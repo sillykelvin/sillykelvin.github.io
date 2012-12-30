@@ -1,0 +1,234 @@
+#+TITLE:       Core Servlet and JSP Volume 1/2(2nd Edition) Learning Notes
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-11-08 Thu
+#+KEYWORDS:    java, servlet, jsp
+#+CATEGORY:    notes
+#+TAGS:        :J2EE:HTTP:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: learning notes of book Core Servlet and JSP Volume 1/2(2nd Edition)
+
+This file recorded notes during learning /Core Servlet and JSP/.
+
+* A sample =web.xml=:
+
+  #+begin_src xml
+  <?xml version="1.0" encoding="utf-8"?>
+
+  <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation=
+           "http://java.sun.com/xml/ns/j2ee
+            http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>Servlet Testing</display-name>
+    <description>
+      This web application demonstrates the usage of Servlet/JSP (mainly Servlet).
+      The contents are composed while reading Core Servlet and JSP Volume 2.
+    </description>
+
+    <!-- the following definition seems no effect... -->
+    <icon>
+      <small-icon>/small.png</small-icon>
+      <large-icon>/large.gif</large-icon>
+    </icon>
+
+    <!-- the following definition seems no effect... -->
+    <mime-mapping>
+      <extension>png</extension>
+      <mime-type>text/plain</mime-type>
+    </mime-mapping>
+
+    <context-param>
+      <param-name>host</param-name>
+      <param-value>nj-kelvin-hu</param-value>
+    </context-param>
+
+    <error-page>
+      <error-code>404</error-code>
+      <location>/404.jsp</location>
+    </error-page>
+
+    <error-page>
+      <exception-type>java.lang.Exception</exception-type>
+      <location>/exception.jsp</location>
+    </error-page>
+
+    <listener>
+      <listener-class>ini.kelvin.servlet.ContextListener</listener-class>
+    </listener>
+
+    <listener>
+      <listener-class>ini.kelvin.servlet.SessionListener</listener-class>
+    </listener>
+
+    <filter>
+      <filter-name>print</filter-name>
+      <filter-class>ini.kelvin.servlet.PrintFilter</filter-class>
+      <init-param>
+        <param-name>admin</param-name>
+        <param-value>Kelvin Hu</param-value>
+      </init-param>
+    </filter>
+    <filter-mapping>
+      <filter-name>print</filter-name>
+      <servlet-name>Hello</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+      <filter-name>print</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+      <servlet-name>Hello</servlet-name>
+      <servlet-class>ini.kelvin.servlet.HelloWorldServlet</servlet-class>
+      <init-param>
+        <param-name>name</param-name>
+        <param-value>Kelvin Hu</param-value>
+      </init-param>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>Hello</servlet-name>
+      <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+      <welcome-file>index.html</welcome-file>
+      <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+
+    <session-config>
+      <session-timeout>1</session-timeout>
+    </session-config>
+
+  </web-app>
+  #+end_src
+
+  The value of =url-pattern= must start with =/= or =*.=.
+
+  Matching Overlapping Patterns:
+
+  1) Exact matches handled first: http://.../foo/bar will be handled by
+     =/foo/bar=, not =/foo/*=, also, =/foo/bar.html= will win over
+     =*.html=, if the URL is http://.../foo/bar.html.
+
+  2) Directory mapping are preferred over extension mappings: the URL
+     http://.../foo/bar.html will be handled by =/foo/*=, not the pattern
+     =*.html=.
+
+  3) For overlapping directory mappings, the longest path is preferred:
+     http://.../foo/bar/baz.html will be handled by =/foo/bar/*=, not
+     =/foo/*=.
+
+  Parameters defined in =<init-param>= could be read by the method
+  =getInitParameter()= of =ServletConfig=.
+
+  =<load-on-startup>= tells server the sequence that the servlet should
+  be loaded into memory, lower number goes first, if two servlets have
+  the same number, the load sequence is decided by server. Negative number
+  cannot guarantee the servlet loading at startup.
+
+  When defining the =<location>= of =<error-page>=, be careful of the
+  leading slash, so =<location>/404.jsp</location>= will work, but if
+  the slash =/= removed, =404.jsp= will be not found.
+
+* HTTP/1.1 common request headers
+
+  1) =Accept=: specify the MIME types that the browser can handle
+
+  2) =Accept-Charset=: the character charset
+
+  3) =Accept-Encoding=: the encoding type, the most commonly used is
+     "gzip, deflate"
+
+  4) =Accept-Language=: the language the browser excepted
+
+  5) =Authorization=: used to identify the browser when visiting some pages
+     with password protection
+
+  6) =Connection=: to indicate if the browser can handle continuous HTTP
+     connection, continuous connection can transfer several files(html,
+     images, etc) in one socket, saved the cost of establishing multiple
+     connections
+
+  7) =Content-Length=: only used for =POST=, specify the length of =POST=
+     request
+
+  8) =Cookie=: return cookies back to http server, these cookies are formerly
+     sent to browser by http server
+
+  9) =Host=: the host name and port number in the requested URL
+
+  10) =If-Modified-Since=: indicate the requested page is wanted only if the
+      page has been modified after the specified date, otherwise the http
+      server will send 304(Not Modified) instead, servlet should not handle
+      this header directly, but implement =getLastModified()= method, let
+      the server to handle the date comparison
+
+  11) =If-Unmodified-Since=: the opposite one of =If-Modified-Since=
+
+  12) =Referer=: the URL which referenced current page
+
+  13) =User-Agent=: to identify the client browser which sent the request
+
+* HTTP/1.1 common response headers
+
+  1) =Allow=: specify request methods the server supported
+
+  2) =Cache-Control=: tell client how to cache the document, can be set with
+     the following values:
+     - =public=: the document can be cached
+     - =private=: the document can only be cached in private cache for single
+       user
+     - =no-cache=: do not cache the document (old browsers use =Pragma=, so
+       this header should also be set to =no-cache= for old browsers)
+     - =no-store=: do not cache, even do not store in temp folder on local disk
+     - =must-revalidate=: client must communicate with server to validate the
+       document everytime when using it
+     - =proxy-revalidate=: similar to previous one, only adapted to shared cache
+     - =max-age=XXX=: the document will be invalid after /XXX/ seconds, it is the
+       replacement of header =Expires=, and it has higher priority when both of
+       them exist
+     - =s-max-age=XXX=: the shared cache should make the document invalid after
+       /XXX/ seconds
+
+  3) =Connection=: used for continuouse connection, the value "close" tells the
+     browser not to use continuous connection, default is continuous connection
+
+  4) =Content-Disposition=: make the browser to ask user to store the response
+     with the specified name on disk, as below:
+     =Content-Disposition: attachment; filename=some-file-name=
+
+  5) =Content-Encoding=: the encoding used during response transmission
+
+  6) =Content-Language=: the language response used
+
+  7) =Content-Length=: the byte count of response, only used for continuous
+     connection
+
+  8) =Content-Type=: the MIME of response, example:
+     =Content-Type: text/html; charset=utf-8=
+
+  9) =Expires=: see =Cache-Control= and =Pragma=
+
+  10) =Last-Modified=: the last modified time of the document
+
+  11) =Location=: required when status code is between 300 and 399, used to
+      notify the browser where the document is stored, the browser will
+      automatically connect to the new address and get the new document
+
+  12) =Pragma=: see =Cache-Control= and =Expires=
+
+  13) =Refresh=: tell browser to send request for the newest page after the
+      interval, example use:
+      =Refresh: 5; URL=http://host/path=
+
+  14) =Retry-After=: used with status code 503, tell the client to retry after
+      the interval
+
+  15) =Set-Cookie=: specify a cookie, every cookie needs a stand alone header
+
+  16) =WWW-Authenticate=: used with 401, tell browser the authentication type
+      and domain needed in request header =Authorization=

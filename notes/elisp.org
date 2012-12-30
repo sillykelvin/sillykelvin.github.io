@@ -1,0 +1,335 @@
+#+title:       GNU Emacs Lisp Reference Manual Learning Notes
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-07-21 Sat
+#+KEYWORDS:    emacs, elisp
+#+CATEGORY:    notes
+#+TAGS:        :Emacs:Elisp:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: learning notes of GNU Emacs Lisp Reference Manual
+
+Notes recorded during learning /Emacs Lisp Reference Manual/, I did not finish
+the whole book, only 12 chapters.
+
+* Introduction
+
+** =nil= and =t=
+
+   - =nil=
+     1. symbol with name "nil"
+     2. logical truth value =false=
+     3. empty list
+
+   - =t=
+     1. truth value t
+     2. symbol "t"
+
+   - =booleanp= /obj/
+     return non-=nil= if /obj/ is t or nil, otherwise not
+
+** version info
+
+   - =emacs-version= *&optional* /here/ function
+
+   - =emacs-build-time=                 variable
+
+   - =emacs-version=                    variable
+
+   - =emacs-major-version=              variable
+
+   - =emacs-minor-version=              variable
+
+* Data Types
+
+  one object can have *only one* primitive type, but may can belong to several other types\\
+  primitive types are: =integer, float, cons, symbol, string, vector, hash-table, subr, byte-code function=
+
+** character type
+
+   the read syntax of basic char is ?<X>, <X> stands for the character to be represented, so ?A stands for 'A'
+
+** equality predicates
+
+   - =eq= /obj1/ /obj2/ :: return =t= if /obj1/ and /obj2/ are the same object, otherwise return =nil=\\
+        integers with same value are considered to be the same object, so =(eq 1 1)= will return =t=\\
+        exception: =(eq "abc" "abc")= will return =nil=, but =(eq "" "")= will return =t= because the empty string is only stored one copy\\
+        as expected, =(eq '(1 2 3) '(1 2 3))= will return =nil=
+
+   - =equal= /obj1/ /obj2/ :: return =t= if /obj1/ and /obj2/ have equal components, otherwise return =nil=\\
+        unlike =eq=, =equal= will look into arguments to check if there contents are the same, if /obj1/ and /obj2/ are =eq=, they must be =equal=
+        so, as expected, =(equal '(1 2 3) '(1 2 3))= and =(equal "abc" "abc")= will both return =t=
+
+* Numbers
+
+** two types
+
+   - =integer=
+   - =float=
+
+** type predicates functions
+
+   - =floatp= /object/
+   - =integerp= /object/
+   - =numberp= /object/
+   - =natnump= /object/ : returns =t= if /object/ is a natural number, such as 0, 1, 2...
+   - =zerop= /object/
+
+** comparison functions
+
+   - =max= /num1/ *&rest* /nums/ return the maximum value
+
+   - =min= /num1/ *&rest* /nums/ return the minimun value
+
+** conversion functions
+
+   - =float= /number/ convert the /number/ to float type
+
+   - =truncate= /number/ *&optional* /divisor/ convert the /number/ to integer by rounding towards zero
+
+   - =floor= /number/ *&optional* /divisor/ convert the /number/ to integer by rounding towards negative infinity
+
+   - =ceiling= /number/ *&optional* /divisor/ convert the /number/ to integer by rounding towards positive infinity
+
+   - =round= /number/ *&optional* /divisor/ convert the /number/ to integer by rounding towards nearest integer
+
+** random function
+
+   - =random= *&optional* /limit/ returns a pseudo-random integer\\
+     if /limit/ is a positive integer, the value is chosen in [0, limit), and of course only choose integer
+     if /limit/ is =t=, it will choose a new seed, otherwise Emacs will always use the same seed, so the returned
+        pseudo-random integer sequences are always the same
+
+* Strings and Characters
+
+** predicates functions
+
+   - =stringp= /object/
+   - =string-or-null-p= /object/
+   - =char-or-string-p= /object/
+
+** useful functions
+
+   - =substring= : to get substring
+   - =concat= : to concatenate strings together
+   - =split-string= : split string into several strings
+   - =string== / =string-equal= : judge the equality of two strings
+   - =string-prefix-p= : check if a string is a prefix of another
+   - =downcase= / =upcase= : change a string or a character to opposite case
+
+* Lists
+
+** cons cells
+
+   a cons cell has two slots, the first is called CAR and the second is called CDR, and it may looks like the structure below:
+
+   #+begin_src c
+       struct cons_cell {
+           void * CAR;
+           void * CDR;
+       };
+   #+end_src
+
+   so the two slots can hold any values, and lists are built up from cons cell, which stores object pointer in CAR slot, and stores the nexe node pointer in CDR slot
+
+** element accessing functions
+
+   - =car= / =cdr=
+   - =pop=
+   - =nth= / =nthcdr=
+   - =last=
+
+** building functions
+
+   - =cons=
+   - =list=
+   - =make-list=
+   - =append=
+   - =reverse=
+   - =number-sequence=
+
+** modification functions
+
+   - =push=
+   - =add-to-list=
+   - =setcar= / =setcdr=
+
+   - =nconc= *&rest* /lists/ : return a list containing all the elements of /lists/, last CDR of each given list is set to point to next list
+
+   - =memq= /object/ /list/ : test if /object/ is in /list/, if is in, return the sublist from the position /object/ occurs the first time
+
+   - =delq= /object/ /list/ : delete all occurrences of /object/ in /list/, note that it uses =eq= to check if two objects are equal, same as =memq=
+
+   - =remq= /object/ /list/ : returns a list copy with all elements =eq= to /object/ removed
+
+   - =member= /object/ /list/ : like =memq=, only difference is it uses =equal= to check the equality of two objects
+
+   - =delete= /object/ /sequence/ : like =delq=, but uses =equal= for comparison
+
+   - =remove= /object/ /sequence/ : like =delete=, but it always returns a copy of processed /sequence/, no matter /sequence/ is a list, vector, or a string
+
+** association lists
+
+   /alist/ for short, it is a list consists of cons cells, that is to say, every element of alist is a cons cell, the CAR of the cons cell stores\\
+   *key* while the CDR stores *value*
+
+   - =assoc= /key/ /alist/ : returns the first occurrence of /key/ in /alist/, uses =equal= for comparison, note that it returns the whole cons cell,\\
+     not only the CDR
+
+   - =rassoc= /value/ /alist/ : like =assoc=, but uses CDR for comparison, =assoc= uses CAR
+
+   - =assq= /key/ /alist/ : like =assoc=, but uses =eq= for comparison
+
+   - =rassq= /value/ /alist/ : ...
+
+   - =assq-delete-all= / =rassq-delete-all= : ...
+
+* Sequences, Arrays and Vectors
+
+  sequence: list, array
+  array: vector, string, char-table, bool-vector
+
+** sequence functions
+
+   - =sequencep=
+   - =length=
+
+   - =elt= /sequence/ /index/ : returns the element of /sequence/ at /index/
+
+** array functions
+
+   - =arrayp=
+
+   - =aref= /array/ /index/ : returns element of /array/ at /index/
+
+   - =aset= /array/ /index/ /object/ : set /object/ to the /index/ element of /array/
+
+   - =fillarray= /array/ /object/ : fills /array/ with /object/
+
+** vector functions
+
+   - =vectorp=
+
+   - =vector= *&rest* /objects/ : creates a vector with /objects/
+
+   - =make-vector= /length/ /object/ : makes a vector has /length/ and filled by /object/
+
+   - =vconcat= *&test* /sequences/ : returns a new vector containing all elements in /sequences/
+
+** char-table, bool-vector (skipped)
+
+   not so useful, so skip them
+
+* Hash Tables (skipped)
+
+  not so useful, so skip it
+
+* Symbols
+
+** symbol components
+
+   each symbol has four components:
+
+   - print name: the name of the symbol
+
+   - value: symbol's current value as a variable
+
+   - function: symbol's function definition, can also hold a symbol, a keymap, or a keyboard macro
+
+   - property list: symbol's property list
+
+** create and intern symbols
+
+   symbols are stored in a vector called /obarray/, symbol name and symbol is with a one-to-one mapping relationship\\
+   interning a symbol means hash it and put it into /obarray/, or find it from /obarray/, so there will never be two symbols with same name in one /obarray/,\\
+   or two names pointing to one symbol.
+
+   =*intern*= : find a symbol from /obarray/, or create a new symbol and put it into /obarray/. *so the finding action is also a interning operation*
+
+   of course there are /uninterned symbols/, it means they are not put into any /obarray/, they may exist in some other object or as variable values
+
+** functions
+
+   - =symbol-name=
+   - =make-symbol=
+
+   - =intern= /name/ *&optional* /obarray/ : returns the interned symbol with name /name/, creates a new one and puts it into /obarray/ if no symbol found
+   - =intern-soft= /name/ *&optional* /obarray/ : returns the already interned symbol with name /name/, returns =nil= if not found
+
+   - =mapatoms= /function/ *&optional* /obarray/ : calls /function/ once with each symbol in /obarray/, then returns =nil=
+
+** property list
+
+   property list (so called /plist/) is like association list (/alist/), it is also key-value pair data structure, but it often uses symbol as the key, so a plist\\
+   may always have unique keys, while alist may not.
+
+** plist functions
+
+   - =symbol-plist= /symbol/
+   - =setplist= /symbol/ /plist/
+   - =get= /symbol/ /property/
+   - =put= /symbol/ /property/ /value/
+   - =plist-get= /plist/ /property/
+   - =plist-put= /plist/ /property/ /value/
+   - =plist-member= /plist/ /property/
+
+* Evaluation
+
+  a Lisp object that is intended for evaluation is called a /form/ or /expression/, or /S-expression/
+  any Lisp object can be evaluated, but in practice only numbers, string, symbols, lists are evaluated very often
+
+** kinds of forms
+
+   how Emacs evaluates a form depends on its data type: symbols, lists, and "all other data types"
+
+   - self-evaluating forms: "all other data types"
+     the result of self-evaluating is the object itself, so 25 will be evaluated to 25, "abc" will be evaluated to "abc"
+
+   - symbol forms: will be evaluated as a variable, so its value field will be returned
+
+   - list forms: the evaluating way of a list is determined by its first element, if first element is:
+     - a symbol: the symbol's function field will be obtained and replace the symbol with that function
+     - a function: evaluates the remaining elements of the list first, and then call the function with these evaluated remaining elements as parameters
+     - a macro: evaluates the macro with the remaining elements as parameters without evaluating the remaining elements
+     - special forms: such as /if/, /and/, evaluation of elements in the list depends on the special forms' syntax requirements
+
+* Control Structures (skipped)
+
+  things about special forms for flow control, such as /if/, /progn/, /cond/, /while/, so skip it
+
+* Variables
+
+** local variables
+
+   - =let= /bindings.../ /forms.../
+   - =let*= /bindings.../ /forms.../ : like =let=, difference is a local variable binding will take effect immediately before next local variable binding takes place
+
+   - =makeunbound= /symbol/ : cancel the /symbol/'s binding to a value
+   - =boundp= /variable/ : to judge if the variable is bound, returns =t= if its value is not *void*
+
+** global variables
+
+   global variables can be defined by =defvar= and =defconst=, they do not have actually difference, =defconst= is intent to inform human readers that the variable\\
+   may should not be changed, but actually its value can be changed
+
+* Functions
+
+  function types:
+  - lambda expression
+  - primitive : written in C
+  - special form : like =if=, =and=, =while=
+  - macro
+  - command : (includes /keyboard macros/)
+  - closure
+  - byte-code function
+  - autoload object
+
+** mapping functions
+
+   - =mapcar= /function/ /sequence/ : applies /function/ to each element in /sequence/ in turn, return a list of results
+   - =mapc= /function/ /sequence/ : like =mapcar=, but it is used for side effects, return value will be ignored
+   - =mapconcat= /function/ /sequence/ /separator/ : like =mapcar=, but /function/'s result must be string, and the strings will be concatenated as return value
+
+
+
+------------------------------------------------------------------------------------------

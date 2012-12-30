@@ -1,0 +1,390 @@
+#+TITLE:       Spring in Action(3rd edition) Learning Notes
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-10-24 Wed
+#+KEYWORDS:    java, spring
+#+CATEGORY:    notes
+#+TAGS:        :J2EE:Spring:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: reading notes of book Spring in Action
+
+This file recorded all the notes during learning /Spring in Action 3rd Edition/,
+I did not complete the book, and may continue to finish reading it later.
+
+* Chapter 2 Wiring beans
+
+  All namespaces could be contained in spring xml configuration file:
+
+  | namespace | purpose                                           |
+  |-----------+---------------------------------------------------|
+  | aop       | for AOP                                           |
+  | beans     | declaration of beans and how they should be wired |
+  | context   | ...                                               |
+  | jee       | integration with Java EE APIs (JNDI, EJB, etc.)   |
+  | jms       | ...                                               |
+  | lang      | ...                                               |
+  | mvc       | spring MVC                                        |
+  | oxm       | spring object-to-xml mapping                      |
+  | tx        | transaction configuration                         |
+  | util      | ...                                               |
+
+** Wiring beans through constructor
+
+   The bean below will be wired by its default constructor:
+
+   : <bean id="hello" class="ini.kelvin.spring.Hello" />
+
+   But if the bean definition does not have a default constructor:
+
+   : <bean id="hello" class="ini.kelvin.spring.Hello">
+   :     <constructor-arg value="someValue" />
+   :     <constructor-arg ref="beanId" />
+   : <bean>
+
+   The example above will use the constructor which has two args, 1st one is
+   basic type(err.. String should also be considered as "basic type"), 2nd
+   one is an instance of an object, so it should be defined with =<bean>= tag
+   and then the =ref= is the reference of that bean, whose id is =beanId=.
+
+** Wiring beans through factory method
+
+   Some definition of classes may not have a visible constructor, an example
+   is the singleton bean definition, as below:
+
+   #+begin_src java
+   public class Singleton {
+       private Singleton() {}
+
+       public static Singleton getInstance() {
+           return SingletonHolder.instance;
+       }
+
+       private static class SingletonHolder {
+           private static Singleton instance = new Singleton();
+       }
+   }
+   #+end_src
+
+   Under this condition, we can use following to construct the bean:
+
+   : <bean id="singleton"
+   :       class="Singleton"
+   :       factory-method="getInstance" />
+
+** Bean scoping
+
+   The definition of bean scope is as following:
+
+   |----------------+------------------------------------------------|
+   | Scope          | Description                                    |
+   |----------------+------------------------------------------------|
+   | singleton      | only one bean *per spring container* (*default |
+   |                | scoping*)                                      |
+   |----------------+------------------------------------------------|
+   | prototype      | once per use                                   |
+   |----------------+------------------------------------------------|
+   | request        | scopes a bean to an HTTP request, only valid   |
+   |                | when used in a web-capable spring context      |
+   |                | (such as with SpringMVC)                       |
+   |----------------+------------------------------------------------|
+   | session        | to an HTTP session, similar to =request=       |
+   |----------------+------------------------------------------------|
+   | global-session | to a global HTTP session, valid in a portlet   |
+   |                | context                                        |
+   |----------------+------------------------------------------------|
+
+** Initializing and destroying
+
+   Specify attributes =init-method= and =destroy-method= in a bean definition,
+   the method specified by =init-method= will be invoked after the bean is
+   constructed, and the method specified by =destroy-method= will be invoked
+   before the bean is removed from the container.
+
+   : <bean id="xxx"
+   :       class="xxx.Resource"
+   :       init-method="allocateResource"
+   :       destroy-method="freeResource" />
+
+   As the example shows, the required resources will be allocated after
+   constructed, and the resources will be freed before bean removed.
+
+** Wiring beans through property setting methods
+
+   =<property>= is like =<constructor-arg>=, example:
+
+   : <bean id="hello" class="ini.kelvin.spring.Hello">
+   :     <property name="stringProperty" value="someValue" />
+   :     <property name="objectProperty" ref="beanId" />
+   : <bean>
+
+   In the example above, the method =setStringProperty= will be invoked to
+   inject the value =someValue=, and =setObjectProperty= will be invoked to
+   set the related property to the bean referenced by =beanId=.
+
+   NOTICE: the attribute =name= of =property= should be related to the set
+   method, not the field name, e.g. field name is =realProperty=, but the
+   set method is =setFakeProperty=, so the =name= should be =fakeProperty=.
+
+   In the example above, if there are several =property=, and all of them
+   have =ref= to "beanId", then the bean with id "beanId" will be shared
+   by all of them. The example below will create a standalone =InnerBean=,
+   only available for bean "hello":
+
+   : <bean id="hello" class="ini.kelvin.spring.Hello">
+   :     <property name="stringProperty" value="someValue" />
+   :     <property name="objectProperty">
+   :         <bean class="package.path.InnerBean" />
+   :     </property>
+   : <bean>
+
+** Wiring collections
+
+   Elements for collection wiring:
+
+   |--------------------+------------------------------------------------|
+   | Collection element | Description                                    |
+   |--------------------+------------------------------------------------|
+   | <list>             | Wiring a list of values, allowing duplicates   |
+   |--------------------+------------------------------------------------|
+   | <set>              | Wiring a set of values, ensuring no duplicates |
+   |--------------------+------------------------------------------------|
+   | <map>              | Wiring name-value pairs, key and value could   |
+   |                    | be of any type                                 |
+   |--------------------+------------------------------------------------|
+   | <props>            | Wiring name-value pairs, key and value should  |
+   |                    | be both =String=                               |
+   |--------------------+------------------------------------------------|
+
+   An example of =<list>= (=<set>= is similar):
+
+   : <bean ...>
+   :     <property name="countries">
+   :         <list>
+   :             <ref bean="China" />
+   :             <ref bean="USA" />
+   :             ...
+   :         </list>
+   :     </property>
+   : </bean>
+
+   An example of =<map>=:
+
+   : <bean ...>
+   :     <property name="keyValuePair">
+   :         <map>
+   :             <entry key="key1" value-ref="Obj1" />
+   :             <entry key="key2" value-ref="Obj2" />
+   :             ...
+   :         </map>
+   :     </property>
+   : </bean>
+
+   The =<entry>= element contains a key value pair, both key and value could
+   be a primitive value or a reference to another bean, when key/value is a
+   primitive value, =<key>= / =<value>= should be used; when key/value
+   referenced to other bean, =<key-ref>= / =<value-ref>= shoud be used.
+
+   An example of =<props>=:
+
+   : <bean ...>
+   :     <property name="personalInfo">
+   :         <props>
+   :             <prop key="name">Kelvin Hu</prop>
+   :             <prop key="email">ini.kelvin@gmail.com</prop>
+   :             ...
+   :         </props>
+   :     </property>
+   : </bean>
+
+** Wiring nothing(null)
+
+   Example:
+
+   : <property ...>
+   :     <null />
+   : </property>
+
+** Spring expression language (SpEL):
+
+   *This section is omitted.*
+
+* Chapter 3 Minimizing XML configuration in Spring
+
+  - Autowiring helps reduce =<property>= and =<constructor-arg>=.
+  - Autodiscovery helps reduce =<bean>=.
+
+** Automatically wiring
+
+   - =byName= : search beans, if a bean's id matches the property name, then
+     it will be wired into this property
+
+   - =byType= : search beans, search criteria is class type
+
+   - =constructor= : search beans, the beans which can satisfy the bean's
+     constructor wil be used to construct the bean
+
+   - =autodetect= : try autowiring by =constructor= first, if no suitable
+     constructor or bean is found, then try autowiring by type.
+
+** Wiring with annotations
+
+   By default annotation wiring is turned off, use the following line to
+   turn it on:
+
+   : <context:annotation-config />
+
+   Autowiring annotations:
+
+   1) =@Autowired= / =@Qualifier=
+
+   2) =@Inject= / =@Named= / =@Qualifier=
+
+   3) =@Value= (for primitive types, useful while using with SpEL)
+
+   4) =@Resource=
+
+** Automatically discovering
+
+   =<context:annotation-config>= is only used for automatically wiring, but
+   =<context:component-scan>= will used for both autowiring, but also
+   autodiscovery, as below:
+
+   : <beans ...>
+   :     <context:component-scan base-package="com.mycompany.xxx">
+   :     </context:component-scan>
+   : </beans>
+
+   Annotations can be used:
+
+   1) =@Component= : general-purpose annotation, indicating that the class
+      is a Spring component
+
+   2) =@Controller= : defines a Spring MVC controller
+
+   3) =@Repository= : defines a data repository
+
+   4) =@Service= : defines a service
+
+   5) any customized annotation annotated with =@Component=
+
+   =<context:component-scan>= can include =<context:include-filter>= and
+   =<context:exclude-filter>= to tweak component scanning. *(this section
+   is omitted, since it is not used so much)*
+
+** Java-based configuration
+
+   *not used so often, omitted*
+
+* Chapter 4 Aspect-oriented Spring
+
+  AOP terminology
+
+  - *ADVICE*
+    The job that aspects are meant to do, is called /advice/, advice defines
+    both the /what/ and the /when/ of an aspect.
+
+    Spring aspects can work with five kinds of advice:
+    - /Before/: the advice functionality takes place before the advised method
+      is invoked
+    - /After/: after advised method completes, no matter success or failure
+    - /After-returning/: after succeeded completion
+    - /After-throwing/: after exception-thrown completion
+    - /Around/: both before and after
+
+  - *JOIN POINTS*
+    A /join point/ is a point in the execution of the application where an
+    aspect can be plugged in. This point could be a method being called, an
+    exception being thrown, or a field being modified.
+
+  - *POINTCUTS*
+    Advice defines the /what/ and the /when/ of aspects, then /pointcuts/
+    define the /where/. A pointcut defines a set of join points at which the
+    advice should be woven.
+
+  - *ASPECTS*
+    An /aspect/ is the merger of advice and pointcuts, advice and pointcuts
+    define an aspect: what is does, and, where and when it does it.
+
+  - *INTRODUCTIONS*
+    An /introduction/ allows to add new methods or attributes to existing
+    classes.
+
+  - *WEAVING*
+    /Weaving/ is the process of applying aspects to a target object to create
+    a new proxied object. There are three points that weaving can take place:
+    /Compile time/, /Classload time/, and /Runtime/.
+
+** Declaring aspects in XML
+
+   |---------------------------+---------------------------------------------|
+   | AOP configuration element | Purpose                                     |
+   |---------------------------+---------------------------------------------|
+   | <aop:config>              | The top-level AOP element.                  |
+   |---------------------------+---------------------------------------------|
+   | <aop:advisor>             | an AOP advisor                              |
+   |---------------------------+---------------------------------------------|
+   | <aop:after>               | an AOP after advice                         |
+   |---------------------------+---------------------------------------------|
+   | <aop:after-returning>     | an AOP after-returning advice               |
+   |---------------------------+---------------------------------------------|
+   | <aop:after-throwing>      | an AOP after-throwing advice                |
+   |---------------------------+---------------------------------------------|
+   | <aop:around>              | an AOP around advice                        |
+   |---------------------------+---------------------------------------------|
+   | <aop:aspect>              | an aspect                                   |
+   |---------------------------+---------------------------------------------|
+   | <aop:aspectj-autoproxy>   | enables annotation-driven aspects using     |
+   |                           | @AspectJ                                    |
+   |---------------------------+---------------------------------------------|
+   | <aop:before>              | an AOP before advice                        |
+   |---------------------------+---------------------------------------------|
+   | <aop:declare-parents>     | introduces additional interfaces to advised |
+   |                           | objects that are transparently implemented  |
+   |---------------------------+---------------------------------------------|
+   | <aop:pointcut>            | a pointcut                                  |
+   |---------------------------+---------------------------------------------|
+
+   A typical configuration:
+
+   : <bean id="aspectBean" class="package.AspectBean" />
+   : ...
+   : <aop:config>
+   :     <aop:aspect ref="aspectBean">
+   :         <aop:pointcut id="aPointCut"
+   :             expression="execution(* package.class.method(..))" />
+   :         <aop:before pointcut-ref="aPointCut" method="aspectMethod" />
+   :     </aop:aspect>
+   : </aop:config>
+
+   For the example above, the class definition =package.AspectBean= should
+   have a method named =aspectMethod=, which will be invoked before the
+   execution of =package.class.method()=.
+
+   But, for the type =<aop:around>=, it is not that simple like the example
+   above. The XML configuration of this type is similar to =<aop:before>=,
+   but the method =aspectMethod= defined in =package.AspectBean= should have
+   the following prototype:
+   : public void aspectMethod(ProceedingJoinPoint joinPoint)
+   and the invocation of =joinPoint.proceed()= will invoke the advised
+   method, so code blocks can be put before and after this invocation, which
+   can implement the effect of "around".
+
+** Annotating aspects
+
+   *omitted*
+
+* Chapter 5 Hitting the database
+
+  Several options to configure a data source:
+
+  - Data source defined by a JDBC driver
+  - Data source looked up by JNDI
+  - Data source pool connections(C3P0, DBCP, etc.)
+
+  PS: This chapter seems quite simple, no more to note.
+
+* Chapter 6 Managing transactions
+
+  A transaction manager should be chosen first:
+  =DataSourceTransactionManager=, =HibernateTransactionManager=, etc.
