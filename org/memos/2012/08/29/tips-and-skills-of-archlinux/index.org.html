@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.40 in css mode. -->
+<html>
+  <head>
+    <title>index.org</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #839496;
+        background-color: #002b36;
+      }
+      .bold {
+        /* bold */
+        font-weight: bold;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #586e75;
+        font-style: italic;
+      }
+      .italic {
+        /* italic */
+        text-decoration: underline;
+      }
+      .org-code {
+        /* org-code */
+        color: #586e75;
+      }
+      .org-document-info {
+        /* org-document-info */
+        color: #afeeee;
+      }
+      .org-document-info-keyword {
+        /* org-document-info-keyword */
+        color: #586e75;
+      }
+      .org-document-title {
+        /* org-document-title */
+        color: #afeeee;
+        font-size: 144%;
+        font-weight: bold;
+      }
+      .org-level-1 {
+        /* org-level-1 */
+        color: #268bd2;
+      }
+      .org-level-2 {
+        /* org-level-2 */
+        color: #2aa198;
+      }
+      .org-link {
+        /* org-link */
+        color: #6c71c4;
+        text-decoration: underline;
+      }
+      .org-meta-line {
+        /* org-meta-line */
+        color: #586e75;
+        font-style: italic;
+      }
+      .whitespace-line {
+        /* whitespace-line */
+        color: #ee82ee;
+        background-color: #333333;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="org-document-info-keyword">#+TITLE:</span><span class="comment">       </span><span class="org-document-title">Tips and Skills of Archlinux</span>
+<span class="org-document-info-keyword">#+AUTHOR:</span><span class="comment">      </span><span class="org-document-info">Kelvin Hu</span>
+<span class="org-document-info-keyword">#+EMAIL:</span><span class="comment">       </span><span class="org-document-info">ini.kelvin@gmail.com</span>
+<span class="org-document-info-keyword">#+DATE:</span><span class="comment">        </span><span class="org-document-info">2012-08-29 Wed</span>
+<span class="org-meta-line">#+KEYWORDS:    linux, archlinux</span>
+<span class="org-meta-line">#+CATEGORY:    memos</span>
+<span class="org-meta-line">#+TAGS:        :Linux:Archlinux:</span>
+<span class="org-meta-line">#+LANGUAGE:    en</span>
+<span class="org-meta-line">#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t &lt;:t</span>
+<span class="org-meta-line">#+DESCRIPTION: small skills/tips learned during using my archlinux</span>
+
+&#36825;&#26159;&#19968;&#31687;&#22791;&#24536;&#24615;&#36136;&#30340;&#25991;&#31456;&#65292;&#20027;&#35201;&#35760;&#24405;&#25105;&#22312;&#20351;&#29992;Archlinux&#30340;&#36807;&#31243;&#20013;&#65292;&#36935;&#21040;&#30340;&#19968;&#20123;&#38382;&#39064;&#21450;&#30456;&#24212;&#30340;&#35299;&#20915;
+&#21150;&#27861;&#65292;&#20197;&#21450;&#19968;&#20123;&#27604;&#36739;&#26377;&#29992;&#30340;&#21629;&#20196;&#25110;&#32773;tips&#12290;&#20250;&#19981;&#23450;&#26399;&#26356;&#26032;&#12290;
+
+<span class="org-level-1">* sudo related</span>
+
+  For other more <span class="org-code">=sudoers=</span> configuration, please see this <span class="whitespace-line">wiki page.</span>
+
+<span class="org-level-2">** add a user to sudoers file:</span>
+
+   Users who do not exist in <span class="org-code">=/etc/sudoers=</span> will not have permission to run
+   command <span class="org-code">=sudo ...=</span>, add the following line to this file:
+
+   <span class="org-code">: &lt;username&gt; ALL=(ALL) ALL
+</span>
+   Now the user <span class="italic">/&lt;username&gt;/</span> will have the root privileges.
+
+<span class="org-level-2">** make a user password needless:</span>
+
+   Input password every time when you run <span class="org-code">=sudo ...=</span> is really annoying, put
+   the following line into <span class="org-code">=/etc/sudoers/=</span>:
+
+   <span class="org-code">: Defaults:&lt;username&gt; !authenticate
+</span>
+   Now the user <span class="italic">/&lt;username&gt;/</span> will not need to input password any more when
+   running <span class="org-code">=sudo ...=</span>.
+
+<span class="org-level-1">* wireless related</span>
+
+<span class="org-level-2">** set up connection using netcfg, with WPA:</span>
+
+   <span class="org-code">: touch /etc/network.d/home  # the file name can be whatever you like
+</span>   <span class="org-code">: vi /etc/network.d/home
+</span>
+   then input the following contents:
+
+   <span class="org-code">: CONNECTION="wireless"
+</span>   <span class="org-code">: ESSID="&lt;my network&gt;"  # replace it with the real network ESSID
+</span>   <span class="org-code">: INTERFACE="wlan0"
+</span>   <span class="org-code">: SCAN="yes"
+</span>   <span class="org-code">: IP="dhcp"
+</span>   <span class="org-code">: TIMEOUT="10"
+</span>   <span class="org-code">: SECURITY="wpa"
+</span>   <span class="org-code">: KEY="&lt;passphrase&gt;"    # replace it with your real passphrase
+</span>
+   then save this file, run the following command:
+
+   <span class="org-code">: netcfg home
+</span>
+   Now your network will be up.
+
+   Other useful commands:
+
+   <span class="org-code">: ip link set wlan0 up/down # take up/down the wireless network
+</span>   <span class="org-code">: ip addr show wlan0        # show state of the wireless network
+</span>   <span class="org-code">: iwlist wlan0 scan         # scan available wireless points
+</span>   <span class="org-code">: iw dev wlan0 scan         # same as above
+</span>
+   Command <span class="org-code">=wifi-menu=</span> is also very useful in package <span class="italic">/netcfg/</span>.
+
+<span class="org-level-1">* pacman related</span>
+
+<span class="org-level-2">** query the package that a file belongs to:</span>
+
+   <span class="org-code">: pacman -Qo /path/to/file
+</span>
+<span class="org-level-1">* usefull commands</span>
+
+<span class="org-level-2">** &#26597;&#30475;&#31471;&#21475;&#21344;&#29992;&#24773;&#20917;</span>
+
+   <span class="org-code">: netstat -anput
+</span>
+   -a) established&#21644;listen&#37117;&#26174;&#31034;
+
+   -n) &#26174;&#31034;&#25968;&#23383;&#65292;&#22914;127.0.0.1:80&#65292;&#32780;&#19981;&#26159;localhost:http
+
+   -p) &#26174;&#31034;&#21344;&#29992;&#27492;&#31471;&#21475;&#30340;PID&#21644;&#31243;&#24207;&#21517;&#31216;
+
+   -u/-t) &#26174;&#31034;TCP&#21644;UDP&#65292;&#26597;&#31471;&#21475;&#21344;&#29992;&#22522;&#26412;&#21482;&#26377;TCP/UDP&#26159;&#26377;&#29992;&#30340;&#65292;&#20854;&#23427;&#37027;&#20123;STREAM&#30340;&#26681;&#26412;&#19981;
+          &#30693;&#36947;&#26159;&#31070;&#39532;&#31867;&#22411;&#12290;&#12290;
+
+   &#22914;&#26524;&#26377;&#35013;lsof&#30340;&#35805;&#65292;&#20063;&#21487;&#20197;&#29992;&#20197;&#19979;&#21629;&#20196;&#26597;&#30475;8080&#30340;&#31471;&#21475;&#21344;&#29992;&#65306;
+
+   <span class="org-code">: lsof -i :8080
+</span>
+<span class="org-level-2">** lookup binary dependency</span>
+
+   <span class="org-code">: ldd [-v] &lt;path/to/binary&gt;
+</span>
+   or
+
+   <span class="org-code">: readelf
+</span>
+<span class="org-level-1">* emacs related</span>
+
+<span class="org-level-2">** emacs/fcitx&#24555;&#25463;&#38190;&#20914;&#31361;</span>
+
+   Emacs&#36873;&#25321;&#30340;&#40664;&#35748;&#24555;&#25463;&#38190;&#26159;Ctrl + Space&#65292;&#21644;fcitx&#30340;&#28608;&#27963;&#24555;&#25463;&#38190;Ctrl + Space&#20914;&#31361;&#12290;
+
+   <span class="bold">*&#35299;&#20915;&#26041;&#27861;*</span> &#65306;&#20462;&#25913; <span class="org-code">=~/.config/fcitx/config=</span> &#65306;
+
+   <span class="org-code">: TriggerKey=CTRL_RSHIFT    # default value is CTRL_SPACE
+</span>   <span class="org-code">: IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
+</span>
+   &#23558;TriggerKey&#30001;&#40664;&#35748;&#30340;Ctrl + Space&#25913;&#20026;Ctrl + Right Shift&#65292;&#20294;&#26159;&#30001;&#20110;&#21478;&#22806;&#19968;&#20010;&#36873;&#39033;&#20063;&#26159;
+   Ctrl + Shift&#65292;&#26377;&#20914;&#31361;&#65292;&#25152;&#20197;&#25226;&#20914;&#31361;&#30340;IMSwitchHotkey&#32473;&#25913;&#25481;&#12290;
+
+   &#28982;&#21518;&#65292;&#37325;&#21551;fcitx&#65292;&#36825;&#26679;fcitx&#21644;emacs&#30340;&#24555;&#25463;&#38190;&#20914;&#31361;&#23601;&#35299;&#20915;&#20102;&#12290;
+
+<span class="org-level-2">** emacs&#20013;&#25991;&#36755;&#20837;</span>
+
+   &#35201;&#22312;emacs&#20013;&#36755;&#20837;&#20013;&#25991;&#65292;&#36824;&#38656;&#35201;&#35774;&#32622;LC_CTYPE&#20026;zh_CN.UTF-8&#65292;&#19981;&#28982;&#20381;&#26087;&#26080;&#27861;&#36755;&#20837;&#12290;&#27604;&#36739;
+   &#22909;&#30340;&#35299;&#20915;&#26041;&#27861;&#65306;
+
+   <span class="org-code">: sudo mv /usr/bin/emacs /usr/bin/emacs.origin
+</span>   <span class="org-code">: sudo touch /usr/bin/emacs
+</span>   <span class="org-code">: sudo chmod 755 /usr/bin/emacs
+</span>
+   &#28982;&#21518;&#65292;&#22312; <span class="org-code">=/usr/bin/emacs=</span> &#20013;&#36755;&#20837;&#20197;&#19979;&#20869;&#23481;&#65306;
+
+   <span class="org-code">: #!/bin/zsh
+</span>   <span class="org-code">: LC_CTYPE=zh_CN.UTF-8
+</span>   <span class="org-code">: /usr/bin/emacs.origin "$@"
+</span>
+   &#20877;&#36816;&#34892;emacs&#23601;&#21487;&#20197;&#36755;&#20837;&#20013;&#25991;&#12290;
+
+<span class="org-level-1">* &#32456;&#31471;&#26576;&#20123;&#25991;&#23383;&#26174;&#31034;&#20026;&#30333;&#33394;&#23567;&#26041;&#22359;</span>
+
+  &#22240;&#20026;locale&#36873;&#20102;&#20854;&#23427;&#35821;&#35328;&#65292;&#20294;&#21448;&#27809;&#23433;&#35013;&#20854;&#23427;&#35821;&#35328;&#30340;&#23383;&#20307;&#65292;&#25152;&#20197;&#26174;&#31034;&#23567;&#26041;&#22359;&#12290;
+
+  <span class="bold">*&#35299;&#20915;&#26041;&#27861;*</span> &#65306;&#32534;&#36753; <span class="org-code">=/etc/locale.gen=</span> &#65292;&#21482;&#20445;&#30041; <span class="italic">/en_US.UTF-8 UTF-8/</span> &#36825;&#19968;&#34892;&#65292;&#20877;&#36816;
+  &#34892; <span class="org-code">=locale-gen=</span> &#65292;&#37325;&#21551;&#26082;&#21487;&#12290;
+</pre>
+  </body>
+</html>

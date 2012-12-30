@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.40 in css mode. -->
+<html>
+  <head>
+    <title>index.org</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #839496;
+        background-color: #002b36;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #586e75;
+        font-style: italic;
+      }
+      .org-code {
+        /* org-code */
+        color: #586e75;
+      }
+      .org-document-info {
+        /* org-document-info */
+        color: #afeeee;
+      }
+      .org-document-info-keyword {
+        /* org-document-info-keyword */
+        color: #586e75;
+      }
+      .org-document-title {
+        /* org-document-title */
+        color: #afeeee;
+        font-size: 144%;
+        font-weight: bold;
+      }
+      .org-level-1 {
+        /* org-level-1 */
+        color: #268bd2;
+      }
+      .org-level-2 {
+        /* org-level-2 */
+        color: #2aa198;
+      }
+      .org-meta-line {
+        /* org-meta-line */
+        color: #586e75;
+        font-style: italic;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="org-document-info-keyword">#+TITLE:</span><span class="comment">       </span><span class="org-document-title">Tips and Skills of CentOS</span>
+<span class="org-document-info-keyword">#+AUTHOR:</span><span class="comment">      </span><span class="org-document-info">Kelvin Hu</span>
+<span class="org-document-info-keyword">#+EMAIL:</span><span class="comment">       </span><span class="org-document-info">ini.kelvin@gmail.com</span>
+<span class="org-document-info-keyword">#+DATE:</span><span class="comment">        </span><span class="org-document-info">2012-09-26 Wed</span>
+<span class="org-meta-line">#+KEYWORDS:    linux, centos</span>
+<span class="org-meta-line">#+CATEGORY:    memos</span>
+<span class="org-meta-line">#+TAGS:        :Linux:CentOS:</span>
+<span class="org-meta-line">#+LANGUAGE:    en</span>
+<span class="org-meta-line">#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t &lt;:t</span>
+<span class="org-meta-line">#+DESCRIPTION: small skills/tips during using centos</span>
+
+&#36825;&#26159;&#19968;&#31687;&#22791;&#24536;&#24615;&#36136;&#30340;&#25991;&#31456;&#65292;&#20027;&#35201;&#35760;&#24405;&#25105;&#22312;&#37197;&#32622;&#21644;&#31649;&#29702;CentOS&#26381;&#21153;&#22120;&#30340;&#36807;&#31243;&#20013;&#65292;&#36935;&#21040;&#30340;&#19968;&#20123;&#38382;&#39064;&#21450;
+&#30456;&#24212;&#30340;&#35299;&#20915;&#21150;&#27861;&#65292;&#20197;&#21450;&#19968;&#20123;&#27604;&#36739;&#26377;&#29992;&#30340;&#21629;&#20196;&#25110;&#32773;tips&#12290;&#20250;&#19981;&#23450;&#26399;&#26356;&#26032;&#12290;
+
+<span class="org-level-1">* yum related</span>
+
+<span class="org-level-2">** error 404:</span>
+
+   &#26377;&#26102;&#65292; <span class="org-code">=yum makecache=</span> &#25110;&#32773;&#20854;&#23427;&#21629;&#20196;&#21487;&#33021;&#20250;&#20986;&#29616;&#20197;&#19979;&#38169;&#35823;&#65306;
+
+   <span class="org-code">: [Errno 14] HTTP Error 404: Not Found
+</span>
+   &#36825;&#26102;&#65292;&#36816;&#34892; <span class="org-code">=yum clean all=</span> &#65292;&#20877;&#25191;&#34892;&#30456;&#24212;&#21629;&#20196;&#21363;&#21487;&#12290;
+
+<span class="org-level-2">** Public key not installed:</span>
+
+   &#22312;&#23433;&#35013;&#36719;&#20214;&#21253; <span class="org-code">=yum install xxx=</span> &#26102;&#20986;&#29616; "Public key for * is not installed"&#65306;
+
+   <span class="org-code">: # &#27880;&#24847;&#25226;&#20197;&#19979;&#21629;&#20196;&#26411;&#23614;&#30340;&#29256;&#26412;&#25913;&#25104;&#23545;&#24212;&#30340;&#29256;&#26412;
+</span>   <span class="org-code">: $ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+</span>
+<span class="org-level-1">* ftp related</span>
+
+<span class="org-level-2">** </span><span class="org-level-2"><span class="org-code">=tar=</span></span><span class="org-level-2"> error with ftp downloaded file:</span>
+
+   &#22312;&#35299;&#21387;&#29992;ftp&#19979;&#36733;&#30340;&#21253;&#26102;&#65292;&#20986;&#29616;&#20197;&#19979;&#38169;&#35823;&#65306;
+
+   <span class="org-code">: Tar: Exiting with failure status due to previous errors
+</span>
+   &#21407;&#22240;&#65306;&#36890;&#36807;ftp download&#19979;&#26469;&#30340;&#21253;&#22312;&#20256;&#36755;&#26102;&#27809;&#26377;&#20351;&#29992;&#20108;&#36827;&#21046;&#20256;&#36865;&#65292;&#25152;&#20197;tar&#35299;&#21387;&#22833;&#36133;&#12290;
+   &#35299;&#20915;&#26041;&#26696;&#65306;&#22312;ftp&#30331;&#24405;&#20043;&#21518;&#65292;&#36816;&#34892; <span class="org-code">=ftp&gt; bin=</span> &#65292;&#20877;&#36827;&#34892; <span class="org-code">=get=</span> &#19979;&#36733;&#25805;&#20316;&#12290;
+
+<span class="org-level-1">* network related</span>
+
+<span class="org-level-2">** no network in a virtual machine:</span>
+
+   &#34394;&#25311;&#26426;&#20013;&#65292;&#20197;minimal&#27169;&#24335;&#26032;&#23433;&#35013;&#30340;CentOS&#36830;&#19981;&#19978;Internet&#65292;&#22240;&#20026;&#40664;&#35748;eth0&#27809;&#26377;&#25171;&#24320;&#65292;&#32534;&#36753;
+   &#20197;&#19979;&#25991;&#20214;&#65306;
+
+   <span class="org-code">: /etc/sysconfig/network-scripts/ifcfg-eth0
+</span>
+   &#23558; ONBOOT="no" &#30340;no&#25913;&#25104;yes&#21363;&#21487;&#12290;
+
+<span class="org-level-2">** shutdown firewall:</span>
+
+   CentOS&#30340;&#38450;&#28779;&#22681;&#40664;&#35748;&#25171;&#24320;&#65292;&#24182;&#19988;&#24212;&#29992;&#20102;&#24456;&#24378;&#30340;&#35268;&#21017;&#65292;&#36825;&#26102;&#20505;&#20854;&#23427;&#26426;&#22120;&#26080;&#27861;&#35775;&#38382;&#20854;apache&#31561;web
+   &#26381;&#21153;&#65292;&#24212;&#29992;&#20197;&#19979;&#21629;&#20196;&#20851;&#38381;&#38450;&#28779;&#22681;&#65288;&#36825;&#24182;&#38750;&#26368;&#22909;&#30340;&#35299;&#20915;&#26041;&#24335;&#65292;&#26368;&#22909;&#30340;&#35299;&#20915;&#26041;&#24335;&#26159;&#37197;&#32622;&#38450;&#28779;&#22681;&#35268;&#21017;&#65292;
+   &#25918;&#34892;&#26576;&#20123;&#31471;&#21475;&#65289;&#65306;
+
+   <span class="org-code">: service iptables save
+</span>   <span class="org-code">: service iptables stop
+</span>   <span class="org-code">: chkconfig iptables off
+</span></pre>
+  </body>
+</html>

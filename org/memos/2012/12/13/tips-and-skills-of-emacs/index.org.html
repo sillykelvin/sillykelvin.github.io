@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.40 in css mode. -->
+<html>
+  <head>
+    <title>index.org</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #839496;
+        background-color: #002b36;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #586e75;
+        font-style: italic;
+      }
+      .org-code {
+        /* org-code */
+        color: #586e75;
+      }
+      .org-document-info {
+        /* org-document-info */
+        color: #afeeee;
+      }
+      .org-document-info-keyword {
+        /* org-document-info-keyword */
+        color: #586e75;
+      }
+      .org-document-title {
+        /* org-document-title */
+        color: #afeeee;
+        font-size: 144%;
+        font-weight: bold;
+      }
+      .org-level-1 {
+        /* org-level-1 */
+        color: #268bd2;
+      }
+      .org-meta-line {
+        /* org-meta-line */
+        color: #586e75;
+        font-style: italic;
+      }
+      .org-table {
+        /* org-table */
+        color: #87cefa;
+      }
+      .whitespace-line {
+        /* whitespace-line */
+        color: #ee82ee;
+        background-color: #333333;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="org-document-info-keyword">#+TITLE:</span><span class="comment">       </span><span class="org-document-title">Tips and Skills of Emacs</span>
+<span class="org-document-info-keyword">#+AUTHOR:</span><span class="comment">      </span><span class="org-document-info">Kelvin Hu</span>
+<span class="org-document-info-keyword">#+EMAIL:</span><span class="comment">       </span><span class="org-document-info">ini.kelvin@gmail.com</span>
+<span class="org-document-info-keyword">#+DATE:</span><span class="comment">        </span><span class="org-document-info">2012-12-13 Thu</span>
+<span class="org-meta-line">#+KEYWORDS:    emacs</span>
+<span class="org-meta-line">#+CATEGORY:    memos</span>
+<span class="org-meta-line">#+TAGS:        :Emacs:</span>
+<span class="org-meta-line">#+LANGUAGE:    en</span>
+<span class="org-meta-line">#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t &lt;:t</span>
+<span class="org-meta-line">#+DESCRIPTION: small skills/tips learned during using emacs</span>
+
+&#35760;&#24405;&#19968;&#20123;&#20851;&#20110;Emacs&#36825;&#20010;&#31070;&#22120;&#30340;&#22855;&#28139;&#25216;&#24039;&#12290;&#19981;&#23450;&#26102;&#26356;&#26032;&#12290;
+
+<span class="org-level-1">* &#30697;&#24418;&#25805;&#20316;</span>
+
+  Emacs&#25152;&#26377;&#36319;&#30697;&#24418;&#25805;&#20316;&#30340;&#21629;&#20196;&#37117;&#26159;&#20197; <span class="org-code">=C-x r=</span> &#20026;&#21069;&#32512;&#65292;&#20854;&#21306;&#22495;&#36873;&#25321;&#19982;&#26222;&#36890;&#30340;&#21306;&#22495;&#36873;&#25321;&#30340;&#24555;&#25463;&#38190;&#19968;
+  &#26679;&#65306; <span class="org-code">=C-space=</span> &#65292;&#21482;&#26159;&#22312;&#25191;&#34892;&#30697;&#24418;&#25805;&#20316;&#26102;&#65292;Emacs&#20250;&#23558;&#36873;&#25321;&#30340;&#36215;&#28857;&#21644;&#32456;&#28857;&#20316;&#20026;&#23545;&#35282;&#65292;&#20854;&#20013;&#30340;&#20869;&#23481;
+  &#20316;&#20026;&#30697;&#24418;&#21306;&#22495;&#12290;&#24120;&#29992;&#24555;&#25463;&#38190;&#65306;
+
+  <span class="org-table">| C-space | set-mark-command | &#26631;&#35760;&#30697;&#24418;&#21306;&#22359;&#30340;&#19968;&#20010;&#35282;&#65288;&#20809;&#26631;&#26631;&#35760;&#20854;&#30456;&#23545;&#30340;&#35282;&#65289;&#12290;                         </span><span class="whitespace-line">              |</span>
+  <span class="org-table">| C-x r t | string-rectangle | &#29992;&#23383;&#31526;&#20018;&#22635;&#20805;&#30697;&#24418;&#21306;&#22495;                                     </span><span class="whitespace-line">                          |</span>
+  <span class="org-table">| C-x r k | kill-rectangle   | &#21098;&#20999;&#24403;&#21069;&#30340;&#30697;&#24418;&#21306;&#22359;&#65292;&#24182;&#23558;&#20854;&#20445;&#23384;&#22312;&#19968;&#20010;&#29305;&#27530;&#30340;&#30697;&#24418;&#21306;&#22359;&#32531;&#20914;&#21306;&#20013;&#12290;                 </span><span class="whitespace-line">      |</span>
+  <span class="org-table">| C-x r d | delete-rectangle | &#21024;&#38500;&#24403;&#21069;&#30340;&#30697;&#24418;&#21306;&#22359;&#65292;&#24182;&#19981;&#20026;&#31896;&#36148;&#32780;&#20445;&#23384;&#23427;&#12290;                           </span><span class="whitespace-line">                |</span>
+  <span class="org-table">| C-x r c | clear-rectangle  | &#28165;&#38500;&#24403;&#21069;&#30340;&#30697;&#24418;&#21306;&#22359;&#65292;&#20351;&#29992;&#31354;&#30333;&#23383;&#31526;&#26367;&#25442;&#25972;&#20010;&#21306;&#22495;&#12290;                        </span><span class="whitespace-line">             |</span>
+  <span class="org-table">| C-x r o | open-rectangle   | &#25171;&#24320;&#24403;&#21069;&#30340;&#30697;&#24418;&#21306;&#22359;&#65292;&#20351;&#29992;&#31354;&#30333;&#23383;&#31526;&#22635;&#20805;&#25972;&#20010;&#21306;&#22495;&#65292;&#24182;&#23558;&#35813;&#30697;&#24418;&#21306;&#22359;&#30340;&#25152;&#26377;&#25991;&#26412;&#31227;&#21160;&#21040;&#21491;&#36793;&#12290; |</span>
+  <span class="org-table">| C-x r y | yank-rectangle   | &#22312;&#20809;&#26631;&#22788;&#65292;&#31896;&#36148;&#19978;&#19968;&#27425;&#21098;&#20999;&#30340;&#30697;&#24418;&#21306;&#22359;&#30340;&#20869;&#23481;&#65292;&#23558;&#25152;&#26377;&#30340;&#29616;&#26377;&#25991;&#26412;&#31227;&#21160;&#21040;&#21491;&#36793;&#12290;            </span><span class="whitespace-line"> |</span>
+
+<span class="org-level-1">* &#23492;&#23384;&#22120;&#25805;&#20316;</span>
+
+  - &#25991;&#26412;&#25805;&#20316;&#65306;
+
+  <span class="org-table">| C-x r s R   | &#20445;&#23384;&#36873;&#20013;&#30340;&#21306;&#22495;&#21040;&#23492;&#23384;&#22120;R         |</span>
+  <span class="org-table">| C-x r r R   | &#20445;&#23384;&#30697;&#24418;&#21306;&#22495;                    |</span>
+  <span class="org-table">| C-x r i R   | &#35835;&#21462;&#23492;&#23384;&#22120;R&#30340;&#20869;&#23481;&#24182;&#25554;&#20837;&#21040;&#20809;&#26631;&#22788; |</span>
+
+  - Buffer/Window/Frame&#25805;&#20316;&#65306;
+
+  <span class="org-table">| C-x r SPC R | &#20445;&#23384;Buffer&#21450;&#20809;&#26631;&#20301;&#32622;            |</span>
+  <span class="org-table">| C-x r w R   | &#20445;&#23384;&#24403;&#21069;Window&#30340;&#37197;&#32622;            |</span>
+  <span class="org-table">| C-x r f R   | &#20445;&#23384;&#24403;&#21069;Frame&#30340;&#37197;&#32622;             |</span>
+  <span class="org-table">| C-x r j R   | &#24674;&#22797;&#23492;&#23384;&#22120;R&#30340;&#20869;&#23481;               |</span>
+
+  <span class="org-code">: M-x list-registers    ; &#26174;&#31034;&#25152;&#26377;&#23492;&#23384;&#22120;&#20013;&#30340;&#20869;&#23481;
+</span>  <span class="org-code">: M-x view-register R   ; &#26597;&#30475;&#23492;&#23384;&#22120;R&#20013;&#30340;&#20869;&#23481;
+</span>
+<span class="org-level-1">* &#20070;&#31614;&#25805;&#20316;&#65306;</span>
+
+  <span class="org-table">| C-x r m Bookmark | bookmark-set         | &#35774;&#32622;&#19968;&#20010;&#21517;&#20026; Bookmark &#30340;&#20070;&#31614;&#12290;              </span><span class="whitespace-line">|</span>
+  <span class="org-table">| C-x r l          | bookmarks-bmenu-list | &#21015;&#20986;&#25152;&#26377;&#24050;&#20445;&#23384;&#30340;&#20070;&#31614;&#12290;                      |</span>
+  <span class="org-table">|                  | bookmark-delete      | &#21024;&#38500;&#19968;&#20010;&#20070;&#31614;&#12290;                           </span><span class="whitespace-line">   |</span>
+  <span class="org-table">| C-x r b Bookmark | bookmark-jump        | &#36339;&#36716;&#33267;&#21517;&#20026; Bookmark &#30340;&#20070;&#31614;&#20013;&#25152;&#35774;&#32622;&#30340;&#20301;&#32622;&#12290;  |</span>
+  <span class="org-table">|                  | bookmark-save        | &#23558;&#25152;&#26377;&#30340;&#20070;&#31614;&#20445;&#23384;&#21040;&#20070;&#31614;&#25991;&#20214; ~/.emac.bmk &#20013;&#12290; |</span>
+
+<span class="org-level-1">* &#21024;&#38500;&#31354;&#34892;&#65306;</span>
+
+  <span class="org-code">: M-x flush-lines RET ^$ RET
+</span>
+  <span class="org-code">=flush-lines=</span> &#21629;&#20196;&#30340;&#26412;&#24847;&#26159;&#21024;&#38500;buffer&#20013;match&#38543;&#21518;&#30340;regexp&#30340;&#34892;&#65292;&#32780; <span class="org-code">=^$=</span> &#23601;&#20195;&#34920;&#31354;
+  &#34892;&#65292;&#20110;&#26159;&#36825;&#23601;&#26159;&#21024;&#38500;&#31354;&#34892;&#30340;&#25805;&#20316;&#12290;
+</pre>
+  </body>
+</html>

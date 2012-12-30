@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Org Mode Manual Learning Notes</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Org Mode Manual Learning Notes"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-07-21 Sat"/>
+<meta name="author" content="Kelvin Hu"/>
+<meta name="description" content="learning notes of org mode manual"/>
+<meta name="keywords" content="org mode"/>
+
+<link href="../../../../../media/css/main.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+
+<div id="preamble">
+<h1><a href="../../../../../">Kelvin</a></h1>
+   <nav id="main-nav">
+     <ul id="nav-list-main">
+       <li><a href="../../../../../sitemap.html" class="menu">Sitemap</a></li>
+       <li><a href="../../../../../categories/" class="menu">Categories</a></li>
+       <li><a href="../../../../../tags/" class="menu">Tags</a></li>
+       <li><a href="../../../../../recentposts.html" class="menu">Recent Posts</a></li>
+       <li><a href="../../../../../about.html" class="menu">About</a></li>
+     </ul>
+   </nav>
+   <nav id="sub-nav" class="align-right">
+     <div class="social">
+         <a class="github" title="GitHub" href="https://github.com/kelvinh/org-page">GitHub</a>
+         <!-- TODO: change the link below to proper value  -->
+         <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+     </div>
+     <form class="search" target="_blank" method="get" action="http://google.com/search">
+       <input type="hidden" value="site:kelvinh.github.com" name="q" />
+       <input type="text" class="align-right" results="0" name="q" />
+     </form>
+   </nav>
+</div>
+
+<div id="content">
+<h1 class="title">Org Mode Manual Learning Notes</h1>
+
+<p>Learning notes recorded during reading org mode manual, simple and incomplete, because they are all about basic syntax.
+</p>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">headers</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+Headers are lines started with star * (be careful that there should not be any indent before the star, otherwise it will be an item of a list, not a header).
+</p>
+<p>
+The first level header is with one star *, and the second with two stars, and so on.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">lists</h2>
+<div class="outline-text-2" id="text-2">
+
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">unsorted lists</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+Unsorted list items start with -, + or *, but the star is NOT recommanded because it is not easy to distinguish it from headers.
+</p><ul>
+<li>so, this is an unsorted list item using -
+</li>
+<li>this one using +
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2">sorted lists</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+Sorted list items start with 1. or 1), if <code>org-alphabetical-lists</code> is configured, a. a) A. A) can also be used.
+</p><ol>
+<li>sorted list item using a right parenthesis )
+</li>
+<li>using a period .
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3">description lists</h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+<p>
+Description list items are unsorted list items, which contain separator :: to distinguish <i>description term</i> from <i>description</i>.
+</p>
+<dl>
+<dt>description example</dt><dd>this is a description for the "description example"
+</dd>
+</dl>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">foot notes</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+Footnotes are made in square brackets, start with "fn:", and then follow a name, e.g. "1" or "kelvin".
+</p>
+<p>
+my blog on cnblogs<sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup>
+</p>
+<p>
+my blog on github<sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">tables</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+create a table is very easy, like what I am doing below:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">name</th><th scope="col" class="left">age</th><th scope="col" class="left">job</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">Kelvin Hu</td><td class="left">23</td><td class="left">Software Engineer</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Someone</td><td class="left">Unknown</td><td class="left">Unknown</td></tr>
+</tbody>
+</table>
+
+
+
+
+<p>
+several useful key bindings:
+</p>
+<dl>
+<dt><code>C-c -</code></dt><dd>mapping command is <i>org-table-insert-hline</i>, will insert a separate line below
+</dd>
+<dt><code>C-c RET</code></dt><dd>mapping command is <i>org-table-hline-and-move</i>, insert a separate line and move to next row
+</dd>
+<dt><code>C-c |</code></dt><dd>mapping command is <i>org-table-create-or-convert-from-region</i>, create or convert table
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">links</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+Links exist between two square brackets, like below:
+</p>
+<p>
+<a href="http://kelvinh.github.com">kelvin's github blog</a> or <a href="http://kelvinh.github.com">http://kelvinh.github.com</a>
+</p>
+
+<p>
+useful key bindings:
+</p>
+<dl>
+<dt><code>C-c C-o</code></dt><dd><i>org-open-at-point</i>, open the link in browser
+</dd>
+</dl>
+
+
+<p>
+for more information about links, please visit offical org doc: <a href="http://orgmode.org/org.html#Link-abbreviations">click here</a>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">markup rules</h2>
+<div class="outline-text-2" id="text-6">
+
+
+
+</div>
+
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1">title</h3>
+<div class="outline-text-3" id="text-6-1">
+
+
+<p>
+The line below will be considered as the title of this document:
+</p>
+
+
+<pre class="src src-org"><span style="color: #586e75;">#+title:</span><span style="color: #586e75; font-style: italic;"> </span><span style="color: #afeeee; font-size: 144%; font-weight: bold;">the line will be used as the title of current document</span>
+
+note that the case is not sensitive, so #+title: will have the same effect as #+TITLE:
+and also do not forget the colon ":"
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2">several other useful syntax</h3>
+<div class="outline-text-3" id="text-6-2">
+
+
+
+
+
+<pre class="src src-org"><span style="color: #586e75; font-style: italic;">#+BEGIN_VERSE and #+END_VERSE: the contents between the two tags will be outputed originaly, with no format</span>
+
+'#+BEGIN_QUOTE' and '#+END_QUOTE': the contents between the two tags are treated as quoting
+(why I add a quote ' here? you may try it then you will know why I add it here ^_^)
+
+<span style="color: #586e75; font-style: italic;">#+BEGIN_CENTER and #+END_CENTER: the two tags will center the contents between them</span>
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3">emphasis and monospace</h3>
+<div class="outline-text-3" id="text-6-3">
+
+
+<p>
+As the offical doc says, you can make word <b>bold</b>, <i>italic</i> and <span style="text-decoration:underline;">underlined</span>, and also <del>strike through</del>.\\ also there are other two syntax: <code>code</code> and <code>verbatim</code>, I do not quite know what they are used for.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4">horizontal rules</h3>
+<div class="outline-text-3" id="text-6-4">
+
+
+<p>
+a line with at least 5 dashes and only contains dashes will be converted into a horizontal line, like below: --------------------------------------------------------------------------------------------------------------------
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6-5" class="outline-3">
+<h3 id="sec-6-5">comments</h3>
+<div class="outline-text-3" id="text-6-5">
+
+
+<p>
+several rules:
+</p>
+
+
+<pre class="src src-org">1) lines start with #
+2) indented lines start with #+
+3) contents between #+BEGIN_COMMENT and #+END_COMMENT
+4) entire subtree starts with keyword COMMENT
+</pre>
+
+
+<p>
+<code>C-c ;</code> can toggle the COMMENT keyword at the beginning of an entry
+</p>
+<p>
+note: all comments will <b>NOT</b> be exported
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6-6" class="outline-3">
+<h3 id="sec-6-6">useful syntax again</h3>
+<div class="outline-text-3" id="text-6-6">
+
+
+
+
+
+<pre class="src src-org">'#+begin_example'
+   example here...
+'#+end_example'
+
+'#+begin_src &lt;syntax&gt; [-n -r]'
+   some code here...
+'#+end_src'
+</pre>
+
+<p>
+the &lt;syntax&gt; stands for the type, e.g. emacs-lisp
+</p>
+<p>
+e.g. as below:
+</p>
+
+
+
+<pre class="src src-emacs-lisp"><span class="linenr">1:  </span>(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">hello-world</span>()
+<span class="linenr">2:  </span>  (print <span style="color: #2aa198;">"hello world"</span>))
+</pre>
+
+
+
+<pre class="src src-java"><span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">Test</span> {
+    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #268bd2;">args</span>) {
+        System.out.println(<span style="color: #2aa198;">"hello world"</span>);
+    }
+}
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-7" class="outline-3">
+<h3 id="sec-6-7">include files</h3>
+<div class="outline-text-3" id="text-6-7">
+
+
+<p>
+for example: <b>#+include: "~/.emacs.d/init.el" src emacs-lisp</b> will insert the contents of ~/.emacs.d/init.el at current position, as below:\\ (the second parameter is the tag type, "src" stands for "#+begin\_src/#+end\_src" pair, so do "quote" and "example")
+</p>
+
+
+
+<pre class="src src-emacs-lisp"><span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">---------------------------------------------------------------------------------</span>
+<span style="color: #586e75; font-style: italic;">; </span><span style="color: #586e75; font-style: italic;">******* Emacs main config file *******</span>
+<span style="color: #586e75; font-style: italic;">;        </span><span style="color: #586e75; font-style: italic;">Author:  Kelvin Hu</span>
+<span style="color: #586e75; font-style: italic;">;       </span><span style="color: #586e75; font-style: italic;">Created:  04/26/2012</span>
+<span style="color: #586e75; font-style: italic;">; </span><span style="color: #586e75; font-style: italic;">Last Modified:  09/04/2012</span>
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">---------------------------------------------------------------------------------</span>
+
+<span style="color: #586e75; font-style: italic;">;;; </span><span style="color: #586e75; font-style: italic;">this is no longer needed, because we have set the environment variable HOME pointing to this directory</span>
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">(if (string-equal system-type "windows-nt") (setenv "HOME" "D:/Dev-Support/Emacs-Config/"))</span>
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">server</span>)
+(<span style="color: #859900;">unless</span> (server-running-p)
+  (server-start))
+
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">---------------------------------------------------------------------------------</span>
+<span style="color: #586e75; font-style: italic;">; </span><span style="color: #586e75; font-style: italic;">load the initial config</span>
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">---------------------------------------------------------------------------------</span>
+<span style="color: #586e75; font-style: italic;">;;; </span><span style="color: #586e75; font-style: italic;">the ~ folder has been set to this directory according to the HOME environment variable</span>
+(add-to-list 'load-path <span style="color: #2aa198;">"~/.emacs.d"</span>)
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">(add-to-list 'load-path "~/.emacs.d/lisp")</span>
+(add-to-list 'load-path <span style="color: #2aa198;">"~/.emacs.d/lib"</span>)
+(add-to-list 'load-path <span style="color: #2aa198;">"~/.emacs.d/conf"</span>)
+(add-to-list 'load-path <span style="color: #2aa198;">"~/.emacs.d/util"</span>)
+
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-theme</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-misc</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-ido</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-tabbar</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-editing</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-programming</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-auto-complete</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-markdown</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-ace-jump</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-autopair</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-org</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-ibuffer</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-yasnippet</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-flyspell</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-encoding</span>)
+
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-undo-tree</span>)
+
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">(require 'conf-cedet)</span>
+
+<span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">(require 'conf-jdee)</span>
+
+
+<span style="color: #586e75; font-style: italic;">;;; </span><span style="color: #586e75; font-style: italic;">===================== read desktop at the last step =====================</span>
+(<span style="color: #859900;">require</span> '<span style="color: #2aa198;">conf-desktop</span>)
+</pre>
+
+
+
+
+
+<hr/>
+
+
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+<p class="footnote"><sup><a class="footnum" name="fn.1" href="#fnr.1">1</a></sup> <a href="http://www.cnblogs.com/ini_always">http://www.cnblogs.com/ini\_always</a>
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn.2" href="#fnr.2">2</a></sup> <a href="http://kelvinh.github.com">http://kelvinh.github.com</a>
+</p></div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<div id="post-meta">
+  <span title="post date" class="post-info">2012-07-21</span>
+  <span title="last modification date" class="update-info">2012-12-31</span>
+  <span title="category" class="category"><a href="../../../../../categories/notes/">notes</a></span>
+  <span title="tags" class="tags"><a href="../../../../../tags/org-mode/">Org Mode</a></span>
+  <span title="author" class="author">Kelvin Hu</span>
+  <span title="htmlized org source file" class="org-source"><a href="../../../../../../org/notes/2012/07/21/org-mode-manual-learning-notes/index.org.html">htmlized org source</a></span>
+</div><section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    //var disqus_developer = 1;
+    var disqus_identifier = "/blog/notes/2012/07/21/org-mode-manual-learning-notes/";
+    var disqus_url = "http://kelvinh.github.com/blog/notes/2012/07/21/org-mode-manual-learning-notes/";
+    var disqus_shortname = 'kelvinh';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section><div id="footer">
+  <p class="creator">Generated by Org version 7.8.11 with Emacs version 24</p>
+  <p class="copyright">
+    Copyright &copy; 2012 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+    &nbsp;&nbsp;-&nbsp;&nbsp;
+    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+  </p>
+</div>
+</div>
+</body>
+</html>

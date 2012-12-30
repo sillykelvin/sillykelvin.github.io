@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>SICP Learning Notes And Exersice</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="SICP Learning Notes And Exersice"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-12-10 Sun"/>
+<meta name="author" content="Kelvin Hu"/>
+<meta name="description" content="learning notes of book Structure and Interpretation of Computer Programs"/>
+<meta name="keywords" content="sicp"/>
+
+<link href="../../../../../media/css/main.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+
+<div id="preamble">
+<h1><a href="../../../../../">Kelvin</a></h1>
+   <nav id="main-nav">
+     <ul id="nav-list-main">
+       <li><a href="../../../../../sitemap.html" class="menu">Sitemap</a></li>
+       <li><a href="../../../../../categories/" class="menu">Categories</a></li>
+       <li><a href="../../../../../tags/" class="menu">Tags</a></li>
+       <li><a href="../../../../../recentposts.html" class="menu">Recent Posts</a></li>
+       <li><a href="../../../../../about.html" class="menu">About</a></li>
+     </ul>
+   </nav>
+   <nav id="sub-nav" class="align-right">
+     <div class="social">
+         <a class="github" title="GitHub" href="https://github.com/kelvinh/org-page">GitHub</a>
+         <!-- TODO: change the link below to proper value  -->
+         <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+     </div>
+     <form class="search" target="_blank" method="get" action="http://google.com/search">
+       <input type="hidden" value="site:kelvinh.github.com" name="q" />
+       <input type="text" class="align-right" results="0" name="q" />
+     </form>
+   </nav>
+</div>
+
+<div id="content">
+<h1 class="title">SICP Learning Notes And Exersice</h1>
+
+<p>这里记录了我在学习SICP的过程中的一点笔记，以及作业解答，现在还正在学习中。。（因为作业太多了，读起来真慢。。）
+</p>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">构造过程抽象</h2>
+<div class="outline-text-2" id="text-1">
+
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1">求值模型</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<ul>
+<li>正则序求值：先将复合式代入实际参数，再逐渐展开，直到得到一个只包含基本运算符的表达式，再对其进行求值。（完全展开而后归约）
+
+</li>
+<li>应用序求值：对于复合型表达式，将能进行计算的一些子表达式求值，再对其进行展开，再求值能够进行计算的子表达式，直到求出最终结果。（展开一层归约一层）
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2">练习1.2</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<pre class="example">
+(/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5))))) (* 3 (- 6 2) (- 2 7)))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3">练习1.3</h3>
+<div class="outline-text-3" id="text-1-3">
+
+<pre class="example">
+the answer below is wrong!!!
+(define (sum-of-max-two a b c)
+    (cond ((&lt; a b) (if (&lt; a c) (+ b c) (+ a b)))
+          (else (if (&lt; b c) (+ a c) (+ a b)))))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4">练习1.5</h3>
+<div class="outline-text-3" id="text-1-4">
+
+
+<p>
+   初看到 <code>(define (p) (p))</code> 这样的定义吓了我一跳，细看其实是一个递归函数的定义，但由没有退出条件，所以一旦有 <code>(p)</code> 这样的调用，程序将陷入死循环。
+</p>
+<p>
+   再看 <code>(test 0 (p))</code> ，如果是正则序，那么会完全展开再求值，于是会有如下过程：
+</p><pre class="example">
+1. (if (= 0 0) 0 (p))
+2. (if #t 0 (p))
+3. return value, 0
+</pre>
+
+<p>   如果是应用序，则会先求值 <code>(p)</code> ，于是程序陷入死循环。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5">练习1.6</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+<p>
+   这个题目看了半天，大概猜到是跟求值模型相关的，但在解释器racket上试，和使用原始版本的if结果一模一样。。
+</p>
+<p>
+   于是，无奈Google之，发现<a href="http://blog.csdn.net/xuanyun/article/details/1331872">此帖</a>，讲得很详细，看来对求值模型还是理解不够，但关键是，racket解释器在实验练习1.5时明明是陷入死循环了，说明是应用序才对，但这里又工作得好好的，真让人搞不懂。。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6">练习1.7</h3>
+<div class="outline-text-3" id="text-1-6">
+
+
+<p>
+   另一个 <code>good-enough?</code> 函数：
+</p><pre class="example">
+(define (good-enough? guess x)
+  (&lt; (/ (abs (- (improve guess x) guess)) guess) 0.00001))
+</pre>
+
+<p>   这个函数不是用绝对误差来作比较，而是用两次guess的变化率来比较，这在处理很小的数时会比较有用，比方说小数0.0000000001这种，但在处理大数时，反而会增加误差，因为计算变化率的分母很大，导致分子很大时依然能满足要求，所以在处理大数时不如先前版本的绝对误差精确。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-7" class="outline-3">
+<h3 id="sec-1-7">练习1.8</h3>
+<div class="outline-text-3" id="text-1-7">
+
+
+<p>
+   牛顿法解立方根：
+</p><pre class="example">
+(define (3sqrt guess x)
+  (if (good-enough? guess x)
+      guess
+      (3sqrt (improve guess x) x)))
+
+(define (improve guess x)
+  (/ (+ (/ x (* guess guess)) (* 2 guess)) 3))
+
+(define (good-enough? guess x)
+  (&lt; (/ (abs (- (improve guess x) guess)) guess) 0.00001))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-8" class="outline-3">
+<h3 id="sec-1-8">线性递归和迭代</h3>
+<div class="outline-text-3" id="text-1-8">
+
+
+<p>
+   作为一个递归过程，但其计算过程可能会是递归的，也可能是迭代的。以阶乘计算为例：
+</p>
+<pre class="example">
+;; 第一种定义
+(define (factorial n)
+  (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+</pre>
+
+
+<pre class="example">
+;; 第二种定义
+(define (factorial n)
+  (define (fact-iter result counter)
+    (if (&gt; counter n)
+        result
+        (fact-iter (* result counter) (+ counter 1))))
+  (fact-iter 1 1))
+</pre>
+
+
+<p>
+   毫无疑问两种定义都使用了递归过程，但两者有些不同：第一种在计算时会导致 <code>factorial</code> 自身的展开，而且用于计算的n越大，展开的层数越多；第二种在计算时，只需要维护 <code>result</code> 以及 <code>counter</code> 两个变量即可。
+</p>
+<p>
+   在上面的例子中，第一种定义就是递归计算过程，第二种则是迭代计算过程。由于两者都是线性的，所以都是线性过程。（所谓线性是指，第一种的展开长度对于n是线性增长的；第二种的计算步骤对于n是线性增长的）
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-9" class="outline-3">
+<h3 id="sec-1-9">练习1.9</h3>
+<div class="outline-text-3" id="text-1-9">
+
+
+<pre class="example">
+(inc (+ 3 5))
+(inc (inc (+ 2 5)))
+(inc (inc (inc (+ 1 5))))
+(inc (inc (inc (inc (+ 0 5)))))
+(inc (inc (inc (inc 5))))
+(inc (inc (inc 6)))
+(inc (inc 7))
+(inc 8)
+9
+</pre>
+
+<p>   这是一个递归计算过程
+</p>
+<pre class="example">
+(+ 3 6)
+(+ 2 7)
+(+ 1 8)
+(+ 0 9)
+9
+</pre>
+
+<p>   这是一个迭代计算过程
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-10" class="outline-3">
+<h3 id="sec-1-10">练习1.10</h3>
+<div class="outline-text-3" id="text-1-10">
+
+
+<pre class="example">
+(A 1 10) =&gt; 1024
+(A 2 4)  =&gt; 65536
+(A 3 3)  =&gt; 65536
+</pre>
+
+
+<pre class="example">
+f(n) = 2n
+g(n) = 2^n
+h(n) = 2^h(n-1)
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-11" class="outline-3">
+<h3 id="sec-1-11">练习1.11</h3>
+<div class="outline-text-3" id="text-1-11">
+
+
+<p>
+   n &lt; 3, f(n) = n; n &gt;= 3, f(n) = f(n-1) + 2f(n-2) + 3f(n-3)
+</p>
+<p>
+   递归过程：
+</p>
+<pre class="example">
+(define (f n)
+  (cond ((&lt; n 3) n)
+        (else (+ (f (- n 1))
+                 (* 2 (f (- n 2)))
+                 (* 3 (f (- n 3)))))))
+</pre>
+
+
+<p>
+   迭代过程：
+</p>
+<p>
+   a = f(2) = 2, b = f(1) = 1, c = f(0) = 0 a &lt;= a + 2b + 3c b &lt;= a c &lt;= b
+</p>
+<pre class="example">
+(define (f2 n)
+  (f2-iter 2 1 0 n))
+
+(define (f2-iter a b c count)
+  (if (= count 0)
+      c
+      (f2-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-12" class="outline-3">
+<h3 id="sec-1-12">练习1.12</h3>
+<div class="outline-text-3" id="text-1-12">
+
+
+<p>
+   杨辉三角的规律：f(n, 1) = f(n, n) = 1, f(n, m) = f(n-1, m-1) + f(n-1, m), 1 &lt; m &lt; n
+</p>
+<pre class="example">
+(define (pascal-triangle n m)
+  (if (or (= m 1) (= m n))
+      1
+      (+ (pascal-triangle (- n 1) (- m 1))
+         (pascal-triangle (- n 1) m))))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-13" class="outline-3">
+<h3 id="sec-1-13">练习1.13</h3>
+<div class="outline-text-3" id="text-1-13">
+
+
+<p>
+   <del>暂时跳过，现在手头只有一台电脑，草稿纸和笔都没有，无法证明。。</del>
+</p>
+<p>
+   整个计算过程涉及到一些数学符号，如果只用文本格式写会很蛋疼，于是，只写个思路：
+</p>
+<ol>
+<li>按提示，证明 <code>Fib(n) = (φ^n - ψ^n) / √5</code> ，其中 <code>φ = (1 + √5) / 2</code> ， <code>ψ = (1 - √5) / 2</code> ，证明过程比较简单，根据数学归纳法和Fib(n)的定义即可。
+
+</li>
+<li>之后，要证明Fib(n)是最接近φ^n/√5的整数，只需要证明 <code>|Fib(n) - φ^n/√5| ≤ 0.5</code> 即可。经过化简，需要证明的不等式变成 <code>|ψ^n / √5| ≤ 0.5</code> 。
+
+</li>
+<li>经过观察， <code>|ψ^n / √5|</code> 实际上是趋于0的极限，所以只需要证明两点即可：
+
+<ol>
+<li><code>|ψ^n / √5| ≤ |ψ^(n-1) / √5|</code>
+</li>
+<li><code>|ψ^0 / √5| ≤ 0.5</code>
+
+</li>
+</ol>
+
+<p>      这两点都是比较好证明的。于是再反推回到第二步，就证明了Fib(n)是离φ^n/√5最近的整数。
+</p></li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-14" class="outline-3">
+<h3 id="sec-1-14">练习1.14</h3>
+<div class="outline-text-3" id="text-1-14">
+
+
+<p>
+   <b>再略过。。手头没有笔和纸，泪流满面。。</b>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-15" class="outline-3">
+<h3 id="sec-1-15">练习1.15</h3>
+<div class="outline-text-3" id="text-1-15">
+
+
+<p>
+   a) 这个问题一时半会儿不知道如何作答，就直接暴力地在函数 <code>p(x)</code> 的定义中加了一个打印函数来打印x以确定被调用了几次，结果显示， <code>(sine 12.15)</code> 调用了5次 <code>p(x)</code> 函数。
+</p>
+<p>
+   b) 对 <code>(sine a)</code> 进行展开，第一次后a变成a/3，第二次变成a/9，所以，在n次之后，a变成了a除以3的n次方。空间和步数是正比于展开次数n的，所以，n关于a的阶就是空间和步数关于a的阶。展开的终止条件是 <code>a / 3^n ≤ 0.1</code> ，可以求出 <code>n ≥ log3(10a)</code> ，即n会大于等于以3为底10a的对数。所以空间和步数关于a的增长阶是对数的。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-16" class="outline-3">
+<h3 id="sec-1-16">练习1.16</h3>
+<div class="outline-text-3" id="text-1-16">
+
+
+<p>
+   题目要求：1.只能用迭代，不能递归；2.增长的阶是对数级。
+</p>
+<p>
+   被这个题的提示给坑到了。。因为提示说维持一个附加变量a来保存计算值，于是我就按提示构造了一个状态变量a，打算用来保存每次迭代的计算值，但经过演算发现必须在第一步迭代将a从1直接给过渡到b^(n/2)，不然后面的迭代没法继续，但这肯定是不可能的。。
+</p>
+<p>
+   无奈，去网上搜了一下，当我看到下面这两个等式的时候，我瞬间就明白了：
+</p>
+<ol>
+<li>n为偶数时：a(b^2)^(n/2) = ab^n
+</li>
+<li>n为奇数时：ab*b^(n-1) = ab^n
+</li>
+</ol>
+
+
+<p>
+   按上面的等式写出迭代过程：
+</p>
+<pre class="example">
+n为偶数时：
+a &lt;= a
+b &lt;= b^2
+n &lt;= n / 2
+
+n为奇数时：
+a &lt;= a * b
+b &lt;= b
+n &lt;= n - 1
+</pre>
+
+
+<p>
+   于是，解答如下：
+</p>
+<pre class="example">
+(define (fast-expt b n)
+  (fast-expt-iter 1 b n))
+
+(define (fast-expt-iter a b n)
+  (cond ((= n 0) a)
+        ((even? n) (fast-expt-iter a (* b b) (/ n 2)))
+        (else (fast-expt-iter (* a b) b (- n 1)))))
+
+(define (even? n)
+  (= (remainder n 2) 0))
+</pre>
+
+
+<p>
+   这明明是a和b共同保存中间值，以2^10为例，10 =&gt; 5 =&gt; 4 =&gt; 2 =&gt; 1 =&gt; 0，大多时候a都在打酱油，而b才是保存中间值的主力。。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-17" class="outline-3">
+<h3 id="sec-1-17">练习1.17</h3>
+<div class="outline-text-3" id="text-1-17">
+
+
+<pre class="example">
+(define (my* a b)
+  (cond ((= b 0) 0)
+        ((even? b) (my* (double a) (halve b)))
+        (else (+ a (my* a (- b 1))))))
+
+(define (double a)
+  (+ a a))
+
+(define (halve a)
+  (/ a 2))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-18" class="outline-3">
+<h3 id="sec-1-18">练习1.18</h3>
+<div class="outline-text-3" id="text-1-18">
+
+
+<p>
+   有了1.16的基础，再来这道题就好多了，这题的难点是构造类似1.16中的ab^n。和1.16不同，这里的构造等式如下（状态变量定义为s）：
+</p>
+<ol>
+<li>b为偶数：s + ab = s + a*2 * b/2
+</li>
+<li>b为奇数：s + ab = (s + a) + a * (b - 1)
+</li>
+</ol>
+
+
+<p>
+   于是，有如下解：
+</p>
+<pre class="example">
+(define (my* a b)
+  (my*-iter 0 a b))
+
+(define (my*-iter s a b)
+  (cond ((= b 0) s)
+        ((even? b) (my*-iter s (double a) (halve b)))
+        (else (my*-iter (+ s a) a (- b 1)))))
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-19" class="outline-3">
+<h3 id="sec-1-19">练习1.19</h3>
+<div class="outline-text-3" id="text-1-19">
+
+
+<p>
+   这个题是要求p'和q'，根据T^2 = T'，可以得到两个关于p'和q'的方程，联立方程可得解。
+</p>
+<p>
+   这两个二元一次方程本身不难，但因为项太多，还有平方，所以如果打字打出来会很蛋疼，所以就不打了，最后解出的结果是：
+</p>
+<pre class="example">
+p' = p^2 + q^2
+q' = q^2 + 2pq
+</pre>
+
+
+<p>
+   吐槽：外国人真尼玛牛，一个特例斐波那契数列，能想到通用的T变换，而且，还尼玛T^2 = T'。。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-20" class="outline-3">
+<h3 id="sec-1-20">练习1.20</h3>
+<div class="outline-text-3" id="text-1-20">
+
+
+<p>
+   个人觉得这个题的水平略低，因为只是按照定义对过程调用进行展开而已。关键是，如果你展开的内容少一点也可以接受，但是 <code>(gcd 206 40)</code> 的正规序展开内容太多了，我写了几层，就写不下去了。。最后看了<a href="http://www.billthelizard.com/2010/01/sicp-exercise-120-gcd.html">这里</a>的详细展开内容，那哥们真是耐得住。。其实题目的意思大概是想让我们对这两种展开方式有一个比较深刻的理解，但这样大量的重复性工作，显得没有必要，所以我没有耐得住寂寞展开到最后。。从那哥们展开的结果来看，最后的答案是18和4。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-21" class="outline-3">
+<h3 id="sec-1-21">练习1.21</h3>
+<div class="outline-text-3" id="text-1-21">
+
+
+<p>
+   把书中的的 <code>smallest-divisor</code> 及相关定义照执行一遍就行了，结果如下：
+</p>
+<pre class="example">
+(smallest-divisor 199)    =&gt; 199
+(smallest-divisor 1999)   =&gt; 1999
+(smallest-divisor 19999)  =&gt; 7
+</pre>
+
+
+<p>
+   PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divisor</code> 相关的 <code>divides?</code> 定义，其中对 <code>remainder</code> 过程的调用就把参数a和b写反了，坑爹。。页脚的注释d/n应该是n/d。。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-22" class="outline-3">
+<h3 id="sec-1-22">练习1.22</h3>
+<div class="outline-text-3" id="text-1-22">
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<div id="post-meta">
+  <span title="post date" class="post-info">2012-12-10</span>
+  <span title="last modification date" class="update-info">2012-12-31</span>
+  <span title="category" class="category"><a href="../../../../../categories/notes/">notes</a></span>
+  <span title="tags" class="tags"><a href="../../../../../tags/sicp/">SICP</a></span>
+  <span title="author" class="author">Kelvin Hu</span>
+  <span title="htmlized org source file" class="org-source"><a href="../../../../../../org/notes/2012/12/10/sicp-learning-notes-and-exersice/index.org.html">htmlized org source</a></span>
+</div><section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    //var disqus_developer = 1;
+    var disqus_identifier = "/blog/notes/2012/12/10/sicp-learning-notes-and-exersice/";
+    var disqus_url = "http://kelvinh.github.com/blog/notes/2012/12/10/sicp-learning-notes-and-exersice/";
+    var disqus_shortname = 'kelvinh';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section><div id="footer">
+  <p class="creator">Generated by Org version 7.8.11 with Emacs version 24</p>
+  <p class="copyright">
+    Copyright &copy; 2012 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+    &nbsp;&nbsp;-&nbsp;&nbsp;
+    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+  </p>
+</div>
+</div>
+</body>
+</html>
