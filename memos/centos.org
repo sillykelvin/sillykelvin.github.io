@@ -1,0 +1,62 @@
+#+TITLE:       Tips and Skills of CentOS
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-09-26 Wed
+#+KEYWORDS:    linux, centos
+#+CATEGORY:    memos
+#+TAGS:        :Linux:CentOS:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: small skills/tips during using centos
+
+这是一篇备忘性质的文章，主要记录我在配置和管理CentOS服务器的过程中，遇到的一些问题及
+相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
+
+* yum related
+
+** error 404:
+
+   有时， =yum makecache= 或者其它命令可能会出现以下错误：
+
+   : [Errno 14] HTTP Error 404: Not Found
+
+   这时，运行 =yum clean all= ，再执行相应命令即可。
+
+** Public key not installed:
+
+   在安装软件包 =yum install xxx= 时出现 "Public key for * is not installed"：
+
+   : # 注意把以下命令末尾的版本改成对应的版本
+   : $ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+
+* ftp related
+
+** =tar= error with ftp downloaded file:
+
+   在解压用ftp下载的包时，出现以下错误：
+
+   : Tar: Exiting with failure status due to previous errors
+
+   原因：通过ftp download下来的包在传输时没有使用二进制传送，所以tar解压失败。
+   解决方案：在ftp登录之后，运行 =ftp> bin= ，再进行 =get= 下载操作。
+
+* network related
+
+** no network in a virtual machine:
+
+   虚拟机中，以minimal模式新安装的CentOS连不上Internet，因为默认eth0没有打开，编辑
+   以下文件：
+
+   : /etc/sysconfig/network-scripts/ifcfg-eth0
+
+   将 ONBOOT="no" 的no改成yes即可。
+
+** shutdown firewall:
+
+   CentOS的防火墙默认打开，并且应用了很强的规则，这时候其它机器无法访问其apache等web
+   服务，应用以下命令关闭防火墙（这并非最好的解决方式，最好的解决方式是配置防火墙规则，
+   放行某些端口）：
+
+   : service iptables save
+   : service iptables stop
+   : chkconfig iptables off

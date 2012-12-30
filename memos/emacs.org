@@ -1,0 +1,59 @@
+#+TITLE:       Tips and Skills of Emacs
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-12-13 Thu
+#+KEYWORDS:    emacs
+#+CATEGORY:    memos
+#+TAGS:        :Emacs:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: small skills/tips learned during using emacs
+
+记录一些关于Emacs这个神器的奇淫技巧。不定时更新。
+
+* 矩形操作
+
+  Emacs所有跟矩形操作的命令都是以 =C-x r= 为前缀，其区域选择与普通的区域选择的快捷键一
+  样： =C-space= ，只是在执行矩形操作时，Emacs会将选择的起点和终点作为对角，其中的内容
+  作为矩形区域。常用快捷键：
+
+  | C-space | set-mark-command | 标记矩形区块的一个角（光标标记其相对的角）。                                       |
+  | C-x r t | string-rectangle | 用字符串填充矩形区域                                                               |
+  | C-x r k | kill-rectangle   | 剪切当前的矩形区块，并将其保存在一个特殊的矩形区块缓冲区中。                       |
+  | C-x r d | delete-rectangle | 删除当前的矩形区块，并不为粘贴而保存它。                                           |
+  | C-x r c | clear-rectangle  | 清除当前的矩形区块，使用空白字符替换整个区域。                                     |
+  | C-x r o | open-rectangle   | 打开当前的矩形区块，使用空白字符填充整个区域，并将该矩形区块的所有文本移动到右边。 |
+  | C-x r y | yank-rectangle   | 在光标处，粘贴上一次剪切的矩形区块的内容，将所有的现有文本移动到右边。             |
+
+* 寄存器操作
+
+  - 文本操作：
+
+  | C-x r s R   | 保存选中的区域到寄存器R         |
+  | C-x r r R   | 保存矩形区域                    |
+  | C-x r i R   | 读取寄存器R的内容并插入到光标处 |
+
+  - Buffer/Window/Frame操作：
+
+  | C-x r SPC R | 保存Buffer及光标位置            |
+  | C-x r w R   | 保存当前Window的配置            |
+  | C-x r f R   | 保存当前Frame的配置             |
+  | C-x r j R   | 恢复寄存器R的内容               |
+
+  : M-x list-registers    ; 显示所有寄存器中的内容
+  : M-x view-register R   ; 查看寄存器R中的内容
+
+* 书签操作：
+
+  | C-x r m Bookmark | bookmark-set         | 设置一个名为 Bookmark 的书签。              |
+  | C-x r l          | bookmarks-bmenu-list | 列出所有已保存的书签。                      |
+  |                  | bookmark-delete      | 删除一个书签。                              |
+  | C-x r b Bookmark | bookmark-jump        | 跳转至名为 Bookmark 的书签中所设置的位置。  |
+  |                  | bookmark-save        | 将所有的书签保存到书签文件 ~/.emac.bmk 中。 |
+
+* 删除空行：
+
+  : M-x flush-lines RET ^$ RET
+
+  =flush-lines= 命令的本意是删除buffer中match随后的regexp的行，而 =^$= 就代表空
+  行，于是这就是删除空行的操作。

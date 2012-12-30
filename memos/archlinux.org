@@ -1,0 +1,142 @@
+#+TITLE:       Tips and Skills of Archlinux
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-08-29 Wed
+#+KEYWORDS:    linux, archlinux
+#+CATEGORY:    memos
+#+TAGS:        :Linux:Archlinux:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: small skills/tips learned during using my archlinux
+
+这是一篇备忘性质的文章，主要记录我在使用Archlinux的过程中，遇到的一些问题及相应的解决
+办法，以及一些比较有用的命令或者tips。会不定期更新。
+
+* sudo related
+
+  For other more =sudoers= configuration, please see this [[https://wiki.archlinux.org/index.php/Sudo][wiki page]].
+
+** add a user to sudoers file:
+
+   Users who do not exist in =/etc/sudoers= will not have permission to run
+   command =sudo ...=, add the following line to this file:
+
+   : <username> ALL=(ALL) ALL
+
+   Now the user /<username>/ will have the root privileges.
+
+** make a user password needless:
+
+   Input password every time when you run =sudo ...= is really annoying, put
+   the following line into =/etc/sudoers/=:
+
+   : Defaults:<username> !authenticate
+
+   Now the user /<username>/ will not need to input password any more when
+   running =sudo ...=.
+
+* wireless related
+
+** set up connection using netcfg, with WPA:
+
+   : touch /etc/network.d/home  # the file name can be whatever you like
+   : vi /etc/network.d/home
+
+   then input the following contents:
+
+   : CONNECTION="wireless"
+   : ESSID="<my network>"  # replace it with the real network ESSID
+   : INTERFACE="wlan0"
+   : SCAN="yes"
+   : IP="dhcp"
+   : TIMEOUT="10"
+   : SECURITY="wpa"
+   : KEY="<passphrase>"    # replace it with your real passphrase
+
+   then save this file, run the following command:
+
+   : netcfg home
+
+   Now your network will be up.
+
+   Other useful commands:
+
+   : ip link set wlan0 up/down # take up/down the wireless network
+   : ip addr show wlan0        # show state of the wireless network
+   : iwlist wlan0 scan         # scan available wireless points
+   : iw dev wlan0 scan         # same as above
+
+   Command =wifi-menu= is also very useful in package /netcfg/.
+
+* pacman related
+
+** query the package that a file belongs to:
+
+   : pacman -Qo /path/to/file
+
+* usefull commands
+
+** 查看端口占用情况
+
+   : netstat -anput
+
+   -a) established和listen都显示
+
+   -n) 显示数字，如127.0.0.1:80，而不是localhost:http
+
+   -p) 显示占用此端口的PID和程序名称
+
+   -u/-t) 显示TCP和UDP，查端口占用基本只有TCP/UDP是有用的，其它那些STREAM的根本不
+          知道是神马类型。。
+
+   如果有装lsof的话，也可以用以下命令查看8080的端口占用：
+
+   : lsof -i :8080
+
+** lookup binary dependency
+
+   : ldd [-v] <path/to/binary>
+
+   or
+
+   : readelf
+
+* emacs related
+
+** emacs/fcitx快捷键冲突
+
+   Emacs选择的默认快捷键是Ctrl + Space，和fcitx的激活快捷键Ctrl + Space冲突。
+
+   *解决方法* ：修改 =~/.config/fcitx/config= ：
+
+   : TriggerKey=CTRL_RSHIFT    # default value is CTRL_SPACE
+   : IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
+
+   将TriggerKey由默认的Ctrl + Space改为Ctrl + Right Shift，但是由于另外一个选项也是
+   Ctrl + Shift，有冲突，所以把冲突的IMSwitchHotkey给改掉。
+
+   然后，重启fcitx，这样fcitx和emacs的快捷键冲突就解决了。
+
+** emacs中文输入
+
+   要在emacs中输入中文，还需要设置LC_CTYPE为zh_CN.UTF-8，不然依旧无法输入。比较
+   好的解决方法：
+
+   : sudo mv /usr/bin/emacs /usr/bin/emacs.origin
+   : sudo touch /usr/bin/emacs
+   : sudo chmod 755 /usr/bin/emacs
+
+   然后，在 =/usr/bin/emacs= 中输入以下内容：
+
+   : #!/bin/zsh
+   : LC_CTYPE=zh_CN.UTF-8
+   : /usr/bin/emacs.origin "$@"
+
+   再运行emacs就可以输入中文。
+
+* 终端某些文字显示为白色小方块
+
+  因为locale选了其它语言，但又没安装其它语言的字体，所以显示小方块。
+
+  *解决方法* ：编辑 =/etc/locale.gen= ，只保留 /en_US.UTF-8 UTF-8/ 这一行，再运
+  行 =locale-gen= ，重启既可。

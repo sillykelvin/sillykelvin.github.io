@@ -1,0 +1,50 @@
+#+TITLE:       Useful Commands of Git
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-07-29 Sun
+#+KEYWORDS:    git, git command
+#+CATEGORY:    memos
+#+TAGS:        :Git:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: useful commands during using git
+
+这是一篇备忘性质的文章，主要记录我在使用git的过程中，个人觉得一些比较有用的命令。会不
+定期更新。
+
+* useful commands
+
+** pretty log:
+
+   以前我会用一些GUI的git工具来看历史提交记录，现在有了这个命令，发现那些GUI工具都弱
+   爆了。。
+
+   : git log --oneline --graph --decorate
+
+** modify commit message:
+
+   当某个commit提交后发现message错误时，可以用此命令修正：
+
+   : git commit --amend -m "correct message"
+
+** clean useless files:
+
+   在工作区进行某些测试，例如 =make= ，可能会产生很多不需要提交到repository的文件，
+   手动一个个删除又太麻烦，可以利用下面这个命令：
+
+   : git clean -fdx
+
+   所有未执行 =git add= 的文件将全部被删除。
+
+   1. =-f= 代表强制删除
+   2. =-d= 代表目录
+   3. =-x= 代表在 =.gitignore= 中存在的文件也一并删除
+
+** clear obsolete branch:
+
+   If some branches are deleted at remote repository, the local branches will
+   not be deleted automatically (e.g. a branch named /devel/ at remote repo is
+   deleted, the branch "remotes/origin/devel" will still exist), so use this
+   command to clear the obsolete local branches:
+
+   : git remote prune origin
