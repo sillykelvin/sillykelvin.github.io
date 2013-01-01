@@ -1,0 +1,43 @@
+#+TITLE:       Remove Youku Ads Totally
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-01-01 Tue
+#+KEYWORDS:    youku, ads, linux
+#+CATEGORY:    essays
+#+TAGS:        :Non-tech:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: how to remove ads on youku totally
+
+每天上youku看看War3视频是我最基本的娱乐，但最近youku越来越恶心，广告的时间最长的时候
+有45秒！如果广告10秒还是可以忍受的，但45秒，对于视频广告来说，肯定是太长了。下面就讲讲
+我是如何折腾，彻底去掉youku的广告的（系统：Linux；浏览器：firefox）：
+
+PS：下面的“彻底去除广告”部分并不是我的原创，而是参考某位童鞋的，但是他的blog貌似挂掉
+了，于是，这里就无法给出链接了，原谅我吧。 ^_^
+
+** 安装Adblock Plus：
+
+   给firefox装上Adblock Plus（没试过Chrome，但Chrome应该也有类似插件），为了让刚装
+   上的ABP适应天朝国情，需要在其中订阅特定的filter：在 *filter subscriptions* 标签
+   页，点击 *Add filter subscription* ，然后选择 *ChinaList+EasyList* ，搞定。
+
+   重启一下firefox，再打开一个youku测试页面，发现广告是没了，但是却黑屏了，还提示：
+
+   : 呃...广告无法正常播放了
+
+   如果广告是45秒，那么也要这样黑屏45秒，有没有觉得恶心。。下面，开始第二步。
+
+** 彻底去除广告：
+
+   其实这也没什么神秘的，进到以下目录：
+
+   : cd ~/.macromedia/Flash_Player/\#SharedObjects/GW8DDG87/
+   : # 注意最后一层目录的名字可能跟这里不太一样
+
+   在这个目录里面，会有一个叫 /static.youku.com/ 的目录，执行以下操作：
+
+   : rm -rf static.youku.com && touch static.youku.com
+
+   删掉这个目录并且新建一个跟这个目录名相同的文件，再打开一个youku视频，那令人讨厌的黑
+   屏是不是不见了？
