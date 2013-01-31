@@ -48,3 +48,18 @@
    command to clear the obsolete local branches:
 
    : git remote prune origin
+
+* misc
+
+** github proxy settings under windows
+
+   万恶的GFW，前两天封了github，这两天虽然解封了，但是访问速度慢得要死，clone一个
+   repo才1KB/s。。。无奈，使用代理，但是windows下怎么设置代理还没弄过，折腾了好一
+   阵子，才弄出来，只需要在命令行设置以下环境变量：
+
+   : set https_proxy=http://<username>:<password>@<proxy_addr>:<proxy_port>
+
+   需要注意的是，github使用的是https，所以如果上面设置成 =http_proxy= 的话是没有
+   效果的，而且设置好之后，clone需要使用https协议，不能使用git协议：
+
+   : git clone https://github.com/<person>/<project>.git
