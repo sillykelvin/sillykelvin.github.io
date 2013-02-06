@@ -134,9 +134,48 @@
 
    再运行emacs就可以输入中文。
 
+* mplayer related
+
+** 改变音轨
+
+   有些电影本身就是双语的，这时候只需要切换一下音轨就可以了：
+
+   : mplayer ... -aid 0/1 (for more than one language)
+
+   至于音轨的信息在mplayer播放的时候，会在命令行输出，所以只需要先试着播放一下，然后看命令
+   行的音轨信息，再按照上面加上参数就可以了。
+
+** 字幕乱码
+
+   不太清楚mplayer默认使用的是什么编码，但肯定有些字幕采用的编码和mplayer默认使用的编码不
+   同，这就导致播放的时候会乱码，但因为大家都是天朝人，所以还是可以大致猜到字幕的编码的，一
+   般情况加上下面的参数就OK了：
+
+   : mplayer ... -subcp cp936
+
+   如果加上这个参数后，还是显示有乱码，那就再试试其它编码，gb2312神马的，总有一个是可以的。
+
 * 终端某些文字显示为白色小方块
 
   因为locale选了其它语言，但又没安装其它语言的字体，所以显示小方块。
 
   *解决方法* ：编辑 =/etc/locale.gen= ，只保留 /en_US.UTF-8 UTF-8/ 这一行，再运
   行 =locale-gen= ，重启既可。
+
+* NTFS partitions
+
+  when writing files to NTFS partitions, it will raise an error:
+
+  : cannot create regular file 'filename': Permission denied
+
+  it even happened when I am the root.
+
+  after googling, it is because the partition type is improper during mounting,
+  try use the following command will fix the error:
+
+  : sudo mount -t ntfs-3g /dev/sdb1 /mnt
+
+  here =/dev/sdb1= is the NTFS partition, if *ntfs-3g* is not installed, use
+  the following command to install it:
+
+  : sudo pacman -S ntfs-3g
