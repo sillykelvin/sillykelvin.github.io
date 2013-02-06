@@ -1,0 +1,79 @@
+#+TITLE:       How to Fix SSL CRIME Security Issue of httpd
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-02-05 Tue
+#+KEYWORDS:    ssl, httpd
+#+CATEGORY:    essays
+#+TAGS:        :Httpd:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: crime issue fixing, and compilation process of mod_ssl
+
+Team的一台web server，被公司负责安全的team扫出了security issue，server用的是CentOS
+搭上的Apache httpd 2.2.15，这个security issue详细的讨论在[[https://issues.apache.org/bugzilla/show_bug.cgi?id=53219#c6][这里]]，叫什么CRIME，表示
+不懂。。不过根据下面的回复，只需设置httpd.conf的 =SSLCompression= 为 =off= 即可。
+
+但悲剧的是，Apache httpd只是说在2.2.24以后的版本，或者2.4.x版本才会包括这个选项，
+公司server的2.2.15并没有这个设置项。。而且，CentOS把httpd和mod_ssl作为两个package
+给分开了，这个选项的开关是在mod_ssl里面。。再次而且，由于防火墙的限制，server上是
+不能访问外网的，所以只能自己下载ssl module的source code和patch，自己编译了。但实际
+上mod_ssl已经和httpd整合在一起了，所以需要下载整个httpd的source code进行编译。（真
+想不通CentOS为什么要把两者分开。。。）
+
+* 下载httpd 2.2.23的source code
+
+  这个就不用多说了吧。。在这里：http://httpd.apache.org/download.cgi
+
+  : # curl -O -L http://labs.mop.com/apache-mirror//httpd/httpd-2.2.23.tar.gz
+  : # tar xzvf httpd-2.2.23.tar.gz
+  : # cd httpd-2.2.23
+
+* 安装patch
+
+  根据前面的链接，顺利找到patch，下载并安装（注意我们是在httpd的解压目录里面）：
+
+  : # curl -L -o 'security.patch' -k https://issues.apache.org/bugzilla/attachment.cgi?id=28804&action=diff&context=patch&collapsed=&headers=1&format=raw
+  : # patch -p0 < security.patch # -p0代表不删除patch里面的目录层次
+
+  好了，现在patch就打好了。
+
+* configure & make
+
+  实际上我只需要编译出ssl的module就行了，可是按正常的：
+
+  : # ./configure
+  : # make
+  : # find -name mod_ssl.so
+
+  死活是找不到 =mod_ssl.so= ，后来google了一下，在stackoverflow上说是被静态编译进
+  httpd里面去了，如果要单独编译so文件出来，需要添加如下的参数：
+
+  : # ./configure --enable-mods-shared='ssl' --enable--ssl
+
+  但在configure的过程中出错，因为openssl的devel包没有安装，安装之：
+
+  : # yum install openssl-devel
+
+  然后，就能顺利configure & make了。
+
+* 安装编译后的mod_ssl
+
+  下面就直接安装编译好的mod_ssl就可以了：
+
+  : # cp modules/ssl/.libs/mod_ssl.so /usr/lib64/httpd/modules
+
+  再修改httpd的ssl.conf文件：
+
+  : # vi /etc/httpd/conf.d/ssl.conf
+
+  将 =SSLCompression off= 加进去，注意是加在 =LoadModule ... mod_ssl.so= 的后面，
+  因为这个选项是在mod_ssl里面，如果module还没被load进去，是找不到这个选项的。
+
+  最后，检查httpd的配置文件有没有错误（如果使用没有打patch的mod_ssl，这里的检查会
+  报错，因为找不到 =SSLCompression= 这个选项），并重启httpd服务：
+
+  : # apachectl -t
+  : # service httpd restart
+
+  那么，这个security issue就算修好了，虽然我还是糊里糊涂的：好好的一个SSL压缩，怎
+  么就会有security issue呢。。。
