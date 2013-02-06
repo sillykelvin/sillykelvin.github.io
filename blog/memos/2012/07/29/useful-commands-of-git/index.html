@@ -132,6 +132,40 @@ git clean -fdx
 git remote prune origin
 </pre>
 
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">misc</h2>
+<div class="outline-text-2" id="text-2">
+
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">github proxy settings under windows</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   万恶的GFW，前两天封了github，这两天虽然解封了，但是访问速度慢得要死，clone一个repo才1KB/s。。。无奈，使用代理，但是windows下怎么设置代理还没弄过，折腾了好一阵子，才弄出来，只需要在命令行设置以下环境变量：
+</p>
+<pre class="example">
+set https_proxy=http://&lt;username&gt;:&lt;password&gt;@&lt;proxy_addr&gt;:&lt;proxy_port&gt;
+</pre>
+
+
+<p>
+   需要注意的是，github使用的是https，所以如果上面设置成 <code>http_proxy</code> 的话是没有效果的，而且设置好之后，clone需要使用https协议，不能使用git协议：
+</p>
+<pre class="example">
+git clone https://github.com/&lt;person&gt;/&lt;project&gt;.git
+</pre>
+
 </div>
 </div>
 </div>
@@ -140,7 +174,7 @@ git remote prune origin
 <div id="postamble">
 <div id="post-meta">
   <span title="post date" class="post-info">2012-07-29</span>
-  <span title="last modification date" class="update-info">2012-12-31</span>
+  <span title="last modification date" class="update-info">2013-02-06</span>
   <span title="category" class="category"><a href="../../../../../categories/memos/">memos</a></span>
   <span title="tags" class="tags"><a href="../../../../../tags/git/">Git</a></span>
   <span title="author" class="author">Kelvin Hu</span>

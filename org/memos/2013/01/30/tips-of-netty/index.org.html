@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.40 in css mode. -->
+<html>
+  <head>
+    <title>index.org</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #839496;
+        background-color: #002b36;
+      }
+      .bold {
+        /* bold */
+        font-weight: bold;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #586e75;
+        font-style: italic;
+      }
+      .org-code {
+        /* org-code */
+        color: #586e75;
+      }
+      .org-document-info {
+        /* org-document-info */
+        color: #afeeee;
+      }
+      .org-document-info-keyword {
+        /* org-document-info-keyword */
+        color: #586e75;
+      }
+      .org-document-title {
+        /* org-document-title */
+        color: #afeeee;
+        font-size: 144%;
+        font-weight: bold;
+      }
+      .org-level-1 {
+        /* org-level-1 */
+        color: #268bd2;
+      }
+      .org-meta-line {
+        /* org-meta-line */
+        color: #586e75;
+        font-style: italic;
+      }
+      .whitespace-line {
+        /* whitespace-line */
+        color: #ee82ee;
+        background-color: #333333;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="org-document-info-keyword">#+TITLE:</span><span class="comment">       </span><span class="org-document-title">Tips of Netty</span>
+<span class="org-document-info-keyword">#+AUTHOR:</span><span class="comment">      </span><span class="org-document-info">Kelvin Hu</span>
+<span class="org-document-info-keyword">#+EMAIL:</span><span class="comment">       </span><span class="org-document-info">ini.kelvin@gmail.com</span>
+<span class="org-document-info-keyword">#+DATE:</span><span class="comment">        </span><span class="org-document-info">2013-01-30 Wed</span>
+<span class="org-meta-line">#+KEYWORDS:    netty, java, nio</span>
+<span class="org-meta-line">#+CATEGORY:    memos</span>
+<span class="org-meta-line">#+TAGS:        :Netty:Java:Nio:</span>
+<span class="org-meta-line">#+LANGUAGE:    en</span>
+<span class="org-meta-line">#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t &lt;:t</span>
+<span class="org-meta-line">#+DESCRIPTION: some notes of netty framework, version 4.x</span>
+
+&#35760;&#24405;&#19968;&#20123;&#20851;&#20110;netty&#20351;&#29992;&#30340;&#24515;&#24471;&#12290;
+
+<span class="org-level-1">* ChannelInitializer&lt;C extends Channel&gt;</span>
+
+  &#36825;&#20010;&#31867;&#26412;&#36523;&#20063;&#26159;&#19968;&#20010;handler&#65292;&#20027;&#35201;&#20851;&#27880; <span class="org-code">=channel register=</span> &#20107;&#20214;&#65292;&#20851;&#38190;&#26041;&#27861;&#22914;&#19979;&#65306;
+
+  <span class="org-code">: public final void channelRegistered(ChannelHandlerContext ctx)
+</span>  <span class="org-code">:         throws Exception {
+</span>  <span class="org-code">:     boolean removed = false;
+</span>  <span class="org-code">:     boolean success = false;
+</span>  <span class="org-code">:     try {
+</span>  <span class="org-code">:         initChannel((C) ctx.channel());
+</span>  <span class="org-code">:         ctx.pipeline().remove(this);
+</span>  <span class="org-code">:         removed = true;
+</span>  <span class="org-code">:         ctx.fireChannelRegistered();
+</span>  <span class="org-code">:         success = true;
+</span>  <span class="org-code">:     } catch (Throwable t) {
+</span>  <span class="org-code">:         // ...
+</span>  <span class="org-code">:     } finally {
+</span>  <span class="org-code">:         // ...
+</span>  <span class="org-code">:     }
+</span>  <span class="org-code">: }
+</span>
+  &#27880;&#24847;&#20854;&#20013;&#30340; <span class="org-code">=initChannel(...)=</span> &#26041;&#27861;&#35843;&#29992;&#65292;&#36825;&#20010;&#26041;&#27861;&#22312;&#36825;&#20010;&#31867;&#37324;&#23450;&#20041;&#20026;abstract&#65292;&#25152;&#20197;
+  &#23376;&#31867;&#38656;&#35201;&#23454;&#29616;&#20043;&#65292;&#20197;&#36827;&#34892;channel&#30340;&#21021;&#22987;&#21270;&#65292;&#22914;&#28155;&#21152;handler&#31561;&#12290;
+
+<span class="org-level-1">* buffer chain in DefaultChannelHandlerContext</span>
+
+  DefaultChannelHandlerContext&#26412;&#36523;&#23601;&#26159;&#19968;&#31995;&#21015;context chain&#30340;&#19968;&#20010;&#32467;&#28857;&#65292;&#27599;&#20010;&#32467;&#28857;&#20250;
+  &#32500;&#25252;prev&#21644;next&#20004;&#20010;&#25351;&#38024;&#65292;&#20998;&#21035;&#25351;&#21521;&#21069;&#21518;&#32467;&#28857;&#12290;
+
+  &#38656;&#35201;&#27880;&#24847;&#30340;&#26159;&#65292;&#36825;&#20010;context chain&#26159;&#21452;&#21521;&#30340;&#65292;&#22312;&#26597;&#25214;inbound&#30340;next buffer&#30340;&#26102;&#20505;&#65292;&#20250;
+  &#39034;&#30528;next&#25351;&#38024;&#26397;&#21069;&#25214;&#65307;&#32780;&#26597;&#25214;outbound&#30340;next buffer&#30340;&#26102;&#20505;&#65292;&#20250;&#39034;&#30528;prev&#25351;&#38024;&#26397;&#22238;&#25214;&#12290;
+
+  &#27599;&#20010;context&#20013;&#65292;&#38024;&#23545;inbound&#21644;outbound&#37117;&#20445;&#30041;&#20102;&#20004;&#20010;&#31867;&#22411;&#30340;buffer&#24341;&#29992;&#65306;ByteBuf&#21644;
+  MessageBuf&#65292;&#20294;&#26159;&#19968;&#20010;context&#21482;&#20250;&#26377;&#19968;&#31181;&#31867;&#22411;&#65292;&#36825;&#23601;&#35201;&#30475;&#24403;&#21069;&#30340;handler&#26159;&#19979;&#38754;&#30340;&#21738;&#19968;&#31181;
+  &#31867;&#22411;&#20102;&#65306;
+
+  - ChannelInboundByteHandler
+  - ChannelInboundMessageHandler
+  - ChannelOutboundByteHandler
+  - ChannelInboundMessageHandler
+
+<span class="org-level-1">* AttributeMap &amp; attr()</span>
+
+  Java NIO&#30340;SelectionKey&#20013;&#26377;&#19968;&#20010;attachment&#65292;&#36825;&#22312;&#20256;&#36882;&#19968;&#20123;&#39069;&#22806;&#30340;&#20449;&#24687;&#26102;&#24456;&#26377;&#29992;&#65292;Netty
+  &#20063;&#26377;&#31867;&#20284;&#30340;&#23454;&#29616;&#65292;&#23601;&#26159; <span class="org-code">=AttributeMap=</span> &#36825;&#20010;&#25509;&#21475;&#65292;&#20854;&#21482;&#23450;&#20041;&#20102;&#19968;&#20010; <span class="org-code">=attr()=</span> &#26041;&#27861;&#12290;
+
+  <span class="org-code">=DefaultAttributeMap=</span> &#23454;&#29616;&#20102;&#36825;&#20010;&#25509;&#21475;&#65292;&#32780; <span class="org-code">=DefaultChannelHandlerContext=</span> &#21017;&#32487;&#25215;
+  &#20102;&#36825;&#20010;&#31867;&#65292;&#20110;&#26159;&#25152;&#26377;&#30340;Channel Context&#37117;&#21487;&#20197;&#38468;&#24102;&#39069;&#22806;&#20449;&#24687;&#20102;&#12290;attr()&#30340;&#23454;&#29616;&#22914;&#19979;&#65306;
+
+  <span class="org-code">: public synchronized &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key) {
+</span>  <span class="org-code">:     Map&lt;AttributeKey&lt;?&gt;, Attribute&lt;?&gt;&gt; map = this.map;
+</span>  <span class="org-code">:     if (map == null) {
+</span>  <span class="org-code">:         // Not using ConcurrentHashMap due to high memory consumption.
+</span>  <span class="org-code">:         map = this.map = new IdentityHashMap&lt;AttributeKey&lt;?&gt;, Attribute&lt;?&gt;&gt;(</span><span class="whitespace-line">2);</span><span class="org-code">
+</span>  <span class="org-code">:     }
+</span>  <span class="org-code">:
+</span>  <span class="org-code">:     @SuppressWarnings("unchecked")
+</span>  <span class="org-code">:     Attribute&lt;T&gt; attr = (Attribute&lt;T&gt;) map.get(key);
+</span>  <span class="org-code">:     if (attr == null) {
+</span>  <span class="org-code">:         attr = new DefaultAttribute&lt;T&gt;();
+</span>  <span class="org-code">:         map.put(key, attr);
+</span>  <span class="org-code">:     }
+</span>  <span class="org-code">:     return attr;
+</span>  <span class="org-code">: }
+</span>
+  &#21487;&#20197;&#30475;&#21040;&#65292;&#20854;&#20869;&#37096;&#26159;&#29992;&#20102;&#19968;&#20010; <span class="org-code">=IdentityHashMap=</span> &#26469;&#20445;&#23384;key-value&#30340;&#20449;&#24687;&#65292;&#20854;key&#30340;&#31867;
+  &#22411;&#26159; <span class="org-code">=AttributeKey&lt;T&gt;=</span> &#65292;&#32780;value&#21017;&#26159; <span class="org-code">=Attribute&lt;T&gt;=</span> &#12290;&#32780;&#36825;&#20010; <span class="org-code">=Attribute&lt;T&gt;=</span> &#25509;
+  &#21475;&#30340;&#23454;&#29616;&#22914;&#19979;&#65288;&#22312;DefaultAttributeMap&#30340;&#23450;&#20041;&#20013;&#65289;&#65306;
+
+  <span class="org-code">: private class DefaultAttribute&lt;T&gt; extends AtomicReference&lt;T&gt; implements Attr</span><span class="whitespace-line">ibute&lt;T&gt;</span><span class="org-code">
+</span>  <span class="org-code">: ...
+</span>
+  &#32780; <span class="org-code">=AtomicReference&lt;T&gt;=</span> &#21017;&#26159;java concurrent&#21253;&#20013;&#30340;&#31867;&#65292;Netty&#30452;&#25509;&#32487;&#25215;&#20043;&#20197;&#23454;&#29616;&#23545;&#35937;
+  &#30340;get()/set()&#30340;&#24182;&#21457;&#35775;&#38382;&#12290;
+
+  <span class="bold">*&#27880;&#24847;*</span> : ChannelHandlerContext&#21644;Channel&#37117;&#25193;&#23637;&#20102;&#35813;&#25509;&#21475;&#65292;&#20294;Channel Handler Context
+  &#21482;&#26159;&#38024;&#23545;&#20110;&#24403;&#21069;handler&#30340;Context&#65292;&#22914;&#26524;&#35201;&#23558;&#26576;&#20123;&#20449;&#24687;&#22312;&#19981;&#21516;&#30340;handler&#20043;&#38388;&#20256;&#36882;&#65292;&#38656;&#35201;&#35774;&#32622;
+  Channel&#30340;attr&#12290;
+</pre>
+  </body>
+</html>

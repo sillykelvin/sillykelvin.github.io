@@ -585,7 +585,263 @@ q' = q^2 + 2pq
 <h3 id="sec-1-22">练习1.22</h3>
 <div class="outline-text-3" id="text-1-22">
 
+
+<p>
+   我使用的Scheme实现是Racket，这个实现并没有包含如题目中所说的 <code>runtime</code> ，于是我Google了一下，发现有一个过程叫 <code>current-inexact-milliseconds</code> 可以达到要求，于是就用它代替了 <code>runtime</code> 。
+</p>
+<p>
+   这个题目的实现代码如下：
+</p>
+<pre class="example">
+(define (timed-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (current-inexact-milliseconds)))
+
+(define (start-prime-test n start-time)
+  (if (prime? n)
+      (report-time (- (current-inexact-milliseconds) start-time))
+      #f))  ;; 这里因为Racket实现不允许if只有一个分支，所以用#f来表示另一个分支
+
+(define (report-time elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
+(define (search-for-primes start count)
+  (cond ((= count 0) (newline))
+        ((timed-prime-test start) (search-for-primes (next-odd start) (- count 1)))
+        (else (search-for-primes (next-odd start) count))))
+
+(define (next-odd n)
+  (if (= (remainder n 2) 0)
+      (+ 1 n)
+      (+ 2 n)))
+</pre>
+
+
+<p>
+   测试了几组数据，得到以下结果（不是奇数的行已删去）：
+</p>
+<pre class="example">
+100000000003 *** 24.06689453125
+100000000019 *** 14.223876953125
+100000000057 *** 15.403076171875
+&gt;
+1000000000039 *** 49.025146484375
+1000000000061 *** 48.720947265625
+1000000000063 *** 47.57080078125
+&gt;
+10000000000037 *** 154.43701171875
+10000000000051 *** 143.823974609375
+10000000000099 *** 147.25390625
+</pre>
+
+
+<p>
+   取平均值除了一下，时间比值为2.706和3.066，这两个离√10还差得比较多，不过可能是受CPU，系统环境的影响，随机性较强，不过比值应该是√10这一点还是很明确的。
+</p>
 </div>
+
+</div>
+
+<div id="outline-container-1-23" class="outline-3">
+<h3 id="sec-1-23">练习1.23</h3>
+<div class="outline-text-3" id="text-1-23">
+
+
+<pre class="example">
+(define (next n)
+  (if (= n 2)
+      3
+      (+ n 2)))
+
+(define (find-divisor n test)
+  (cond ((&gt; (* test test) n) n)
+        ((divides? n test) test)
+        (else (find-divisor n (next test)))))
+</pre>
+
+
+<p>
+   得到结果如下（取了三组和1.22中对应的值）：
+</p>
+<pre class="example">
+100000000003 *** 14.049072265625
+100000000019 *** 10.261962890625
+100000000057 *** 9.14697265625
+&gt;
+1000000000039 *** 40.97705078125
+1000000000061 *** 30.837890625
+1000000000063 *** 31.4189453125
+&gt;
+10000000000037 *** 103.964111328125
+10000000000051 *** 102.067138671875
+10000000000099 *** 94.930908203125
+</pre>
+
+
+<p>
+   分别计算平均消耗时间比值，得到三个值：1.61，1.41，1.48，这几个值是明显是小于2的。可能虽然步数是少了一半，但是在运行过程中的一些其它消耗，导致了时间比值小于2。
+</p>
+<p>
+   然后我又试了一下，证明这多出来的时间消耗是来自 <code>next</code> 过程调用，将 <code>find-divisor</code> 以及 <code>smallest-divisor</code> 过程进行重定义为以下形式：
+</p>
+<pre class="example">
+(define (find-divisor n test)
+  (cond ((&gt; (* test test) n) n)
+        ((divides? n test) test)
+        (else (find-divisor n (+ test 2))))) ;; 直接加2，不再调用next过程
+
+(define (smallest-divisor n)
+  (find-divisor n 3)) ;; 直接从3开始
+</pre>
+
+
+<p>
+   结果如下：
+</p>
+<pre class="example">
+100000000003 *** 13.234130859375
+100000000019 *** 8.0458984375
+100000000057 *** 7.89599609375
+&gt;
+1000000000039 *** 28.672119140625
+1000000000061 *** 25.3388671875
+1000000000063 *** 25.071044921875
+&gt;
+10000000000037 *** 78.4560546875
+10000000000051 *** 78.115966796875
+10000000000099 *** 71.85498046875
+</pre>
+
+
+<p>
+   可以看到，这里的时间消耗确实是比1.22中减半了。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-24" class="outline-3">
+<h3 id="sec-1-24">练习1.24</h3>
+<div class="outline-text-3" id="text-1-24">
+
+
+<p>
+   这个练习，将 <code>start-prime-test</code> 中的 <code>prime?</code> 换成 <code>fast-prime?</code> 即可：
+</p>
+<pre class="example">
+(define (start-prime-test n start-time)
+  (if (fast-prime? n 3)  ;; 测试的次数取3
+      (report-time (- (current-inexact-milliseconds) start-time))
+      #f))
+</pre>
+
+
+<p>
+   然后进行测试，得到以下结果（最高只能到10的9次方，因为再高的话，超过了int型的最大值，这时 <code>random</code> 函数会报错）：
+</p>
+<pre class="example">
+1009 *** 0.014892578125
+1013 *** 0.01611328125
+1019 *** 0.015869140625
+&gt;
+10007 *** 0.02099609375
+10009 *** 0.02099609375
+10037 *** 0.02001953125
+&gt;
+100003 *** 0.02490234375
+100019 *** 0.02392578125
+100043 *** 0.02392578125
+&gt;
+1000003 *** 0.028076171875
+1000033 *** 0.028076171875
+1000037 *** 0.029052734375
+&gt;
+10000019 *** 0.032958984375
+10000079 *** 0.033203125
+10000103 *** 0.032958984375
+&gt;
+100000007 *** 0.0380859375
+100000037 *** 0.0380859375
+100000039 *** 0.0380859375
+&gt;
+1000000007 *** 0.041015625
+1000000009 *** 0.0419921875
+1000000021 *** 0.0419921875
+</pre>
+
+
+<p>
+   增长速度是O(log n)，所以10^6附近应该是10^3附近所消耗时间的两倍，10^9是三倍：从上面的结果来看，10^6次方的数据比较接近（0.028/0.014），但10^9则要小了不少，只有大概2.67倍左右；10^8应该是10^4的两倍，这个数据也还比较接近（0.038/0.020）。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-25" class="outline-3">
+<h3 id="sec-1-25">练习1.25</h3>
+<div class="outline-text-3" id="text-1-25">
+
+
+<p>
+   其实这个问题的答案在前面的脚注46中就说了：
+</p>
+<blockquote>
+
+<p>这种技术非常有用，因为它意味着我们的计算中不需要去处理比m大很多的数（请与练习1.25比较）。
+</p>
+</blockquote>
+
+
+<p>
+   原来的 <code>expmod</code> 函数是利用了以下的等式：
+</p>
+<pre class="example">
+(x * y) % m = [(x % m) * (y % m)] % m
+</pre>
+
+
+<p>
+   这样，如果 <code>x*y</code> 的值很大的话，可以分解成两个小于m的数再取模，这样计算起来就要容易很多。
+</p>
+<p>
+   而1.25中的 <code>expmod</code> 的定义也是没问题的：先算出乘方值，再取模。但是需要注意的是，这个乘方值可能很大，这样再求模，可能就会很慢，没有办法和原来版本的高效性相提并论。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-26" class="outline-3">
+<h3 id="sec-1-26">练习1.26</h3>
+<div class="outline-text-3" id="text-1-26">
+
+
+<p>
+   这个题还比较好理解，在使用 <code>square</code> 的时候，只需要在 <code>expmod</code> 内部执行一次递归调用，但直接使用乘法的话，会执行两次递归调用，情况如下：
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="right" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="right">次数</th><th scope="col" class="left">递归情况(square)</th><th scope="col" class="left">递归情况(*)</th></tr>
+</thead>
+<tbody>
+<tr><td class="right">1</td><td class="left">n</td><td class="left">n</td></tr>
+<tr><td class="right">2</td><td class="left">n/2</td><td class="left">n/2 * n/2</td></tr>
+<tr><td class="right">3</td><td class="left">n/4</td><td class="left">n/4 * n/4 * n/4 * n/4</td></tr>
+<tr><td class="right">&hellip;</td><td class="left"></td><td class="left"></td></tr>
+</tbody>
+</table>
+
+
+<p>
+   注：上表没有考虑 <code>n-1</code> 的情况，因为 <code>n-1</code> 作为常数级的衰减（请原谅，我自己发明了“衰减”这个词），和指数级衰减比起来可以忽略。
+</p>
+<p>
+   可以看到，使用 <code>square</code> 的情况是指数级衰减，所以最终是Θ(log n)；直接使用乘法虽然也是指数级衰减，但是衰减的同时，递归调用数却在指数级增加，刚好和衰减抵消，于是就是Θ(n)。
+</p></div>
 </div>
 </div>
 </div>
@@ -593,7 +849,7 @@ q' = q^2 + 2pq
 <div id="postamble">
 <div id="post-meta">
   <span title="post date" class="post-info">2012-12-10</span>
-  <span title="last modification date" class="update-info">2012-12-31</span>
+  <span title="last modification date" class="update-info">2013-02-06</span>
   <span title="category" class="category"><a href="../../../../../categories/notes/">notes</a></span>
   <span title="tags" class="tags"><a href="../../../../../tags/sicp/">SICP</a></span>
   <span title="author" class="author">Kelvin Hu</span>

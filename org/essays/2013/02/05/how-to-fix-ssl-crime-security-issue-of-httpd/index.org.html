@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.40 in css mode. -->
+<html>
+  <head>
+    <title>index.org</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #839496;
+        background-color: #002b36;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #586e75;
+        font-style: italic;
+      }
+      .org-code {
+        /* org-code */
+        color: #586e75;
+      }
+      .org-document-info {
+        /* org-document-info */
+        color: #afeeee;
+      }
+      .org-document-info-keyword {
+        /* org-document-info-keyword */
+        color: #586e75;
+      }
+      .org-document-title {
+        /* org-document-title */
+        color: #afeeee;
+        font-size: 144%;
+        font-weight: bold;
+      }
+      .org-level-1 {
+        /* org-level-1 */
+        color: #268bd2;
+      }
+      .org-link {
+        /* org-link */
+        color: #6c71c4;
+        text-decoration: underline;
+      }
+      .org-meta-line {
+        /* org-meta-line */
+        color: #586e75;
+        font-style: italic;
+      }
+      .whitespace-line {
+        /* whitespace-line */
+        color: #ee82ee;
+        background-color: #333333;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="org-document-info-keyword">#+TITLE:</span><span class="comment">       </span><span class="org-document-title">How to Fix SSL CRIME Security Issue of httpd</span>
+<span class="org-document-info-keyword">#+AUTHOR:</span><span class="comment">      </span><span class="org-document-info">Kelvin Hu</span>
+<span class="org-document-info-keyword">#+EMAIL:</span><span class="comment">       </span><span class="org-document-info">ini.kelvin@gmail.com</span>
+<span class="org-document-info-keyword">#+DATE:</span><span class="comment">        </span><span class="org-document-info">2013-02-05 Tue</span>
+<span class="org-meta-line">#+KEYWORDS:    ssl, httpd</span>
+<span class="org-meta-line">#+CATEGORY:    essays</span>
+<span class="org-meta-line">#+TAGS:        :Httpd:</span>
+<span class="org-meta-line">#+LANGUAGE:    en</span>
+<span class="org-meta-line">#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t &lt;:t</span>
+<span class="org-meta-line">#+DESCRIPTION: crime issue fixing, and compilation process of mod_ssl</span>
+
+Team&#30340;&#19968;&#21488;web server&#65292;&#34987;&#20844;&#21496;&#36127;&#36131;&#23433;&#20840;&#30340;team&#25195;&#20986;&#20102;security issue&#65292;server&#29992;&#30340;&#26159;CentOS
+&#25645;&#19978;&#30340;Apache httpd 2.2.15&#65292;&#36825;&#20010;security issue&#35814;&#32454;&#30340;&#35752;&#35770;&#22312;<span class="whitespace-line">&#36825;&#37324;&#65292;&#21483;&#20160;&#20040;CRIME&#65292;&#34920;&#31034;</span>
+&#19981;&#25026;&#12290;&#12290;&#19981;&#36807;&#26681;&#25454;&#19979;&#38754;&#30340;&#22238;&#22797;&#65292;&#21482;&#38656;&#35774;&#32622;httpd.conf&#30340; <span class="org-code">=SSLCompression=</span> &#20026; <span class="org-code">=off=</span> &#21363;&#21487;&#12290;
+
+&#20294;&#24754;&#21095;&#30340;&#26159;&#65292;Apache httpd&#21482;&#26159;&#35828;&#22312;2.2.24&#20197;&#21518;&#30340;&#29256;&#26412;&#65292;&#25110;&#32773;2.4.x&#29256;&#26412;&#25165;&#20250;&#21253;&#25324;&#36825;&#20010;&#36873;&#39033;&#65292;
+&#20844;&#21496;server&#30340;2.2.15&#24182;&#27809;&#26377;&#36825;&#20010;&#35774;&#32622;&#39033;&#12290;&#12290;&#32780;&#19988;&#65292;CentOS&#25226;httpd&#21644;mod_ssl&#20316;&#20026;&#20004;&#20010;package
+&#32473;&#20998;&#24320;&#20102;&#65292;&#36825;&#20010;&#36873;&#39033;&#30340;&#24320;&#20851;&#26159;&#22312;mod_ssl&#37324;&#38754;&#12290;&#12290;&#20877;&#27425;&#32780;&#19988;&#65292;&#30001;&#20110;&#38450;&#28779;&#22681;&#30340;&#38480;&#21046;&#65292;server&#19978;&#26159;
+&#19981;&#33021;&#35775;&#38382;&#22806;&#32593;&#30340;&#65292;&#25152;&#20197;&#21482;&#33021;&#33258;&#24049;&#19979;&#36733;ssl module&#30340;source code&#21644;patch&#65292;&#33258;&#24049;&#32534;&#35793;&#20102;&#12290;&#20294;&#23454;&#38469;
+&#19978;mod_ssl&#24050;&#32463;&#21644;httpd&#25972;&#21512;&#22312;&#19968;&#36215;&#20102;&#65292;&#25152;&#20197;&#38656;&#35201;&#19979;&#36733;&#25972;&#20010;httpd&#30340;source code&#36827;&#34892;&#32534;&#35793;&#12290;&#65288;&#30495;
+&#24819;&#19981;&#36890;CentOS&#20026;&#20160;&#20040;&#35201;&#25226;&#20004;&#32773;&#20998;&#24320;&#12290;&#12290;&#12290;&#65289;
+
+<span class="org-level-1">* &#19979;&#36733;httpd 2.2.23&#30340;source code</span>
+
+  &#36825;&#20010;&#23601;&#19981;&#29992;&#22810;&#35828;&#20102;&#21543;&#12290;&#12290;&#22312;&#36825;&#37324;&#65306;<span class="org-link">http://httpd.apache.org/download.cgi</span>
+
+  <span class="org-code">: # curl -O -L http://labs.mop.com/apache-mirror//httpd/httpd-2.2.23.tar.gz
+</span>  <span class="org-code">: # tar xzvf httpd-2.2.23.tar.gz
+</span>  <span class="org-code">: # cd httpd-2.2.23
+</span>
+<span class="org-level-1">* &#23433;&#35013;patch</span>
+
+  &#26681;&#25454;&#21069;&#38754;&#30340;&#38142;&#25509;&#65292;&#39034;&#21033;&#25214;&#21040;patch&#65292;&#19979;&#36733;&#24182;&#23433;&#35013;&#65288;&#27880;&#24847;&#25105;&#20204;&#26159;&#22312;httpd&#30340;&#35299;&#21387;&#30446;&#24405;&#37324;&#38754;&#65289;&#65306;
+
+  <span class="org-code">: # curl -L -o 'security.patch' -k https://issues.apache.org/bugzilla/attachme</span><span class="whitespace-line">nt.cgi?id=28804&amp;action=diff&amp;context=patch&amp;collapsed=&amp;headers=1&amp;format=raw</span><span class="org-code">
+</span>  <span class="org-code">: # patch -p0 &lt; security.patch # -p0&#20195;&#34920;&#19981;&#21024;&#38500;patch&#37324;&#38754;&#30340;&#30446;&#24405;&#23618;&#27425;
+</span>
+  &#22909;&#20102;&#65292;&#29616;&#22312;patch&#23601;&#25171;&#22909;&#20102;&#12290;
+
+<span class="org-level-1">* configure &amp; make</span>
+
+  &#23454;&#38469;&#19978;&#25105;&#21482;&#38656;&#35201;&#32534;&#35793;&#20986;ssl&#30340;module&#23601;&#34892;&#20102;&#65292;&#21487;&#26159;&#25353;&#27491;&#24120;&#30340;&#65306;
+
+  <span class="org-code">: # ./configure
+</span>  <span class="org-code">: # make
+</span>  <span class="org-code">: # find -name mod_ssl.so
+</span>
+  &#27515;&#27963;&#26159;&#25214;&#19981;&#21040; <span class="org-code">=mod_ssl.so=</span> &#65292;&#21518;&#26469;google&#20102;&#19968;&#19979;&#65292;&#22312;stackoverflow&#19978;&#35828;&#26159;&#34987;&#38745;&#24577;&#32534;&#35793;&#36827;
+  httpd&#37324;&#38754;&#21435;&#20102;&#65292;&#22914;&#26524;&#35201;&#21333;&#29420;&#32534;&#35793;so&#25991;&#20214;&#20986;&#26469;&#65292;&#38656;&#35201;&#28155;&#21152;&#22914;&#19979;&#30340;&#21442;&#25968;&#65306;
+
+  <span class="org-code">: # ./configure --enable-mods-shared='ssl' --enable--ssl
+</span>
+  &#20294;&#22312;configure&#30340;&#36807;&#31243;&#20013;&#20986;&#38169;&#65292;&#22240;&#20026;openssl&#30340;devel&#21253;&#27809;&#26377;&#23433;&#35013;&#65292;&#23433;&#35013;&#20043;&#65306;
+
+  <span class="org-code">: # yum install openssl-devel
+</span>
+  &#28982;&#21518;&#65292;&#23601;&#33021;&#39034;&#21033;configure &amp; make&#20102;&#12290;
+
+<span class="org-level-1">* &#23433;&#35013;&#32534;&#35793;&#21518;&#30340;mod_ssl</span>
+
+  &#19979;&#38754;&#23601;&#30452;&#25509;&#23433;&#35013;&#32534;&#35793;&#22909;&#30340;mod_ssl&#23601;&#21487;&#20197;&#20102;&#65306;
+
+  <span class="org-code">: # cp modules/ssl/.libs/mod_ssl.so /usr/lib64/httpd/modules
+</span>
+  &#20877;&#20462;&#25913;httpd&#30340;ssl.conf&#25991;&#20214;&#65306;
+
+  <span class="org-code">: # vi /etc/httpd/conf.d/ssl.conf
+</span>
+  &#23558; <span class="org-code">=SSLCompression off=</span> &#21152;&#36827;&#21435;&#65292;&#27880;&#24847;&#26159;&#21152;&#22312; <span class="org-code">=LoadModule ... mod_ssl.so=</span> &#30340;&#21518;&#38754;&#65292;
+  &#22240;&#20026;&#36825;&#20010;&#36873;&#39033;&#26159;&#22312;mod_ssl&#37324;&#38754;&#65292;&#22914;&#26524;module&#36824;&#27809;&#34987;load&#36827;&#21435;&#65292;&#26159;&#25214;&#19981;&#21040;&#36825;&#20010;&#36873;&#39033;&#30340;&#12290;
+
+  &#26368;&#21518;&#65292;&#26816;&#26597;httpd&#30340;&#37197;&#32622;&#25991;&#20214;&#26377;&#27809;&#26377;&#38169;&#35823;&#65288;&#22914;&#26524;&#20351;&#29992;&#27809;&#26377;&#25171;patch&#30340;mod_ssl&#65292;&#36825;&#37324;&#30340;&#26816;&#26597;&#20250;
+  &#25253;&#38169;&#65292;&#22240;&#20026;&#25214;&#19981;&#21040; <span class="org-code">=SSLCompression=</span> &#36825;&#20010;&#36873;&#39033;&#65289;&#65292;&#24182;&#37325;&#21551;httpd&#26381;&#21153;&#65306;
+
+  <span class="org-code">: # apachectl -t
+</span>  <span class="org-code">: # service httpd restart
+</span>
+  &#37027;&#20040;&#65292;&#36825;&#20010;security issue&#23601;&#31639;&#20462;&#22909;&#20102;&#65292;&#34429;&#28982;&#25105;&#36824;&#26159;&#31946;&#37324;&#31946;&#28034;&#30340;&#65306;&#22909;&#22909;&#30340;&#19968;&#20010;SSL&#21387;&#32553;&#65292;&#24590;
+  &#20040;&#23601;&#20250;&#26377;security issue&#21602;&#12290;&#12290;&#12290;
+</pre>
+  </body>
+</html>
