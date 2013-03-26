@@ -41,3 +41,11 @@ PS：下面的“彻底去除广告”部分并不是我的原创，而是参考
 
    删掉这个目录并且新建一个跟这个目录名相同的文件，再打开一个youku视频，那令人讨厌的黑
    屏是不是不见了？
+
+** 补充：
+
+   最近发现在Windows上也可以这么干以彻底去除广告，其位置如下：
+
+   : c:\Users\<your_account_name>\AppData\Roaming\Macromedia\Flash Player\#SharedObjects\XDJVUS3R\
+
+   同样删掉 /static.youku.com/ 目录并以此名字新建一个文本文件即可。
