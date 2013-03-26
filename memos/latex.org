@@ -1,4 +1,4 @@
-#+TITLE:       Tips and Skills of TeX/LaTeX
+#+TITLE:       关于TeX/LaTeX/XeLaTeX的一些使用技巧
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2013-03-05 Tue
