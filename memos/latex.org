@@ -1,0 +1,140 @@
+#+TITLE:       Tips and Skills of TeX/LaTeX
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-03-05 Tue
+#+URI:         /wiki/tex/
+#+KEYWORDS:    tex, latex, xelatex
+#+TAGS:        :TeX:LaTeX:XeLaTeX:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: small skills/tips learned during using tex/latex/xelatex
+
+
+* Code Snippets Processing
+
+  There is a package called *listings*, it is a very handy package for code snippets processing, include highlighting, formatting, numbering, etc.
+
+  The commonly used settings by myself:
+
+  : \usepackage{listings}
+  : \usepackage{color}
+  : \usepackage{textcomp}
+  :
+  : \lstset{
+  :   language=python,  % language, c, java, etc.
+  :   frame=shadowbox,  % border and its style
+  :   framexleftmargin=7mm,
+  :   backgroundcolor=\color[rgb]{0.9,0.9,0.9}, rulesepcolor=\color{black},
+  :   showspaces=false, showtabs=false, tabsize=4, showstringspaces=false,
+  :   numberstyle=\small, % numbering and its style
+  :   numbers=left,
+  :   basicstyle=\ttfamily, % fonts and style
+  :   stringstyle=\ttfamily\color[rgb]{0.627,0.126,0.941},
+  :   keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},
+  :   commentstyle=\color[rgb]{0.133,0.545,0.133},
+  :   identifierstyle=\ttfamily,
+  :   xleftmargin=1.2cm, xrightmargin=0.5cm,
+  :   lineskip=0.2em,
+  :   upquote=true,    % quote style, for ' and "
+  :   breaklines=true, % automatically break long lines
+  :   %% stepnumber=1,
+  :   %% numbersep=10pt,
+  :   %% prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+  :   %% breakatwhitespace=false,
+  :   %% aboveskip={1.5\baselineskip},
+  :   %% columns=fixed,
+  :   %% extendedchars=true,
+  : }
+
+  A code snippet example:
+
+  : \begin{lstlisting}
+  : >>> import django
+  : >>> print django.get_version()
+  : 1.5
+  : >>>
+  : \end{lstlisting}
+
+  Network resource for *listings*:
+
+  1. http://www.tjansson.dk/?p=419
+  2. ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+
+* Remove Border of ToC/Links/Footnotes
+
+  There is a discussion [[http://stackoverflow.com/questions/544907/remove-boxes-from-hyperlinked-toc-in-latex][here]].
+
+  The root cause is that the style is the default style of package *hyperref*, I really don't know why *hyperref* uses such an ugly style as its default style...
+
+  Many solutions are mentioned in above link, I prefer this one:
+
+  : \usepackage{hyperref}
+  : \hypersetup{
+  :     colorlinks,
+  :     citecolor=black,
+  :     filecolor=black,
+  :     linkcolor=black,
+  :     urlcolor=black
+  : }
+
+  This can not only remove the ugly border, but also customize the link color.
+
+* Make A Title Multi Lines
+
+  Use a line break operator(double backslash) can achieve this:
+
+  : \documentclass{article}
+  : \begin{document}
+  : \title{First line of title \\
+  : Second line of title}\maketitle
+  : \end{document}
+
+  Reference: http://tex.stackexchange.com/questions/56222/how-to-make-a-title-of-two-or-more-lines
+
+* Error of Package hyperref With XeLaTeX
+
+  When compiling with =xelatex=, an error occurs:
+
+  : mktexmf: empty or non-existent rootfile! kpathsea: Running mktexmf pzdr.mf
+  : The command name is D:\TexLive\bin\win32\mktexmf
+  : Cannot find pzdr.mf.
+
+  But it's strange that the error does not affect output, the pdf file is created normally!
+
+  However, the error is annoying, after searching the web, find a solution here: http://www.ktug.or.kr/xe/index.php?document_srl=161963
+
+  This page is in Korean, but it does not affect too much, from the first reply, I find the solution:
+
+  : tlmgr install zapfding
+
+  So, after package *zapfding* installed, the error is gone.
+
+  Another useful link: http://tex.stackexchange.com/questions/50596/latex-font-error-i-cant-find-file-pzdr
+
+* Error of Package xunicode
+
+  The error is as following:
+
+  : /XXX/XXX/xunicode.sty
+  : ! I can't find file `t3enc.def'.
+
+  This is because *xunicode* requires package *tipa* (*t3enc.def* is a file of *tipa*).
+
+  So, install the missing package will solve the issue:
+
+  : tlmgr install tipa
+
+  Reference: http://tex.stackexchange.com/questions/31341/cant-use-fontspec-with-xelatex-after-tlmgr-update
+
+* Use Different Font For Different Language
+
+  XeLaTeX allows usage of system fonts, the following code snippet can make ASCII characters use font /Segoe UI/, monospace font is /Consolas/, but Chinese characters will use font /Microsoft YaHei/:
+
+  : \usepackage{fontspec}
+  : \usepackage{xeCJK}
+  :
+  : \setmainfont[ItalicFont={* Italic},BoldFont={* Bold},BoldItalicFont={* Bold Italic}]{Segoe UI}
+  : \setmonofont[ItalicFont={* Italic},BoldFont={* Bold},BoldItalicFont={* Bold Italic}]{Consolas}
+  : \setCJKmainfont{Microsoft YaHei}
+
+  Reference: http://tex.stackexchange.com/questions/21046/change-xetex-fonts-automatically-depending-on-unicode-blocks
