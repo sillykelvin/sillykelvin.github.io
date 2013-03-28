@@ -1,0 +1,61 @@
+#+TITLE:       Tips and Skills of Emacs Lisp
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-08-11 Sat
+#+URI:         /wiki/elisp/
+#+KEYWORDS:    emacs, elisp
+#+TAGS:        :Emacs:Elisp:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: small skills/tips of elisp programming
+
+
+这是一篇备忘性质的文章，主要记录我在Elisp编程过程中总结的一些比较有用的tips。会不定期更新。
+
+* 正则表达式分组与匹配
+
+  在用正则表达式进行搜索的时候，可以方便地按需要进行分组，假设buffer中有以下内容：
+
+  : this is group 1 :: this is group 2
+
+  那么，执行完以下语句后：
+
+  : (progn
+  :   (goto-char (point-min))
+  :   (re-search-forward "^\\(.*\\) :: \\(.*\\)$" nil t)
+  :   (setq key (match-string-no-properties 1 nil))
+  :   (setq val (match-string-no-properties 2 nil)))
+
+  key的值是"this is group 1"，val的值是"this is group 2"。
+
+  为什么呢？因为正则表达式 =^\\(.*\\) : \\(.*\\)$= ，它的两个括号代表两个group，所以这个正则表达式的意思是，一个group之后紧跟"<空格><冒号><冒号><空格>"，再紧跟另一个group，而buffer中那一行刚好匹配这个表达式，并且，"this is group 1"对应于第一组，"this is group 2"对应于第二组，而 =match-string-no-properties= 就是将对应组的内容取出来，所以key的值就是"this is group 1"，val的值就是"this is group 2"。
+
+* 强大的 =format-spec= 函数
+
+  灵活使用 =format-spec= 函数，可以定义多种多样的模板，有例为证：
+
+  : (format-spec "author: %a, email: %e"
+  :          '((?a . "kelvin") (?e . "ini.kelvin@gmail.com")))
+  :
+  : => "author: kelvin, email: ini.kelvin@gmail.com"
+
+  结果看起来不错吧，这样，我们就可以按自己的需要定义模板，并且模板里面可以使用特定的替换符来代表不同的意义。
+
+* =shell-command= 函数的工作目录
+
+  默认情况下， =shell-command= 的工作目录是当前buffer对应文件所在的目录，但有时候需要在其它目录执行一个命令，比方说去某个git的repo执行一下 =git status= ，但是又不离开当前buffer，就需要change一下 =default-directory= 这个变量的值：
+
+  : (setq default-directory "/home/")
+  : (shell-command ...) # will be run under directory /home
+
+  其实我前面是在忽悠人的， =shell-command= 的工作目录根本不是根据当前buffer对应的文件来确定的，而就是根据 =defualt-directory= 来确定的。只不过 =default-directory= 是一个buffer-local的变量，它的值就是当前buffer对应的文件所在的目录。
+
+* 以字符串形式输出变量
+
+  在调试的过程中，有时我们需要看一个变量的内容，或者把一个变量的内容稍微做一些修改，于是，就需要用到 =prin1-to-string= 这个函数，再加上insert就perfect了：
+
+  : (insert (prin1-to-string var))  ;; 将var的内容以字符串形式插入到当前buffer
+
+  真的很好用，谁用谁知道。
+
+  有人会问，你为什么不用 =C-h v= 来显示var呢？是的，能显示，但显示出来的东东是只读的，我还要把它从Help buffer里面给copy出来再编辑。。
