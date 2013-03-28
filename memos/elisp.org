@@ -1,4 +1,4 @@
-#+TITLE:       Tips and Skills of Emacs Lisp
+#+TITLE:       Emacs Lisp的一些编程心得
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2012-08-11 Sat
