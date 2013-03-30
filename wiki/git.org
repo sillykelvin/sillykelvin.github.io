@@ -1,0 +1,57 @@
+#+TITLE:       关于git的一些有用的命令
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-07-29 Sun
+#+URI:         /wiki/git/
+#+KEYWORDS:    git, git command
+#+TAGS:        :Git:VCS:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: useful commands during using git
+
+
+这是一篇备忘性质的文章，主要记录我在使用git的过程中，个人觉得一些比较有用的命令。会不定期更新。
+
+* useful commands
+
+** pretty log:
+
+   以前我会用一些GUI的git工具来看历史提交记录，现在有了这个命令，发现那些GUI工具都弱爆了。。
+
+   : git log --oneline --graph --decorate
+
+** modify commit message:
+
+   当某个commit提交后发现message错误时，可以用此命令修正：
+
+   : git commit --amend -m "correct message"
+
+** clean useless files:
+
+   在工作区进行某些测试，例如 =make= ，可能会产生很多不需要提交到repository的文件，手动一个个删除又太麻烦，可以利用下面这个命令：
+
+   : git clean -fdx
+
+   所有未执行 =git add= 的文件将全部被删除。
+
+   1. =-f= 代表强制删除
+   2. =-d= 代表目录
+   3. =-x= 代表在 =.gitignore= 中存在的文件也一并删除
+
+** clear obsolete branch:
+
+   If some branches are deleted at remote repository, the local branches will not be deleted automatically (e.g. a branch named /devel/ at remote repo is deleted, the branch "remotes/origin/devel" will still exist), so use this command to clear the obsolete local branches:
+
+   : git remote prune origin
+
+* misc
+
+** github proxy settings under windows
+
+   万恶的GFW，前两天封了github，这两天虽然解封了，但是访问速度慢得要死，clone一个repo才1KB/s。。。无奈，使用代理，但是windows下怎么设置代理还没弄过，折腾了好一阵子，才弄出来，只需要在命令行设置以下环境变量：
+
+   : set https_proxy=http://<username>:<password>@<proxy_addr>:<proxy_port>
+
+   需要注意的是，github使用的是https，所以如果上面设置成 =http_proxy= 的话是没有效果的，而且设置好之后，clone需要使用https协议，不能使用git协议：
+
+   : git clone https://github.com/<person>/<project>.git
