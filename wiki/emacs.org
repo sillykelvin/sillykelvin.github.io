@@ -1,21 +1,20 @@
-#+TITLE:       Tips and Skills of Emacs
+#+TITLE:      关于Emacs的一些使用心得
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2012-12-13 Thu
+#+URI:         /wiki/emacs/
 #+KEYWORDS:    emacs
-#+CATEGORY:    memos
 #+TAGS:        :Emacs:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+DESCRIPTION: small skills/tips learned during using emacs
 
+
 记录一些关于Emacs这个神器的奇淫技巧。不定时更新。
 
 * 矩形操作
 
-  Emacs所有跟矩形操作的命令都是以 =C-x r= 为前缀，其区域选择与普通的区域选择的快捷键一
-  样： =C-space= ，只是在执行矩形操作时，Emacs会将选择的起点和终点作为对角，其中的内容
-  作为矩形区域。常用快捷键：
+  Emacs所有跟矩形操作的命令都是以 =C-x r= 为前缀，其区域选择与普通的区域选择的快捷键一样： =C-space= ，只是在执行矩形操作时，Emacs会将选择的起点和终点作为对角，其中的内容作为矩形区域。常用快捷键：
 
   | C-space | set-mark-command | 标记矩形区块的一个角（光标标记其相对的角）。                                       |
   | C-x r t | string-rectangle | 用字符串填充矩形区域                                                               |
@@ -55,5 +54,4 @@
 
   : M-x flush-lines RET ^$ RET
 
-  =flush-lines= 命令的本意是删除buffer中match随后的regexp的行，而 =^$= 就代表空
-  行，于是这就是删除空行的操作。
+  =flush-lines= 命令的本意是删除buffer中match随后的regexp的行，而 =^$= 就代表空行，于是这就是删除空行的操作。
