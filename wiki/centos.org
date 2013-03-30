@@ -1,16 +1,15 @@
-#+TITLE:       Tips and Skills of CentOS
+#+TITLE:       关于CentOS的一些使用技巧
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2012-09-26 Wed
+#+URI:         /wiki/centos/
 #+KEYWORDS:    linux, centos
-#+CATEGORY:    memos
 #+TAGS:        :Linux:CentOS:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+DESCRIPTION: small skills/tips during using centos
 
-这是一篇备忘性质的文章，主要记录我在配置和管理CentOS服务器的过程中，遇到的一些问题及
-相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
+这是一篇备忘性质的文章，主要记录我在配置和管理CentOS服务器的过程中，遇到的一些问题及相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
 
 * yum related
 
@@ -38,14 +37,14 @@
    : Tar: Exiting with failure status due to previous errors
 
    原因：通过ftp download下来的包在传输时没有使用二进制传送，所以tar解压失败。
+
    解决方案：在ftp登录之后，运行 =ftp> bin= ，再进行 =get= 下载操作。
 
 * network related
 
 ** no network in a virtual machine:
 
-   虚拟机中，以minimal模式新安装的CentOS连不上Internet，因为默认eth0没有打开，编辑
-   以下文件：
+   虚拟机中，以minimal模式新安装的CentOS连不上Internet，因为默认eth0没有打开，编辑以下文件：
 
    : /etc/sysconfig/network-scripts/ifcfg-eth0
 
@@ -53,9 +52,7 @@
 
 ** shutdown firewall:
 
-   CentOS的防火墙默认打开，并且应用了很强的规则，这时候其它机器无法访问其apache等web
-   服务，应用以下命令关闭防火墙（这并非最好的解决方式，最好的解决方式是配置防火墙规则，
-   放行某些端口）：
+   CentOS的防火墙默认打开，并且应用了很强的规则，这时候其它机器无法访问其apache等web服务，应用以下命令关闭防火墙（这并非最好的解决方式，最好的解决方式是配置防火墙规则，放行某些端口）：
 
    : service iptables save
    : service iptables stop
@@ -63,11 +60,6 @@
 
 ** device "eth0" does not seem to be present:
 
-   将一个虚拟机revert回某一个snapshot的时候，会报 =device "eth0" does not seem to be
-   present= 的错误，打开 =/etc/sysconfig/network-scripts/ifcfg-eth0= ，会发现里面的
-   MAC地址和Vmware虚拟机的settings里面的MAC address对不上。目测这应该是发生这个错误的
-   原因所在。
+   将一个虚拟机revert回某一个snapshot的时候，会报 =device "eth0" does not seem to be present= 的错误，打开 =/etc/sysconfig/network-scripts/ifcfg-eth0= ，会发现里面的MAC地址和Vmware虚拟机的settings里面的MAC address对不上。目测这应该是发生这个错误的原因所在。
 
-   解决方法：实际证明，不管是修改虚拟机里面的MAC，或者修改Vmware的settings里面的MAC来
-   让两者一致，都是没用的。最有效的方法：从settings里面删除当前的Network Adapter，再
-   重新新建一个即可，Vmware会自动检测到硬件变化并对虚拟机做相应的设置。
+   解决方法：实际证明，不管是修改虚拟机里面的MAC，或者修改Vmware的settings里面的MAC来让两者一致，都是没用的。最有效的方法：从settings里面删除当前的Network Adapter，再重新新建一个即可，Vmware会自动检测到硬件变化并对虚拟机做相应的设置。
