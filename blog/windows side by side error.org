@@ -1,9 +1,9 @@
-#+TITLE:       Solution to Windows Side-by-Side Error
+#+TITLE:       解决Windows上程序运行时的side by side错误
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2013-01-31 Thu
-#+KEYWORDS:    windows
-#+CATEGORY:    essays
+#+URI:         /blog/%y/%m/%d/windows-side-by-side-error-solution/
+#+KEYWORDS:    windows, side by side error
 #+TAGS:        :Windows:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
@@ -11,13 +11,10 @@
 
 * 起因
 
-  前两天写了个小工具，在我的机器跑得好好的，QA的测试机里面却死活跑不起来，一运行
-  就出现一个圣诞框，报一个side by side的错误：
+  前两天写了个小工具，在我的机器跑得好好的，QA的测试机里面却死活跑不起来，一运行就出现一个对话框，报一个side by side的错误：
 
   #+begin_quote
-  The application has failed to start because its side-by-side configuration is
-  incorrect. Please see the application event log or use the command-line
-  sxstrace.exe tool for more detail.
+  The application has failed to start because its side-by-side configuration is incorrect. Please see the application event log or use the command-line sxstrace.exe tool for more detail.
   #+end_quote
 
   郁闷至极，不过这个对话框却提供了一点额外的信息：
@@ -28,12 +25,11 @@
 
 * 解决过程
 
-  按照 [[http://www.arkhamconsulting.com/blogs/?p=8][这个]] 帖子，先打开sxstrace.exe的调试模式：
+  按照[[http://www.arkhamconsulting.com/blogs/?p=8][这个]]帖子，先打开sxstrace.exe的调试模式：
 
   : sxstrace trace -logfile:C:/trace.bin
 
-  然后再打开应用程序，这时候在C盘根目录的trace.bin已经生成了，于是退出sxstrace，
-  再运行以下命令：
+  然后再打开应用程序，这时候在C盘根目录的trace.bin已经生成了，于是退出sxstrace，再运行以下命令：
 
   : sxstrace parse -logfile:C:/trace.bin -outfile:C:/trace.log
 
@@ -83,10 +79,8 @@
   : ERROR: Activation Context generation failed.
   : End Activation Context Generation.
 
-  看起来是 =Microsoft.VC90.CRT.dll= 这个reference没有找到，这个是属于 =Visual C++
-  2008 Redistributable= 的一个动态链接库。去M$的网站下一个装上，一切就OK了。
+  看起来是 =Microsoft.VC90.CRT.dll= 这个reference没有找到，这个是属于 =Visual C++ 2008 Redistributable= 的一个动态链接库。去M$的网站下一个装上，一切就OK了。
 
 * 总结
 
-  对于windows我一向没有好感，不评价，写这篇blog主要是为了记录 =sxstrace.exe= 这个
-  工具，感觉用来debug不错。
+  对于windows我一向没有好感，不评价，写这篇blog主要是为了记录 =sxstrace.exe= 这个工具，感觉用来debug不错。
