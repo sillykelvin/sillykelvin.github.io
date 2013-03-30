@@ -1,16 +1,15 @@
-#+TITLE:       Tips and Skills of Archlinux
+#+TITLE:       关于Archlinux的一些使用技巧
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2012-08-29 Wed
+#+URI:         /wiki/archlinux/
 #+KEYWORDS:    linux, archlinux
-#+CATEGORY:    memos
 #+TAGS:        :Linux:Archlinux:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+DESCRIPTION: small skills/tips learned during using my archlinux
 
-这是一篇备忘性质的文章，主要记录我在使用Archlinux的过程中，遇到的一些问题及相应的解决
-办法，以及一些比较有用的命令或者tips。会不定期更新。
+这是一篇备忘性质的文章，主要记录我在使用Archlinux的过程中，遇到的一些问题及相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
 
 * sudo related
 
@@ -18,8 +17,7 @@
 
 ** add a user to sudoers file:
 
-   Users who do not exist in =/etc/sudoers= will not have permission to run
-   command =sudo ...=, add the following line to this file:
+   Users who do not exist in =/etc/sudoers= will not have permission to run command =sudo ...=, add the following line to this file:
 
    : <username> ALL=(ALL) ALL
 
@@ -27,13 +25,11 @@
 
 ** make a user password needless:
 
-   Input password every time when you run =sudo ...= is really annoying, put
-   the following line into =/etc/sudoers/=:
+   Input password every time when you run =sudo ...= is really annoying, put the following line into =/etc/sudoers/=:
 
    : Defaults:<username> !authenticate
 
-   Now the user /<username>/ will not need to input password any more when
-   running =sudo ...=.
+   Now the user /<username>/ will not need to input password any more when running =sudo ...=.
 
 * wireless related
 
@@ -86,8 +82,7 @@
 
    -p) 显示占用此端口的PID和程序名称
 
-   -u/-t) 显示TCP和UDP，查端口占用基本只有TCP/UDP是有用的，其它那些STREAM的根本不
-          知道是神马类型。。
+   -u/-t) 显示TCP和UDP，查端口占用基本只有TCP/UDP是有用的，其它那些STREAM的根本不知道是神马类型。。
 
    如果有装lsof的话，也可以用以下命令查看8080的端口占用：
 
@@ -112,15 +107,13 @@
    : TriggerKey=CTRL_RSHIFT    # default value is CTRL_SPACE
    : IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
 
-   将TriggerKey由默认的Ctrl + Space改为Ctrl + Right Shift，但是由于另外一个选项也是
-   Ctrl + Shift，有冲突，所以把冲突的IMSwitchHotkey给改掉。
+   将TriggerKey由默认的Ctrl + Space改为Ctrl + Right Shift，但是由于另外一个选项也是Ctrl + Shift，有冲突，所以把冲突的IMSwitchHotkey给改掉。
 
    然后，重启fcitx，这样fcitx和emacs的快捷键冲突就解决了。
 
 ** emacs中文输入
 
-   要在emacs中输入中文，还需要设置LC_CTYPE为zh_CN.UTF-8，不然依旧无法输入。比较
-   好的解决方法：
+   要在emacs中输入中文，还需要设置LC_CTYPE为zh_CN.UTF-8，不然依旧无法输入。比较好的解决方法：
 
    : sudo mv /usr/bin/emacs /usr/bin/emacs.origin
    : sudo touch /usr/bin/emacs
@@ -142,14 +135,11 @@
 
    : mplayer ... -aid 0/1 (for more than one language)
 
-   至于音轨的信息在mplayer播放的时候，会在命令行输出，所以只需要先试着播放一下，然后看命令
-   行的音轨信息，再按照上面加上参数就可以了。
+   至于音轨的信息在mplayer播放的时候，会在命令行输出，所以只需要先试着播放一下，然后看命令行的音轨信息，再按照上面加上参数就可以了。
 
 ** 字幕乱码
 
-   不太清楚mplayer默认使用的是什么编码，但肯定有些字幕采用的编码和mplayer默认使用的编码不
-   同，这就导致播放的时候会乱码，但因为大家都是天朝人，所以还是可以大致猜到字幕的编码的，一
-   般情况加上下面的参数就OK了：
+   不太清楚mplayer默认使用的是什么编码，但肯定有些字幕采用的编码和mplayer默认使用的编码不同，这就导致播放的时候会乱码，但因为大家都是天朝人，所以还是可以大致猜到字幕的编码的，一般情况加上下面的参数就OK了：
 
    : mplayer ... -subcp cp936
 
@@ -159,8 +149,7 @@
 
   因为locale选了其它语言，但又没安装其它语言的字体，所以显示小方块。
 
-  *解决方法* ：编辑 =/etc/locale.gen= ，只保留 /en_US.UTF-8 UTF-8/ 这一行，再运
-  行 =locale-gen= ，重启既可。
+  *解决方法* ：编辑 =/etc/locale.gen= ，只保留 /en_US.UTF-8 UTF-8/ 这一行，再运行 =locale-gen= ，重启既可。
 
 * NTFS partitions
 
@@ -170,12 +159,10 @@
 
   it even happened when I am the root.
 
-  after googling, it is because the partition type is improper during mounting,
-  try use the following command will fix the error:
+  after googling, it is because the partition type is improper during mounting, try use the following command will fix the error:
 
   : sudo mount -t ntfs-3g /dev/sdb1 /mnt
 
-  here =/dev/sdb1= is the NTFS partition, if *ntfs-3g* is not installed, use
-  the following command to install it:
+  here =/dev/sdb1= is the NTFS partition, if *ntfs-3g* is not installed, use the following command to install it:
 
   : sudo pacman -S ntfs-3g
