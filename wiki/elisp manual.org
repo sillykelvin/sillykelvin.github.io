@@ -2,15 +2,15 @@
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2012-07-21 Sat
+#+URI:         /wiki/elisp-manual/
 #+KEYWORDS:    emacs, elisp
-#+CATEGORY:    notes
 #+TAGS:        :Emacs:Elisp:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+DESCRIPTION: learning notes of GNU Emacs Lisp Reference Manual
 
-Notes recorded during learning /Emacs Lisp Reference Manual/, I did not finish
-the whole book, only 12 chapters.
+
+Notes recorded during learning /Emacs Lisp Reference Manual/, I did not finish the whole book, only 12 chapters.
 
 * Introduction
 
@@ -42,8 +42,7 @@ the whole book, only 12 chapters.
 
 * Data Types
 
-  one object can have *only one* primitive type, but may can belong to several other types\\
-  primitive types are: =integer, float, cons, symbol, string, vector, hash-table, subr, byte-code function=
+  one object can have *only one* primitive type, but may can belong to several other types primitive types are: =integer, float, cons, symbol, string, vector, hash-table, subr, byte-code function=
 
 ** character type
 
@@ -51,14 +50,13 @@ the whole book, only 12 chapters.
 
 ** equality predicates
 
-   - =eq= /obj1/ /obj2/ :: return =t= if /obj1/ and /obj2/ are the same object, otherwise return =nil=\\
-        integers with same value are considered to be the same object, so =(eq 1 1)= will return =t=\\
-        exception: =(eq "abc" "abc")= will return =nil=, but =(eq "" "")= will return =t= because the empty string is only stored one copy\\
-        as expected, =(eq '(1 2 3) '(1 2 3))= will return =nil=
+   - =eq= /obj1/ /obj2/ :: return =t= if /obj1/ and /obj2/ are the same object, otherwise return =nil= integers with same value are considered to be the same object, so =(eq 1 1)= will return =t=
 
-   - =equal= /obj1/ /obj2/ :: return =t= if /obj1/ and /obj2/ have equal components, otherwise return =nil=\\
-        unlike =eq=, =equal= will look into arguments to check if there contents are the same, if /obj1/ and /obj2/ are =eq=, they must be =equal=
-        so, as expected, =(equal '(1 2 3) '(1 2 3))= and =(equal "abc" "abc")= will both return =t=
+     exception: =(eq "abc" "abc")= will return =nil=, but =(eq "" "")= will return =t= because the empty string is only stored one copy as expected, =(eq '(1 2 3) '(1 2 3))= will return =nil=
+
+   - =equal= /obj1/ /obj2/ :: return =t= if /obj1/ and /obj2/ have equal components, otherwise return =nil=
+
+     unlike =eq=, =equal= will look into arguments to check if there contents are the same, if /obj1/ and /obj2/ are =eq=, they must be =equal=. so, as expected, =(equal '(1 2 3) '(1 2 3))= and =(equal "abc" "abc")= will both return =t=
 
 * Numbers
 
@@ -95,10 +93,11 @@ the whole book, only 12 chapters.
 
 ** random function
 
-   - =random= *&optional* /limit/ returns a pseudo-random integer\\
+   - =random= *&optional* /limit/ returns a pseudo-random integer
+
      if /limit/ is a positive integer, the value is chosen in [0, limit), and of course only choose integer
-     if /limit/ is =t=, it will choose a new seed, otherwise Emacs will always use the same seed, so the returned
-        pseudo-random integer sequences are always the same
+
+     if /limit/ is =t=, it will choose a new seed, otherwise Emacs will always use the same seed, so the returned pseudo-random integer sequences are always the same
 
 * Strings and Characters
 
@@ -124,10 +123,10 @@ the whole book, only 12 chapters.
    a cons cell has two slots, the first is called CAR and the second is called CDR, and it may looks like the structure below:
 
    #+begin_src c
-       struct cons_cell {
-           void * CAR;
-           void * CDR;
-       };
+   struct cons_cell {
+       void * CAR;
+       void * CDR;
+   };
    #+end_src
 
    so the two slots can hold any values, and lists are built up from cons cell, which stores object pointer in CAR slot, and stores the nexe node pointer in CDR slot
@@ -151,7 +150,9 @@ the whole book, only 12 chapters.
 ** modification functions
 
    - =push=
+
    - =add-to-list=
+
    - =setcar= / =setcdr=
 
    - =nconc= *&rest* /lists/ : return a list containing all the elements of /lists/, last CDR of each given list is set to point to next list
@@ -170,11 +171,9 @@ the whole book, only 12 chapters.
 
 ** association lists
 
-   /alist/ for short, it is a list consists of cons cells, that is to say, every element of alist is a cons cell, the CAR of the cons cell stores\\
-   *key* while the CDR stores *value*
+   /alist/ for short, it is a list consists of cons cells, that is to say, every element of alist is a cons cell, the CAR of the cons cell stores *key* while the CDR stores *value*
 
-   - =assoc= /key/ /alist/ : returns the first occurrence of /key/ in /alist/, uses =equal= for comparison, note that it returns the whole cons cell,\\
-     not only the CDR
+   - =assoc= /key/ /alist/ : returns the first occurrence of /key/ in /alist/, uses =equal= for comparison, note that it returns the whole cons cell, not only the CDR
 
    - =rassoc= /value/ /alist/ : like =assoc=, but uses CDR for comparison, =assoc= uses CAR
 
@@ -240,9 +239,7 @@ the whole book, only 12 chapters.
 
 ** create and intern symbols
 
-   symbols are stored in a vector called /obarray/, symbol name and symbol is with a one-to-one mapping relationship\\
-   interning a symbol means hash it and put it into /obarray/, or find it from /obarray/, so there will never be two symbols with same name in one /obarray/,\\
-   or two names pointing to one symbol.
+   symbols are stored in a vector called /obarray/, symbol name and symbol is with a one-to-one mapping relationship interning a symbol means hash it and put it into /obarray/, or find it from /obarray/, so there will never be two symbols with same name in one /obarray/, or two names pointing to one symbol.
 
    =*intern*= : find a symbol from /obarray/, or create a new symbol and put it into /obarray/. *so the finding action is also a interning operation*
 
@@ -260,8 +257,7 @@ the whole book, only 12 chapters.
 
 ** property list
 
-   property list (so called /plist/) is like association list (/alist/), it is also key-value pair data structure, but it often uses symbol as the key, so a plist\\
-   may always have unique keys, while alist may not.
+   property list (so called /plist/) is like association list (/alist/), it is also key-value pair data structure, but it often uses symbol as the key, so a plist may always have unique keys, while alist may not.
 
 ** plist functions
 
@@ -275,19 +271,20 @@ the whole book, only 12 chapters.
 
 * Evaluation
 
-  a Lisp object that is intended for evaluation is called a /form/ or /expression/, or /S-expression/
-  any Lisp object can be evaluated, but in practice only numbers, string, symbols, lists are evaluated very often
+  a Lisp object that is intended for evaluation is called a /form/ or /expression/, or /S-expression/ any Lisp object can be evaluated, but in practice only numbers, string, symbols, lists are evaluated very often
 
 ** kinds of forms
 
    how Emacs evaluates a form depends on its data type: symbols, lists, and "all other data types"
 
    - self-evaluating forms: "all other data types"
+
      the result of self-evaluating is the object itself, so 25 will be evaluated to 25, "abc" will be evaluated to "abc"
 
    - symbol forms: will be evaluated as a variable, so its value field will be returned
 
    - list forms: the evaluating way of a list is determined by its first element, if first element is:
+
      - a symbol: the symbol's function field will be obtained and replace the symbol with that function
      - a function: evaluates the remaining elements of the list first, and then call the function with these evaluated remaining elements as parameters
      - a macro: evaluates the macro with the remaining elements as parameters without evaluating the remaining elements
@@ -309,8 +306,7 @@ the whole book, only 12 chapters.
 
 ** global variables
 
-   global variables can be defined by =defvar= and =defconst=, they do not have actually difference, =defconst= is intent to inform human readers that the variable\\
-   may should not be changed, but actually its value can be changed
+   global variables can be defined by =defvar= and =defconst=, they do not have actually difference, =defconst= is intent to inform human readers that the variable may should not be changed, but actually its value can be changed
 
 * Functions
 
@@ -329,7 +325,3 @@ the whole book, only 12 chapters.
    - =mapcar= /function/ /sequence/ : applies /function/ to each element in /sequence/ in turn, return a list of results
    - =mapc= /function/ /sequence/ : like =mapcar=, but it is used for side effects, return value will be ignored
    - =mapconcat= /function/ /sequence/ /separator/ : like =mapcar=, but /function/'s result must be string, and the strings will be concatenated as return value
-
-
-
-------------------------------------------------------------------------------------------
