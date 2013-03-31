@@ -2,15 +2,15 @@
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2012-10-24 Wed
+#+URI:         /wiki/spring-in-action/
 #+KEYWORDS:    java, spring
-#+CATEGORY:    notes
-#+TAGS:        :J2EE:Spring:
+#+TAGS:        :Java:Spring:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+DESCRIPTION: reading notes of book Spring in Action
 
-This file recorded all the notes during learning /Spring in Action 3rd Edition/,
-I did not complete the book, and may continue to finish reading it later.
+
+This file recorded all the notes during learning /Spring in Action 3rd Edition/, I did not complete the book, and may continue to finish reading it later.
 
 * Chapter 2 Wiring beans
 
@@ -42,15 +42,11 @@ I did not complete the book, and may continue to finish reading it later.
    :     <constructor-arg ref="beanId" />
    : <bean>
 
-   The example above will use the constructor which has two args, 1st one is
-   basic type(err.. String should also be considered as "basic type"), 2nd
-   one is an instance of an object, so it should be defined with =<bean>= tag
-   and then the =ref= is the reference of that bean, whose id is =beanId=.
+   The example above will use the constructor which has two args, 1st one is basic type(err.. String should also be considered as "basic type"), 2nd one is an instance of an object, so it should be defined with =<bean>= tag and then the =ref= is the reference of that bean, whose id is =beanId=.
 
 ** Wiring beans through factory method
 
-   Some definition of classes may not have a visible constructor, an example
-   is the singleton bean definition, as below:
+   Some definition of classes may not have a visible constructor, an example is the singleton bean definition, as below:
 
    #+begin_src java
    public class Singleton {
@@ -96,18 +92,14 @@ I did not complete the book, and may continue to finish reading it later.
 
 ** Initializing and destroying
 
-   Specify attributes =init-method= and =destroy-method= in a bean definition,
-   the method specified by =init-method= will be invoked after the bean is
-   constructed, and the method specified by =destroy-method= will be invoked
-   before the bean is removed from the container.
+   Specify attributes =init-method= and =destroy-method= in a bean definition, the method specified by =init-method= will be invoked after the bean is constructed, and the method specified by =destroy-method= will be invoked before the bean is removed from the container.
 
    : <bean id="xxx"
    :       class="xxx.Resource"
    :       init-method="allocateResource"
    :       destroy-method="freeResource" />
 
-   As the example shows, the required resources will be allocated after
-   constructed, and the resources will be freed before bean removed.
+   As the example shows, the required resources will be allocated after constructed, and the resources will be freed before bean removed.
 
 ** Wiring beans through property setting methods
 
@@ -118,18 +110,11 @@ I did not complete the book, and may continue to finish reading it later.
    :     <property name="objectProperty" ref="beanId" />
    : <bean>
 
-   In the example above, the method =setStringProperty= will be invoked to
-   inject the value =someValue=, and =setObjectProperty= will be invoked to
-   set the related property to the bean referenced by =beanId=.
+   In the example above, the method =setStringProperty= will be invoked to inject the value =someValue=, and =setObjectProperty= will be invoked to set the related property to the bean referenced by =beanId=.
 
-   NOTICE: the attribute =name= of =property= should be related to the set
-   method, not the field name, e.g. field name is =realProperty=, but the
-   set method is =setFakeProperty=, so the =name= should be =fakeProperty=.
+   NOTICE: the attribute =name= of =property= should be related to the set method, not the field name, e.g. field name is =realProperty=, but the set method is =setFakeProperty=, so the =name= should be =fakeProperty=.
 
-   In the example above, if there are several =property=, and all of them
-   have =ref= to "beanId", then the bean with id "beanId" will be shared
-   by all of them. The example below will create a standalone =InnerBean=,
-   only available for bean "hello":
+   In the example above, if there are several =property=, and all of them have =ref= to "beanId", then the bean with id "beanId" will be shared by all of them. The example below will create a standalone =InnerBean=, only available for bean "hello":
 
    : <bean id="hello" class="ini.kelvin.spring.Hello">
    :     <property name="stringProperty" value="someValue" />
@@ -180,10 +165,7 @@ I did not complete the book, and may continue to finish reading it later.
    :     </property>
    : </bean>
 
-   The =<entry>= element contains a key value pair, both key and value could
-   be a primitive value or a reference to another bean, when key/value is a
-   primitive value, =<key>= / =<value>= should be used; when key/value
-   referenced to other bean, =<key-ref>= / =<value-ref>= shoud be used.
+   The =<entry>= element contains a key value pair, both key and value could be a primitive value or a reference to another bean, when key/value is a primitive value, =<key>= / =<value>= should be used; when key/value referenced to other bean, =<key-ref>= / =<value-ref>= shoud be used.
 
    An example of =<props>=:
 
@@ -216,21 +198,17 @@ I did not complete the book, and may continue to finish reading it later.
 
 ** Automatically wiring
 
-   - =byName= : search beans, if a bean's id matches the property name, then
-     it will be wired into this property
+   - =byName= : search beans, if a bean's id matches the property name, then it will be wired into this property
 
    - =byType= : search beans, search criteria is class type
 
-   - =constructor= : search beans, the beans which can satisfy the bean's
-     constructor wil be used to construct the bean
+   - =constructor= : search beans, the beans which can satisfy the bean's constructor wil be used to construct the bean
 
-   - =autodetect= : try autowiring by =constructor= first, if no suitable
-     constructor or bean is found, then try autowiring by type.
+   - =autodetect= : try autowiring by =constructor= first, if no suitable constructor or bean is found, then try autowiring by type.
 
 ** Wiring with annotations
 
-   By default annotation wiring is turned off, use the following line to
-   turn it on:
+   By default annotation wiring is turned off, use the following line to turn it on:
 
    : <context:annotation-config />
 
@@ -246,9 +224,7 @@ I did not complete the book, and may continue to finish reading it later.
 
 ** Automatically discovering
 
-   =<context:annotation-config>= is only used for automatically wiring, but
-   =<context:component-scan>= will used for both autowiring, but also
-   autodiscovery, as below:
+   =<context:annotation-config>= is only used for automatically wiring, but =<context:component-scan>= will used for both autowiring, but also autodiscovery, as below:
 
    : <beans ...>
    :     <context:component-scan base-package="com.mycompany.xxx">
@@ -257,8 +233,7 @@ I did not complete the book, and may continue to finish reading it later.
 
    Annotations can be used:
 
-   1) =@Component= : general-purpose annotation, indicating that the class
-      is a Spring component
+   1) =@Component= : general-purpose annotation, indicating that the class is a Spring component
 
    2) =@Controller= : defines a Spring MVC controller
 
@@ -268,9 +243,7 @@ I did not complete the book, and may continue to finish reading it later.
 
    5) any customized annotation annotated with =@Component=
 
-   =<context:component-scan>= can include =<context:include-filter>= and
-   =<context:exclude-filter>= to tweak component scanning. *(this section
-   is omitted, since it is not used so much)*
+   =<context:component-scan>= can include =<context:include-filter>= and =<context:exclude-filter>= to tweak component scanning. *(this section is omitted, since it is not used so much)*
 
 ** Java-based configuration
 
@@ -281,39 +254,36 @@ I did not complete the book, and may continue to finish reading it later.
   AOP terminology
 
   - *ADVICE*
-    The job that aspects are meant to do, is called /advice/, advice defines
-    both the /what/ and the /when/ of an aspect.
+
+    The job that aspects are meant to do, is called /advice/, advice defines both the /what/ and the /when/ of an aspect.
 
     Spring aspects can work with five kinds of advice:
-    - /Before/: the advice functionality takes place before the advised method
-      is invoked
+
+    - /Before/: the advice functionality takes place before the advised method is invoked
     - /After/: after advised method completes, no matter success or failure
     - /After-returning/: after succeeded completion
     - /After-throwing/: after exception-thrown completion
     - /Around/: both before and after
 
   - *JOIN POINTS*
-    A /join point/ is a point in the execution of the application where an
-    aspect can be plugged in. This point could be a method being called, an
-    exception being thrown, or a field being modified.
+
+    A /join point/ is a point in the execution of the application where an aspect can be plugged in. This point could be a method being called, an exception being thrown, or a field being modified.
 
   - *POINTCUTS*
-    Advice defines the /what/ and the /when/ of aspects, then /pointcuts/
-    define the /where/. A pointcut defines a set of join points at which the
-    advice should be woven.
+
+    Advice defines the /what/ and the /when/ of aspects, then /pointcuts/ define the /where/. A pointcut defines a set of join points at which the advice should be woven.
 
   - *ASPECTS*
-    An /aspect/ is the merger of advice and pointcuts, advice and pointcuts
-    define an aspect: what is does, and, where and when it does it.
+
+    An /aspect/ is the merger of advice and pointcuts, advice and pointcuts define an aspect: what is does, and, where and when it does it.
 
   - *INTRODUCTIONS*
-    An /introduction/ allows to add new methods or attributes to existing
-    classes.
+
+    An /introduction/ allows to add new methods or attributes to existing classes.
 
   - *WEAVING*
-    /Weaving/ is the process of applying aspects to a target object to create
-    a new proxied object. There are three points that weaving can take place:
-    /Compile time/, /Classload time/, and /Runtime/.
+
+    /Weaving/ is the process of applying aspects to a target object to create a new proxied object. There are three points that weaving can take place: /Compile time/, /Classload time/, and /Runtime/.
 
 ** Declaring aspects in XML
 
@@ -357,18 +327,13 @@ I did not complete the book, and may continue to finish reading it later.
    :     </aop:aspect>
    : </aop:config>
 
-   For the example above, the class definition =package.AspectBean= should
-   have a method named =aspectMethod=, which will be invoked before the
-   execution of =package.class.method()=.
+   For the example above, the class definition =package.AspectBean= should have a method named =aspectMethod=, which will be invoked before the execution of =package.class.method()=.
 
-   But, for the type =<aop:around>=, it is not that simple like the example
-   above. The XML configuration of this type is similar to =<aop:before>=,
-   but the method =aspectMethod= defined in =package.AspectBean= should have
-   the following prototype:
+   But, for the type =<aop:around>=, it is not that simple like the example above. The XML configuration of this type is similar to =<aop:before>=, but the method =aspectMethod= defined in =package.AspectBean= should have the following prototype:
+
    : public void aspectMethod(ProceedingJoinPoint joinPoint)
-   and the invocation of =joinPoint.proceed()= will invoke the advised
-   method, so code blocks can be put before and after this invocation, which
-   can implement the effect of "around".
+
+   and the invocation of =joinPoint.proceed()= will invoke the advised method, so code blocks can be put before and after this invocation, which can implement the effect of "around".
 
 ** Annotating aspects
 
@@ -386,5 +351,4 @@ I did not complete the book, and may continue to finish reading it later.
 
 * Chapter 6 Managing transactions
 
-  A transaction manager should be chosen first:
-  =DataSourceTransactionManager=, =HibernateTransactionManager=, etc.
+  A transaction manager should be chosen first: =DataSourceTransactionManager=, =HibernateTransactionManager=, etc.
