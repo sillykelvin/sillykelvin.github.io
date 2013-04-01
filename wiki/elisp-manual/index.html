@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>GNU Emacs Lisp Reference Manual Learning Notes</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="GNU Emacs Lisp Reference Manual Learning Notes"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-07-21 Sat"/>
+<meta name="author" content="Kelvin Hu"/>
+<meta name="description" content="learning notes of GNU Emacs Lisp Reference Manual"/>
+<meta name="keywords" content="emacs, elisp"/>
+<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+
+<div id="preamble">
+<hgroup id="header">
+  <h1><a href="/">Kelvin的胡言乱语</a></h1>
+  <h2>重剑无锋，大巧不工。</h2>
+</hgroup>
+<nav id="main-nav">
+  <ul id="nav-list-main">
+    <li><a href="/blog/" class="menu">Blog</a></li>
+    <li><a href="/wiki/" class="menu">Wiki</a></li>
+    <li><a href="/tags/" class="menu">Tags</a></li>
+    <li><a href="/about/" class="menu">About</a></li>
+  </ul>
+</nav>
+<nav id="sub-nav" class="align-right">
+  <div class="social">
+    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+    <!-- TODO: change the link below to proper value  -->
+    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+  </div>
+  <form class="search" target="_blank" method="get" action="http://google.com/search">
+    <input type="hidden" value="site:kelvinh.github.com" name="q" />
+    <input type="text" class="align-right" results="0" name="q" />
+  </form>
+</nav>
+
+</div>
+
+<div id="content">
+<h1 class="title">GNU Emacs Lisp Reference Manual Learning Notes</h1>
+
+
+<p>
+Notes recorded during learning <i>Emacs Lisp Reference Manual</i>, I did not finish the whole book, only 12 chapters.
+</p>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><code>nil</code> and <code>t</code></h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<ul>
+<li><code>nil</code>
+<ol>
+<li>symbol with name "nil"
+</li>
+<li>logical truth value <code>false</code>
+</li>
+<li>empty list
+
+</li>
+</ol>
+
+</li>
+<li><code>t</code>
+<ol>
+<li>truth value t
+</li>
+<li>symbol "t"
+
+</li>
+</ol>
+
+</li>
+<li><code>booleanp</code> <i>obj</i>
+     return non-=nil= if <i>obj</i> is t or nil, otherwise not
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2">version info</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<ul>
+<li><code>emacs-version</code> <b>&amp;optional</b> <i>here</i> function
+
+</li>
+<li><code>emacs-build-time</code>                 variable
+
+</li>
+<li><code>emacs-version</code>                    variable
+
+</li>
+<li><code>emacs-major-version</code>              variable
+
+</li>
+<li><code>emacs-minor-version</code>              variable
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">Data Types</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  one object can have <b>only one</b> primitive type, but may can belong to several other types primitive types are: <code>integer, float, cons, symbol, string, vector, hash-table, subr, byte-code function</code>
+</p>
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">character type</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   the read syntax of basic char is ?&lt;X&gt;, &lt;X&gt; stands for the character to be represented, so ?A stands for 'A'
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2">equality predicates</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<dl>
+<dt><code>eq</code> <i>obj1</i> <i>obj2</i></dt><dd>return <code>t</code> if <i>obj1</i> and <i>obj2</i> are the same object, otherwise return <code>nil</code> integers with same value are considered to be the same object, so <code>(eq 1 1)</code> will return <code>t</code>
+
+<p>
+     exception: <code>(eq "abc" "abc")</code> will return <code>nil</code>, but <code>(eq "" "")</code> will return <code>t</code> because the empty string is only stored one copy as expected, <code>(eq '(1 2 3) '(1 2 3))</code> will return <code>nil</code>
+</p>
+</dd>
+<dt><code>equal</code> <i>obj1</i> <i>obj2</i></dt><dd>return <code>t</code> if <i>obj1</i> and <i>obj2</i> have equal components, otherwise return <code>nil</code>
+
+<p>
+     unlike <code>eq</code>, <code>equal</code> will look into arguments to check if there contents are the same, if <i>obj1</i> and <i>obj2</i> are <code>eq</code>, they must be <code>equal</code>. so, as expected, <code>(equal '(1 2 3) '(1 2 3))</code> and <code>(equal "abc" "abc")</code> will both return <code>t</code>
+</p></dd>
+</dl>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Numbers</h2>
+<div class="outline-text-2" id="text-3">
+
+
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1">two types</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+<ul>
+<li><code>integer</code>
+</li>
+<li><code>float</code>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2">type predicates functions</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+<ul>
+<li><code>floatp</code> <i>object</i>
+</li>
+<li><code>integerp</code> <i>object</i>
+</li>
+<li><code>numberp</code> <i>object</i>
+</li>
+<li><code>natnump</code> <i>object</i> : returns <code>t</code> if <i>object</i> is a natural number, such as 0, 1, 2&hellip;
+</li>
+<li><code>zerop</code> <i>object</i>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3">comparison functions</h3>
+<div class="outline-text-3" id="text-3-3">
+
+
+<ul>
+<li><code>max</code> <i>num1</i> <b>&amp;rest</b> <i>nums</i> return the maximum value
+
+</li>
+<li><code>min</code> <i>num1</i> <b>&amp;rest</b> <i>nums</i> return the minimun value
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-4" class="outline-3">
+<h3 id="sec-3-4">conversion functions</h3>
+<div class="outline-text-3" id="text-3-4">
+
+
+<ul>
+<li><code>float</code> <i>number</i> convert the <i>number</i> to float type
+
+</li>
+<li><code>truncate</code> <i>number</i> <b>&amp;optional</b> <i>divisor</i> convert the <i>number</i> to integer by rounding towards zero
+
+</li>
+<li><code>floor</code> <i>number</i> <b>&amp;optional</b> <i>divisor</i> convert the <i>number</i> to integer by rounding towards negative infinity
+
+</li>
+<li><code>ceiling</code> <i>number</i> <b>&amp;optional</b> <i>divisor</i> convert the <i>number</i> to integer by rounding towards positive infinity
+
+</li>
+<li><code>round</code> <i>number</i> <b>&amp;optional</b> <i>divisor</i> convert the <i>number</i> to integer by rounding towards nearest integer
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-5" class="outline-3">
+<h3 id="sec-3-5">random function</h3>
+<div class="outline-text-3" id="text-3-5">
+
+
+<ul>
+<li><code>random</code> <b>&amp;optional</b> <i>limit</i> returns a pseudo-random integer
+
+<p>
+     if <i>limit</i> is a positive integer, the value is chosen in [0, limit), and of course only choose integer
+</p>
+<p>
+     if <i>limit</i> is <code>t</code>, it will choose a new seed, otherwise Emacs will always use the same seed, so the returned pseudo-random integer sequences are always the same
+</p></li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">Strings and Characters</h2>
+<div class="outline-text-2" id="text-4">
+
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1">predicates functions</h3>
+<div class="outline-text-3" id="text-4-1">
+
+
+<ul>
+<li><code>stringp</code> <i>object</i>
+</li>
+<li><code>string-or-null-p</code> <i>object</i>
+</li>
+<li><code>char-or-string-p</code> <i>object</i>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2">useful functions</h3>
+<div class="outline-text-3" id="text-4-2">
+
+
+<ul>
+<li><code>substring</code> : to get substring
+</li>
+<li><code>concat</code> : to concatenate strings together
+</li>
+<li><code>split-string</code> : split string into several strings
+</li>
+<li><code>string=</code> / <code>string-equal</code> : judge the equality of two strings
+</li>
+<li><code>string-prefix-p</code> : check if a string is a prefix of another
+</li>
+<li><code>downcase</code> / <code>upcase</code> : change a string or a character to opposite case
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">Lists</h2>
+<div class="outline-text-2" id="text-5">
+
+
+
+</div>
+
+<div id="outline-container-5-1" class="outline-3">
+<h3 id="sec-5-1">cons cells</h3>
+<div class="outline-text-3" id="text-5-1">
+
+
+<p>
+   a cons cell has two slots, the first is called CAR and the second is called CDR, and it may looks like the structure below:
+</p>
+
+
+
+<pre class="src src-c"><span style="color: #859900;">struct</span> <span style="color: #b58900;">cons_cell</span> {
+    <span style="color: #b58900;">void</span> * <span style="color: #b58900;">CAR</span>;
+    <span style="color: #b58900;">void</span> * <span style="color: #b58900;">CDR</span>;
+};
+</pre>
+
+
+<p>
+   so the two slots can hold any values, and lists are built up from cons cell, which stores object pointer in CAR slot, and stores the nexe node pointer in CDR slot
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5-2" class="outline-3">
+<h3 id="sec-5-2">element accessing functions</h3>
+<div class="outline-text-3" id="text-5-2">
+
+
+<ul>
+<li><code>car</code> / <code>cdr</code>
+</li>
+<li><code>pop</code>
+</li>
+<li><code>nth</code> / <code>nthcdr</code>
+</li>
+<li><code>last</code>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-3" class="outline-3">
+<h3 id="sec-5-3">building functions</h3>
+<div class="outline-text-3" id="text-5-3">
+
+
+<ul>
+<li><code>cons</code>
+</li>
+<li><code>list</code>
+</li>
+<li><code>make-list</code>
+</li>
+<li><code>append</code>
+</li>
+<li><code>reverse</code>
+</li>
+<li><code>number-sequence</code>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-4" class="outline-3">
+<h3 id="sec-5-4">modification functions</h3>
+<div class="outline-text-3" id="text-5-4">
+
+
+<ul>
+<li><code>push</code>
+
+</li>
+<li><code>add-to-list</code>
+
+</li>
+<li><code>setcar</code> / <code>setcdr</code>
+
+</li>
+<li><code>nconc</code> <b>&amp;rest</b> <i>lists</i> : return a list containing all the elements of <i>lists</i>, last CDR of each given list is set to point to next list
+
+</li>
+<li><code>memq</code> <i>object</i> <i>list</i> : test if <i>object</i> is in <i>list</i>, if is in, return the sublist from the position <i>object</i> occurs the first time
+
+</li>
+<li><code>delq</code> <i>object</i> <i>list</i> : delete all occurrences of <i>object</i> in <i>list</i>, note that it uses <code>eq</code> to check if two objects are equal, same as <code>memq</code>
+
+</li>
+<li><code>remq</code> <i>object</i> <i>list</i> : returns a list copy with all elements <code>eq</code> to <i>object</i> removed
+
+</li>
+<li><code>member</code> <i>object</i> <i>list</i> : like <code>memq</code>, only difference is it uses <code>equal</code> to check the equality of two objects
+
+</li>
+<li><code>delete</code> <i>object</i> <i>sequence</i> : like <code>delq</code>, but uses <code>equal</code> for comparison
+
+</li>
+<li><code>remove</code> <i>object</i> <i>sequence</i> : like <code>delete</code>, but it always returns a copy of processed <i>sequence</i>, no matter <i>sequence</i> is a list, vector, or a string
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5-5" class="outline-3">
+<h3 id="sec-5-5">association lists</h3>
+<div class="outline-text-3" id="text-5-5">
+
+
+<p>
+   <i>alist</i> for short, it is a list consists of cons cells, that is to say, every element of alist is a cons cell, the CAR of the cons cell stores <b>key</b> while the CDR stores <b>value</b>
+</p>
+<ul>
+<li><code>assoc</code> <i>key</i> <i>alist</i> : returns the first occurrence of <i>key</i> in <i>alist</i>, uses <code>equal</code> for comparison, note that it returns the whole cons cell, not only the CDR
+
+</li>
+<li><code>rassoc</code> <i>value</i> <i>alist</i> : like <code>assoc</code>, but uses CDR for comparison, <code>assoc</code> uses CAR
+
+</li>
+<li><code>assq</code> <i>key</i> <i>alist</i> : like <code>assoc</code>, but uses <code>eq</code> for comparison
+
+</li>
+<li><code>rassq</code> <i>value</i> <i>alist</i> : &hellip;
+
+</li>
+<li><code>assq-delete-all</code> / <code>rassq-delete-all</code> : &hellip;
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">Sequences, Arrays and Vectors</h2>
+<div class="outline-text-2" id="text-6">
+
+
+<p>
+  sequence: list, array
+  array: vector, string, char-table, bool-vector
+</p>
+
+</div>
+
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1">sequence functions</h3>
+<div class="outline-text-3" id="text-6-1">
+
+
+<ul>
+<li><code>sequencep</code>
+</li>
+<li><code>length</code>
+
+</li>
+<li><code>elt</code> <i>sequence</i> <i>index</i> : returns the element of <i>sequence</i> at <i>index</i>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2">array functions</h3>
+<div class="outline-text-3" id="text-6-2">
+
+
+<ul>
+<li><code>arrayp</code>
+
+</li>
+<li><code>aref</code> <i>array</i> <i>index</i> : returns element of <i>array</i> at <i>index</i>
+
+</li>
+<li><code>aset</code> <i>array</i> <i>index</i> <i>object</i> : set <i>object</i> to the <i>index</i> element of <i>array</i>
+
+</li>
+<li><code>fillarray</code> <i>array</i> <i>object</i> : fills <i>array</i> with <i>object</i>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3">vector functions</h3>
+<div class="outline-text-3" id="text-6-3">
+
+
+<ul>
+<li><code>vectorp</code>
+
+</li>
+<li><code>vector</code> <b>&amp;rest</b> <i>objects</i> : creates a vector with <i>objects</i>
+
+</li>
+<li><code>make-vector</code> <i>length</i> <i>object</i> : makes a vector has <i>length</i> and filled by <i>object</i>
+
+</li>
+<li><code>vconcat</code> <b>&amp;test</b> <i>sequences</i> : returns a new vector containing all elements in <i>sequences</i>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4">char-table, bool-vector (skipped)</h3>
+<div class="outline-text-3" id="text-6-4">
+
+
+<p>
+   not so useful, so skip them
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7">Hash Tables (skipped)</h2>
+<div class="outline-text-2" id="text-7">
+
+
+<p>
+  not so useful, so skip it
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8">Symbols</h2>
+<div class="outline-text-2" id="text-8">
+
+
+
+</div>
+
+<div id="outline-container-8-1" class="outline-3">
+<h3 id="sec-8-1">symbol components</h3>
+<div class="outline-text-3" id="text-8-1">
+
+
+<p>
+   each symbol has four components:
+</p>
+<ul>
+<li>print name: the name of the symbol
+
+</li>
+<li>value: symbol's current value as a variable
+
+</li>
+<li>function: symbol's function definition, can also hold a symbol, a keymap, or a keyboard macro
+
+</li>
+<li>property list: symbol's property list
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8-2" class="outline-3">
+<h3 id="sec-8-2">create and intern symbols</h3>
+<div class="outline-text-3" id="text-8-2">
+
+
+<p>
+   symbols are stored in a vector called <i>obarray</i>, symbol name and symbol is with a one-to-one mapping relationship interning a symbol means hash it and put it into <i>obarray</i>, or find it from <i>obarray</i>, so there will never be two symbols with same name in one <i>obarray</i>, or two names pointing to one symbol.
+</p>
+<p>
+   <code>*intern*</code> : find a symbol from <i>obarray</i>, or create a new symbol and put it into <i>obarray</i>. <b>so the finding action is also a interning operation</b>
+</p>
+<p>
+   of course there are <i>uninterned symbols</i>, it means they are not put into any <i>obarray</i>, they may exist in some other object or as variable values
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-8-3" class="outline-3">
+<h3 id="sec-8-3">functions</h3>
+<div class="outline-text-3" id="text-8-3">
+
+
+<ul>
+<li><code>symbol-name</code>
+</li>
+<li><code>make-symbol</code>
+
+</li>
+<li><code>intern</code> <i>name</i> <b>&amp;optional</b> <i>obarray</i> : returns the interned symbol with name <i>name</i>, creates a new one and puts it into <i>obarray</i> if no symbol found
+</li>
+<li><code>intern-soft</code> <i>name</i> <b>&amp;optional</b> <i>obarray</i> : returns the already interned symbol with name <i>name</i>, returns <code>nil</code> if not found
+
+</li>
+<li><code>mapatoms</code> <i>function</i> <b>&amp;optional</b> <i>obarray</i> : calls <i>function</i> once with each symbol in <i>obarray</i>, then returns <code>nil</code>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-8-4" class="outline-3">
+<h3 id="sec-8-4">property list</h3>
+<div class="outline-text-3" id="text-8-4">
+
+
+<p>
+   property list (so called <i>plist</i>) is like association list (<i>alist</i>), it is also key-value pair data structure, but it often uses symbol as the key, so a plist may always have unique keys, while alist may not.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-8-5" class="outline-3">
+<h3 id="sec-8-5">plist functions</h3>
+<div class="outline-text-3" id="text-8-5">
+
+
+<ul>
+<li><code>symbol-plist</code> <i>symbol</i>
+</li>
+<li><code>setplist</code> <i>symbol</i> <i>plist</i>
+</li>
+<li><code>get</code> <i>symbol</i> <i>property</i>
+</li>
+<li><code>put</code> <i>symbol</i> <i>property</i> <i>value</i>
+</li>
+<li><code>plist-get</code> <i>plist</i> <i>property</i>
+</li>
+<li><code>plist-put</code> <i>plist</i> <i>property</i> <i>value</i>
+</li>
+<li><code>plist-member</code> <i>plist</i> <i>property</i>
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9">Evaluation</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+  a Lisp object that is intended for evaluation is called a <i>form</i> or <i>expression</i>, or <i>S-expression</i> any Lisp object can be evaluated, but in practice only numbers, string, symbols, lists are evaluated very often
+</p>
+
+</div>
+
+<div id="outline-container-9-1" class="outline-3">
+<h3 id="sec-9-1">kinds of forms</h3>
+<div class="outline-text-3" id="text-9-1">
+
+
+<p>
+   how Emacs evaluates a form depends on its data type: symbols, lists, and "all other data types"
+</p>
+<ul>
+<li>self-evaluating forms: "all other data types"
+
+<p>
+     the result of self-evaluating is the object itself, so 25 will be evaluated to 25, "abc" will be evaluated to "abc"
+</p>
+</li>
+<li>symbol forms: will be evaluated as a variable, so its value field will be returned
+
+</li>
+<li>list forms: the evaluating way of a list is determined by its first element, if first element is:
+
+<ul>
+<li>a symbol: the symbol's function field will be obtained and replace the symbol with that function
+</li>
+<li>a function: evaluates the remaining elements of the list first, and then call the function with these evaluated remaining elements as parameters
+</li>
+<li>a macro: evaluates the macro with the remaining elements as parameters without evaluating the remaining elements
+</li>
+<li>special forms: such as <i>if</i>, <i>and</i>, evaluation of elements in the list depends on the special forms' syntax requirements
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10">Control Structures (skipped)</h2>
+<div class="outline-text-2" id="text-10">
+
+
+<p>
+  things about special forms for flow control, such as <i>if</i>, <i>progn</i>, <i>cond</i>, <i>while</i>, so skip it
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11">Variables</h2>
+<div class="outline-text-2" id="text-11">
+
+
+
+</div>
+
+<div id="outline-container-11-1" class="outline-3">
+<h3 id="sec-11-1">local variables</h3>
+<div class="outline-text-3" id="text-11-1">
+
+
+<ul>
+<li><code>let</code> <i>bindings&hellip;</i> <i>forms&hellip;</i>
+</li>
+<li><code>let*</code> <i>bindings&hellip;</i> <i>forms&hellip;</i> : like <code>let</code>, difference is a local variable binding will take effect immediately before next local variable binding takes place
+
+</li>
+<li><code>makeunbound</code> <i>symbol</i> : cancel the <i>symbol</i>'s binding to a value
+</li>
+<li><code>boundp</code> <i>variable</i> : to judge if the variable is bound, returns <code>t</code> if its value is not <b>void</b>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-11-2" class="outline-3">
+<h3 id="sec-11-2">global variables</h3>
+<div class="outline-text-3" id="text-11-2">
+
+
+<p>
+   global variables can be defined by <code>defvar</code> and <code>defconst</code>, they do not have actually difference, <code>defconst</code> is intent to inform human readers that the variable may should not be changed, but actually its value can be changed
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12">Functions</h2>
+<div class="outline-text-2" id="text-12">
+
+
+<p>
+  function types:
+</p><ul>
+<li>lambda expression
+</li>
+<li>primitive : written in C
+</li>
+<li>special form : like <code>if</code>, <code>and</code>, <code>while</code>
+</li>
+<li>macro
+</li>
+<li>command : (includes <i>keyboard macros</i>)
+</li>
+<li>closure
+</li>
+<li>byte-code function
+</li>
+<li>autoload object
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-12-1" class="outline-3">
+<h3 id="sec-12-1">mapping functions</h3>
+<div class="outline-text-3" id="text-12-1">
+
+
+<ul>
+<li><code>mapcar</code> <i>function</i> <i>sequence</i> : applies <i>function</i> to each element in <i>sequence</i> in turn, return a list of results
+</li>
+<li><code>mapc</code> <i>function</i> <i>sequence</i> : like <code>mapcar</code>, but it is used for side effects, return value will be ignored
+</li>
+<li><code>mapconcat</code> <i>function</i> <i>sequence</i> <i>separator</i> : like <code>mapcar</code>, but <i>function</i>'s result must be string, and the strings will be concatenated as return value
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<div id="post-meta">
+  <span title="post date" class="post-info">2012-07-21</span>
+  <span title="last modification date" class="update-info">2013-04-01</span>
+  <span title="tags" class="tags"><a href="/tags/emacs/">Emacs</a>, <a href="/tags/elisp/">Elisp</a></span>
+  <span title="author" class="author">Kelvin Hu</span>
+</div>
+<div id="footer">
+  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
+  <p class="copyright">
+    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+    &nbsp;&nbsp;-&nbsp;&nbsp;
+    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>

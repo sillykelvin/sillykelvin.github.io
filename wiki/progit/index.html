@@ -1,0 +1,1201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Pro Git读书笔记</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="Pro Git读书笔记"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-11-30 Fri"/>
+<meta name="author" content="Kelvin Hu"/>
+<meta name="description" content="reading notes of book Pro Git"/>
+<meta name="keywords" content="vcs, git"/>
+<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+
+<div id="preamble">
+<hgroup id="header">
+  <h1><a href="/">Kelvin的胡言乱语</a></h1>
+  <h2>重剑无锋，大巧不工。</h2>
+</hgroup>
+<nav id="main-nav">
+  <ul id="nav-list-main">
+    <li><a href="/blog/" class="menu">Blog</a></li>
+    <li><a href="/wiki/" class="menu">Wiki</a></li>
+    <li><a href="/tags/" class="menu">Tags</a></li>
+    <li><a href="/about/" class="menu">About</a></li>
+  </ul>
+</nav>
+<nav id="sub-nav" class="align-right">
+  <div class="social">
+    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+    <!-- TODO: change the link below to proper value  -->
+    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+  </div>
+  <form class="search" target="_blank" method="get" action="http://google.com/search">
+    <input type="hidden" value="site:kelvinh.github.com" name="q" />
+    <input type="text" class="align-right" results="0" name="q" />
+  </form>
+</nav>
+
+</div>
+
+<div id="content">
+<h1 class="title">Pro Git读书笔记</h1>
+
+
+<p>
+这是我读《Pro Git》这本书写的一点笔记和心得。我略过了自己在读这本书之前已经弄懂的，或者作为一个git使用者不需要去关心的内容，而详细写了自己不懂的地方，比方说子模块，我会一点一点去做实验，然后写下自己的实验心得。
+</p>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">起步</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<ul>
+<li>本地版本控制系统
+</li>
+<li>集中化版本控制系统（e.g. Perforce）
+</li>
+<li>分布式版本控制系统（e.g. Git）
+</li>
+</ul>
+
+
+<p>
+  普通版本控制系统记录文件内容的差异，而git记录整体的变化。
+</p>
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1">文件的三种状态</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<ul>
+<li>已提交（committed）：文件已保存在数据库中
+</li>
+<li>已修改（modified）：文件有修改，但尚未保存
+</li>
+<li>已暂存（staged）：已经把修改的文件放在暂存区域，等待提交
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2">配置文件</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<p>
+   git有三个level的配置文件：
+</p>
+<ul>
+<li><code>/etc/gitconfig</code> ：针对系统所有的user， <code>git config</code> 的 <code>--system</code> 选项就是用来配置这个文件
+</li>
+<li><code>~/.gitconfig</code> ：用户目录的配置文件，对应于 <code>git config</code> 的 <code>--global</code> 选项
+</li>
+<li><code>.git/config</code> ： 这里的配置仅仅对当前的project有效
+</li>
+</ul>
+
+
+<p>
+   三个文件的优先级依次从低到高。
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">基础</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  .gitignore的规范：
+</p>
+<ul>
+<li>空行或者#开头的行会被忽略
+</li>
+<li>可使用glob模式匹配
+</li>
+<li>匹配模式最后跟斜杠（/）代表目录
+</li>
+<li>可以在模式前加感叹号（!）取反
+</li>
+</ul>
+
+
+<p>
+  glob模式：星号（*）匹配零个或多个字符；[abc]匹配任意一个在方括号内的字符（注意，只匹配一个）；问号（?）匹配一个字符；[0-9]匹配在0到9范围内的所有字符。
+</p>
+<p>
+  .gitignore例子：
+</p>
+<pre class="example">
+# 此为注释 – 忽略
+*.a       # 忽略所有 .a 结尾的文件
+!lib.a    # 但 lib.a 不会被忽略
+/TODO     # 仅仅忽略项目根目录下的 TODO 文件，不包括 subdir/TODO
+build/    # 忽略 build/ 目录下的所有文件
+doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1">基本命令</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<ul>
+<li><code>git add</code> ：将未跟踪、已修改的文件添加到暂存区
+</li>
+<li><code>git commit</code> ：提交已经添加到暂时区的文件
+</li>
+<li><code>git rm</code> ：删除已提交的文件
+</li>
+<li><code>git mv</code> ：文件重命名
+
+</li>
+<li><code>git commit --amend</code> ：添加某些未提交的文件到暂存区，然后执行此命令，将会把这些文件添加到上一次的提交；如果执行此命令时暂存区没有文件，就相当于修改最近一次提交的提交信息
+</li>
+<li><code>git reset HEAD &lt;file&gt;</code> ：将已暂存的文件取消暂存
+</li>
+<li><code>git checkout -- &lt;file&gt;</code> ：取消对文件的修改（谨慎使用）
+
+</li>
+<li><code>git remote -v</code> ：显示所有远程仓库的信息
+</li>
+<li><code>git remote add &lt;shortname&gt; &lt;url&gt;</code> ：添加一个远程仓库
+</li>
+<li><code>git fetch &lt;shortname&gt;</code> ：获取远程仓库&lt;shortname&gt;的所有内容到本地
+</li>
+<li><code>git push &lt;repo&gt; &lt;branch&gt;</code> ：将分支&lt;branch&gt;推送到&lt;repo&gt;仓库
+</li>
+<li><code>git pull</code> ：自动获取远程仓库的内容，并合并到本地，相当于fetch后再merge
+</li>
+<li><code>git remote show &lt;repo&gt;</code> ：显示某个远程仓库的详细信息
+</li>
+<li><code>git remote rename</code> ：仓库重命名
+</li>
+<li><code>git remote rm</code> ：删除远程仓库
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">分支</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Git每一次提交，都是创建了一棵树，树的叶子是blob对象，代表各个目录的文件，记录着这一次commit对于上一次commit的文件的改动。然后每个目录形成一个tree对象，记录着本目录中的文件和子目录，于是这样就形成了一棵类似于文件系统的树，除了叶子结点为blob对象代表文件外，其它结点为tree对象代表目录，最后的顶层结点代表project的根目录。最最后，有一个commit对象，其tree属性指向这个代表根目录的tree对象，同时，commit的另一个属性parent指向了上一次提交的commit对象。
+</p>
+<p>
+  于是，所有的commit对象串起来，就形成了所有的提交记录。并且，只要找到某个commit对象，就可以轻松获取整个project在这次提交的所有文件内容状态。
+</p>
+<p>
+  分支创建：创建一个分支指针，指向某个commit。
+</p>
+<p>
+  分支切换：假设有两个分支：master和devel，如果当前工作分支位于master上，就会有一个叫HEAD的特殊指针指向master的分支指针，要切换到devel分支，只需要把HEAD重新指向devel的分支指针，并且把所有文件的内容和状态置为devel指向的commit对象对应的内容和状态即可。
+</p>
+<p>
+  远程分支只是一些在不与远程仓库交互的情况下，无法改变的指针，意味着不能提交内容到远程分支上，而只能把本地分支推送到远程分支。如果想基于某远程分支进行开发，可以先checkout出一个本地分支： <code>git checkout -b branch origin/branch</code> ，代表以远程仓库origin的branch分支为基础建立一个本地的branch分支。然后，执行 <code>git push origin branch:branch</code> 将本地分支branch的内容推送到远程分支branch。如果要删除远程分支，只需要把本地分支的名字留空即可，代表“推送空内容到远程的某分支”，即删除远程分支。
+</p>
+<p>
+  rebase：在某个分支的基础上，将另一个分支的改变全部整全进来，形成一个新的提交，同时，被整合进来的分支的所有提交被全部删除。如果将分支看作河流，那么merge就是将产生分叉的两条河流的水汇合起来重新形成一条河流，而rebase则相当于是在分叉成两条的河流已经流了一段时间之后，回到最初河流分叉处，直接将其中的一条分叉抹掉，并且将已经流入这条已经不存在的分叉中的水再舀出来倒进另一条分叉中，最终结果看起来像是至始至终都只存在一条河流一样。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">搭建服务器</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+  git访问的几种协议：
+</p>
+<ul>
+<li>本地协议：所谓的远程仓库只是硬盘上挂载的一个目录，例如可以使用以下命令来克隆一个远程仓库到本地： <code>git clone file:///opt/git/project.git</code>
+</li>
+<li>SSH协议：远程仓库放在一台可通过SSH访问的机器上： <code>git clone ssh://user@server:project.git</code>
+</li>
+<li>Git协议：是一个包含在git软件包中的一个守护进程，用来监听端口9418，该协议通常不会允许写操作，如果允许该操作，那么任何一个可以访问项目URL的人都会有推送权限
+</li>
+<li>HTTP/S协议：可能通过HTTP/S访问项目，架设比较简单
+</li>
+</ul>
+
+
+<p>
+  <b>鉴于目前没有搭建Git服务器的需求（github已经够用了），所以略过本章其它内容。</b>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5">分布式</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  <b>本章讲如何进行多人同时协调工作，略。</b>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6">工具</h2>
+<div class="outline-text-2" id="text-6">
+
+
+
+</div>
+
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1">修订版本（revision）选择</h3>
+<div class="outline-text-3" id="text-6-1">
+
+
+<p>
+   所谓的修订版本，就代指一次commit。git有各种各样强大的命令来选择某一个revision，或者某一个范围的revision。然后，就可以使用 <code>git log</code> 或者 <code>git show</code> 命令来显示这个revision或者这个范围的revision的信息。
+</p>
+<ul>
+<li>SHA-1：每次commit都有一个SHA-1值，可以用这个值来代表这次提交。在不会导致混乱的情况下，可以使用短值（最短至少是五位）。如一个project只有两次提交：
+
+<pre class="example">
+734713bc047d87bf7eac9674765ae793478c50d3
+d921970aadf03b3cf0e71becdaab3147ba71cdef
+</pre>
+
+
+<p>
+     那么d9219，d921970，d921970aadf03b3cf0e71becdaab3147ba71cdef都可以代表第二次提交。
+</p>
+</li>
+<li>分支引用：所谓分支引用，就是指向某个commit的分支指针，如master分支指针。分支引用和它指向的这个commit是等价的。
+
+</li>
+<li>引用日志：引用日志就是git保存的一份记录HEAD指针和分支引用指针最近一段时间位置的日志。可以使用 <code>git reflog</code> 查看。如 <code>git reflog HEAD</code> 表示要查看 <code>HEAD</code> 指针最近的位置信息， <code>git reflog master</code> 用来查询 <code>master</code> 指针最近的位置。于是，就可以使用输出里的简称来指代某次提交，如 <code>HEAD@{3}</code> 或者 <code>master@{3}</code> ，甚至可以使用比较tricky的语法： <code>master@{yesterday}</code> ， <code>HEAD@{2.months.ago}</code> 。但是引用日志只存在于本地，只是用来记录对本地仓库的操作。
+
+</li>
+<li>祖先引用：主要是 <code>^</code> 和 <code>~</code> ， <code>HEAD~1</code> ， <code>HEAD^1</code> ， <code>HEAD~</code> ， <code>HEAD^</code> 这四个引用是等价的，都代表HEAD的父提交（即1是可以省略的）。但是 <code>HEAD^2</code> 和 <code>HEAD~2</code> 的意义是不一样的：前者代表第二父提交（即广度搜索）；后者代表父提交的父提交（即深度搜索）。
+
+</li>
+<li>提交范围：上述选择方式都是指定某一次提交，而git可以通过以下语法来选择一定的提交范围：
+
+<ul>
+<li>双点语法： <code>A..D</code> ，A和D代表提交，意思是可以从D获取而不能从A获取的提交，例如下面的示例提交：
+
+<pre class="example">
+A &lt;= B &lt;= C &lt;= D
+</pre>
+
+
+<p>
+       那么B和C就是可以从D获取而不能从A获取的，即 <code>A..D</code> 将会返回B和C。
+</p>
+</li>
+<li>多点语法：例如想找出refA和refB能获取，而refC不能获取的提交范围，可以使用以下命令：
+
+<pre class="example">
+git log refA refB ^refC
+git log refA refB --not refC
+</pre>
+
+
+<p>
+       这两条命令是等价的。
+</p>
+</li>
+<li>三点语法： <code>A...D</code> ，代表可以从A或者D获取，但是不能同时从两者获取的提交。还可以加一个 <code>--left-right</code> 参数来标明输出的提交是属于哪一个分支：
+
+<pre class="example">
+git log --left-right master...devel
+</pre>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2">交互式暂存</h3>
+<div class="outline-text-3" id="text-6-2">
+
+
+<p>
+   命令 <code>git add -i</code> 可以进行交互式暂存，包括以下操作：
+</p>
+<pre class="example">
+1. status    2. update    3. revert    4. add untracked
+5. patch     6. diff      7. quit      8. help
+</pre>
+
+
+<p>
+   其中2用来添加更新到暂存，3用来撤回已暂存的文件，4用来添加新加的文件到暂存，6用来显示已暂存文件的差异。
+</p>
+<p>
+   命令5是比较有用的，比方说某个文件新加了三行，但是只想把前两行添加到暂存，新加的第三行打算下一次再添加到暂存提交，那么就可以用patch命令来实现该操作。当然，如果不用交互模式，也可以使用命令 <code>git add -p</code> 或者 <code>git add --patch</code> 实现。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3">储藏（Stashing）</h3>
+<div class="outline-text-3" id="text-6-3">
+
+
+<p>
+   所谓的储藏，就是在工作了一段时间——修改或者添加了一些文件，并且已经暂存了部分文件之后，需要切换到其它分支，但是又不想提交这些还没完成的工作，那么就可以把这些工作先储藏起来，切换到其它分支工作，然后在需要的时候把储藏的工作再拿出来。
+</p>
+<ul>
+<li>命令 <code>git stash</code> 可以储藏当前的工作到储藏栈，然后工作目录会被恢复成最后一次提交时的样子。
+
+</li>
+<li>命令 <code>git stash list</code> 可以查看当前储藏栈上的所有储藏。
+
+</li>
+<li>命令 <code>git stash apply stash@{0}</code> 用来应用储藏 <code>stash@{0}</code> ，如果不加储藏的简称，那么就默认应用栈最顶端的储藏，即 <code>stash@{0}</code> 。
+
+</li>
+<li>命令 <code>git stash apply [stash name] --index</code> 可以在应用储藏的同时，将储藏中已经暂存的文件也暂存起来，也就是说，不加 <code>--index</code> 参数的时候，储藏中已暂存的文件是不会进入暂存的，但 <code>--index</code> 参数会在应用储藏的同时，暂存储藏中已暂存的文件。
+
+</li>
+<li><code>apply</code> 命令只是应用储藏，储藏内容还是在栈上，命令 <code>git stash drop</code> 可以删除储藏，或者运行 <code>git stash pop</code> 来在应用储藏的同时，从栈上删除储藏。
+
+</li>
+<li>在应用了储藏后，又进行了一些别的工作，这时又想取消刚刚已应用的储藏，可以使用下面的命令：
+
+<pre class="example">
+git stash show -p stash@{0} | git apply -R
+</pre>
+
+
+<p>
+     管道前的命令用来将储藏 <code>stash@{0}</code> 以git的patch形式显示在标准输出上；管道后的命令是用来反应用某个patch，整个命令的意思就是：取得某个储藏的patch形式，并且反应用之，即取消储藏。
+</p>
+</li>
+<li>从储藏中创建分支：如果储藏了一个储藏，然后又进行了一些其它工作，这时应用这个储藏可能会有冲突，于是，就可以使用 <code>git stash branch &lt;branch name&gt;</code> 从储藏时所处的提交来创建一个新的分支，应用储藏和后面的工作，如果应用没有问题，就删除储藏。
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4">修改提交历史</h3>
+<div class="outline-text-3" id="text-6-4">
+
+
+<p>
+   <b>注意，这部分涉及的命令基本都是rebase操作，也就是“破坏性”的，如果操作的提交已经push到服务器，建议不要执行这些操作。</b>
+</p>
+<p>
+   在前面的笔记中有涉及到修改最后一次提交的提交说明的内容，即执行以下命令：
+</p>
+<pre class="example">
+git commit --amend -m "new commit message"
+</pre>
+
+
+<p>
+   但是想修改多个提交的提交说明，甚至是提交本身的内容的时候，就需要更加有用的命令：
+</p>
+<pre class="example">
+git rebase -i HEAD~3
+</pre>
+
+
+<p>
+   这个命令会进行交互式的rebase操作，涉及最近3次的提交。执行这个命令后，会打开一个编辑器，编辑器中大致会是以下内容：
+</p>
+<pre class="example">
+pick 930d211 this is a rebased commit: add my name
+pick fa337d2 this is a rebased commit: add another anonymous person
+pick c110578 remove extra 'dot'
+
+# Rebase 6bbf412..c110578 onto 6bbf412
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#  x, exec = run command (the rest of the line) using shell
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+#
+# Note that empty commits are commented out
+</pre>
+
+
+<p>
+   可以看到，前面三行是最近三个提交，但顺序和 <code>git log</code> 的输出是相反的。如果要对某个提交做动作，只需要更改它那行的第一个单词为想要做的操作即可。后面的注释中对于可以做的操作有比较详细的说明：
+</p><ul>
+<li>pick：对这个提交不做什么事
+</li>
+<li>reword：对这个提交本身不做什么事，但是修改它的提交说明
+</li>
+<li>edit：编辑这个提交，可能涉及提交本身的内容
+</li>
+<li>squash：“压制”这个提交，即将这个提交和前一个提交合并为一个，之后会打开一个编辑器来编辑合并之后的提交信息
+</li>
+<li>fixup：同样是“压制”，不过这个提交的提交信息被忽略
+</li>
+<li>exec：这个命令我自己没有试，不知道有什么效果，不过从说明来看，应该是会在shell中执行这个单词之后的内容
+</li>
+</ul>
+
+
+<p>
+   <b>需要注意的是，如果某行被删除了，那这个提交就会彻底没有了，所以不要随便乱删。</b>
+</p>
+<p>
+   那么，可以进行的操作有（主要的操作，其它的我没有试）：
+</p>
+<ol>
+<li>更改提交顺序：
+
+<pre class="example">
+pick c110578 remove extra 'dot'
+pick 930d211 this is a rebased commit: add my name
+pick fa337d2 this is a rebased commit: add another anonymous person
+</pre>
+
+
+</li>
+<li>改变某两次提交的提交说明：
+
+<pre class="example">
+reword 930d211 this is a rebased commit: add my name
+reword fa337d2 this is a rebased commit: add another anonymous person
+pick c110578 remove extra 'dot'
+</pre>
+
+
+</li>
+<li>把两次提交合并成一次：
+
+<pre class="example">
+pick 930d211 this is a rebased commit: add my name
+squash fa337d2 this is a rebased commit: add another anonymous person
+pick c110578 remove extra 'dot'
+</pre>
+
+
+</li>
+<li>编辑某次提交（或者多次提交也可以）：
+
+<pre class="example">
+pick 930d211 this is a rebased commit: add my name
+pick fa337d2 this is a rebased commit: add another anonymous person
+edit c110578 remove extra 'dot'
+</pre>
+
+</li>
+</ol>
+
+
+<p>
+   然后，保存内容，退出编辑器，git会根据你的要求进行接下来的操作，对于前三种操作，后续的操作都比较简单，这里说一下第四种操作——编辑提交。
+</p>
+<p>
+   编辑提交的内容就多了，比方说重新修改某些文件，加入新文件等等。这里以把上面例子中的那一次提交 <code>c110578</code> 给拆分成两次为例：
+</p>
+<pre class="example">
+# 注意，这里的HEAD不再是当前分支的最顶端的commit，而是指向你正执行edit操作的commit
+git reset HEAD^                                 # 把HEAD指针给reset到上次提交
+git add AUTHOR                                  # 添加AUTHOR文件到暂存区
+git commit -m "remove extra 'dot' from AUTHOR"  # 提交AUTHOR文件
+git add README                                  # 再添加README文件到暂存区
+git commit -m "remove extra 'dot' from README"  # 提交README文件
+</pre>
+
+
+<p>
+   好了，原来的一次提交 <code>c110578</code> 已经变成两次提交了，但是，因为edit操作必须要停下来等待用户完成对提交的编辑，并且git也无法知道什么时候编辑会完成，所以，在编辑完了之后，一定不要忘了执行 <code>git rebase --continue</code> 来告诉git继续进行整个交互式的rebase操作。
+</p>
+
+</div>
+
+<div id="outline-container-6-4-1" class="outline-4">
+<h4 id="sec-6-4-1">核弹级选项：filter-branch</h4>
+<div class="outline-text-4" id="text-6-4-1">
+
+
+<p>
+    pro git直接把filter-branch命令为“核弹级选项”，应该是跟这个命令强大的力量有关，它能按
+    照某些规则，一次操作大量的commit，如果使用得好，会产生很好的效果；如果使用不好，就会真的
+    是“核弹”，会产生毁灭性的效果。这个命令的使用方法比较多，具体可以参考<a href="http://www.kernel.org/pub/software/scm/git/docs/git-filter-branch.html">git man page</a>，而
+    且平时用到的可能性比较小，所以我也不打算一个一个选项地试了，但大概可以有以下用处：
+</p>
+<ul>
+<li>从所有提交中删除某个文件：比方说叫password.txt文件：
+<pre class="example">
+git filter-branch --tree-filter 'rm -f password.txt' HEAD
+</pre>
+
+
+</li>
+<li>全局更新电子邮件地址：
+<pre class="example">
+git filter-branch --commit-filter '
+    if [ "$GIT_AUTHOR_EMAIL" = "old_email@domain.com" ]; then
+        GIT_AUTHOR_EMAIL="ini.kelvin at gmail"
+    fi
+    git commit-tree "$@"
+' HEAD
+</pre>
+
+</li>
+</ul>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-5" class="outline-3">
+<h3 id="sec-6-5">调试</h3>
+<div class="outline-text-3" id="text-6-5">
+
+
+<p>
+   主要是两个命令：
+</p>
+<ol>
+<li><code>git blame &lt;file name&gt;</code> ：查看文件的每一行，是在哪次提交修改的。还可加上 <code>-L</code> 参数来指定具体的行数，如 <code>git blame -L 50,60 README</code> 。
+
+</li>
+<li><code>git bisect</code> ：用来对提交历史进行二分查找，以最终确定引入问题或者bug的那个提交。比如在1.0版本时某个bug还是没有的，但在当前commit出现了，就可以执行以下命令：
+
+<pre class="example">
+git bisect start
+git bisect bad HEAD
+git bisect good v1.0
+</pre>
+
+
+<p>
+      上述命令相当于开始二分搜索，并设定上限和下限，然后git会输出下面的信息：
+</p>
+<pre class="example">
+Bisecting: 650 revisions left to test after this (roughly 9 steps)
+[8da35c00dd750fc9a9d64847ccde1fedc6818593] Merge commit '4a472d5fc317186adc8300355dcf6ce5bdd73762'
+</pre>
+
+
+<p>
+      然后需要检查project当前状态是否有bug，然后执行下面命令：
+</p>
+<pre class="example">
+git bisect good/bad # 无bug时执行good，有bug时执行bad
+</pre>
+
+
+<p>
+      上面的命令是在告诉git，当前的这个commit是“好”的还是“坏”的，然后git会决定继续搜索的范围。如此递归，就能最终确定引入bug的那个commit。
+</p>
+<p>
+      <b>由于执行二分搜索时HEAD指针的位置发生了变化，所以在二分搜索结束后，需要手动地执行命令git bisect reset将HEAD指针重置回执行二分搜索前的位置。</b>
+</p>
+<p>
+      如果有一个脚本是用来检测这个bug的，并且会在正常时返回0，错误返回非0的话，就可以用这个脚本来自动地执行搜索：
+</p>
+<pre class="example">
+git bisect start HEAD v1.0
+git bisect run detect-bug.sh
+</pre>
+
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-6" class="outline-3">
+<h3 id="sec-6-6">子模块</h3>
+<div class="outline-text-3" id="text-6-6">
+
+
+<p>
+   所谓子模块，就是把某个git的project，作为当前项目一个子模块，即形成了树关系。
+</p>
+<p>
+   <b>添加一个子模块：</b>
+</p>
+<pre class="example">
+git submodule add /path/to/module.git [submodule path]
+</pre>
+
+
+<p>
+   执行完这个操作之后，project根目录中会多出存放这个子模块的目录，同时还会有多出一个.gitmodules文件（如果这是第一次添加子模块的话），同时， <code>.git/config</code> 中会多出一个保存这个子模块信息的section，而 <code>.git/modules</code> 目录中会多出保存这个子模块的仓库。
+</p>
+<p>
+   接着，如果执行 <code>git status</code> ，会看到有新的change已经暂存，需要commit。执行commit操作即可。需要注意的是，子模块虽然是一个目录，但在提交时git并不是像对待其它目录那样对待子模块，git会以一个特殊的模式160000记录子模块，如果运行 <code>git diff HEAD^..</code> ，会发现其中有类似下面这样的几行记录：
+</p>
+<pre class="example">
++++ b/lib
+@@ -0,0 +1 @@
++Subproject commit c8db25ca81ba7e840a06b7a03d08e00c72d59897
+</pre>
+
+
+<p>
+   实际这个所谓的"patch"就记录了子模块的添加（可以看到，其实只记录了子模块最新提交的SHA-1值）。于是，一个子模块就算添加进来了。
+</p>
+<p>
+   <b>克隆一个带子模块的仓库：</b>
+</p>
+<pre class="example">
+git clone /repo/with/submodule.git [repo path]
+</pre>
+
+
+<p>
+   但是，拷贝下来的仓库中的子模块是没有的，需要做额外的操作：
+</p>
+<pre class="example">
+git submodule init
+</pre>
+
+
+<p>
+   上述操作将子模块写入 <code>.git/config</code> 文件（在这之前子模块在这个关键文件中是没有信息的）。但这时子模块还是没有内容的，需要执行以下命令：
+</p>
+<pre class="example">
+git submodule update
+</pre>
+
+
+<p>
+   这一步才是真正将子模块给down下来。但需要注意的是，此时在子模块目录中执行 <code>git status</code> 会显示 <code>Not on any branch</code> ，即不在任何分支上，如果在project根目录中执行（记得替换路径）：
+</p>
+<pre class="example">
+cat .git/modules/&lt;submodule name&gt;/HEAD
+</pre>
+
+
+<p>
+   会看到如下输出：
+</p>
+<pre class="example">
+c8db25ca81ba7e840a06b7a03d08e00c72d59897
+</pre>
+
+
+<p>
+   这个SHA-1值就是上面提交时记录的子模块的最新提交的SHA-1值，这说明，子模块的update操作只是按照project的commit记录down下来了子模块对应这个SHA-1值的commit，并没有帮我们处理HEAD指针，所以会显示不在任何分支上，但实际这个commit和master分支指向的commit是一样的：
+</p>
+<pre class="example">
+cat .git/modules/&lt;submodule name&gt;/refs/heads/master
+</pre>
+
+
+<p>
+   会输出一模一样的SHA-1值（当然，这取决于你子模块最后提交所处的分支，如果不是master分支而是其它分支，如source，那么就是和source指针的值是一样的）。这时，如果需要对子模块做一些更新，一定记得先checkout某个分支。如果没有checkout而是直接更新并commit，那么HEAD指针会成为唯一一个指向这个新的commit的指针，如果然后再checkout某个分支，那么由于HEAD指针被改变指向了这个checkout的分支，于是之前的那个commit就没有任何的指针指向它了——也就是说，它丢失了。
+</p>
+<p>
+   <b>合并更新:</b>
+</p>
+<p>
+   假设有两个developer A和B，B更新了子模块，并push到公共仓库，然后，A执行了merge操作，在运行 <code>git status</code> 时会发现，有东西需要提交。这是因为，A执行merge之后，project的提交内容被更新，这代表提交中保存的子模块的SHA-1值会被更新，但子模块本身不会自动更新，所以还是旧值，于是查询status就会发现当前子模块的SHA-1值和merge进来的提交中的SHA-1值不符合，于是，git就判断工作目录中的子模块有更新需要提交。这时如果执行commit的话，得到的效果会恰恰相反：因为子模块的SHA-1值是旧值，所以这个旧值（其实也就是旧的commit）会覆盖从公共仓库中merge进来的比较新的commit。这时，正确的操作是执行 <code>git submodule update</code> ，在update子模块之后，再查询status会发现一切正常，因为子模块的SHA-1值和最新提交中保存的子模块的SHA-1值match了。
+</p>
+<p>
+   但问题又来了：虽然子模块是更新了，但是子模块的master指针却依旧指向旧值（前面说过，update操作只是按SHA-1值来更新，并不理会分支），所以，这个时候如果checkout master，HEAD指向的内容就又丢失了。。于是，只能执行以下操作：
+</p>
+<pre class="example">
+git branch new-update
+git checkout master
+git merge new-update
+git branch -d new-update
+</pre>
+
+
+<p>
+   先建一个新分支以防checkout操作导致HEAD指针移动而造成commit丢失，然后checkout master再merge这个新建的分支，再删除这个多余的分支。于是。。终于让master更新到最新了。。
+</p>
+<p>
+   还有问题：如果两个project A和B都依赖某个模块lib，那么B更新了lib并push到公共仓库，A怎么办呢？其实这时候，A在项目根目录如何fetch或者pull都是没办法感知lib这个子模块的更新的，原因很明显：A执行fetch或者pull操作只是获得A的最新的commit，并不是lib的最新的commit，而A的commit中显然是不会包含B的commit中所包含的子模块的更新信息的，所以，无论如何fetch或者pull，都是无用功，这时候，只能到子模块目录中，checkout到master（记得要保证master指针是指向最新的commit，不然HEAD所指向的commit会丢失），然后执行pull操作，更新子模块，这样A自然也是更新了，所以还需要到A的根目录执行commit操作。
+</p>
+<p>
+   最后一个问题：如果，A和B都在develop某project，然后B更新了子模块，但并没有将子模块push到公共仓库；但是B将这个project的更新push到公共仓库了。然后A从这个project的公共仓库pull了最新的更新，这个更新会告诉他，子模块有更新。于是，A执行 <code>git submodule update</code> ，这时候会发生什么呢？这个就好玩了，因为B没有push子模块，所以子模块的公共仓库自然是没有这个更新的，所以，git会报一个fatal的error，报怨找不到这个commit，大概内容如下：
+</p>
+<pre class="example">
+fatal: reference is not a tree: e98cd5b2c9ec262255856fad4dde124e74f1ee08
+Unable to checkout 'e98cd5b2c9ec262255856fad4dde124e74f1ee08' in submodule path 'lib'
+</pre>
+
+
+<p>
+   所以，如果要搞破坏，就push更新到project的公共仓库，不push子模块的更新，等着别人来搞你吧。。
+</p>
+<p>
+   还有最后一个问题。。如何删除一个子模块？ <code>git submodule rm</code> ？不，git没有提供这样的命令，真的不知道Linus怎么想的，没有这个命令，真的好蛋疼啊。。于是，需要执行以下操作（以子模块名字叫lib为例）：
+</p>
+<pre class="example">
+git rm --cached lib
+rm -rf lib
+git config -f .gitmodules --remove-section submodule.lib
+git config -f .git/config --remove-section submodule.lib
+rm -rf .git/modules/lib
+git add .gitmodules
+git commit -m "delete submodule 'lib'"
+</pre>
+
+
+<p>
+   关于git子模块的两个不错的参考(不过两篇都有点老，其中有些内容和最新版git的表现不太一样)：
+</p>
+<ol>
+<li><a href="https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial">https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial</a>
+</li>
+<li><a href="http://www.kafeitu.me/git/2012/03/27/git-submodule.html">http://www.kafeitu.me/git/2012/03/27/git-submodule.html</a>
+</li>
+</ol>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7">自定义</h2>
+<div class="outline-text-2" id="text-7">
+
+
+
+</div>
+
+<div id="outline-container-7-1" class="outline-3">
+<h3 id="sec-7-1">配置</h3>
+<div class="outline-text-3" id="text-7-1">
+
+
+<p>
+   git的配置存在于三个地方，/etc/gitconfig，~/.gitconfig，.git/config，优先级依次变高。
+</p>
+<p>
+   一些比较常用的配置项：
+</p>
+<pre class="example">
+# configure name and email
+git config --global user.name "Anonymous"
+git config --global user.email "anonymous@domain.com"
+
+# configure editor and colorized output
+git config --global core.editor emacs/vim/nano
+git config --global color.ui true/always/false
+
+# configure whitespace processing and line ending formatting
+git config --global core.autocrlf true/input/false
+git config --global core.whitespace ...
+</pre>
+
+
+<p>
+   git关于diff和merge的操作有四个命令：
+</p>
+<pre class="example">
+git diff ...
+git difftool ...
+git merge ...
+git mergetool ...
+</pre>
+
+
+<p>
+   因此，关于diff和merge的配置，要稍复杂一点：
+</p>
+<ul>
+<li>merge.tool：此配置对应于 <code>git mergetool</code>
+</li>
+<li>diff.external：此配置对应于 <code>git diff</code>
+</li>
+<li>diff.tool：此配置对应于 <code>git difftool</code> ，另外，这个配置会覆盖merge.tool
+</li>
+</ul>
+
+
+<p>
+   另外，git内置了对一些常见的merge/diff tool的支持，所以在配置这些工具时，只需要指明名字即可（如meld）：
+</p>
+<pre class="example">
+git config --global diff.tool meld
+</pre>
+
+
+<p>
+   运行 <code>git difftool</code> ，就会使用meld来进行diff了。需要注意的是，此时运行 <code>git diff</code> 仍然会在stdout输出类似patch的diff信息，因为我们并没设置diff.external。
+</p>
+<p>
+   对于git没有内置支持的diff/merge tool，需要自己写脚本来包装处理git传过来的参数，git会传送7个参数给diff tool：
+</p>
+<pre class="example">
+path old-file old-hex old-mode new-file new-hex new-mode
+</pre>
+
+
+<p>
+   通常需要diff第2个和第5个参数，所以，需要自己写一个wrapper：
+</p>
+<pre class="example">
+#!/bin/sh
+[ $# -eq 7 ] &amp;&amp; /path/to/your/diff/tool "$2" "$5"
+</pre>
+
+
+<p>
+   给这个脚本加上可执行属性，然后，再执行以下设置：
+</p>
+<pre class="example">
+git config --global diff.tool diff_wrapper
+git config --global diff.diff_wrapper.cmd \
+'diff_wrapper "$BASE" "$LOCAL" "$REMOTE" "$MERGED"'
+</pre>
+
+
+<p>
+   注意，第二个设置是必须的，因为git要求对于没有内置支持的diff tool设置这个属性。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-7-2" class="outline-3">
+<h3 id="sec-7-2">属性</h3>
+<div class="outline-text-3" id="text-7-2">
+
+
+<p>
+   git的属性配置在文件 <code>.gitattrubites</code> 中，个人感觉git属性的用处主要是下面几个：
+</p>
+<ol>
+<li>特定文件的比较工具设定： <code>.gitconfig</code> 中可以设定文件的比较工具，但没办法针对特定文件设定特定的工具，这可以用属性来完成，执行以下命令：
+
+<pre class="example">
+echo '*.png diff=exif' &gt;&gt; .gitattributes
+git config diff.exif.textconv exiftool
+</pre>
+
+
+<p>
+      于是在执行 <code>git diff</code> 比较png图片的时候，就会使用 <code>exiftool</code> 来比较。
+</p>
+</li>
+<li>文件内容扩展和过滤：需要定义一个filter，filter会有两个操作，在commit的时候执行clean，在checkout的时候执行smudge。clean和smudge可以是自定义脚本，输入和输出分别是stdin和stdout。如果需要在文件commit的时候添加一些特定注释，如文件开头的Lincese信息，然后在checkout的时候去掉这些烦人的注释，这样的操作就可以使用这个功能实现。但由于这个功能已经是太过自定义化了，所以个人不太建议使用。
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-7-3" class="outline-3">
+<h3 id="sec-7-3">钩子（hook）</h3>
+<div class="outline-text-3" id="text-7-3">
+
+
+<p>
+   钩子保存在 <code>.git/hooks</code> 目录中。可以是一些shell或者python脚本。用来在git的工作流程中做一些事情。
+</p>
+<p>
+   <b>估计用到的可能性不大，略之。</b>
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8">其它VCS</h2>
+<div class="outline-text-2" id="text-8">
+
+
+<p>
+  <b>基本是不会用到的，略之。</b>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9">内部原理</h2>
+<div class="outline-text-2" id="text-9">
+
+
+<p>
+  在执行 <code>git init</code> 之后，会在.git目录中生成以下目录和文件：
+</p>
+<pre class="example">
+branches      # 貌似现在这个目录已经obsolete
+description   # 貌似木有什么用
+hooks         # 保存钩子脚本，不过初始化的都带有sample后缀，所以默认是没有启用的
+objects       # 用来保存将来生成的一些对象，blob/tree/commit等等
+config        # 用来保存关于git的一些配置的文件
+HEAD          # HEAD指针
+info          # 这个目录不太清楚干嘛的，不过和.gitignore貌似有点关系
+refs          # 存放一些引用指针，像分支引用，tag引用等，还包括远程仓库分支引用
+</pre>
+
+
+<p>
+  在执行初次提交后，还会生成以下文件及目录（不重要的目录及文件已经略去）：
+</p>
+<pre class="example">
+logs          # 存储对仓库操作的引用日志
+index         # 暂存区文件
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-9-1" class="outline-3">
+<h3 id="sec-9-1">对象</h3>
+<div class="outline-text-3" id="text-9-1">
+
+
+<p>
+   git对象是存储在 <code>.git/objects/</code> 中的，在初次提交后执行 <code>find .git/objects -type f</code> 命令，可以会有下面类似的输入（我用来测试的内容是提交了一个只写有一句"version 2"的test.txt文件）：
+</p>
+<pre class="example">
+.git/objects/2f/39845a4a2c3ad86adebb00b1ddabd959c131c4
+.git/objects/1f/7a7a472abf3dd9643fd615f6da379c4acb3e3a
+.git/objects/57/0db6f309fb733c6b043da219a33204f5a393a6
+</pre>
+
+
+<p>
+   如果再执行 <code>git cat-file -t &lt;sha-1&gt;</code> ，会发现，这三个对象，一个是blob，一个是tree，还有一个是commit，使用命令 <code>git cat-file -p &lt;sha-1&gt;</code> 来查看输出，内容如下：
+</p>
+<pre class="example">
+&gt; git cat-file -p 1f7a
+  version 2
+&gt; git cat-file -p 2f39
+  100644 blob 1f7a7a472abf3dd9643fd615f6da379c4acb3e3a    test.txt
+&gt; git cat-file -p 570d
+  tree 2f39845a4a2c3ad86adebb00b1ddabd959c131c4
+  author Kelvin Hu &lt;ini.kelvin@gmail.com&gt; 1355040112 +0800
+  committer Kelvin Hu &lt;ini.kelvin@gmail.com&gt; 1355040112 +0800
+
+  initial commit
+&gt;
+</pre>
+
+
+<p>
+   可以看到，第一个blob输出的是文件内容，第二个tree输出的是指向的blob的sha-1，以及它的文件名等，第三个commit对象输出的是指的tree的sha-1，以及提交作者，邮件，提交消息等。
+</p>
+<p>
+   可以使用 <code>git write-tree</code> ， <code>git commit-tree</code> 等底命令直接创建tree和commit对象，而实际上 <code>git add</code> ， <code>git commit</code> 等上层命令就是在调用这些底层命令进行工作：保存修改了的文件的blob，更新暂存区index文件，创建tree对象指向blob，再创建commit对象指向tree，再更新相关的分支引用，以及HEAD指针。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-9-2" class="outline-3">
+<h3 id="sec-9-2">对象存储</h3>
+<div class="outline-text-3" id="text-9-2">
+
+
+<p>
+   先解出一个对象看看里面的内容，以上面的blob——test.txt文件为例，用以下python脚本去解：
+</p>
+<pre class="example">
+&gt;&gt;&gt; import zlib
+&gt;&gt;&gt; import hashlib
+&gt;&gt;&gt; f = open('.git/objects/1f/7a7a472abf3dd9643fd615f6da379c4acb3e3a')
+&gt;&gt;&gt; t = f.read()
+'x\x01K\xca\xc9OR04`(K-*\xce\xcc\xcfS0\xe2\x02\x007R\x05\x83'
+&gt;&gt;&gt; f.close()
+&gt;&gt;&gt; zlib.decompress(t)
+'blob 10\x00version 2\n'
+&gt;&gt;&gt; sha = hashlib.sha1()
+&gt;&gt;&gt; sha.update(zlib.decompress(t))
+&gt;&gt;&gt; sha.hexdigest()
+'1f7a7a472abf3dd9643fd615f6da379c4acb3e3a'
+&gt;&gt;&gt;
+</pre>
+
+
+<p>
+   上述脚本很简单：打开那个blob对象，读取内容，再用zlib解之，并计算解出内容的sha-1值。通过解析过程以及最后解出的结果可以看到git对象的生成过程：
+</p>
+<ol>
+<li>先构造一个文件头：对象类型 + 空格 + 内容长度 + 空字节
+</li>
+<li>和文件内容拼接起来
+</li>
+<li>计算其sha-1值，作为这个对象的sha-1
+</li>
+<li>用zlib压缩之
+</li>
+<li>将压缩后的内容写入文件，文件保存的位置是：.git/objects/&lt;sha-1头两位&gt;/&lt;sha-1剩下的值&gt;
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9-3" class="outline-3">
+<h3 id="sec-9-3">分支引用、标签</h3>
+<div class="outline-text-3" id="text-9-3">
+
+
+<p>
+   分支引用就是指向某一个commit的指针，存储在目录 <code>.git/refs/heads</code> 中，而标签也是指向commit的指针，只不过标签是不变的，永远指向某个commit，标签存储在 <code>.git/refs/tags</code> 目录中。
+</p>
+<p>
+   分支引用和标签的内容相似，比如master分支：
+</p>
+<pre class="example">
+&gt; cat .git/refs/heads/master
+  570db6f309fb733c6b043da219a33204f5a393a6
+</pre>
+
+
+<p>
+   HEAD指针是一个特殊的指针，它指向一个分支引用：
+</p>
+<pre class="example">
+&gt; cat .git/HEAD
+  ref: refs/heads/master
+</pre>
+
+
+<p>
+   远程分支引用保存位置是： <code>.git/refs/remotes/&lt;repo name&gt;/&lt;branch name&gt;</code> 。其内容和本地分支引用是一样的，只不过它们不能被checkout。
+</p>
+<p>
+   <b>虽然可以手工修改这些引用指针，但不是建议这么做，因为手工修改不会产生引用日志。</b>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-9-4" class="outline-3">
+<h3 id="sec-9-4">仓库压缩</h3>
+<div class="outline-text-3" id="text-9-4">
+
+
+<p>
+   假设有一个大文件，大概20KB，在添加了一行之后，再进行commit，git仍然保存了整个修改过的文件，而不是这个文件和前一个文件diff之后的那一行的内容。所以，在上一个commit，这个blob对象可能大概占用12KB空间，而这次添加了一行之后，它依然会生成一个占用12KB空间的blob对象，虽然其实只是添加了一行内容。
+</p>
+<p>
+   可以运行 <code>git gc</code> 来让git打包存储这些个对象。运行这一条命令后，git会将 <code>.git/objects</code> 中的对象进行打包，存储在 <code>.git/objects/pack/</code> 目录中，同时删除 <code>.git/objects</code> 中已被打包保存的对象以节省空间。在打包过程中，git会比较文件不同提交之间的差异，所以，上述情况的第二次commit就会只保存差异，而不是整个文件内容了。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-9-5" class="outline-3">
+<h3 id="sec-9-5">refspec</h3>
+<div class="outline-text-3" id="text-9-5">
+
+
+<p>
+   所谓refspec，就是远程仓库分支到本地分支的映射，保存在 <code>.git/config</code> 的 <code>[remote]</code> 区。包括fetch和push，可能看起来像这样：
+</p>
+<pre class="example">
+[remote "origin"]
+    url = git@github.com:kelvinh/org-page.git
+    fetch = +refs/heads/*:refs/remotes/origin/*
+    push = refs/heads/master:refs/heads/rd/master
+</pre>
+
+
+<p>
+   其中+代表在不能fast-forward的情况下，强制更新。+后的格式是&lt;src&gt;:&lt;dst&gt;。
+</p>
+<ul>
+<li>对于fetch，&lt;src&gt;代表远程仓库的分支，&lt;dst&gt;代表映射的本地分支。
+</li>
+<li>对于push，&lt;src&gt;代表本地分支，&lt;dst&gt;代表要推送的远程仓库的分支。
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-9-6" class="outline-3">
+<h3 id="sec-9-6">传输协议</h3>
+<div class="outline-text-3" id="text-9-6">
+
+
+<p>
+   <b>这应该是Linus才需要关心的内容，作为一个使用者，就不关心这种太过底层的东西了，略之。</b>
+</p></div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<div id="post-meta">
+  <span title="post date" class="post-info">2012-11-30</span>
+  <span title="last modification date" class="update-info">2013-04-01</span>
+  <span title="tags" class="tags"><a href="/tags/git/">Git</a>, <a href="/tags/vcs/">VCS</a></span>
+  <span title="author" class="author">Kelvin Hu</span>
+</div>
+<div id="footer">
+  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
+  <p class="copyright">
+    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+    &nbsp;&nbsp;-&nbsp;&nbsp;
+    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>

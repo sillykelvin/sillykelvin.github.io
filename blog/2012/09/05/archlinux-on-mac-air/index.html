@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>在MacBook Air上安装Archlinux</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="在MacBook Air上安装Archlinux"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-09-05 Wed"/>
+<meta name="author" content="Kelvin Hu"/>
+<meta name="description" content="how to install archlinux on a macbook air"/>
+<meta name="keywords" content="linux, archlinux, macbook air"/>
+<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+<body>
+
+<div id="preamble">
+<hgroup id="header">
+  <h1><a href="/">Kelvin的胡言乱语</a></h1>
+  <h2>重剑无锋，大巧不工。</h2>
+</hgroup>
+<nav id="main-nav">
+  <ul id="nav-list-main">
+    <li><a href="/blog/" class="menu">Blog</a></li>
+    <li><a href="/wiki/" class="menu">Wiki</a></li>
+    <li><a href="/tags/" class="menu">Tags</a></li>
+    <li><a href="/about/" class="menu">About</a></li>
+  </ul>
+</nav>
+<nav id="sub-nav" class="align-right">
+  <div class="social">
+    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+    <!-- TODO: change the link below to proper value  -->
+    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+  </div>
+  <form class="search" target="_blank" method="get" action="http://google.com/search">
+    <input type="hidden" value="site:kelvinh.github.com" name="q" />
+    <input type="text" class="align-right" results="0" name="q" />
+  </form>
+</nav>
+
+</div>
+
+<div id="content">
+<h1 class="title">在MacBook Air上安装Archlinux</h1>
+
+
+<p>
+前两天在自己中奖抽到的那台11寸macbook air上装上了archlinux，应archlinux-cn的google mail group中几位兄弟的要求，在这里记录一下整个安装的过程，供一些准备进行同样折腾的兄弟看看，也作为自己的一份备忘。
+</p>
+<ul>
+<li>使用镜像：2012-08-04的archlinux iso
+</li>
+<li>目标：arch和mac os双系统共存（其实我的最终目的是只有arch，完全删除mac os，我对苹果的东西完全无爱，如果不是抽奖抽到的，我是不会主动去买苹果的东西的。但因为是第一次在mac上安装arch，所以先让mac os再存在一会儿，以免arch安装失败后没系统可用了，等摸清楚一些细节之后，就直接格整个硬盘只留arch）
+</li>
+</ul>
+
+
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Mac和PC的不同点</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<ul>
+<li>mac引导程序是UEFI，而普通PC是BIOS
+</li>
+<li>mac的分区表是GPT，普通PC是MBR，MBR由于66字节的限制，只能有四个主分区，GPT没有这个限制
+</li>
+<li>mac安装好之后，默认的分区有三个：负责boot的EFI分区，大概有200MB，Mac主分区以及Recovery分区，大概650MB
+</li>
+</ul>
+
+
+<p>
+  除了上述区别以外，其它基本应该都是一样的。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">过程</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<ol>
+<li>使用dd命令制作用于安装的U盘，如何使用请自行google
+</li>
+<li>调整硬盘分区，这个可以使用mac os的Disk Utility完成，缩减mac os的硬盘分区大小，以空出一部分空间来安装archlinux
+</li>
+<li>在mac os中安装rEFIt（这步不是强制要求，但强烈建议安装之，因为不安装rEFIt的话，待会儿arch安装好后我们还要进mac os去执行bless）
+</li>
+<li>插上U盘，如果刚刚安装了rEFIt，就直接会看到一个开机启动选项，选择那个类似Windows图标的启动即可（具体名字我忘了，大概是叫Legacy OS吧。。如果没安装rEFIt，开机需要按住option键启动，应该会有三个选择，一个Mac HD，一个Recovery，还有一个Windows，选择最后一个）
+</li>
+<li>正常的话，现在应该进入archlinux的安装界面了，按照archlinux的安装wiki介绍一步一步安装即可
+</li>
+</ol>
+
+
+<p>
+  具体安装过程我就不重复了，看wiki即可。下面讲讲我在安装中遇到的一些问题和陷阱，供各位兄弟参考，以免少走弯路。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">安装过程中的一些注意事项</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<ol>
+<li>在对硬盘进行分区时，对硬盘分区的工具请选择gdisk/cgdisk，而不是常用的fdisk/cfdisk！！！因为Mac的分区表是GPT，fdisk/cfdisk只支持MBR，如果强行使用的话，就等着丢数据吧。。
+
+</li>
+<li>在安装进行得差不多，已经到安装grub的时候，因为前面已经讲了mac使用UEFI引导，所以这里选择安装grub-efi-x86_64而不是grub-bios。
+     按照wiki运行 <code>grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck --debug</code> 这个命令的时候，grub会报找不到efi参数的错误，是因为我们是以模拟BIOS模式启动arch安装而不是EFI，所以会报这个错误，不用管它。
+
+</li>
+<li>因为上面这个错误grub没有管，所以只有我们自己手动来handle了，运行以下命令：
+<pre class="example">
+cp /boot/efi/EFI/arch_grub/grubx64.efi /boot/backup.efi
+# 将这个efi引导程序先copy出来备用，因为我们等下mount要使用这个目录
+mount LABEL=EFI /boot/efi
+# 还记得前面说过的mac负责boot的EFI分区吗？没错，这个mount命令就是将这个分区mount到/boot/efi
+cp /boot/backup.efi /boot/efi/EFI/BOOT/BOOTX64.efi
+# 将我们刚刚backup的efi引导程序copy到这个boot分区，这里路径一定不能搞错！！
+# 据google到的小道消息，这个路径是苹果hard code指定的启动固件。。所以，拼写错了就找不到了。。
+</pre>
+
+
+<p>
+     所以，我们这里实际只做了一件grub没有帮我们做的事：将grub的引导程序copy到整个macbook的引导分区，并指定其路径和命名。
+</p>
+</li>
+<li>关于grub的事，光上面一步还没完，还需要运行一下 <code>grub-mkconfig -o /boot/grub/grub.cfg</code> ，重新生成cfg文件，不然grub启动的时候会找不到硬盘，因为默认的grub.cfg里面的硬盘UUID是错误的。grub的配置就到此为止了。
+
+</li>
+<li>编辑/etc/mkinitcpio.conf，在MODULES数组中加入"ahci sd_mod"（注意，如果是SSD，就加sd_mod，如果是普通的机械硬盘，就加ata_generic），然后运行 <code>mkinitcpio -p linux</code> ，不然在启动的时候会提示no controller found，你就等着强制关机吧。
+</li>
+</ol>
+
+
+<p>
+  需要注意的事情就这么多。到这里，系统应该是已经能运行了。
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">附</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<ol>
+<li>如果进入系统后触摸板无效，是因为驱动没有装好，安装 <code>xf86-input-synaptics</code> 即可。
+
+</li>
+<li>触摸板默认的滚动方向和原来的方向相反，会很不习惯，这时候，需要改 <code>~/.Xmodmap</code> ，添加以下行：
+<pre class="example">
+pointer = 1 2 3 5 4 6 7 8 9
+</pre>
+
+<p>     注意4和5的位置，因为4和5分别代表上下滚动，所以将它们交换一下位置即可，修改完成后，记得执行 <code>xmodmap ~/.Xmodmap</code> 。
+</p></li>
+</ol>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<div id="post-meta">
+  <span title="post date" class="post-info">2012-09-05</span>
+  <span title="last modification date" class="update-info">2013-04-01</span>
+  <span title="tags" class="tags"><a href="/tags/linux/">Linux</a>, <a href="/tags/archlinux/">Archlinux</a></span>
+  <span title="author" class="author">Kelvin Hu</span>
+</div>
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    //var disqus_developer = 1;
+    var disqus_identifier = "/blog/2012/09/05/archlinux-on-mac-air/";
+    var disqus_url = "http://kelvinh.github.com/blog/2012/09/05/archlinux-on-mac-air/";
+    var disqus_shortname = 'kelvinh';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+<div id="footer">
+  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
+  <p class="copyright">
+    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+    &nbsp;&nbsp;-&nbsp;&nbsp;
+    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+  </p>
+</div>
+
+</div>
+</body>
+</html>
