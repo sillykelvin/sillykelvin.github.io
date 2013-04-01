@@ -4,7 +4,7 @@
 #+DATE:        2013-02-05 Tue
 #+URI:         /blog/%y/%m/%d/fix-httpd-ssl-security-issue/
 #+KEYWORDS:    ssl crime, apache httpd
-#+TAGS:        :Apache:
+#+TAGS:        :Apache:HTTP:
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
 #+DESCRIPTION: crime issue fixing, and compilation process of mod_ssl
