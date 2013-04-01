@@ -159,9 +159,9 @@ Learning notes recorded during reading org mode manual, simple and incomplete, b
 
 ** include files
 
-   for example: *#+include: "~/.emacs.d/init.el" src emacs-lisp* will insert the contents of ~/.emacs.d/init.el at current position, as below: (the second parameter is the tag type, "src" stands for "#+begin\_src/#+end\_src" pair, so do "quote" and "example")
+   for example: *#+include: "~/.emacs.d/init.el" src emacs-lisp* will insert the contents of ~/.emacs.d/init.el at current position, as below: (the second parameter is the tag type, "src" stands for "#+begin_src/#+end_src" pair, so do "quote" and "example")
 
-#+include: "~/.emacs.d/init.el" src emacs-lisp
+   : #+include: "~/.emacs.d/init.el" src emacs-lisp
 
 --------------------------------------------------------------------------------
 
