@@ -6,9 +6,9 @@
 #+KEYWORDS:    home page, personal site
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
-#+DESCRIPTION: This is the home page of http://kelvinh.github.com/
+#+DESCRIPTION: This is the home page of http://kelvinh.github.io/
 
-This is the home page of site [[http://kelvinh.github.com]], currently I have little idea about what to write on this page, I may improve it later.
+This is the home page of site [[http://kelvinh.github.io]], currently I have little idea about what to write on this page, I may improve it later.
 
 * Description
 
@@ -16,7 +16,7 @@ This is the home page of site [[http://kelvinh.github.com]], currently I have li
 
 --------------------------------------------------------------------------------
 
-这是我的网站[[http://kelvinh.github.com]]的主页，目前我还不太清楚该在主页上放些什么内容，等我想到该放什么了，我再更新吧。
+这是我的网站[[http://kelvinh.github.io]]的主页，目前我还不太清楚该在主页上放些什么内容，等我想到该放什么了，我再更新吧。
 
 * 说明
 
