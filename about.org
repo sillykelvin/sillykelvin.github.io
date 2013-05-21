@@ -10,7 +10,7 @@
 
 Hello, I am Kelvin Hu, from China, you could get in touch with me through the following ways:
 
-- [[mailto:ini <dot> kelvin <at> gmail <dot> com][Email]](please replace corresponding characters)
+- [[mailto:ini <dot> kelvin <at> gmail <dot> com][Email]] (please replace corresponding characters)
 - [[https://github.com/kelvinh][GitHub]]
 - [[http://weibo.com/ikevinhu][Sina Weibo]]
 - [[https://twitter.com/__kelvinh__][Twitter]] (not used very often)
@@ -33,7 +33,7 @@ Hello, I am Kelvin Hu, from China, you could get in touch with me through the fo
 
 大家好，我是Kelvin Hu，来自大天朝，你可以通过以下方式联系我：
 
-- [[mailto: ini <dot> kelvin <at> gmail <dot> com][Email]] （请替换相应的字符）
+- [[mailto:ini <dot> kelvin <at> gmail <dot> com][Email]] （请替换相应的字符）
 - [[https://github.com/kelvinh][GitHub]]
 - [[http://weibo.com/ikevinhu][新浪微博]]
 - [[https://twitter.com/__kelvinh__][Twitter]] （不怎么常用）
