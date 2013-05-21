@@ -6,11 +6,11 @@
 #+KEYWORDS:    about page, personal site
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
-#+DESCRIPTION: This is the about page of http://kelvinh.github.com/
+#+DESCRIPTION: This is the about page of http://kelvinh.github.io/
 
 Hello, I am Kelvin Hu, from China, you could get in touch with me through the following ways:
 
-- [[mailto: ini <dot> kelvin <at> gmail <dot> com][Email]] (please replace corresponding characters)
+- [[mailto:ini <dot> kelvin <at> gmail <dot> com][Email]](please replace corresponding characters)
 - [[https://github.com/kelvinh][GitHub]]
 - [[http://weibo.com/ikevinhu][Sina Weibo]]
 - [[https://twitter.com/__kelvinh__][Twitter]] (not used very often)
@@ -27,7 +27,7 @@ Hello, I am Kelvin Hu, from China, you could get in touch with me through the fo
 
 * Thanks
 
-  Really thank @<strong>Lenin Lee, the owner of site [[http://0x3f.org]]@</strong>, I borrowed the styles from his site, and then did some customization based on it.
+  Really thank @@html:<strong>@@Lenin Lee, the owner of site [[http://0x3f.org]]@@html:</strong>@@, I borrowed the styles from his site, and then did some customization based on it.
 
 --------------------------------------------------------------------------------
 
@@ -64,4 +64,4 @@ Hello, I am Kelvin Hu, from China, you could get in touch with me through the fo
 
 * 感谢
 
-  非常感谢@<strong>Lenin Lee, [[http://0x3f.org]]的站长@</strong>，鉴于本人那糟糕的设计天赋，以及可怜的CSS知识，我就直接从他的站点“借”来了样式，然后在这个基础上做了一些自定义。
+  非常感谢@@html:<strong>@@Lenin Lee, [[http://0x3f.org]]的站长@@html:</strong>@@，鉴于本人那糟糕的设计天赋，以及可怜的CSS知识，我就直接从他的站点“借”来了样式，然后在这个基础上做了一些自定义。
