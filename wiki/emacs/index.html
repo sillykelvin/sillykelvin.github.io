@@ -1,188 +1,273 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>关于Emacs的一些使用心得</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<meta name="title" content="关于Emacs的一些使用心得"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-12-13 Thu"/>
-<meta name="author" content="Kelvin Hu"/>
-<meta name="description" content="small skills/tips learned during using emacs"/>
-<meta name="keywords" content="emacs"/>
-<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>关于Emacs的一些使用心得 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+        <meta name="description" content="small skills/tips learned during using emacs" />
+            <meta name="keywords" content="emacs" />
+        <link rel="stylesheet" href="/media/css/main.css" />
+  </head>
+  <body>
+    <div id="preamble">
+      <hgroup id="header">
+        <h1><a href="/">Kelvin的胡言乱语</a></h1>
+        <h2>重剑无锋，大巧不工。</h2>
+      </hgroup>
+      <nav id="main-nav">
+        <ul id="nav-list-main">
+          <li><a href="/blog/" class="menu">Blog</a></li>
+          <li><a href="/wiki/" class="menu">Wiki</a></li>
+          <li><a href="/tags/" class="menu">Tags</a></li>
+          <li><a href="/about/" class="menu">About</a></li>
+        </ul>
+      </nav>
+      <nav id="sub-nav" class="align-right">
+        <div class="social">
+          <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+                    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+        </div>
+        <form class="search" target="_blank" method="get" action="http://google.com/search">
+          <input type="hidden" value="site:kelvinh.github.io" name="q" />
+          <input type="text" class="align-right" results="0" name="q" />
+        </form>
+      </nav>
+    </div>
 
-
-</head>
-<body>
-
-<div id="preamble">
-<hgroup id="header">
-  <h1><a href="/">Kelvin的胡言乱语</a></h1>
-  <h2>重剑无锋，大巧不工。</h2>
-</hgroup>
-<nav id="main-nav">
-  <ul id="nav-list-main">
-    <li><a href="/blog/" class="menu">Blog</a></li>
-    <li><a href="/wiki/" class="menu">Wiki</a></li>
-    <li><a href="/tags/" class="menu">Tags</a></li>
-    <li><a href="/about/" class="menu">About</a></li>
-  </ul>
-</nav>
-<nav id="sub-nav" class="align-right">
-  <div class="social">
-    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
-    <!-- TODO: change the link below to proper value  -->
-    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
-  </div>
-  <form class="search" target="_blank" method="get" action="http://google.com/search">
-    <input type="hidden" value="site:kelvinh.github.com" name="q" />
-    <input type="text" class="align-right" results="0" name="q" />
-  </form>
-</nav>
-
-</div>
-
-<div id="content">
-<h1 class="title">关于Emacs的一些使用心得</h1>
-
-
-<p>
+    <div id="content">
+            <h1 class="title">关于Emacs的一些使用心得</h1>
+            <p>
 记录一些关于Emacs这个神器的奇淫技巧。不定时更新。
 </p>
 
-<div id="outline-container-1" class="outline-2">
+<div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1">矩形操作</h2>
 <div class="outline-text-2" id="text-1">
-
-
 <p>
-  Emacs所有跟矩形操作的命令都是以 <code>C-x r</code> 为前缀，其区域选择与普通的区域选择的快捷键一样： <code>C-space</code> ，只是在执行矩形操作时，Emacs会将选择的起点和终点作为对角，其中的内容作为矩形区域。常用快捷键：
+Emacs所有跟矩形操作的命令都是以 <code>C-x r</code> 为前缀，其区域选择与普通的区域选择的快捷键一样： <code>C-space</code> ，只是在执行矩形操作时，Emacs会将选择的起点和终点作为对角，其中的内容作为矩形区域。常用快捷键：
 </p>
+
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<colgroup><col class="left" /><col class="left" /><col class="left" />
+
+
+<colgroup>
+<col class="left"/>
+
+<col class="left"/>
+
+<col class="left"/>
 </colgroup>
 <tbody>
-<tr><td class="left">C-space</td><td class="left">set-mark-command</td><td class="left">标记矩形区块的一个角（光标标记其相对的角）。</td></tr>
-<tr><td class="left">C-x r t</td><td class="left">string-rectangle</td><td class="left">用字符串填充矩形区域</td></tr>
-<tr><td class="left">C-x r k</td><td class="left">kill-rectangle</td><td class="left">剪切当前的矩形区块，并将其保存在一个特殊的矩形区块缓冲区中。</td></tr>
-<tr><td class="left">C-x r d</td><td class="left">delete-rectangle</td><td class="left">删除当前的矩形区块，并不为粘贴而保存它。</td></tr>
-<tr><td class="left">C-x r c</td><td class="left">clear-rectangle</td><td class="left">清除当前的矩形区块，使用空白字符替换整个区域。</td></tr>
-<tr><td class="left">C-x r o</td><td class="left">open-rectangle</td><td class="left">打开当前的矩形区块，使用空白字符填充整个区域，并将该矩形区块的所有文本移动到右边。</td></tr>
-<tr><td class="left">C-x r y</td><td class="left">yank-rectangle</td><td class="left">在光标处，粘贴上一次剪切的矩形区块的内容，将所有的现有文本移动到右边。</td></tr>
+<tr>
+<td class="left">C-space</td>
+<td class="left">set-mark-command</td>
+<td class="left">标记矩形区块的一个角（光标标记其相对的角）。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r t</td>
+<td class="left">string-rectangle</td>
+<td class="left">用字符串填充矩形区域</td>
+</tr>
+
+<tr>
+<td class="left">C-x r k</td>
+<td class="left">kill-rectangle</td>
+<td class="left">剪切当前的矩形区块，并将其保存在一个特殊的矩形区块缓冲区中。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r d</td>
+<td class="left">delete-rectangle</td>
+<td class="left">删除当前的矩形区块，并不为粘贴而保存它。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r c</td>
+<td class="left">clear-rectangle</td>
+<td class="left">清除当前的矩形区块，使用空白字符替换整个区域。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r o</td>
+<td class="left">open-rectangle</td>
+<td class="left">打开当前的矩形区块，使用空白字符填充整个区域，并将该矩形区块的所有文本移动到右边。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r y</td>
+<td class="left">yank-rectangle</td>
+<td class="left">在光标处，粘贴上一次剪切的矩形区块的内容，将所有的现有文本移动到右边。</td>
+</tr>
 </tbody>
 </table>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-2" class="outline-2">
+<div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2">寄存器操作</h2>
 <div class="outline-text-2" id="text-2">
-
-
-<ul>
+<ul class="org-ul">
 <li>文本操作：
 </li>
 </ul>
 
-
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<colgroup><col class="left" /><col class="left" />
+
+
+<colgroup>
+<col class="left"/>
+
+<col class="left"/>
 </colgroup>
 <tbody>
-<tr><td class="left">C-x r s R</td><td class="left">保存选中的区域到寄存器R</td></tr>
-<tr><td class="left">C-x r r R</td><td class="left">保存矩形区域</td></tr>
-<tr><td class="left">C-x r i R</td><td class="left">读取寄存器R的内容并插入到光标处</td></tr>
+<tr>
+<td class="left">C-x r s R</td>
+<td class="left">保存选中的区域到寄存器R</td>
+</tr>
+
+<tr>
+<td class="left">C-x r r R</td>
+<td class="left">保存矩形区域</td>
+</tr>
+
+<tr>
+<td class="left">C-x r i R</td>
+<td class="left">读取寄存器R的内容并插入到光标处</td>
+</tr>
 </tbody>
 </table>
 
-
-<ul>
+<ul class="org-ul">
 <li>Buffer/Window/Frame操作：
 </li>
 </ul>
 
-
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<colgroup><col class="left" /><col class="left" />
+
+
+<colgroup>
+<col class="left"/>
+
+<col class="left"/>
 </colgroup>
 <tbody>
-<tr><td class="left">C-x r SPC R</td><td class="left">保存Buffer及光标位置</td></tr>
-<tr><td class="left">C-x r w R</td><td class="left">保存当前Window的配置</td></tr>
-<tr><td class="left">C-x r f R</td><td class="left">保存当前Frame的配置</td></tr>
-<tr><td class="left">C-x r j R</td><td class="left">恢复寄存器R的内容</td></tr>
+<tr>
+<td class="left">C-x r SPC R</td>
+<td class="left">保存Buffer及光标位置</td>
+</tr>
+
+<tr>
+<td class="left">C-x r w R</td>
+<td class="left">保存当前Window的配置</td>
+</tr>
+
+<tr>
+<td class="left">C-x r f R</td>
+<td class="left">保存当前Frame的配置</td>
+</tr>
+
+<tr>
+<td class="left">C-x r j R</td>
+<td class="left">恢复寄存器R的内容</td>
+</tr>
 </tbody>
 </table>
-
 
 <pre class="example">
 M-x list-registers    ; 显示所有寄存器中的内容
 M-x view-register R   ; 查看寄存器R中的内容
 </pre>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-3" class="outline-2">
+<div id="outline-container-sec-3" class="outline-2">
 <h2 id="sec-3">书签操作：</h2>
 <div class="outline-text-2" id="text-3">
-
-
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<colgroup><col class="left" /><col class="left" /><col class="left" />
+
+
+<colgroup>
+<col class="left"/>
+
+<col class="left"/>
+
+<col class="left"/>
 </colgroup>
 <tbody>
-<tr><td class="left">C-x r m Bookmark</td><td class="left">bookmark-set</td><td class="left">设置一个名为 Bookmark 的书签。</td></tr>
-<tr><td class="left">C-x r l</td><td class="left">bookmarks-bmenu-list</td><td class="left">列出所有已保存的书签。</td></tr>
-<tr><td class="left"></td><td class="left">bookmark-delete</td><td class="left">删除一个书签。</td></tr>
-<tr><td class="left">C-x r b Bookmark</td><td class="left">bookmark-jump</td><td class="left">跳转至名为 Bookmark 的书签中所设置的位置。</td></tr>
-<tr><td class="left"></td><td class="left">bookmark-save</td><td class="left">将所有的书签保存到书签文件 ~/.emac.bmk 中。</td></tr>
+<tr>
+<td class="left">C-x r m Bookmark</td>
+<td class="left">bookmark-set</td>
+<td class="left">设置一个名为 Bookmark 的书签。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r l</td>
+<td class="left">bookmarks-bmenu-list</td>
+<td class="left">列出所有已保存的书签。</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">bookmark-delete</td>
+<td class="left">删除一个书签。</td>
+</tr>
+
+<tr>
+<td class="left">C-x r b Bookmark</td>
+<td class="left">bookmark-jump</td>
+<td class="left">跳转至名为 Bookmark 的书签中所设置的位置。</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">bookmark-save</td>
+<td class="left">将所有的书签保存到书签文件 ~/.emac.bmk 中。</td>
+</tr>
 </tbody>
 </table>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-4" class="outline-2">
+<div id="outline-container-sec-4" class="outline-2">
 <h2 id="sec-4">删除空行：</h2>
 <div class="outline-text-2" id="text-4">
-
-
 <pre class="example">
 M-x flush-lines RET ^$ RET
 </pre>
 
-
 <p>
-  <code>flush-lines</code> 命令的本意是删除buffer中match随后的regexp的行，而 <code>^$</code> 就代表空行，于是这就是删除空行的操作。
-</p></div>
+<code>flush-lines</code> 命令的本意是删除buffer中match随后的regexp的行，而 <code>^$</code> 就代表空行，于是这就是删除空行的操作。
+</p>
 </div>
 </div>
+    </div>
 
-<div id="postamble">
-<div id="post-meta">
-  <span title="post date" class="post-info">2012-12-13</span>
-  <span title="last modification date" class="update-info">2013-04-01</span>
-  <span title="tags" class="tags"><a href="/tags/emacs/">Emacs</a></span>
-  <span title="author" class="author">Kelvin Hu</span>
-</div>
-<div id="footer">
-  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
-  <p class="copyright">
-    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
-    &nbsp;&nbsp;-&nbsp;&nbsp;
-    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-  </p>
-</div>
+    <div id="postamble">
+            <div id="post-meta">
+        <span title="post date" class="post-info">2012-12-13</span>
+        <span title="last modification date" class="update-info">2013-03-31</span>
+        <span title="tags" class="tags"><a href="/tags/emacs/">Emacs</a></span>
+        <span title="author" class="author">Kelvin Hu</span>
+      </div>
+      
+      
+            <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
 
-</div>
-</body>
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      
+      <div id="footer">
+        <p class="creator">Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p class="copyright">           Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
 </html>

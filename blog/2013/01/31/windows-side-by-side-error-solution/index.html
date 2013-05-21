@@ -1,110 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>解决Windows上程序运行时的side by side错误</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<meta name="title" content="解决Windows上程序运行时的side by side错误"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-01-31 Thu"/>
-<meta name="author" content="Kelvin Hu"/>
-<meta name="description" content="solution to windows side-by-side error"/>
-<meta name="keywords" content="windows, side by side error"/>
-<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>解决Windows上程序运行时的side by side错误 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+        <meta name="description" content="solution to windows side-by-side error" />
+            <meta name="keywords" content="windows, side by side error" />
+        <link rel="stylesheet" href="/media/css/main.css" />
+  </head>
+  <body>
+    <div id="preamble">
+      <hgroup id="header">
+        <h1><a href="/">Kelvin的胡言乱语</a></h1>
+        <h2>重剑无锋，大巧不工。</h2>
+      </hgroup>
+      <nav id="main-nav">
+        <ul id="nav-list-main">
+          <li><a href="/blog/" class="menu">Blog</a></li>
+          <li><a href="/wiki/" class="menu">Wiki</a></li>
+          <li><a href="/tags/" class="menu">Tags</a></li>
+          <li><a href="/about/" class="menu">About</a></li>
+        </ul>
+      </nav>
+      <nav id="sub-nav" class="align-right">
+        <div class="social">
+          <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+                    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+        </div>
+        <form class="search" target="_blank" method="get" action="http://google.com/search">
+          <input type="hidden" value="site:kelvinh.github.io" name="q" />
+          <input type="text" class="align-right" results="0" name="q" />
+        </form>
+      </nav>
+    </div>
 
-
-</head>
-<body>
-
-<div id="preamble">
-<hgroup id="header">
-  <h1><a href="/">Kelvin的胡言乱语</a></h1>
-  <h2>重剑无锋，大巧不工。</h2>
-</hgroup>
-<nav id="main-nav">
-  <ul id="nav-list-main">
-    <li><a href="/blog/" class="menu">Blog</a></li>
-    <li><a href="/wiki/" class="menu">Wiki</a></li>
-    <li><a href="/tags/" class="menu">Tags</a></li>
-    <li><a href="/about/" class="menu">About</a></li>
-  </ul>
-</nav>
-<nav id="sub-nav" class="align-right">
-  <div class="social">
-    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
-    <!-- TODO: change the link below to proper value  -->
-    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
-  </div>
-  <form class="search" target="_blank" method="get" action="http://google.com/search">
-    <input type="hidden" value="site:kelvinh.github.com" name="q" />
-    <input type="text" class="align-right" results="0" name="q" />
-  </form>
-</nav>
-
-</div>
-
-<div id="content">
-<h1 class="title">解决Windows上程序运行时的side by side错误</h1>
-
-
-<div id="outline-container-1" class="outline-2">
+    <div id="content">
+            <h1 class="title">解决Windows上程序运行时的side by side错误</h1>
+            
+<div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1">起因</h2>
 <div class="outline-text-2" id="text-1">
-
-
 <p>
-  前两天写了个小工具，在我的机器跑得好好的，QA的测试机里面却死活跑不起来，一运行就出现一个对话框，报一个side by side的错误：
+前两天写了个小工具，在我的机器跑得好好的，QA的测试机里面却死活跑不起来，一运行就出现一个对话框，报一个side by side的错误：
 </p>
-<blockquote>
 
-<p>The application has failed to start because its side-by-side configuration is incorrect. Please see the application event log or use the command-line sxstrace.exe tool for more detail.
+<blockquote>
+<p>
+The application has failed to start because its side-by-side configuration is incorrect. Please see the application event log or use the command-line sxstrace.exe tool for more detail.
 </p>
 </blockquote>
 
-
 <p>
-  郁闷至极，不过这个对话框却提供了一点额外的信息：
+郁闷至极，不过这个对话框却提供了一点额外的信息：
 </p>
+
 <pre class="example">
 use the command-line sxstrace.exe tool for more detail
 </pre>
 
-
 <p>
-  于是Google了一下，sxstrace.exe是一个跟踪调试应用程序的工具，看起来很不错的样子。
+于是Google了一下，sxstrace.exe是一个跟踪调试应用程序的工具，看起来很不错的样子。
 </p>
 </div>
-
 </div>
-
-<div id="outline-container-2" class="outline-2">
+<div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2">解决过程</h2>
 <div class="outline-text-2" id="text-2">
-
-
 <p>
-  按照<a href="http://www.arkhamconsulting.com/blogs/?p=8">这个</a>帖子，先打开sxstrace.exe的调试模式：
+按照<a href="http://www.arkhamconsulting.com/blogs/?p=8">这个</a>帖子，先打开sxstrace.exe的调试模式：
 </p>
+
 <pre class="example">
 sxstrace trace -logfile:C:/trace.bin
 </pre>
 
-
 <p>
-  然后再打开应用程序，这时候在C盘根目录的trace.bin已经生成了，于是退出sxstrace，再运行以下命令：
+然后再打开应用程序，这时候在C盘根目录的trace.bin已经生成了，于是退出sxstrace，再运行以下命令：
 </p>
+
 <pre class="example">
 sxstrace parse -logfile:C:/trace.bin -outfile:C:/trace.log
 </pre>
 
+<p>
+因为sxstrace trace出来的文件是二进制的，所以用上述命令将其转换成txt的。
+</p>
 
 <p>
-  因为sxstrace trace出来的文件是二进制的，所以用上述命令将其转换成txt的。
+打开trace.log，内容如下：
 </p>
-<p>
-  打开trace.log，内容如下：
-</p>
+
 <pre class="example">
 =================
 Begin Activation Context Generation.
@@ -149,60 +134,68 @@ ERROR: Activation Context generation failed.
 End Activation Context Generation.
 </pre>
 
-
 <p>
-  看起来是 <code>Microsoft.VC90.CRT.dll</code> 这个reference没有找到，这个是属于 <code>Visual C++ 2008 Redistributable</code> 的一个动态链接库。去M$的网站下一个装上，一切就OK了。
+看起来是 <code>Microsoft.VC90.CRT.dll</code> 这个reference没有找到，这个是属于 <code>Visual C++ 2008 Redistributable</code> 的一个动态链接库。去M$的网站下一个装上，一切就OK了。
 </p>
 </div>
-
 </div>
-
-<div id="outline-container-3" class="outline-2">
+<div id="outline-container-sec-3" class="outline-2">
 <h2 id="sec-3">总结</h2>
 <div class="outline-text-2" id="text-3">
-
-
 <p>
-  对于windows我一向没有好感，不评价，写这篇blog主要是为了记录 <code>sxstrace.exe</code> 这个工具，感觉用来debug不错。
-</p></div>
+对于windows我一向没有好感，不评价，写这篇blog主要是为了记录 <code>sxstrace.exe</code> 这个工具，感觉用来debug不错。
+</p>
 </div>
 </div>
+    </div>
 
-<div id="postamble">
-<div id="post-meta">
-  <span title="post date" class="post-info">2013-01-31</span>
-  <span title="last modification date" class="update-info">2013-04-01</span>
-  <span title="tags" class="tags"><a href="/tags/windows/">Windows</a></span>
-  <span title="author" class="author">Kelvin Hu</span>
-</div>
-<section id="comment">
-  <h1 class="title">Comments</h1>
-  <div id="disqus_thread"></div>
-  <script type="text/javascript">
-    //var disqus_developer = 1;
-    var disqus_identifier = "/blog/2013/01/31/windows-side-by-side-error-solution/";
-    var disqus_url = "http://kelvinh.github.com/blog/2013/01/31/windows-side-by-side-error-solution/";
-    var disqus_shortname = 'kelvinh';
+    <div id="postamble">
+            <div id="post-meta">
+        <span title="post date" class="post-info">2013-01-31</span>
+        <span title="last modification date" class="update-info">2013-03-31</span>
+        <span title="tags" class="tags"><a href="/tags/windows/">Windows</a></span>
+        <span title="author" class="author">Kelvin Hu</span>
+      </div>
+      
+            <section id="comment">
+        <h1 class="title">Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/01/31/windows-side-by-side-error-solution/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/01/31/windows-side-by-side-error-solution/";
+          var disqus_shortname = 'kelvinh';
 
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-  </script>
-  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</section>
-<div id="footer">
-  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
-  <p class="copyright">
-    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
-    &nbsp;&nbsp;-&nbsp;&nbsp;
-    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-  </p>
-</div>
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      
+            <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
 
-</div>
-</body>
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      
+      <div id="footer">
+        <p class="creator">Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p class="copyright">           Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
 </html>

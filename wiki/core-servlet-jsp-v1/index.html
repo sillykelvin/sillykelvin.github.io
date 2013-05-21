@@ -1,64 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>Core Servlet and JSP第二版第一册读书笔记</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<meta name="title" content="Core Servlet and JSP第二版第一册读书笔记"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-11-08 Thu"/>
-<meta name="author" content="Kelvin Hu"/>
-<meta name="description" content="learning notes of book Core Servlet and JSP Volume 1/2(2nd Edition)"/>
-<meta name="keywords" content="java, servlet, jsp"/>
-<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Core Servlet and JSP第二版第一册读书笔记 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+        <meta name="description" content="learning notes of book Core Servlet and JSP Volume 1/2(2nd Edition)" />
+            <meta name="keywords" content="java, servlet, jsp" />
+        <link rel="stylesheet" href="/media/css/main.css" />
+  </head>
+  <body>
+    <div id="preamble">
+      <hgroup id="header">
+        <h1><a href="/">Kelvin的胡言乱语</a></h1>
+        <h2>重剑无锋，大巧不工。</h2>
+      </hgroup>
+      <nav id="main-nav">
+        <ul id="nav-list-main">
+          <li><a href="/blog/" class="menu">Blog</a></li>
+          <li><a href="/wiki/" class="menu">Wiki</a></li>
+          <li><a href="/tags/" class="menu">Tags</a></li>
+          <li><a href="/about/" class="menu">About</a></li>
+        </ul>
+      </nav>
+      <nav id="sub-nav" class="align-right">
+        <div class="social">
+          <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+                    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+        </div>
+        <form class="search" target="_blank" method="get" action="http://google.com/search">
+          <input type="hidden" value="site:kelvinh.github.io" name="q" />
+          <input type="text" class="align-right" results="0" name="q" />
+        </form>
+      </nav>
+    </div>
 
-
-</head>
-<body>
-
-<div id="preamble">
-<hgroup id="header">
-  <h1><a href="/">Kelvin的胡言乱语</a></h1>
-  <h2>重剑无锋，大巧不工。</h2>
-</hgroup>
-<nav id="main-nav">
-  <ul id="nav-list-main">
-    <li><a href="/blog/" class="menu">Blog</a></li>
-    <li><a href="/wiki/" class="menu">Wiki</a></li>
-    <li><a href="/tags/" class="menu">Tags</a></li>
-    <li><a href="/about/" class="menu">About</a></li>
-  </ul>
-</nav>
-<nav id="sub-nav" class="align-right">
-  <div class="social">
-    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
-    <!-- TODO: change the link below to proper value  -->
-    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
-  </div>
-  <form class="search" target="_blank" method="get" action="http://google.com/search">
-    <input type="hidden" value="site:kelvinh.github.com" name="q" />
-    <input type="text" class="align-right" results="0" name="q" />
-  </form>
-</nav>
-
-</div>
-
-<div id="content">
-<h1 class="title">Core Servlet and JSP第二版第一册读书笔记</h1>
-
-
-<p>
+    <div id="content">
+            <h1 class="title">Core Servlet and JSP第二版第一册读书笔记</h1>
+            <p>
 This file recorded notes during learning <i>Core Servlet and JSP</i>.
 </p>
 
-<div id="outline-container-1" class="outline-2">
+<div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1">A sample <code>web.xml</code>:</h2>
 <div class="outline-text-2" id="text-1">
-
-
-
-
+<div class="org-src-container">
 
 <pre class="src src-xml">&lt;?<span style="color: #859900;">xml</span> <span style="color: #b58900;">version</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">1.0</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">encoding</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">utf-8</span><span style="color: #2aa198;">"</span>?&gt;
 
@@ -151,101 +136,94 @@ This file recorded notes during learning <i>Core Servlet and JSP</i>.
 
 &lt;/<span style="color: #268bd2;">web-app</span>&gt;
 </pre>
-
+</div>
 
 <p>
-  The value of <code>url-pattern</code> must start with <code>/</code> or <code>*.</code>.
+The value of <code>url-pattern</code> must start with <code>/</code> or <code>*.</code>.
 </p>
+
 <p>
-  Matching Overlapping Patterns:
+Matching Overlapping Patterns:
 </p>
-<ol>
-<li>Exact matches handled first: <a href="http://.../foo/bar">http://&hellip;/foo/bar</a> will be handled by <code>/foo/bar</code>, not <code>/foo/*</code>, also, <code>/foo/bar.html</code> will win over <code>*.html</code>, if the URL is <a href="http://.../foo/bar.html">http://&hellip;/foo/bar.html</a>.
 
+<ol class="org-ol">
+<li>Exact matches handled first: <a href="http://.../foo/bar">http://.../foo/bar</a> will be handled by <code>/foo/bar</code>, not <code>/foo/*</code>, also, <code>/foo/bar.html</code> will win over <code>*.html</code>, if the URL is <a href="http://.../foo/bar.html">http://.../foo/bar.html</a>.
 </li>
-<li>Directory mapping are preferred over extension mappings: the URL <a href="http://.../foo/bar.html">http://&hellip;/foo/bar.html</a> will be handled by <code>/foo/*</code>, not the pattern <code>*.html</code>.
 
+<li>Directory mapping are preferred over extension mappings: the URL <a href="http://.../foo/bar.html">http://.../foo/bar.html</a> will be handled by <code>/foo/*</code>, not the pattern <code>*.html</code>.
 </li>
-<li>For overlapping directory mappings, the longest path is preferred: <a href="http://.../foo/bar/baz.html">http://&hellip;/foo/bar/baz.html</a> will be handled by <code>/foo/bar/*</code>, not <code>/foo/*</code>.
+
+<li>For overlapping directory mappings, the longest path is preferred: <a href="http://.../foo/bar/baz.html">http://.../foo/bar/baz.html</a> will be handled by <code>/foo/bar/*</code>, not <code>/foo/*</code>.
 </li>
 </ol>
 
+<p>
+Parameters defined in <code>&lt;init-param&gt;</code> could be read by the method <code>getInitParameter()</code> of <code>ServletConfig</code>.
+</p>
 
 <p>
-  Parameters defined in <code>&lt;init-param&gt;</code> could be read by the method <code>getInitParameter()</code> of <code>ServletConfig</code>.
+<code>&lt;load-on-startup&gt;</code> tells server the sequence that the servlet should be loaded into memory, lower number goes first, if two servlets have the same number, the load sequence is decided by server. Negative number cannot guarantee the servlet loading at startup.
 </p>
+
 <p>
-  <code>&lt;load-on-startup&gt;</code> tells server the sequence that the servlet should be loaded into memory, lower number goes first, if two servlets have the same number, the load sequence is decided by server. Negative number cannot guarantee the servlet loading at startup.
-</p>
-<p>
-  When defining the <code>&lt;location&gt;</code> of <code>&lt;error-page&gt;</code>, be careful of the leading slash, so <code>&lt;location&gt;/404.jsp&lt;/location&gt;</code> will work, but if the slash <code>/</code> removed, <code>404.jsp</code> will be not found.
+When defining the <code>&lt;location&gt;</code> of <code>&lt;error-page&gt;</code>, be careful of the leading slash, so <code>&lt;location&gt;/404.jsp&lt;/location&gt;</code> will work, but if the slash <code>/</code> removed, <code>404.jsp</code> will be not found.
 </p>
 </div>
-
 </div>
-
-<div id="outline-container-2" class="outline-2">
+<div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2">HTTP/1.1 common request headers</h2>
 <div class="outline-text-2" id="text-2">
-
-
-<ol>
+<ol class="org-ol">
 <li><code>Accept</code>: specify the MIME types that the browser can handle
-
 </li>
+
 <li><code>Accept-Charset</code>: the character charset
-
 </li>
+
 <li><code>Accept-Encoding</code>: the encoding type, the most commonly used is "gzip, deflate"
-
 </li>
+
 <li><code>Accept-Language</code>: the language the browser excepted
-
 </li>
+
 <li><code>Authorization</code>: used to identify the browser when visiting some pages with password protection
-
 </li>
+
 <li><code>Connection</code>: to indicate if the browser can handle continuous HTTP connection, continuous connection can transfer several files(html, images, etc) in one socket, saved the cost of establishing multiple connections
-
 </li>
+
 <li><code>Content-Length</code>: only used for <code>POST</code>, specify the length of <code>POST</code> request
-
 </li>
+
 <li><code>Cookie</code>: return cookies back to http server, these cookies are formerly sent to browser by http server
-
 </li>
+
 <li><code>Host</code>: the host name and port number in the requested URL
-
 </li>
+
 <li><code>If-Modified-Since</code>: indicate the requested page is wanted only if the page has been modified after the specified date, otherwise the http server will send 304(Not Modified) instead, servlet should not handle this header directly, but implement <code>getLastModified()</code> method, let the server to handle the date comparison
-
 </li>
+
 <li><code>If-Unmodified-Since</code>: the opposite one of <code>If-Modified-Since</code>
-
 </li>
+
 <li><code>Referer</code>: the URL which referenced current page
-
 </li>
+
 <li><code>User-Agent</code>: to identify the client browser which sent the request
 </li>
 </ol>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-3" class="outline-2">
+<div id="outline-container-sec-3" class="outline-2">
 <h2 id="sec-3">HTTP/1.1 common response headers</h2>
 <div class="outline-text-2" id="text-3">
-
-
-<ol>
+<ol class="org-ol">
 <li><code>Allow</code>: specify request methods the server supported
-
 </li>
+
 <li><code>Cache-Control</code>: tell client how to cache the document, can be set with the following values:
-<ul>
+<ul class="org-ul">
 <li><code>public</code>: the document can be cached
 </li>
 <li><code>private</code>: the document can only be cached in private cache for single user
@@ -261,89 +239,96 @@ This file recorded notes during learning <i>Core Servlet and JSP</i>.
 <li><code>max-age=XXX</code>: the document will be invalid after <i>XXX</i> seconds, it is the replacement of header <code>Expires</code>, and it has higher priority when both of them exist
 </li>
 <li><code>s-max-age=XXX</code>: the shared cache should make the document invalid after <i>XXX</i> seconds
-
 </li>
 </ul>
-
 </li>
+
 <li><code>Connection</code>: used for continuouse connection, the value "close" tells the browser not to use continuous connection, default is continuous connection
-
 </li>
+
 <li><code>Content-Disposition</code>: make the browser to ask user to store the response with the specified name on disk, as below:
 
 <pre class="example">
 Content-Disposition: attachment; filename=some-file-name
 </pre>
-
-
 </li>
+
 <li><code>Content-Encoding</code>: the encoding used during response transmission
-
 </li>
+
 <li><code>Content-Language</code>: the language response used
-
 </li>
+
 <li><code>Content-Length</code>: the byte count of response, only used for continuous connection
-
 </li>
+
 <li><code>Content-Type</code>: the MIME of response, example:
 
 <pre class="example">
 Content-Type: text/html; charset=utf-8
 </pre>
-
-
 </li>
+
 <li><code>Expires</code>: see <code>Cache-Control</code> and <code>Pragma</code>
-
 </li>
+
 <li><code>Last-Modified</code>: the last modified time of the document
-
 </li>
+
 <li><code>Location</code>: required when status code is between 300 and 399, used to notify the browser where the document is stored, the browser will automatically connect to the new address and get the new document
-
 </li>
+
 <li><code>Pragma</code>: see <code>Cache-Control</code> and <code>Expires</code>
-
 </li>
+
 <li><code>Refresh</code>: tell browser to send request for the newest page after the interval, example use:
 
 <pre class="example">
 Refresh: 5; URL=http://host/path
 </pre>
-
-
 </li>
+
 <li><code>Retry-After</code>: used with status code 503, tell the client to retry after the interval
-
 </li>
+
 <li><code>Set-Cookie</code>: specify a cookie, every cookie needs a stand alone header
-
 </li>
+
 <li><code>WWW-Authenticate</code>: used with 401, tell browser the authentication type and domain needed in request header <code>Authorization</code>
 </li>
 </ol>
+</div>
+</div>
+    </div>
 
-</div>
-</div>
-</div>
+    <div id="postamble">
+            <div id="post-meta">
+        <span title="post date" class="post-info">2012-11-08</span>
+        <span title="last modification date" class="update-info">2013-03-31</span>
+        <span title="tags" class="tags"><a href="/tags/java/">Java</a>, <a href="/tags/http/">HTTP</a></span>
+        <span title="author" class="author">Kelvin Hu</span>
+      </div>
+      
+      
+            <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
 
-<div id="postamble">
-<div id="post-meta">
-  <span title="post date" class="post-info">2012-11-08</span>
-  <span title="last modification date" class="update-info">2013-04-01</span>
-  <span title="tags" class="tags"><a href="/tags/java/">Java</a>, <a href="/tags/http/">HTTP</a></span>
-  <span title="author" class="author">Kelvin Hu</span>
-</div>
-<div id="footer">
-  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
-  <p class="copyright">
-    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
-    &nbsp;&nbsp;-&nbsp;&nbsp;
-    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-  </p>
-</div>
-
-</div>
-</body>
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      
+      <div id="footer">
+        <p class="creator">Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p class="copyright">           Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
 </html>

@@ -1,116 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>关于git的一些有用的命令</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<meta name="title" content="关于git的一些有用的命令"/>
-<meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-07-29 Sun"/>
-<meta name="author" content="Kelvin Hu"/>
-<meta name="description" content="useful commands during using git"/>
-<meta name="keywords" content="git, git command"/>
-<link href="/media/css/main.css" rel="stylesheet" type="text/css" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>关于git的一些有用的命令 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+        <meta name="description" content="useful commands during using git" />
+            <meta name="keywords" content="git, git command" />
+        <link rel="stylesheet" href="/media/css/main.css" />
+  </head>
+  <body>
+    <div id="preamble">
+      <hgroup id="header">
+        <h1><a href="/">Kelvin的胡言乱语</a></h1>
+        <h2>重剑无锋，大巧不工。</h2>
+      </hgroup>
+      <nav id="main-nav">
+        <ul id="nav-list-main">
+          <li><a href="/blog/" class="menu">Blog</a></li>
+          <li><a href="/wiki/" class="menu">Wiki</a></li>
+          <li><a href="/tags/" class="menu">Tags</a></li>
+          <li><a href="/about/" class="menu">About</a></li>
+        </ul>
+      </nav>
+      <nav id="sub-nav" class="align-right">
+        <div class="social">
+          <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+                    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+        </div>
+        <form class="search" target="_blank" method="get" action="http://google.com/search">
+          <input type="hidden" value="site:kelvinh.github.io" name="q" />
+          <input type="text" class="align-right" results="0" name="q" />
+        </form>
+      </nav>
+    </div>
 
-
-</head>
-<body>
-
-<div id="preamble">
-<hgroup id="header">
-  <h1><a href="/">Kelvin的胡言乱语</a></h1>
-  <h2>重剑无锋，大巧不工。</h2>
-</hgroup>
-<nav id="main-nav">
-  <ul id="nav-list-main">
-    <li><a href="/blog/" class="menu">Blog</a></li>
-    <li><a href="/wiki/" class="menu">Wiki</a></li>
-    <li><a href="/tags/" class="menu">Tags</a></li>
-    <li><a href="/about/" class="menu">About</a></li>
-  </ul>
-</nav>
-<nav id="sub-nav" class="align-right">
-  <div class="social">
-    <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
-    <!-- TODO: change the link below to proper value  -->
-    <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
-  </div>
-  <form class="search" target="_blank" method="get" action="http://google.com/search">
-    <input type="hidden" value="site:kelvinh.github.com" name="q" />
-    <input type="text" class="align-right" results="0" name="q" />
-  </form>
-</nav>
-
-</div>
-
-<div id="content">
-<h1 class="title">关于git的一些有用的命令</h1>
-
-
-<p>
+    <div id="content">
+            <h1 class="title">关于git的一些有用的命令</h1>
+            <p>
 这是一篇备忘性质的文章，主要记录我在使用git的过程中，个人觉得一些比较有用的命令。会不定期更新。
 </p>
 
-<div id="outline-container-1" class="outline-2">
+<div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1">useful commands</h2>
 <div class="outline-text-2" id="text-1">
-
-
-
-</div>
-
-<div id="outline-container-1-1" class="outline-3">
+</div><div id="outline-container-sec-1-1" class="outline-3">
 <h3 id="sec-1-1">pretty log:</h3>
 <div class="outline-text-3" id="text-1-1">
-
-
 <p>
-   以前我会用一些GUI的git工具来看历史提交记录，现在有了这个命令，发现那些GUI工具都弱爆了。。
+以前我会用一些GUI的git工具来看历史提交记录，现在有了这个命令，发现那些GUI工具都弱爆了。。
 </p>
+
 <pre class="example">
 git log --oneline --graph --decorate
 </pre>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-1-2" class="outline-3">
+<div id="outline-container-sec-1-2" class="outline-3">
 <h3 id="sec-1-2">modify commit message:</h3>
 <div class="outline-text-3" id="text-1-2">
-
-
 <p>
-   当某个commit提交后发现message错误时，可以用此命令修正：
+当某个commit提交后发现message错误时，可以用此命令修正：
 </p>
+
 <pre class="example">
 git commit --amend -m "correct message"
 </pre>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-1-3" class="outline-3">
+<div id="outline-container-sec-1-3" class="outline-3">
 <h3 id="sec-1-3">clean useless files:</h3>
 <div class="outline-text-3" id="text-1-3">
-
-
 <p>
-   在工作区进行某些测试，例如 <code>make</code> ，可能会产生很多不需要提交到repository的文件，手动一个个删除又太麻烦，可以利用下面这个命令：
+在工作区进行某些测试，例如 <code>make</code> ，可能会产生很多不需要提交到repository的文件，手动一个个删除又太麻烦，可以利用下面这个命令：
 </p>
+
 <pre class="example">
 git clean -fdx
 </pre>
 
-
 <p>
-   所有未执行 <code>git add</code> 的文件将全部被删除。
+所有未执行 <code>git add</code> 的文件将全部被删除。
 </p>
-<ol>
+
+<ol class="org-ol">
 <li><code>-f</code> 代表强制删除
 </li>
 <li><code>-d</code> 代表目录
@@ -118,79 +90,75 @@ git clean -fdx
 <li><code>-x</code> 代表在 <code>.gitignore</code> 中存在的文件也一并删除
 </li>
 </ol>
-
-
 </div>
-
 </div>
-
-<div id="outline-container-1-4" class="outline-3">
+<div id="outline-container-sec-1-4" class="outline-3">
 <h3 id="sec-1-4">clear obsolete branch:</h3>
 <div class="outline-text-3" id="text-1-4">
-
-
 <p>
-   If some branches are deleted at remote repository, the local branches will not be deleted automatically (e.g. a branch named <i>devel</i> at remote repo is deleted, the branch "remotes/origin/devel" will still exist), so use this command to clear the obsolete local branches:
+If some branches are deleted at remote repository, the local branches will not be deleted automatically (e.g. a branch named <i>devel</i> at remote repo is deleted, the branch "remotes/origin/devel" will still exist), so use this command to clear the obsolete local branches:
 </p>
+
 <pre class="example">
 git remote prune origin
 </pre>
-
-
 </div>
 </div>
-
 </div>
-
-<div id="outline-container-2" class="outline-2">
+<div id="outline-container-sec-2" class="outline-2">
 <h2 id="sec-2">misc</h2>
 <div class="outline-text-2" id="text-2">
-
-
-
-</div>
-
-<div id="outline-container-2-1" class="outline-3">
+</div><div id="outline-container-sec-2-1" class="outline-3">
 <h3 id="sec-2-1">github proxy settings under windows</h3>
 <div class="outline-text-3" id="text-2-1">
-
-
 <p>
-   万恶的GFW，前两天封了github，这两天虽然解封了，但是访问速度慢得要死，clone一个repo才1KB/s。。。无奈，使用代理，但是windows下怎么设置代理还没弄过，折腾了好一阵子，才弄出来，只需要在命令行设置以下环境变量：
+万恶的GFW，前两天封了github，这两天虽然解封了，但是访问速度慢得要死，clone一个repo才1KB/s。。。无奈，使用代理，但是windows下怎么设置代理还没弄过，折腾了好一阵子，才弄出来，只需要在命令行设置以下环境变量：
 </p>
+
 <pre class="example">
 set https_proxy=http://&lt;username&gt;:&lt;password&gt;@&lt;proxy_addr&gt;:&lt;proxy_port&gt;
 </pre>
 
-
 <p>
-   需要注意的是，github使用的是https，所以如果上面设置成 <code>http_proxy</code> 的话是没有效果的，而且设置好之后，clone需要使用https协议，不能使用git协议：
+需要注意的是，github使用的是https，所以如果上面设置成 <code>http_proxy</code> 的话是没有效果的，而且设置好之后，clone需要使用https协议，不能使用git协议：
 </p>
+
 <pre class="example">
 git clone https://github.com/&lt;person&gt;/&lt;project&gt;.git
 </pre>
+</div>
+</div>
+</div>
+    </div>
 
-</div>
-</div>
-</div>
-</div>
+    <div id="postamble">
+            <div id="post-meta">
+        <span title="post date" class="post-info">2012-07-29</span>
+        <span title="last modification date" class="update-info">2013-03-31</span>
+        <span title="tags" class="tags"><a href="/tags/git/">Git</a>, <a href="/tags/vcs/">VCS</a></span>
+        <span title="author" class="author">Kelvin Hu</span>
+      </div>
+      
+      
+            <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
 
-<div id="postamble">
-<div id="post-meta">
-  <span title="post date" class="post-info">2012-07-29</span>
-  <span title="last modification date" class="update-info">2013-04-01</span>
-  <span title="tags" class="tags"><a href="/tags/git/">Git</a>, <a href="/tags/vcs/">VCS</a></span>
-  <span title="author" class="author">Kelvin Hu</span>
-</div>
-<div id="footer">
-  <p class="creator">Generated by Org version 7.9.4 with Emacs version 24</p>
-  <p class="copyright">
-    Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
-    &nbsp;&nbsp;-&nbsp;&nbsp;
-    Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
-  </p>
-</div>
-
-</div>
-</body>
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      
+      <div id="footer">
+        <p class="creator">Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p class="copyright">           Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
 </html>
