@@ -70,6 +70,23 @@
 
    : pacman -Qo /path/to/file
 
+** updating error:
+
+   When updating archlinux through pacman with =pacman -Syu=, below error occurs:
+
+   #+BEGIN_QUOTE
+   error: dropbox: missing required signature
+   :: File /var/cache/pacman/pkg/dropbox-2.0.8-1-x86_64.pkg.tar.xz is corrupted (invalid or corrupted package (PGP signature)).
+   Do you want to delete it? [Y/n] y
+   error: failed to commit transaction (invalid or corrupted package)
+   Errors occurred, no packages were upgraded.
+   #+END_QUOTE
+
+   Solution: modify */etc/pacman.conf*, change the value of global =SigLevel= into =Optional TrustAll=.
+
+   : #SigLevel = Required DatabaseOptional
+   : SigLevel  = Optional TrustAll
+
 * usefull commands
 
 ** 查看端口占用情况
