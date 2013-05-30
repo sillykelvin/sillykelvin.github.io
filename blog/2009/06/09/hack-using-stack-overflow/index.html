@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>黑客档案：0day漏洞之简单溢出的利用 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="security issue led by stack overflow" />
+    <meta name="keywords" content="hack, stack overflow" />
+    <link rel="stylesheet" href="/media/css/main.css" />
+  </head>
+  <body>
+    <div id="preamble">
+      <hgroup id="header">
+        <h1><a href="/">Kelvin的胡言乱语</a></h1>
+        <h2>重剑无锋，大巧不工。</h2>
+      </hgroup>
+      <nav id="main-nav">
+        <ul id="nav-list-main">
+          <li><a href="/blog/" class="menu">Blog</a></li>
+          <li><a href="/wiki/" class="menu">Wiki</a></li>
+          <li><a href="/tags/" class="menu">Tags</a></li>
+          <li><a href="/about/" class="menu">About</a></li>
+        </ul>
+      </nav>
+      <nav id="sub-nav" class="align-right">
+        <div class="social">
+          <a class="github" title="GitHub" href="https://github.com/kelvinh">GitHub</a>
+          <a class="rss" title="RSS(TODO)" href="TODO">RSS</a>
+        </div>
+        <form class="search" target="_blank" method="get" action="http://google.com/search">
+          <input type="hidden" value="site:kelvinh.github.io" name="q" />
+          <input type="text" class="align-right" results="0" name="q" />
+        </form>
+      </nav>
+    </div>
+    <div id="content">
+      <h1 class="title">黑客档案：0day漏洞之简单溢出的利用</h1>
+      <p>
+<b>这是我进行博客搬家所找到的第一篇文章（实际上原博客分成了三篇来写），所谓的原博客，其实就是我自己的人人网（怎么样，够不专业吧:-D）。实际上，这篇文章毫无价值可言（除了针对我自己的收藏价值外），但就是这样一篇水文，从我当时写的字里行间，以及文章后面的评论来看，我当时心里是相当做作与炫耀的。现在，回头看看，我真是觉得羞愧。整篇文章，不过就是一个栈溢出导致的安全问题。知之愈多，便觉知之愈少，反过来，真是知之愈少，反觉知之愈多啊。</b>
+</p>
+
+<p>
+<b>以此文章警示自己，静水流深。</b>
+</p>
+
+<p>
+下面是原文（未大改，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">原文的“上”篇</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+废话少说，首先来看下面一段简单的C程序：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;stdio.h&gt;</span>
+<span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;string.h&gt;</span>
+<span style="color: #d33682;">#define</span> <span style="color: #b58900;">PASSWORD</span> <span style="color: #2aa198;">"1234567"</span>    <span style="color: #586e75; font-style: italic;">//</span><span style="color: #657b83; font-style: italic;">&#23450;&#20041;&#23494;&#30721;&#65292;&#20165;&#20026;&#27979;&#35797;&#65292;&#26080;&#23454;&#38469;&#24847;&#20041;</span>
+
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">check_password</span>(<span style="color: #b58900;">char</span> *<span style="color: #b58900;">password</span>)  <span style="color: #586e75; font-style: italic;">//</span><span style="color: #657b83; font-style: italic;">&#29992;&#20110;&#21028;&#26029;&#23494;&#30721;&#26159;&#21542;&#27491;&#30830;</span>
+{
+     <span style="color: #b58900;">int</span> <span style="color: #b58900;">result</span>;
+     <span style="color: #b58900;">char</span> <span style="color: #b58900;">offset</span>[8];                          <span style="color: #586e75; font-style: italic;">//</span><span style="color: #657b83; font-style: italic;">&#27809;&#20160;&#20040;&#29992;&#65292;&#20026;&#28322;&#20986;&#20316;&#20934;&#22791;</span>
+     result = strcmp(password,PASSWORD);
+     strcpy(offset,password);          <span style="color: #586e75; font-style: italic;">//</span><span style="color: #657b83; font-style: italic;">&#21516;&#19978;</span>
+     <span style="color: #859900;">return</span> result;
+}
+
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>()
+{
+     <span style="color: #b58900;">int</span> <span style="color: #b58900;">not_valid</span>;
+     <span style="color: #b58900;">char</span> <span style="color: #b58900;">temp</span>[128];
+     <span style="color: #859900;">while</span>(1)
+     {
+          printf(<span style="color: #2aa198;">"Input the password :"</span>);
+          gets(temp);   <span style="color: #586e75; font-style: italic;">//</span><span style="color: #657b83; font-style: italic;">&#27492;&#22788;&#21516;&#26679;&#26377;&#28431;&#27934;&#65292;&#21482;&#35201;&#20320;&#26377;&#36275;&#22815;&#32784;&#24515;</span>
+          not_valid = check_password(temp);
+          <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>not_valid)
+          {
+               printf(<span style="color: #2aa198;">"Congratulations!"</span>);
+               <span style="color: #859900;">break</span>;
+          }
+          <span style="color: #859900;">else</span>
+               printf(<span style="color: #2aa198;">"Invalid password !\n"</span>);
+     }
+     <span style="color: #859900;">return</span> 0;
+}
+</pre>
+</div>
+
+<p>
+本程序用于让用户输入密码，只有输入为1234567时才会退出程序，否则会一直循环要求输入。
+</p>
+
+<p>
+于是大多数人就想，那只有输入"1234567"时才会退出程序了，但是，试试输入"12345678"，发现程序提示密码正确并退出了，再输入"aaaaaaaa"，发现上面的事又发生了。
+</p>
+
+<p>
+出了什么问题呢？难道是程序的逻辑错了？但是输入"1234"就会提示错误啊？那到底是怎么回事呢？最后来一句老话：欲知后事如何，且听下回分解。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">原文的“中”篇</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+现在来具体分析出现问题的原因。
+</p>
+
+<p>
+来看函数check_password(char *password);中的相关定义：
+</p>
+
+<pre class="example">
+int result;
+char offset[8];
+</pre>
+
+<p>
+问题就在这里。在程序编译成exe文件后， <code>result</code> 和 <code>offset[8]</code> 的内存地址是连在一起的， <code>result</code> 将在 <code>offset[8]</code> 的“下面”。于是，问题就产生了，如果我们让 <code>offset[8]</code> 产生溢出，溢出部分将会覆盖 <code>result</code> 中的内容。如果溢出部分刚好将 <code>result</code> 中的内容覆盖成0，程序就会成功运行！而要将 <code>result</code> 中的内容置0，则需要将ASCII码的 <code>NULL</code> 写入 <code>result</code> ，而字符串的最后一位刚好是 <code>NULL</code> ！
+</p>
+
+<p>
+似乎到这里所有的问题都已经解决了，即：写入8个字符，前8个将写入 <code>offset[8]</code> ，而最后默认附加的一位 <code>NULL</code> 将溢出到 <code>result</code> ，将 <code>result</code> 置0。
+</p>
+
+<p>
+但当输入01234567，也是八个字符，按上面的分析，也是将 <code>result</code> 置0，但为什么程序会提示输入错误，要求重新输入呢？由此看来，并不是所有的八位字符串都行，这又是为什么呢？
+</p>
+
+<p>
+又是那句老话：欲知后事如何，且听下回分解。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">原文的“下”篇</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+接着来讨论还未解决的问题，为什么输入01234567不会提示成功。
+</p>
+
+<p>
+这是因为， <code>check_password(char *)</code> 函数中对 <code>result</code> 赋值采用的是 <code>strcmp()</code> 函数，01234567是小于1234567的，所以 <code>strcmp()</code> 函数会返回-1，导致 <code>result</code> 中的值为-1的补码0xFFFFFFFF，输入01234567只会将 <code>result</code> 覆盖成0xFFFFFF00，从而 <code>result</code> 的值不为0，也就不会成功了。
+</p>
+
+<p>
+到此，所有的疑问都已解决，下次讨论，再会。
+</p>
+</div>
+</div>
+
+    </div>
+    <div id="postamble">
+      <div id="post-meta">
+        <span title="post date" class="post-info">2009-06-09</span>
+        <span title="last modification date" class="update-info">2013-05-30</span>
+        <span title="tags" class="tags"><a href="/tags/security/">Security</a></span>
+        <span title="author" class="author">Kelvin Hu</span>
+      </div>
+      <section id="comment">
+        <h1 class="title">Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2009/06/09/hack-using-stack-overflow/";
+          var disqus_url = "http://kelvinh.github.io/blog/2009/06/09/hack-using-stack-overflow/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+
+      <div id="footer">
+        <p class="creator">Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p class="copyright"> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
