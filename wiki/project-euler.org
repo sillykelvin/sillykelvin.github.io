@@ -255,6 +255,122 @@ It appears that you have answered your own question. There is nothing quite like
 
   但不得不说的是，这个最优解是有前提的，即已经限定满足要求的数是六位数，所以不具有普遍性，因此我也就不贴最优解的解法了，因为普通解对这个题目已经是足够了，反而感觉最优解有点画蛇添足。
 
+* Problem 5
+
+  关于问题5的描述：
+
+  #+BEGIN_QUOTE
+  2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+
+  What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+  #+END_QUOTE
+
+  即求从1到20的所有数的最小公倍数。
+
+  难道要我告诉你们，我是用手算出这道题的么！！我写了段程序试了试，结果不对！！于是觉得1到20范围也不大，果断手算之，然后答案就对了！！
+
+  其实是我最初理解错了题意，写成了求所有数的质因子的并集的最小公倍数，后来发现，所有数的最小公倍数和所有数的质因子的并集的最小公倍数并不是一回事，比方说2和8，它们的最小公倍数是8，但质因子并集的最小公倍数却是2，就是因为在对8分解质因数的过程中，相同的质因子2被忽略了，但需要注意的是，相同的质因子也不能全部保存，例如2、4和8，最小公倍数是8，但如果保存所有分解的质因子，会发现乘积会是64，这显然是不正确的。因此，需要对这种分解出来只有一个质因子的数，即某一个质因子的次幂，保证有且只有一个质因子被乘到乘积中。
+
+  虽然题目已经用手解决了（PS：我真邪恶 :-p），但还是贴出解题程序，可以在解一些大数的时候使用：
+
+  : (defun prime-factors (num)
+  :   (let ((i 2) (factors '(1)))
+  :     (while (>= num i)
+  :       (when (= (% num i) 0)
+  :         (setq num (/ num i))
+  :         (add-to-list 'factors i t)
+  :         (while (= (% num i) 0)
+  :           (setq num (/ num i))))
+  :       (setq i (+ i (if (= i 2) 1 2))))
+  :     factors))
+  :
+  : (funcall
+  :  (lambda (max)
+  :    (let ((i 2) (primes '(1)) (result 1) factors)
+  :      (while (<= i max)
+  :        (setq factors (prime-factors i))
+  :        (dolist (f (cdr factors))
+  :          (when (or (not (memq f primes))
+  :                    (= (length factors) 2)) ;; 长度为2表明这是一个幂类型的数
+  :            (setq result (* result f))
+  :            (add-to-list 'primes f t)))
+  :        (setq i (1+ i)))
+  :      result))
+  :  20)
+
+  然后看了一下“标准答案”，和我上面的原理是一样，也是首先列出所有质因子的并集，但它在处理每个质因子应该乘的次数的时候，思路稍有不同，以70为例，我在遇到2，4，8，16，32，64的时候，都会乘以2，而它则是一次确定质因子2应该的相乘次数，即 =floor(log(70) / log(2))= ，因为程序是不可能一眼就看出来64是小于70的最大的2的次幂的，所以，通过对70求2为底的对数，再向下取整，就是2应该相乘的次数。其它质因子的相乘次数可以用相同的方法求出来，但对于平方已经大于70的质因子以及比它大的质因子，就没必要求了，因为它们需要相乘的次数肯定为1。
+
+* Problem 6
+
+  关于问题6的描述：
+
+  #+BEGIN_QUOTE
+  ...
+  Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+  #+END_QUOTE
+
+  问题的介绍有点长，所以我省略了前面的例子，意思就是求前100个自然数的和平方与平方和的差。
+
+  这个问题其实不算是编程问题，稍作推导就知道：
+
+  @@html:<math xmlns="http://www.w3.org/1998/Math/MathML"><mstyle displaystyle="true"><mi>S</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>+</mo><mi>n</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>&#x2212;<!-- − --></mo><mo stretchy="false">(</mo><msup><mn>1</mn><mn>2</mn></msup><mo>+</mo><msup><mn>2</mn><mn>2</mn></msup><mo>+</mo><msup><mn>3</mn><mn>2</mn></msup><mo>+</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>+</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">[</mo><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></mstyle><msup><mo stretchy="false">]</mo><mn>2</mn></msup><mo>&#x2212;<!-- − --></mo><mstyle displaystyle="true"><mfrac><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mn>2</mn><mi>n</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><mn>6</mn></mfrac><mo>=</mo><mo>.</mo><mo>.</mo><mo>.</mo><mo>=</mo><mfrac><msup><mi>n</mi><mn>4</mn></msup><mn>4</mn></mfrac><mo>+</mo><mfrac><msup><mi>n</mi><mn>3</mn></msup><mn>6</mn></mfrac><mo>&#x2212;<!-- − --></mo><mfrac><msup><mi>n</mi><mn>2</mn></msup><mn>4</mn></mfrac><mo>&#x2212;<!-- − --></mo><mfrac><mi>n</mi><mn>6</mn></mfrac></mstyle></math>@@
+
+  所以，这个题目手算也是可以的...如果非要用程序求的话...
+
+  : (funcall
+  :  (lambda (n)
+  :    (-
+  :     (+ (/ (expt n 4) 4)
+  :        (/ (expt n 3) 6))
+  :     (+ (/ (expt n 2) 4)
+  :        (/ n 6))))
+  :  100)
+
+  “标准答案”就不介绍了，没有这个简单。:-p
+
+* Problem 7
+
+  关于问题7的描述：
+
+  #+BEGIN_QUOTE
+  By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
+
+  What is the 10 001st prime number?
+  #+END_QUOTE
+
+  即求第10001个素数。
+
+  还记得[[Problem 3][问题3]]里面的费马素数测试吗？我心里暗喜，刚好用前面的代码就可以了，于是赶紧写出以下代码：
+
+  : (defun solve-problem7 (n)
+  :   (let ((i 2)
+  :         (prime 3))
+  :     (while (< i n)
+  :       (setq prime (+ prime 2))
+  :       (when (fast-prime? prime 2) ;; 这里的fast-prime?的定义在问题3里面可以看到
+  :         (setq i (+ i 1))))
+  :     prime))
+  :
+  : (solve-problem7 10001)
+
+  告诉你们，我在求第10001个素数之前，我还做过测试的！！我试着求过前面15个素数，结果都是正确的！！
+
+  于是，我信心满满地把上面求出来的结果——104327输入，结果错误。。。我再运行一遍，结果是104347，奇怪，再运行一遍，结果是104183。。。怎么结果还是随机的？一看代码，发现是费马测试的次数太少——每个用来测试的数只做了两次费马测试，虽然每次测试正确的概率很大，但总数太多，总会有漏网之鱼，所以每次的结果都不一样，于是把费马测试的次数改成10，这样，漏网之鱼的概率就很小了，试着运行了三次，结果都是104579。
+
+  于是，再次信心满满地把104579输入，结果还是错误。。。我再运行了三次，结果都是104579，那这肯定不是因为费马测试次数的原因了。这时，我才突然想起来影响结果的罪魁祸首——Carmichael数。
+
+  所谓Carmichael数，就是能完全通过费马测试（注意是完全通过，不是概率性通过）但不是素数的数。所以，就算是把费马测试的次数增加到一千次一万次，这些数也会安然无恙地通过费马测试。
+
+  所以，因为Carmichael数的存在影响了我们的计数，因而真正的结果肯定要比104579大。比104579小的Carmichael数有（这个数列的下一个是115921）：
+
+  #+BEGIN_QUOTE
+  561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341, 41041, 46657, 52633, 62745, 63973, 75361, 101101
+  #+END_QUOTE
+
+  可以看到，有17个Carmichael数骗了我们，于是，从[[http://www.ysr.net.it-chiba.ac.jp/yashiro/sosu/][这里]]找到素数表，从104579再向后数17个偏移量，结果就出来了，我就不再去写程序求了。:-p
+
+  “标准答案”的素数判定原理和普通的循环求模判定差不多，只是稍做了一些优化，这里就不再介绍了。
+
 * Footnotes
 
 [fn:1] 关于费马小定理以及费马检查部分的内容来自SICP的1.2.6节，代码实现是我根据书上的Scheme实现来写了一个Elisp的版本。
