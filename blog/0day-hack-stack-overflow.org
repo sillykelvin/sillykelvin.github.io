@@ -1,0 +1,88 @@
+#+TITLE:       黑客档案：0day漏洞之简单溢出的利用
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2009-06-09 Tue
+#+URI:         /blog/%y/%m/%d/hack-using-stack-overflow/
+#+KEYWORDS:    hack, stack overflow
+#+TAGS:        :Security:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: security issue led by stack overflow
+
+*这是我进行博客搬家所找到的第一篇文章（实际上原博客分成了三篇来写），所谓的原博客，其实就是我自己的人人网（怎么样，够不专业吧:-D）。实际上，这篇文章毫无价值可言（除了针对我自己的收藏价值外），但就是这样一篇水文，从我当时写的字里行间，以及文章后面的评论来看，我当时心里是相当做作与炫耀的。现在，回头看看，我真是觉得羞愧。整篇文章，不过就是一个栈溢出导致的安全问题。知之愈多，便觉知之愈少，反过来，真是知之愈少，反觉知之愈多啊。*
+
+*以此文章警示自己，静水流深。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+* 原文的“上”篇
+
+  废话少说，首先来看下面一段简单的C程序：
+
+  #+BEGIN_SRC C
+  #include <stdio.h>
+  #include <string.h>
+  #define PASSWORD "1234567"    //定义密码，仅为测试，无实际意义
+
+  int check_password(char *password)  //用于判断密码是否正确
+  {
+       int result;
+       char offset[8];                          //没什么用，为溢出作准备
+       result = strcmp(password,PASSWORD);
+       strcpy(offset,password);          //同上
+       return result;
+  }
+
+  int main()
+  {
+       int not_valid;
+       char temp[128];
+       while(1)
+       {
+            printf("Input the password :");
+            gets(temp);   //此处同样有漏洞，只要你有足够耐心
+            not_valid = check_password(temp);
+            if(!not_valid)
+            {
+                 printf("Congratulations!");
+                 break;
+            }
+            else
+                 printf("Invalid password !\n");
+       }
+       return 0;
+  }
+  #+END_SRC
+
+  本程序用于让用户输入密码，只有输入为1234567时才会退出程序，否则会一直循环要求输入。
+
+  于是大多数人就想，那只有输入"1234567"时才会退出程序了，但是，试试输入"12345678"，发现程序提示密码正确并退出了，再输入"aaaaaaaa"，发现上面的事又发生了。
+
+  出了什么问题呢？难道是程序的逻辑错了？但是输入"1234"就会提示错误啊？那到底是怎么回事呢？最后来一句老话：欲知后事如何，且听下回分解。
+
+* 原文的“中”篇
+
+  现在来具体分析出现问题的原因。
+
+  来看函数check_password(char *password);中的相关定义：
+
+  : int result;
+  : char offset[8];
+
+  问题就在这里。在程序编译成exe文件后， =result= 和 =offset[8]= 的内存地址是连在一起的， =result= 将在 =offset[8]= 的“下面”。于是，问题就产生了，如果我们让 =offset[8]= 产生溢出，溢出部分将会覆盖 =result= 中的内容。如果溢出部分刚好将 =result= 中的内容覆盖成0，程序就会成功运行！而要将 =result= 中的内容置0，则需要将ASCII码的 =NULL= 写入 =result= ，而字符串的最后一位刚好是 =NULL= ！
+
+  似乎到这里所有的问题都已经解决了，即：写入8个字符，前8个将写入 =offset[8]= ，而最后默认附加的一位 =NULL= 将溢出到 =result= ，将 =result= 置0。
+
+  但当输入01234567，也是八个字符，按上面的分析，也是将 =result= 置0，但为什么程序会提示输入错误，要求重新输入呢？由此看来，并不是所有的八位字符串都行，这又是为什么呢？
+
+  又是那句老话：欲知后事如何，且听下回分解。
+
+* 原文的“下”篇
+
+  接着来讨论还未解决的问题，为什么输入01234567不会提示成功。
+
+  这是因为， =check_password(char *)= 函数中对 =result= 赋值采用的是 =strcmp()= 函数，01234567是小于1234567的，所以 =strcmp()= 函数会返回-1，导致 =result= 中的值为-1的补码0xFFFFFFFF，输入01234567只会将 =result= 覆盖成0xFFFFFF00，从而 =result= 的值不为0，也就不会成功了。
+
+  到此，所有的疑问都已解决，下次讨论，再会。
