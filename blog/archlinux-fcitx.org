@@ -1,0 +1,88 @@
+#+TITLE:       Archlinux上fcitx的折腾笔记
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-03-29 Fri
+#+URI:         /blog/%y/%m/%d/fix-fcitx-on-archlinux/
+#+KEYWORDS:    fcitx, archlinux, linux
+#+TAGS:        :Fcitx:Archlinux:Linux:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 在archlinux上折腾fcitx
+
+
+故事要从archlinux上最危险的命令—— =pacman -Syu= 说起。
+
+话说前两天习惯性地执行了 =pacman -Syu= 来更新archlinux。然后，然后就悲剧了。。我是使用五笔输入中文的选手（哈，我用五笔我骄傲 :-D），但发现fcitx默认输入法变成了拼音，虽然可以切换成五笔，但却没办法让英文输入和五笔共存，因为拼音是默认输入法，所以，你要么用 /拼音+五笔/ 的输入组合，要么用 /拼音+英文/ 的输入组合，稍微想一想就会知道蛋是多么痛。。
+
+我还忍受了一阵子的 /拼音+英文/ 组合，但发现五笔用多了，拼音输入实在不是我的菜，于是乎，折腾开始了。。
+
+* 降级
+
+  我的第一反应，是fcitx升级导致的，这可能是升级后的版本的bug，于是执行以下命令把找到的与fcitx相关的包通通给降级到4.2.7.4：
+
+  : $ cd /var/cache/pacman/pkg
+  : $ sudo pacman -U fcitx-4.2.7-4-x86_64.pkg.tar.xz
+  : $ sudo pacman -U fcitx-gtk3-4.2.7-4-x86_64.pkg.tar.xz
+  : $ sudo pacman -U fcitx-gtk2-4.2.7-4-x86_64.pkg.tar.xz
+  : $ sudo pacman -U fcitx-qt4-4.2.7-4-x86_64.pkg.tar.xz
+
+  输入 =fcitx -d= 启动fcitx，报错：
+
+  : (ERROR-1583 /build/src/fcitx-4.2.7/src/lib/fcitx/ime.c:281) IM: open /usr/lib/fcitx/fcitx-keyboard.so fail libicuuc.so.50: cannot open shared object file: No such file or directory
+
+  某个共享库找不到，但我看到这个共享库有一个较高的版本，于是，来个偷懒的办法，创建一个软链接看能不能蒙混过关：
+
+  : $ cd /usr/lib
+  : $ sudo ln -s libicuuc.so.51.1 libicuuc.so.50
+
+  继续出错：
+
+  : (ERROR-1634 /build/src/fcitx-4.2.7/src/lib/fcitx/ime.c:281) IM: open /usr/lib/fcitx/fcitx-keyboard.so fail /usr/lib/fcitx/fcitx-keyboard.so: undefined symbol: unorm_normalize_05
+
+  好吧，这个库的v51版本竟然不向后兼容v50版本，看来蒙不过去。。于是，查了一下这个库所在的包：
+
+  : $ pacman -Qo /usr/lib/libicuuc.so.51.1
+  : => /usr/lib/libicuuc.so.51.1 is owned by icu 51.1-1
+
+  看到这个库属于ICU包，那看来只有降级整个包到v50版本了。但根据archlinux的哲学，这种旧包它是不会保存的，还好我们有ARM（Archlinux Rollback Machine）。。。
+
+* 继续降级
+
+  从[[http://arm.konnichi.com/][ARM]]的 *extra* 仓库顺利找到了这个旧包 =icu-50.1.1-1-x86_64.pkg.tar.xz= ，于是迫不及待下载下来，用 =pacman -U= 降级安装。
+
+  心想这下总OK了吧，实事证明，我想多了，重启fcitx，继续报错：
+
+  : (ERROR-880 /build/src/fcitx-4.2.7/src/lib/fcitx/module.c:61) Module: open /usr/lib/fcitx/fcitx-vk.so fail libicule.so.51: cannot open shared object file: No such file or directory
+  : (ERROR-880 /build/src/fcitx-4.2.7/src/lib/fcitx/ui.c:191) UI: open /usr/lib/fcitx/fcitx-classic-ui.so fail libicule.so.51: cannot open shared object file: No such file or directory
+
+  又是找不到共享库。。在archlinux的[[https://www.archlinux.org/packages/extra/x86_64/icu/files/][网站]]上一通乱搜，发现这个找不到的共享库 =libicule.so.51= 属于ICU包的v51版本。。我心里的草泥马真是万千奔腾：见过有依赖的，但没见过这样依赖的，同时依赖于同一个包的两个不同的版本！！
+
+  另外还有一个悲剧我都不想提了，在降级ICU包之后，firefox立马就crash了。。
+
+* 终于。。
+
+  没辙了，于是，去 /archlinux-cn/ 的mailing-list里面来了一发。。
+
+  这个邮件组还是挺活跃和热心的，我描述了问题之后，就有人回，于是，按照提示，先把fcitx和相关的依赖包升级到最新版本，再运行了一下 =fcitx-diagnose= ，出来一大堆输出，有一行引起了我的注意：
+
+  #+BEGIN_QUOTE
+  **Your first (default) input method is pinyin instead of a keyboard input method. You may have trouble deactivate fcitx.**
+  #+END_QUOTE
+
+  邮件组里还有其他人说有可能是输入法的顺序错位，再看到这一行输出，估计可能就是输入法顺序错位了，于是打开 =~/.config/fcitx/profile= ，找到 =EnabledIMList= ，果然发现拼音放在第一个。。于是乎，把这个配置项改成下面这个样子（后面的内容省略了）：
+
+  : EnabledIMList=fcitx-keyboard-us:True,wbpy:True,wubi:True, ...
+
+  做了一下调整，把英文输入和五笔输入调到第一和第二的位置，后面的顺序就不需要怎么关心了，因为用不到。再重启一下fcitx，世界终于又美好起来了。 :-D
+
+--------------------------------------------------------------------------------
+
+=pacman -Syu= 真的是archlinux上最危险的命令，上面提到的这个输入法顺序，我自己是绝对不会改的，我也不太相信是别的程序改动了它，或者，某hacker入侵我的电脑然后蛋疼地去修改我的输入法顺序。。虽然我最终无法定位到底是什么原因，但还是把责任推给这条可怜的命令吧，至少是因为我执行了它之后，fcitx就表现不正常了。。
+
+最后来找几个“ =pacman -Syu= 是archlinux上最危险的命令”的例证：
+
+- 去年的[[https://www.archlinux.org/news/the-lib-directory-becomes-a-symlink/][/lib问题]]，很多人没看公告（我觉得大多数人在执行这个命令的时候，都是不会去archlinux的官方网站看公告的）就直接加上了 =--force= 选项，然后，他们就悲剧了，系统无法使用不说，还很难修复。。
+
+- [[http://www.soimort.org/posts/115][这位哥们]]，其中讲archlinux的部分，有写他因为这个命令导致的诸多悲剧。。
+
+- 我自己，不过和这上面两个比起来，我算是幸运的了。。
