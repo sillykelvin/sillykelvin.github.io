@@ -1,0 +1,31 @@
+#+TITLE:       windows平台JDK环境变量的设置
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2009-12-06 Sun
+#+URI:         /blog/%y/%m/%d/setup-jdk-on-windows/
+#+KEYWORDS:    jdk, windows, java
+#+TAGS:        :Java:Windows:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to setup jdk on windows platform
+
+
+*这是我第二个博客的第一篇文章，在发现人人网不适合写博客之后，于是把博客搬到百度空间（怎么样，要比人人网专业一点了吧 :-D），这是第一篇。*
+
+*同@@html:<a href="/blog/2009/06/09/hack-using-stack-overflow/">黑客档案：0day漏洞之简单溢出的利用</a>@@一样，这一篇基本也只具有针对我自己的纪意义，不管是如何地水，好歹，总算是一种成长历程。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+在windows平台下装了jdk后，我发现在cmd中运行 =java= 可以，但 =javac= ， =javah= 等都不行，后来百度一下才知道jdk安装时已经把java.exe拷贝到system32下面了，但javac和javah等却没有。原来如此！
+
+看来没办法偷懒了，只好打开环境变量，做以下工作：
+
+1. 新建，变量名为 =JAVA_HOME= ，变量值为JDK安装路径（该步可不要，但为了不在后面输入一大串字符串，故不要省，而且这也是推荐的）；
+
+2. 在path里面加 =%JAVA_HOME%\bin= （注意在前后是否需要加分号）；
+
+3. 新建CLASSPATH，值为 =.;%JAVA_HOME%\lib= （同样要注意前后的分号，前面的"."代表当前路径）。
+
+到此，基本配置已完成，在cmd中输入 =javac= ， =javah= 等已经有相应信息输出，而不是令人讨厌的“XXXX不是XXXX批处理程序或XXXX可执行文件了”。

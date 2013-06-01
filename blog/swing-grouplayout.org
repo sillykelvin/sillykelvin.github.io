@@ -1,0 +1,89 @@
+#+TITLE:       剖析GroupLayout can only be used with one Container at a time异常的出现原因及解决方法
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2010-06-09 Wed
+#+URI:         /blog/%y/%m/%d/swing-grouplayout-troubleshooting/
+#+KEYWORDS:    java, swing
+#+TAGS:        :Java:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: troubleshooting - grouplayout can only be used with one container at a time
+
+
+*这是我第二个博客其中的一篇文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+今天写一个小的Swing程序，使用 =GroupLayout= 布局时，出现了上述问题，出问题的代码大致如下：
+
+#+BEGIN_SRC java
+...
+GroupLayout mainLayout = new GroupLayout(this);
+setLayout(mainLayout);
+pack();
+setSize(500, 400);
+...
+#+END_SRC
+
+由于我的类继承了JFrame，所以上面的this指针是Container类型的，没有问题。
+
+代码看来没有问题，但在运行时却报了标题中所写的异常，像往常一样去Google了一下，居然没找到合适的解决方法！我汗啊，看来大家平时都不怎么用Swing做东西的，这只有我自己解决了。
+
+我尝试着修改了一下，将：
+
+: GroupLayout mainLayout = new GroupLayout(this);setLayout(mainLayout);
+
+改为：
+
+: GroupLayout mainLayout = new GroupLayout(getContentPane());
+: getContentPane().setLayout(mainLayout);
+
+结果成功运行了，没报错，好了，基本可以知道该怎么下手了。
+
+=getContentPane()= 方法：
+
+: return getRootPane().getContentPane();
+
+=getRootPane()= 方法：
+
+: return rootPane;
+
+再查看 =rootPane= ， =JRootPane= 类型，其 =getContentPane()= 方法 =return contentPane;= 是一个 =Container= ，好了，这算第一步。
+
+下面查看 =JFrame= 的构造方法，调用 =frameInit()= ，而 =frameInit()= 调用了 =setRootPane(createRootPane())= ， =setRootPane()= 不用说，看 =createRootPane()= ：
+
+: JRootPane rp = new JRootPane();
+
+果然是新new了一个rootPane！那么其中的Container肯定是新new的了，那就自然不是我自己的类，所以抛出标题中的异常现在可以理解一点了。
+
+接着来，单步调试，发现在pack()处抛出异常，步入后继续，得到其抛出异常的相关调用如下：
+
+: Window.pack()
+:   -> Frame.addNotify()
+:   -> Window.addNotify()
+:   -> Window.super.addNotify()
+:   -> Container.super.addNotify()
+:   -> Component.invalidate()
+:   -> Container.invalidate()
+:   -> LayoutManager2.invalidateLayout(this) （注：此处this指向JRootPane中新new的Container）
+:   -> GroupLayout.checkParent(Container)
+:   -> if (parent != host) {
+:          throw new IllegalArgumentException("GroupLayout can only be used with one Container at a time");
+:      }
+
+看见问题了，上面的host是new GroupLayout时传进去的，就是我自己写的类，而传给 =checkParent()= 的Container则是在JFrame中新new出来的JRootPane带的Container，二者根本不是一个类，自然会抛出异常了，不过从这个问题也说明了一点，一个GroupLayout是不能让两个Container共用的。
+
+异常出现原因找到了，问题也就容易解决了，保证：
+
+: GroupLayout layout = new GroupLayout(xxx1);
+: xxx2.setLayout(mainLayout);
+
+这两句中的xxx1和xxx2为同一个Container即可。
+
+--------------------------------------------------------------------------------
+
+附：文中相关类的继承关系
+
+我自己的类 -> JFrame -> Frame -> Window -> Container -> Component
