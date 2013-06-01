@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Archlinux上fcitx的折腾笔记 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="在archlinux上折腾fcitx" />
+    <meta name="keywords" content="fcitx, archlinux, linux" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>Archlinux上fcitx的折腾笔记</h1>
+        <p>
+故事要从archlinux上最危险的命令—— <code>pacman -Syu</code> 说起。
+</p>
+
+<p>
+话说前两天习惯性地执行了 <code>pacman -Syu</code> 来更新archlinux。然后，然后就悲剧了。。我是使用五笔输入中文的选手（哈，我用五笔我骄傲 :-D），但发现fcitx默认输入法变成了拼音，虽然可以切换成五笔，但却没办法让英文输入和五笔共存，因为拼音是默认输入法，所以，你要么用 <i>拼音+五笔</i> 的输入组合，要么用 <i>拼音+英文</i> 的输入组合，稍微想一想就会知道蛋是多么痛。。
+</p>
+
+<p>
+我还忍受了一阵子的 <i>拼音+英文</i> 组合，但发现五笔用多了，拼音输入实在不是我的菜，于是乎，折腾开始了。。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">降级</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+我的第一反应，是fcitx升级导致的，这可能是升级后的版本的bug，于是执行以下命令把找到的与fcitx相关的包通通给降级到4.2.7.4：
+</p>
+
+<pre class="example">
+$ cd /var/cache/pacman/pkg
+$ sudo pacman -U fcitx-4.2.7-4-x86_64.pkg.tar.xz
+$ sudo pacman -U fcitx-gtk3-4.2.7-4-x86_64.pkg.tar.xz
+$ sudo pacman -U fcitx-gtk2-4.2.7-4-x86_64.pkg.tar.xz
+$ sudo pacman -U fcitx-qt4-4.2.7-4-x86_64.pkg.tar.xz
+</pre>
+
+<p>
+输入 <code>fcitx -d</code> 启动fcitx，报错：
+</p>
+
+<pre class="example">
+(ERROR-1583 /build/src/fcitx-4.2.7/src/lib/fcitx/ime.c:281) IM: open /usr/lib/fcitx/fcitx-keyboard.so fail libicuuc.so.50: cannot open shared object file: No such file or directory
+</pre>
+
+<p>
+某个共享库找不到，但我看到这个共享库有一个较高的版本，于是，来个偷懒的办法，创建一个软链接看能不能蒙混过关：
+</p>
+
+<pre class="example">
+$ cd /usr/lib
+$ sudo ln -s libicuuc.so.51.1 libicuuc.so.50
+</pre>
+
+<p>
+继续出错：
+</p>
+
+<pre class="example">
+(ERROR-1634 /build/src/fcitx-4.2.7/src/lib/fcitx/ime.c:281) IM: open /usr/lib/fcitx/fcitx-keyboard.so fail /usr/lib/fcitx/fcitx-keyboard.so: undefined symbol: unorm_normalize_05
+</pre>
+
+<p>
+好吧，这个库的v51版本竟然不向后兼容v50版本，看来蒙不过去。。于是，查了一下这个库所在的包：
+</p>
+
+<pre class="example">
+$ pacman -Qo /usr/lib/libicuuc.so.51.1
+=&gt; /usr/lib/libicuuc.so.51.1 is owned by icu 51.1-1
+</pre>
+
+<p>
+看到这个库属于ICU包，那看来只有降级整个包到v50版本了。但根据archlinux的哲学，这种旧包它是不会保存的，还好我们有ARM（Archlinux Rollback Machine）。。。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">继续降级</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+从<a href="http://arm.konnichi.com/">ARM</a>的 <b>extra</b> 仓库顺利找到了这个旧包 <code>icu-50.1.1-1-x86_64.pkg.tar.xz</code> ，于是迫不及待下载下来，用 <code>pacman -U</code> 降级安装。
+</p>
+
+<p>
+心想这下总OK了吧，实事证明，我想多了，重启fcitx，继续报错：
+</p>
+
+<pre class="example">
+(ERROR-880 /build/src/fcitx-4.2.7/src/lib/fcitx/module.c:61) Module: open /usr/lib/fcitx/fcitx-vk.so fail libicule.so.51: cannot open shared object file: No such file or directory
+(ERROR-880 /build/src/fcitx-4.2.7/src/lib/fcitx/ui.c:191) UI: open /usr/lib/fcitx/fcitx-classic-ui.so fail libicule.so.51: cannot open shared object file: No such file or directory
+</pre>
+
+<p>
+又是找不到共享库。。在archlinux的<a href="https://www.archlinux.org/packages/extra/x86_64/icu/files/">网站</a>上一通乱搜，发现这个找不到的共享库 <code>libicule.so.51</code> 属于ICU包的v51版本。。我心里的草泥马真是万千奔腾：见过有依赖的，但没见过这样依赖的，同时依赖于同一个包的两个不同的版本！！
+</p>
+
+<p>
+另外还有一个悲剧我都不想提了，在降级ICU包之后，firefox立马就crash了。。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">终于。。</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+没辙了，于是，去 <i>archlinux-cn</i> 的mailing-list里面来了一发。。
+</p>
+
+<p>
+这个邮件组还是挺活跃和热心的，我描述了问题之后，就有人回，于是，按照提示，先把fcitx和相关的依赖包升级到最新版本，再运行了一下 <code>fcitx-diagnose</code> ，出来一大堆输出，有一行引起了我的注意：
+</p>
+
+<blockquote>
+<p>
+<b><b>Your first (default) input method is pinyin instead of a keyboard input method. You may have trouble deactivate fcitx.</b></b>
+</p>
+</blockquote>
+
+<p>
+邮件组里还有其他人说有可能是输入法的顺序错位，再看到这一行输出，估计可能就是输入法顺序错位了，于是打开 <code>~/.config/fcitx/profile</code> ，找到 <code>EnabledIMList</code> ，果然发现拼音放在第一个。。于是乎，把这个配置项改成下面这个样子（后面的内容省略了）：
+</p>
+
+<pre class="example">
+EnabledIMList=fcitx-keyboard-us:True,wbpy:True,wubi:True, ...
+</pre>
+
+<p>
+做了一下调整，把英文输入和五笔输入调到第一和第二的位置，后面的顺序就不需要怎么关心了，因为用不到。再重启一下fcitx，世界终于又美好起来了。 :-D
+</p>
+
+<hr/>
+
+<p>
+<code>pacman -Syu</code> 真的是archlinux上最危险的命令，上面提到的这个输入法顺序，我自己是绝对不会改的，我也不太相信是别的程序改动了它，或者，某hacker入侵我的电脑然后蛋疼地去修改我的输入法顺序。。虽然我最终无法定位到底是什么原因，但还是把责任推给这条可怜的命令吧，至少是因为我执行了它之后，fcitx就表现不正常了。。
+</p>
+
+<p>
+最后来找几个“ <code>pacman -Syu</code> 是archlinux上最危险的命令”的例证：
+</p>
+
+<ul class="org-ul">
+<li>去年的<a href="https://www.archlinux.org/news/the-lib-directory-becomes-a-symlink/">/lib问题</a>，很多人没看公告（我觉得大多数人在执行这个命令的时候，都是不会去archlinux的官方网站看公告的）就直接加上了 <code>--force</code> 选项，然后，他们就悲剧了，系统无法使用不说，还很难修复。。
+</li>
+
+<li><a href="http://www.soimort.org/posts/115">这位哥们</a>，其中讲archlinux的部分，有写他因为这个命令导致的诸多悲剧。。
+</li>
+
+<li>我自己，不过和这上面两个比起来，我算是幸运的了。。
+</li>
+</ul>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-03-29</span>
+        <span title="last modification date" class="post-info">2013-06-01</span>
+        <span title="tags" class="post-info"><a href="/tags/fcitx/">Fcitx</a>, <a href="/tags/archlinux/">Archlinux</a>, <a href="/tags/linux/">Linux</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/03/29/fix-fcitx-on-archlinux/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/03/29/fix-fcitx-on-archlinux/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
