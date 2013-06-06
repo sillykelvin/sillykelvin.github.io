@@ -1,0 +1,83 @@
+#+TITLE:       ubuntu10.10下显卡驱动的安装及3D特效的开启
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-04-04 Mon
+#+URI:         /blog/%y/%m/%d/install-nvidia-video-driver-on-ubuntu/
+#+KEYWORDS:    nvidia video driver, ubuntu, linux
+#+TAGS:        :Ubuntu:Linux:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to install nvidia video driver on ubuntu
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+ubuntu自带的显卡驱动不足以开启特效，所以要自己手动安装显卡驱动，但Linux下安装显卡驱动非常麻烦，尤其是NVIDIA的显卡。我的本子的显卡是NVIDIA GeForce 8600M GS（有点老，^_^），以前还是在ubuntu9.10的时候手动安装成功过。我想10.10应该和以前一样，于是就按以前的步骤：
+
+1. 下载显卡驱动
+
+   这个就不用说了，进NVIDIA官网，找到自己显卡对应的型号，然后下载Linux版本的即可，下载下来的是一个类似于 /nvidia-xxx.xxx.run/ 的可执行文件，为了方便，改个短点的名字，就叫 /nv.run/ 好了
+
+2. 关闭X window
+
+   NVIDIA显卡驱动的安装不能在X window环境下进行，会报错，必须关闭X window进入终端，先按 *Ctrl+Alt+F1* 切换到第一个终端（ubuntu默认有八个终端，X window运行在第七终端，所以这里按Ctrl+Alt+F2/F3切换到第二、第三终端亦可），进入终端后，输入用户名和密码登录，然后执行如下命令关闭X window：
+
+   : sudo /etc/init.d/gdm stop
+
+3. 安装显卡驱动
+
+   关闭X window后，再用cd命令跳到下载驱动的目录，运行如下命令即可完成显卡安装：
+
+   : sudo sh nv.run
+
+   然后它会出来一个图形界面，虽然简陋了点，但聊胜于无吧，按它的提示，一步一步执行就可以了。
+
+4. 重新启动X window
+
+   安装完后，再运行以下命令启动X window：
+
+   : sudo /etc/init.d/gdm start
+
+以上是我在ubuntu9.10上成功安装的过程，但我这次照搬的时候，却在第三步出现了错误，貌似是说Linux内核版本出了问题，但内核版本这问题并不是我能解决的，所以，这条路算是走不通了。
+
+--------------------------------------------------------------------------------
+
+后来，我在ubuntu的论坛上看到另外一种方法，给ubuntu添加更新源，然后通过ubuntu自动安装，不用手动安装。经我亲手试验，证明可用：
+
+1. 给ubuntu添加PPA源：
+
+   : sudo add-apt-repository ppa:ubuntu-x-swat/x-updates
+
+2. 更新源列表：
+
+   : sudo apt-get update
+
+3. 安装显卡驱动：
+
+   : sudo apt-get install nvidia-current nvidia-settings
+
+   ubuntu会自己下载软件包并进行安装，等安装完后重启电脑即可。
+
+重启后在 /System->Administration/ 里面有一个 /NVIDIA X Server Settings/ ，打开后是如下界面，就代表安装成功了：
+
+@@html:<img src="http://pic002.cnblogs.com/images/2011/285309/2011040422534377.png" />@@
+
+NVIDIA显卡的设置界面
+
+（说明：其实这也不是代表第一种方法一定不能成功，具体还是要看显卡和系统版本，可以两种方法都试一试，当然第二种方法要简单很多，^_^）
+
+（我一个同学在我的怂恿下也装了ubuntu  ^_^，他的显卡是ATI的，也是下载的.run文件安装，结果他连桌面环境都不用退出就安装成功了，我当时就泪奔了，显卡比显卡，也能气死人啊）
+
+--------------------------------------------------------------------------------
+
+下面，就可以开启3D桌面特效了：
+
+首先要安装用于开启3D特效的软件，叫 *compizconfig-settings-manager* ，执行如下命令：
+
+: sudo apt-get install compizconfig-settings-manager
+
+安装好后，从 /System->Preferences/ 里面打开，里面的每个设置都有详细的说明，可以根据自己的喜好进行设置，这里我就不详细写了。本来传了几张效果图，但太大了，就不贴在这里了。
