@@ -1,0 +1,65 @@
+#+TITLE:       Emacs23.3在ubuntu10.10下的手动编译与安装
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-04-05 Tue
+#+URI:         /blog/%y/%m/%d/compile-emacs-on-ubuntu/
+#+KEYWORDS:    emacs, ubuntu, linux
+#+TAGS:        :Emacs:Linux:Ubuntu:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to compile and install emacs on ubuntu
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+其实本来是打算用 =apt-get= 安装emacs的，但ubuntu在执行更新，并且由于最近实验室网速极慢，所以还得很长时间，心想算了，用同学的电脑去GNU的网站上下一个Linux版本的Emacs好了，同学电脑的系统是windows，虽然实验室网速慢，但在windows下面迅雷的速度还是很给力的（^_^）。
+
+下载的是一个 /emacs-23.3.tar.gz/ 的压缩包（迅雷就是给力啊，几分钟就搞定了），解压后一看，我就泪奔了，里面全是源文件，要自己编译。以前都是用 =apt-get= 来装软件的，没想到会有今天的下场。。。算了，自己编译就自己编译吧，自己动手，丰衣足食。
+
+看解压出来的文件夹里的内容，感觉编译安装什么的应该就是大名鼎鼎的 =make= 来负责的，这个工具倒是从来没用过，不过没吃过猪肉，也看过猪走路嘛，虽然没用过，对它还是了解一些的，反正又不要自己编写makefile，所以应该还是可以搞定的。
+
+废话少说，打开一个终端，cd到刚才解压的目录，运行 =./configure= 命令，运行了一阵子，我正感觉良好呢，它却报错了，如下：
+
+#+BEGIN_QUOTE
+You seem to be running X, but no X development libraries were found. You should install the relevant development files for X and for the toolkit you want, such as Gtk+, Lesstif or Motif. Also make sure you have development files for image handling, i.e. tiff, gif, jpeg, png and xpm. If you are sure you want Emacs compiled without X window support, pass --without-x to configure.
+#+END_QUOTE
+
+看来编译这个并不是那么容易的，上面这段错误提示的大意是没有装GTK+等图形开发库，如果不想在图形界面下使用Emacs，可以使用 =--without-x= 选项进行编译（这不废话吗，能用图形界面却不用，难道要回到原始的字符界面？）
+
+那就装GTK+吧，命令如下（注意是GTK用于开发的开发库）：
+
+: sudo apt-get install libgtk2.0-dev
+
+装好后，再运行 =./configure= ，没想到又报错了，如下：
+
+#+BEGIN_QUOTE
+configure: error: The following required libraries were not found:
+libXpm libjpeg libgif/libungif libtiff
+
+Maybe some development libraries/packages are missing? If you don't want to link with them give --with-xpm=no --with-jpeg=no --with-gif=no --with-tiff=no as options to configure
+#+END_QUOTE
+
+好吧，几个图像开发库也要装，继续：
+
+: sudo apt-get install libxpm-dev
+: sudo apt-get install libjpeg62-dev
+: sudo apt-get install libgif-dev
+: sudo apt-get install libtiff4-dev
+
+然后再运行 =./configure= ，这下终于可以正常地跑到结束了，看输出的信息，该生成的文件都生成了。于是，运行 =make= ，再运行 =sudo make install= ，经过一段时间后，编译结束，但中间报了两个error，我没管它，启动emacs，结果控制台来了一句 /emacs: Cannot open termcap database file/ ，然后就退出了。这次我真想吐血呀，上面编译时的错误我还知道是缺少库，但这个运行时错误就真不知道是什么原因了。还好有狗，放狗一搜，还真有遇到这个问题的前辈，原来仍然是少库，少了个叫 =libncurses5-dev= 库，于是，运行：
+
+: sudo apt-get install libncurses5-dev
+
+安装好这个库，再重新编译。
+
+因为前面编译过，所以运行 =make clean= ， =make distclean= 来清理一下，再重新运行 =./configure= ， =make= ， =sudo make install= ，这次是彻底没错误了，貌似中间连一个warning都没看到。好了，再到终端里敲emacs，这次这位编辑器的大神终于露出了他的真容，不容易啊。不过大神的滚动条在窗口左边，这实在是让我十分地蛋不定。。。
+
+附一张在字符界面运行的截图（如果不想启动Emacs图形界面，请使用emacs -nw启动Emacs）：
+
+@@html:<img src="http://pic002.cnblogs.com/images/2011/285309/2011040523133374.png" />@@
+
+怎么样，看着很有感觉吧，嘿嘿^_^
