@@ -1,0 +1,206 @@
+#+TITLE:       GRUB2英文文档的部分翻译
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-04-08 Fri
+#+URI:         /blog/%y/%m/%d/grub2-doc-translation/
+#+KEYWORDS:    grub2, linux, ubuntu
+#+TAGS:        :Ubuntu:Linux:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: chinese translation of grub2 doc
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+在@@html:<a href="/blog/2011/04/06/modify-dual-system-boot-sequence/">上一篇拙作</a>@@中，本人卖了一个关子，其实这个很简单，如果你坚持看完[[https://help.ubuntu.com/community/Grub2]]这个介绍GRUB2的部分，你就已经全懂了，或者看下面这部分，你也会懂的。 ^_^
+
+下面是我对这个页面选择性地进行的翻译（另外一部分没有翻译是因为我觉得对常规用户用处不大。如果你需要的功能在下面的翻译中没有找到，请移步前面的网址去找找看有没有想要的答案 ^_^）。
+
+另：感觉这个页面貌似是好几个人合作写的，很多地方前后重复，而且还有些地方前后冲突，不过不影响阅读，更不影响用户把自己的电脑当小白鼠进行试验～～～ :D
+
+--------------------------------------------------------------------------------
+
+GRUB2指GRUB 1.98或者更高的版本，GRUB 0.97版本则被称为GRUB。GRUB是 /GRand Unified Bootloader/ 的简写，从ubuntu9.10(Karmic Koala)开始，GRUB2就成为其默认的启动加载器(boot loader)，负责在开机的时候引导不同的操作系统（如果你的电脑是多系统的话）。可以用 =grub-install -v= 来检测GRUB的版本。GRUB 1.99版本将会作为ubuntu11.04默认的启动加载器，这里讲的主要是针对GRUB 1.98版本。
+
+* 改进
+
+  GRUB2相对于GRUB的主要新特性包括：
+
+  - 脚本已经支持条件语句和函数
+  - 动态模块载入
+  - 救援模式
+  - 用户自定义菜单
+  - 主题
+  - 图形启动菜单和提升的splash capability（这个我真不知道该怎么翻译）
+  - 直接从硬盘启动LiveCD ISO映象
+  - 新的配置文件结构
+  - 非x86平台支持（如PowerPC）
+  - UUID的通用支持（不只是ubuntu）
+
+* GRUB vs GRUB2
+
+  GRUB2默认的菜单和GRUB看起来是一样的，但在这相同的表面之下，两者却拥有众多的不同。
+
+  - 如果只有一个ubuntu系统的话，GRUB2将直接引导至login提示界面或者直接进入桌面，不会再显示菜单
+  - 在启动过程中按住Shift来显示菜单（GRUB则是按ESC）
+  - 不再有/boot/grub/menu.lst文件，取而代之的是/boot/grub/grub.cfg文件
+  - 就算是root用户，也不建议编辑/boot/grub/grub.cfg主菜单文件
+  - 如果有系统更新，内核的添加或者移除，又或者用户运行 =update-grub= 命令，则grub.cfg文件就会被重新写入
+  - 可启动的内核清单是自动从/boot目录里的文件生成的，并不是手动编辑清单文件生成的，可以运行 =update-grub= 来更新启动清单
+  - 用户可以使用/etc/grub.d/40_custom这个自定义文件，这个文件里面用户可以放置他们自己的操作系统引导项
+  - /etc/default/grub是用来改变启动菜单的配置文件
+  - 有很多文件可以配置启动菜单，/etc/default/grub，以及/etc/grub.d/文件夹里面的所有文件
+  - 分区的数字顺序发生了改变，以前第一个分区是0，现在是1。但现在第一个设备仍然是hd0，尽管这是可以在/boot/grub/device.map里面改变的
+  - 不管 =update-grub= 是不是被执行过，都自动搜索其它的操作系统，比如windows
+  - 配置文件改动后必须运行 =update-grub= 命令才会生效
+
+* 安装
+
+  这部分就省略了，因为从9.10开始就是GRUB2了，我想应该没人还在用9.04以前的版本，如果需要请前往原文观摩。 ^_^
+
+* 文件结构
+
+  GRUB2使用了改进的文件和目录体系，GRUB的menu.lst文件也不再被使用。
+
+  GRUB2主要使用的目录和文件主要包括：
+
+** /boot/grub/grub.cfg
+
+   这个是最接近GRUB的/boot/grub/menu.lst的文件，它包含了GRUB2的启动菜单信息，但不像menu.lst，它不建议被直接编辑。
+
+   - grub.cfg中每个部分的信息都使用###BEGIN描述，并且其中的信息是根据/etc/grub.d目录下的文件生成的
+   - 由root用户运行 =update-grub= 命令更新grub.cfg
+   - 如果有内核安装或者移除，或者其它可以改变grub.cfg内容的更新，都会导致grub.cfg自动更新
+   - 默认的，不管什么时候执行 =update-grub= 命令，grub.cfg都是“只读”的，这是为了防止用户手动编辑它
+
+   用户应该会注意到/boot/grub目录下会有很多的.mod文件，这些代表modular nature（汗，真心不知道什么意思），它们由GRUB按需要加载。
+
+** /etc/default/grub
+
+   这个文件包含了详细的配置信息，具有root权限的用户可以编辑它，并且执行更新指令后会将其合并到grub.cfg文件。
+
+** /etc/grub.d/（目录）
+
+    - 这个目录内的文件在执行 =update-grub= 命令期间会被读取，它们包含的指令会被合并到grub.cfg文件
+    - 启动菜单项在grub.cfg文件中的先后顺序是由这个目录中的文件执行顺序来决定的，具有较小数字前缀的文件会先被执行，如10_linux会在20_memtest之前执行，字母开头的文件会在数字开头的文件之后执行
+    - 用户自定义菜单项可以在40_custom中添加，或者在新建文件中添加，根据文件名，40_custom定义的菜单项会在菜单的最底端出现
+    - 在执行 =update-grub= 命令期间，只有可执行文件才会生成信息到grub.cfg文件
+
+    该目录默认的文件有：
+
+    - *00_header* ：设置启动的一些特性，如图形界面，默认启动项，超时时间等。这些设置是由/etc/default/grub里面的一些信息导入的。用户通常不需要改变这个文件
+    - *05_debian_theme* ：这个文件设置启动菜单的背景图片，文字颜色，选择高亮颜色及主题。由于默认没有背景图片，所以该文件设置了一个单色的主题来显示启动菜单。如何设置字体和背景图片将会在下面的部分讲到
+    - *10_hurd* ：定位Hurd内核，目前用不上该文件
+    - *10_linux* ：定位用户硬盘上目前正在使用的操作系统内核。它取得内核的相关信息并且把这些内核的名字添加到启动菜单。 /注意：如果你不想你所有的旧内核都出现在菜单上，那就把它们相关的文件从/boot里移走/
+    - *20_memtest86+* ：搜索/boot/memtest86+.bin并且把它添加到启动菜单。目前这个选项出不出现在启动菜单里都无所谓。如果要禁止这个菜单项，把该文件里的可执行代码注释掉，再运行 =update-grub= 即可
+    - *30_os-prober* ：这个文件搜索Linux和其它的操作系统。搜索的结果会加到grub.cfg里面去。这个文件分成了四部分，分别代表了不同的操作系统类型：windows，Linux，OSX，Hurd。这个文件中的变量决定了菜单中最终显示的名字。如果用户熟悉脚本编程，就可以改变这些变量值来改变菜单项的显示名称。该文件默认忽略任何处理dmraid信号的风险，这可以利用命令dmraid -r -c列举出来
+    - *40_custom* ：这个文件是一个添加用户自定义菜单项的模板，文件中"exec tail -n +3 $0"这一行以下的内容，包括注释，在执行 =update-grub= 后都会被没有改动地直接添加到grub.cfg文件
+
+* 配置GRUB2
+
+** /etc/default/grub
+
+   这个是可以让用户修改来改变GRUB默认设置的配置文件，以下是可以由用户编辑的变量：
+
+   - GRUB_BACKGRUOND：设置背景图片，要求输入图片的全路径
+   - GRUB_DEFAULT：设置默认的菜单项，它的值可以是数字，可以是完整的名称引用，也可以是"saved"
+     - GRUB_DEFAULT=0：用菜单项在grub.cfg中出现的位置来设置默认菜单项，第一个菜单项是0，第二个是1，依此类推
+     - GRUB_DEFAULT="xxxx"：一个准确的菜单项名字，包括引号，这种情况下，菜单项在grub.cfg中的位置可以不用考虑，例如：GRUB_DEFAULT="Ubuntu, Linux 2.6.31-9-generic"
+     - GRUB_DEFAULT="saved"：（略）
+   - GRUB_SAVEDEFAULT：如果设置成true，则下次启动的时候，就会选择上次启动选择的系统作为默认的启动项（如果/boot目录在LVM分区或者RAID上，则这一项不起作用）（LVM：逻辑分区；RAID：磁盘阵列）
+   - GRUB_HIDDEN_TIMEOUT：这个用于设置一个不出现GRUB2菜单的画面的显示时间，在此期间，用户可以按任意键让菜单显示出来（后面的部分略）
+   - GRUB_HIDDEN_TIMEOUT_QUIET：（略）
+   - GRUB_TIMEOUT=10：设置菜单的显示时间，设置成-1的话就会一直显示菜单，除非用户手动选择了一个操作系统启动
+   - GRUB_DISTRIBUTOR：（略）
+   - GRUB_CMDLINE_LINUX：（略）
+   - GRUB_CMDLINE_LINUX_DEFAULT：（略）
+   - #GRUB_TERMINAL：取消这行注释，可以禁用图形终端，回到字符界面
+   - #GRUB_DISABLE_LINUX_UUID：如果不想在启动时GRUB传递"root=UUID=xxx"的参数给即将引导的Linux内核的话，可以取消这行注释
+   - #GRUB_GFXMODE=640x480：设置启动菜单的分辨率，但设置的分辨率要显卡支持才行
+     - 小窍门：把分辨率设置得和操作系统一样可以减少开机时间
+     - 用户可以添加颜色深度，尽管这不是必需的，例如：1280x1024x32
+     - 用户可以设置多个分辨率，如果GRUB2不能使用第一个分辨率，它会使用第二个，多个分辨率用逗号隔开，如：1280x1024x16,800x600x24,640x480
+     - 如果使用了背景图片，注意分辨率要和背景图片的尺寸一样
+     - 如果调整分辨率后更新grub.cfg时出现了"not found"的消息提示，试着改变或者增加颜色深度
+     - 在GRUB2的命令行使用vbeinfo命令会显示可用的分辨率列表，在显示启动菜单的时候敲一下"c"键就可以进入GRUB2的命令行
+     - 如果这行被注释了或者用户设置的分辨率没有一个是可用的话，GRUB2就会使用/etc/grub.d/00_header中的默认设置
+   - GRUB_DISABLE_LINUX_RECOVERY：取消注释就可以禁掉启动菜单中的“恢复模式”菜单项
+   - GRUB_INIT_TUNE="480 440 1"：取消注释就可以在启动菜单显示之前发出蜂鸣声
+
+   另外可以加进去的变量：
+
+   GRUB_DISABLE_OS_PROBER=true：加了这个后，就不会再检查其它分区的其它系统，包括windows，Linux，OSX，Hurd。
+
+* Boot Display Behavior
+
+  GRUB2是在加载任何操作系统之前载入内存的，它是按最低需求载入的模块化组件。菜单显示的样式由/etc/default/grub中的设置决定。
+
+** Initial Default
+
+   如果没有检测到别的操作系统， GRUB2会直接引导进入默认的操作系统，并且也不会显示启动菜单；如果检测到其它操作系统的话，才显示启动菜单。
+
+** Timed Display
+
+   启动菜单将显示预定的超时时间，如果超过预定的超时时间用户没有动作，就会启动默认的系统。用户可以通过上下箭头来手动选择操作系统，然后按Enter进入，一旦用户有输入，设定的超时时间倒计时就会停止。
+
+** Hidden（略）
+
+** Saved（略)
+
+** Last Boot Failed or Boot into Recovery Mode
+
+   如果上次启动失败或者是以恢复模式启动的，启动菜单就会一直被显示直到用户作了选择，前面设定的超时时间在这里不起作用，要改变这个设置的话，需要修改/etc/grub.d/00_header文件里的内容。
+
+* 用户自定义菜单项（略）
+
+* 背景图片和主题
+
+  GRUB2设置背景图片只需要两步：选择一幅图像，然后选择字体颜色。注意：设置背景图片需要GRUB 1.98或者更高的版本，对应的ubuntu版本是10.04或者更高。
+
+  GRUB2的背景图片由 =GRUB_BACKGROUND= 变量控制，打开 */etc/default/grub* 文件，把这个变量修改成如下形式：
+
+  : GRUB_BACKGROUND=/usr/share/images/desktop-base/moreblue-orbit-grub.png
+
+  把等号后面的路径换成你的图片的位置的正确路径即可。
+
+  *注意：tag，png，jpeg（仅限8位）可以使用，图片颜色只能是RGB模式，索引模式的图片则不能显示。*
+
+  设置好后，运行 =update-grub= 来更新grub.cfg，如果添加的图片没有问题，终端就会显示出"Found background image..."的消息，如果没显示这条消息，就说明图片设置不成功。
+
+  如果图片不能正确显示，试着检查以下内容：
+
+  - /etc/default/grub中的路径和文件名是否正确
+  - 图片的尺寸是否和设置的分辨率相配，格式是否正确（tga，png，8位jpg）
+  - 图片颜色模式是RGB模式，而不是索引颜色
+  - /etc/default/grub中的console模式是否启用
+  - 在修改/etc/default/grub后必须要执行 =update-grub= 以更新grub.cfg文件
+
+* 设置菜单字体和高亮颜色
+
+  这些设置包含在/etc/grub.d/05_debian_theme文件里面，具体要修改哪些部分依赖于是否选择了背景图片。
+
+  如果选择了背景图片：
+
+  - 定位到和 =if test -e ${f}; then= 对应的else分支，改变WALLPAPER为GRUB_BACKGROUND对应的路径。被选中的菜单项的颜色由COLOR_HIGHLIGHT决定，未被选中的菜单项的颜色由COLOR_NORMAL决定。
+
+  如果没有选择背景图片：
+
+  - 修改set_mono_theme部分：被选中的菜单项的颜色由menu_color_highlight决定，未被选中的菜单项的颜色由menu_color_normal决定，例如： =set menu_color_normal=black/black= ，第一个颜色是文字颜色，第二个颜色是背景颜色；如果第二个颜色选择的是black，那么高亮的行会成为透明的，并且只有文字会改变颜色。
+
+    小提示：black是GRUB2默认的透明颜色，如果使用了背景图片，请只改变第一个颜色而不要改变第二个（如：xxxxx/black），如果改变了第二个颜色，那么背景颜色会覆盖在背景图片上面。
+
+    GRUB2可用的颜色有：black, blue, brown, cyan, dark-gray, green, light-cyan, light-blue, light-green, light-gray, light-magenta, light-red, magenta, red, white, yellow.
+
+  小提示：为了省去重启电脑来检查颜色设置的麻烦，用户可以在启动时进入GRUB2命令行进行设置，并且可以立即看到这些改变。
+
+  - 重启，在GRUB2的菜单出来的时候，按c键进入GRUB2的命令行
+  - 试验不同的颜色搭配，采用如下命令
+  - set color_normal=第一种颜色/black 或者 set color_highlight=第一种颜色/第二种颜色，文字颜色会立即改变
+  - 如果试验完成，按ESC回到启动菜单
+  - 如果不满意，再到命令行继续试验
+  - 记住你想要的颜色搭配，进入系统后编辑/etc/grub.d/05_debian_theme，把颜色设置成你刚经过试验后觉得满意的颜色
+  - 保存，执行 =update-grub= 更新grub.cfg文件
