@@ -1,0 +1,65 @@
+#+TITLE:       扯一下关于魔兽改键的蛋
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-06-13 Thu
+#+URI:         /blog/%y/%m/%d/warkey/
+#+KEYWORDS:    warcraft, MFC, C++, windows
+#+TAGS:        :Windows:C++:Misc:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: windows keyboard hook
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+五一放了几天，难得不用呆在实验室，于是就去了趟将来工作的城市，四处走了走，感觉还不错，但这只会让我心中更加纠结，唉！
+
+算了，不说废话了，有半个月没写博客了，其实也不是没东西可写，反而是要写的太多了，不知道从哪里写起，刚好今天解决了一个很简单但很难发现的问题，于是心血来潮，就写了上来。
+
+最近这几天在写一个魔兽改键的小插件，虽然网上的一些改键已经很完美了，但总感觉有一些地方不合自己的胃口，再加上班上人玩DOTA挺多的，所以就打算自己写一个给班上的人用。技术用的是MFC，当然还有Windows API，以前从来没用MFC，这次就当成练手吧。
+
+话说这个问题是这样的：一同学玩DOTA用影魔，他把影压Ｃ改成R，把放魔瓶的小键盘７改成Ｃ，从理论来讲是可以的，但用的时候发现，按一下Ｃ本来应该只是喝魔瓶的，但同时也施放了影压Ｃ炮。也就是相当于按了两下按键，第一下是正常的改过的按键，第二下是原来的未改过的按键。
+
+玩魔兽并懂得改键原理的同学大概知道，改键其实是通过键盘钩子和消息重定义来完成的，先用键盘钩子钩住键盘消息，再把消息改成想要改的键就行了，我的处理改键过程的函数大致如下：
+
+#+BEGIN_SRC C
+LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+    CWarKeyDlg* pDlg = (CWarKeyDlg*)AfxGetApp()->m_pMainWnd;
+    if(nCode == HC_ACTION && wParam == WM_KEYDOWN)
+    {
+        LPKBDLLHOOKSTRUCT pKB = (LPKBDLLHOOKSTRUCT)lParam;
+        //这里省略了其它一些处理过程
+         DWORD srcKey = pDlg->GetSrcKey(pKB->vkCode);
+        //如果存在改键，就用SendMessage()函数来改键
+         if(srcKey != NULL)
+        {
+            ::SendMessage(pDlg->GetWarCraftWnd(), WM_KEYDOWN, srcKey, 0);
+            ::SendMessage(pDlg->GetWarCraftWnd(), WM_KEYUP, srcKey, 0);
+            return 0;
+        }
+        return CallNextHookEx(pDlg->GetHook(), nCode, wParam, lParam);
+    }
+    return CallNextHookEx(pDlg->GetHook(), nCode, wParam, lParam);
+}
+#+END_SRC
+
+实际上这个函数看起来很完美，根本看不出来任何会发送两个按键消息的错误。研究了半天，把 =SendMessage()= 换成 =keybd_event()= 或者 =SendInput()= 都没什么作用，问题依旧。
+
+就这么简单的几行代码，到底有什么问题呢？就在我山穷水尽的时候，有一行代码突然让我灵光一闪，没错，就是那句return 0;难道是返回值有问题？难道并不是按一个键在这个函数里面发送了两个消息，而是。。而是一个按键消息被处理了两次？于是立马搜MSDN，MSDN里面关于 =LowLevelKeyboardProc= 的返回值说明如下：
+
+#+BEGIN_QUOTE
+*Return Value*
+
+If /nCode/ is less than zero, the hook procedure must return the value returned by =CallNextHookEx=.
+
+If /nCode/ is greater than or equal to zero, and the hook procedure did not process the message, it is highly recommended that you call =CallNextHookEx= and return the value it returns; otherwise, other applications that have installed =WH_KEYBOARD_LL= hooks will not receive hook notifications and may behave incorrectly as a result. If the hook procedure processed the message, it may return a nonzero value to prevent the system from passing the messageto the rest of the hook chain or the target window procedure.
+#+END_QUOTE
+
+按这里面的说明，如果已经处理了消息，就应该返回非零值防止系统传递这个消息，所以， =return 0;= 就会让系统继续传递这个消息，传递到魔兽那里后，它自然是按这个键的意思想干嘛就干嘛了。于是改成 =return 1;= 试试，结果就一切正常了。
+
+写了这么多，可能大家还不知道我在写什么，呵呵，其实连我自己都不知道我在写什么，谁让我语文成绩那么差呢，就把这当成我自嘲的一个笑话吧，呵呵，至少它提醒了我，以后要多多注意细节，细节决定成败。
