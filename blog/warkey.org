@@ -1,7 +1,7 @@
 #+TITLE:       扯一下关于魔兽改键的蛋
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
-#+DATE:        2013-06-13 Thu
+#+DATE:        2011-05-13 Fri
 #+URI:         /blog/%y/%m/%d/warkey/
 #+KEYWORDS:    warcraft, MFC, C++, windows
 #+TAGS:        :Windows:C++:Misc:
