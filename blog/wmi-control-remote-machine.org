@@ -95,7 +95,7 @@ uint32 GetStringValue(
 - 参考文档：
 
   - http://msdn.microsoft.com/en-us/library/ms257364.aspx
-  - http://msdn.microsoft.com/en-us/library/aa390788(v=VS.85).aspx
-  - http://msdn.microsoft.com/en-us/library/aa394554(v=VS.85).aspx
+  - @@html:<a href="http://msdn.microsoft.com/en-us/library/aa390788(v=VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa390788(v=VS.85).aspx</a>@@
+  - @@html:<a href="http://msdn.microsoft.com/en-us/library/aa394554(v=VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa394554(v=VS.85).aspx</a>@@
 
 （看，参考文档全部都是MSDN ^_^）
