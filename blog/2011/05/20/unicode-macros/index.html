@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>绕死你不偿命的UNICODE、_UNICODE、__TEXT、__T、_T、_TEXT、TEXT宏 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="an simple introduction to UNICODE, _UNICODE, __TEXT, __T, _T, _TEXT, TEXT" />
+    <meta name="keywords" content="windows, unicode, macros" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>绕死你不偿命的UNICODE、_UNICODE、__TEXT、__T、_T、_TEXT、TEXT宏</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，但删去了最后一段废话，另外，加上了文章后面回复中有水平的两个）：
+</p>
+
+<hr/>
+
+<p>
+最近在看一些关于VC++和MFC的书时，书上对字符串的处理一般都会使用 <code>TEXT("a string")</code> 的形式或者 <code>_T("a string")</code> 的形式，自己写程序时MFC自动生成的代码中也有类似的宏。作为菜鸟，不加思考地照搬书上的 <code>TEXT()</code> 或者 <code>_T()</code> 不是我的风格，喜欢追根究底的性格促使我决定弄懂这些宏。但如果我按照以往写文章的习惯，跟着我思考的顺序来写这篇随笔的话，那是倒叙，会很不好写，所以我就按弄懂之后的正常顺序来写吧，但这也让这篇随笔看起来有点说教，各位看客且请忍受一下，谢谢。
+</p>
+
+<p>
+C语言发明时尚没有UNICODE这一说，那时候米国人只有ASCII，但随着计算机的进化，程序中需要出现其它国家语言的字符，如中文，这远不是ASCII所能表示的，所以就出现了UNICODE（想深入了解UNICODE的童鞋，请猛击<a href="http://zh.wikipedia.org/wiki/Unicode">这里</a>），于是C语言也新加了一个类型： <code>wchar_t</code> ，用于表示UNICODE字符，其定义为： <code>#define unsigned short wchar_t</code> ，说白了其实就是用16位双字节表示一个字符（ASCII用单字节表示一个字符）。
+</p>
+
+<p>
+这样编写程序就出现了一个问题，我先定义了一个变量： <code>char *str = "china";</code> 这当然没问题，但如果后来要把该字符串换成中文的，那就得换成 <code>wchar_t *str = L"中国";</code> （顺便说一下，字符串前的L是告诉编译器，后面紧跟的字符串按UNICODE宽字符处理，即每个字符占两个字节）。如果字符串只有一个，改一下没问题，但很难想象一个程序中只出现一个字符串，所以，这样修改起来的工作量是很大的。
+</p>
+
+<p>
+M$永远不会缺乏牛人，所以他们自然为VC++想好了解决办法，那就是 <code>__TEXT(), __T()</code> 等一系列宏，先来看看WinNT.h头文件，这个文件有几千行，但我们只需要抽取关键的几行出来：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d33682;">#ifdef</span>  UNICODE                     <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">r_winnt</span>
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__TEXT</span>(<span style="color: #b58900;">quote</span>) L##quote      <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">r_winnt</span>
+<span style="color: #d33682;">#else</span>   <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #657b83; font-style: italic;">UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>               <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">r_winnt</span>
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__TEXT</span>(<span style="color: #b58900;">quote</span>) quote         <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">r_winnt</span>
+<span style="color: #d33682;">#endif</span> <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #657b83; font-style: italic;">UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">r_winnt</span>
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">TEXT</span>(<span style="color: #b58900;">quote</span>) __TEXT(quote)   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">r_winnt</span>
+</pre>
+</div>
+
+<p>
+这几行代码应该很简单：如果定义了UNICODE宏，那么就将 <code>__TEXT(quote)</code> 宏定义为 <code>L##quote</code> ，如果没定义UNICODE宏，则 <code>__TEXT(quote)</code> 宏就是普通的 <code>quote</code> ，最后，再将 <code>TEXT(quote)</code> 宏定义为 <code>__TEXT(quote)</code> 宏。（如果有朋友不懂其中##符号的意思的话，这里解释一下，##起连接作用，例如 <code>__TEXT("china")</code> 在经过宏替换后就会被解释为L"china"）
+</p>
+
+<p>
+这种解决方法很巧妙，编程人员可以根据需要自由定义UNICODE宏来决定是使用ASCII字符串还是UNCODE字符串，而程序中的字符、字符串只需加个宏处理即可。与此类似的还有 <code>__T(), _TEXT()</code> 等宏，这些宏在tchar.h头文件里定义，这个文件同样有几千行，仍然只需要抽出关键的几行：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d33682;">#ifdef</span>  _UNICODE
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__T</span>(<span style="color: #b58900;">x</span>)      L ## x
+<span style="color: #d33682;">#else</span>   <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #657b83; font-style: italic;">ndef _UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__T</span>(<span style="color: #b58900;">x</span>)      x
+<span style="color: #d33682;">#endif</span>  <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #657b83; font-style: italic;">_UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">_T</span>(<span style="color: #b58900;">x</span>)       __T(x)
+<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">_TEXT</span>(<span style="color: #b58900;">x</span>)    __T(x)
+</pre>
+</div>
+
+<p>
+其原理同上，但这里是根据_UNICODE宏（注意前面的下划线）来决定是使用ASCII字符还是UNICODE字符的。同样最后又附加了 <code>_T()</code> 和 <code>_TEXT()</code> 宏的定义。
+</p>
+
+<p>
+到此，疑问又来了，为什么要定义_UNICODE和UNICODE两个宏？M$的牛人吃多了嫌撑？要是一个宏定义了，另一个宏没定义引起冲突怎么办？于是再来查找一番，在atldef.h和afxv_w32.h两个头文件中，我找到了一模一样的内容，如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d33682;">#ifdef</span> _UNICODE
+<span style="color: #d33682;">#if</span><span style="color: #d33682;">n</span><span style="color: #d33682;">def</span> UNICODE
+<span style="color: #d33682;">#define</span> <span style="color: #b58900;">UNICODE</span>         <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">UNICODE is used by Windows headers</span>
+<span style="color: #d33682;">#endif</span>
+<span style="color: #d33682;">#endif</span>
+
+<span style="color: #d33682;">#ifdef</span> UNICODE
+<span style="color: #d33682;">#if</span><span style="color: #d33682;">n</span><span style="color: #d33682;">def</span> _UNICODE
+<span style="color: #d33682;">#define</span> <span style="color: #b58900;">_UNICODE</span>        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">_UNICODE is used by C-runtime/MFC headers</span>
+<span style="color: #d33682;">#endif</span>
+<span style="color: #d33682;">#endif</span>
+</pre>
+</div>
+
+<p>
+这段代码有点绕，但目的很清晰，就是要保证UNICODE和_UNICODE这两个宏要么都定义了，要么都未定义，不能只定义一个。所以，在上面的分析中，不论是利用UNICODE宏来定义的 <code>__TEXT()</code> 和 <code>TEXT()</code> ，还是利用_UNICODE宏来定义的 <code>__T()</code> 、 <code>_T()</code> 和 <code>_TEXT()</code> ，都是可以正常使用的，不会出现一部分是ASCII字符串，另一部分是UNICODE字符串的低等错误。因此， <code>__TEXT, __T, _T, _TEXT, TEXT</code> 这几个宏的具体作用其实是一样的，没有区别，至于M$为什么对相同的功能要搞这么多奇形怪状的符号来表示，那我就不得而知了。
+</p>
+
+<p>
+同时，上面的注释还解释了，UNICODE宏用于Windows头文件，而_UNICODE宏用于C运行时和MFC的头文件，当然我这个菜鸟还不太懂具体区别，只能大概猜到，在Windows的头文件中，需要根据是否使用UNICODE来定义不同版本宏的地方就使用UNICODE宏，而在MFC和标准C中，需要根据是否使用UNICODE来定义不同版本宏的地方就使用_UNICODE宏。
+</p>
+
+<hr/>
+
+<p>
+下面是文章后面的评论中，网友Zhenxing Zhou给出的评论：
+</p>
+
+<p>
+在标准出现之前，编译器自己扩展的，一般以下划线开始，如_UNICODE，当UNICODE成为标准后，由于兼容问题，_UNICODE也应该同时定义，就出现了两个*UNICODE。
+</p>
+
+<p>
+#define unsigned short wchar_t为了兼容早期不支持wchar_t的编译器。
+</p>
+
+<hr/>
+
+<p>
+下面是网友egmkang给出的评论：
+</p>
+
+<ol class="org-ol">
+<li>char* str = "xxx"; 这里的str编码是未知的,但是ASCII兼容的.比如说gd2312,utf-8他就是ASCII兼容的.是可以用来表示中文的.实际的编码跟文件的encoding有关系.
+</li>
+
+<li>L表示后续的字符串是Unicode编码的.但是这个Unicode编码说的很宽泛,UTF-16是Unicode,UTF-32也是Unicode.很不幸,这两种编码在C语言的实现里面同时存在.比如Windows里面用的就是UTF-16,Unix-Like呢,就是UTF-32...
+</li>
+
+<li>马上将要到来的C1X会加强对unicode编码的支持.呵呵,但是VC应该不会支持C1X吧,因为C99到现在VC都不支持..
+</li>
+</ol>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-05-20</span>
+        <span title="last modification date" class="post-info">2013-06-14</span>
+        <span title="tags" class="post-info"><a href="/tags/windows/">Windows</a>, <a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/05/20/unicode-macros/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/05/20/unicode-macros/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

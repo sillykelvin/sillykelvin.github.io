@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>让程序提升Debug权限 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="how to enable debug previlege for windows program" />
+    <meta name="keywords" content="windows, debug previlege" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>让程序提升Debug权限</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<p>
+最近一直忙着写毕业论文，但对于我这种没语言天赋的人，写写实际做的工作还可以，但要写课题背景、意义什么的，头都要大了，憋了两天才憋出两页的绪论，我容易吗我。。。
+</p>
+
+<p>
+所以这半个月也没时间更新博客，现在论文初稿终于写完了，所以来写点东西吧。
+</p>
+
+<p>
+这还是要从我写的魔兽改键显血助手WarKey说起。之前的版本因为判断是否是聊天状态的功能不完善，于是我就按网上的说法，用CE（Cheat Engine，专门用于修改游戏内存的工具）搜索了一下魔兽进程的内存内容，找到存储是否处于聊天状态的内存地址。于是，在WarKey中，只需要取到该内存地址的内容，根据其内容来判断是否处于聊天状态，然后决定是否需要改键即可。但实际上，在调用API函数 <code>ReadProcessMemory()</code> 时，并不能取出其内容，也就是说无论魔兽是否处于聊天状态， <code>ReadProcessMemory()</code> 总是调用失败。经查MSDN，发现该函数操作的句柄需要 <code>PROCESS_VM_READ</code> 访问权限，而这个是由 <code>OpenProcess()</code> 函数来处理的。 <code>OpenProcess()</code> 这个函数指定的访问权限的安全描述符比较复杂，但有一句话很给力： <i>If the caller has enabled the SeDebugPrivilege privilege, the requested access is granted regardless of the contents of the security descriptor.</i> 也就是说如果调用者具有 <code>SeDebugPrivilege</code> 权限，那么就不用管什么安全描述符了。于是只需要给程序提升权限，使其具有 <code>SeDebugPrivilege</code> 权限即可。
+</p>
+
+<p>
+关于提升权限的方法，在MSDN里面查了半天，居然找到了一个很给力的例子：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;windows.h&gt;</span>
+<span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;stdio.h&gt;</span>
+<span style="color: #d33682;">#pragma</span> comment(lib, <span style="color: #2aa198;">"cmcfg32.lib"</span>)
+
+<span style="color: #b58900;">BOOL</span> <span style="color: #268bd2;">SetPrivilege</span>(
+    <span style="color: #b58900;">HANDLE</span> <span style="color: #b58900;">hToken</span>,          <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">access token handle</span>
+    <span style="color: #b58900;">LPCTSTR</span> <span style="color: #b58900;">lpszPrivilege</span>,  <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">name of privilege to enable/disable</span>
+    <span style="color: #b58900;">BOOL</span> <span style="color: #b58900;">bEnablePrivilege</span>   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">to enable or disable privilege</span>
+    )
+{
+    <span style="color: #b58900;">TOKEN_PRIVILEGES</span> <span style="color: #b58900;">tp</span>;
+    <span style="color: #b58900;">LUID</span> <span style="color: #b58900;">luid</span>;
+
+    <span style="color: #859900;">if</span> ( <span style="color: #859900;">!</span>LookupPrivilegeValue(
+            <span style="color: #6c71c4;">NULL</span>,            <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">lookup privilege on local system</span>
+            lpszPrivilege,   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">privilege to lookup</span>
+            &amp;luid ) )        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">receives LUID of privilege</span>
+    {
+        printf(<span style="color: #2aa198;">"LookupPrivilegeValue error: %u\n"</span>, GetLastError() );
+        <span style="color: #859900;">return</span> FALSE;
+    }
+
+    tp.PrivilegeCount = 1;
+    tp.Privileges[0].Luid = luid;
+    <span style="color: #859900;">if</span> (bEnablePrivilege)
+        tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+    <span style="color: #859900;">else</span>
+        tp.Privileges[0].Attributes = 0;
+
+    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">Enable the privilege or disable all privileges.</span>
+
+    <span style="color: #859900;">if</span> ( <span style="color: #859900;">!</span>AdjustTokenPrivileges(
+           hToken,
+           FALSE,
+           &amp;tp,
+           <span style="color: #859900;">sizeof</span>(TOKEN_PRIVILEGES),
+           (PTOKEN_PRIVILEGES) <span style="color: #6c71c4;">NULL</span>,
+           (PDWORD) <span style="color: #6c71c4;">NULL</span>) )
+    {
+          printf(<span style="color: #2aa198;">"AdjustTokenPrivileges error: %u\n"</span>, GetLastError() );
+          <span style="color: #859900;">return</span> FALSE;
+    }
+
+    <span style="color: #859900;">if</span> (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
+
+    {
+          printf(<span style="color: #2aa198;">"The token does not have the specified privilege. \n"</span>);
+          <span style="color: #859900;">return</span> FALSE;
+    }
+
+    <span style="color: #859900;">return</span> TRUE;
+}
+</pre>
+</div>
+
+<p>
+这个例子应该是比较经典的，经过分析之后，于是写出开关Debug权限的函数：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C"><span style="color: #b58900;">BOOL</span> <span style="color: #268bd2;">CWarKeyDlg</span>::EnableDebugPrivilege(<span style="color: #b58900;">BOOL</span> <span style="color: #b58900;">bEnableDebugPrivilege</span>)
+{
+    <span style="color: #b58900;">HANDLE</span> <span style="color: #b58900;">hToken</span>;
+    <span style="color: #b58900;">TOKEN_PRIVILEGES</span> <span style="color: #b58900;">tp</span>;
+    <span style="color: #b58900;">LUID</span> <span style="color: #b58900;">luid</span>;
+
+    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>::OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &amp;hToken))
+    {
+        ::MessageBox(this-&gt;GetSafeHwnd(), GET_TOKEN_ERROR, MSG_BOX_TITLE, MB_OK);
+        <span style="color: #859900;">return</span> FALSE;
+    }
+
+    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>::LookupPrivilegeValue(<span style="color: #6c71c4;">NULL</span>, SE_DEBUG_NAME, &amp;luid))
+    {
+        ::MessageBox(this-&gt;GetSafeHwnd(), GET_PRIVILEGE_VALUE_ERROR, MSG_BOX_TITLE, MB_OK);
+        ::CloseHandle(hToken);
+        <span style="color: #859900;">return</span> FALSE;
+    }
+
+    tp.PrivilegeCount = 1;
+    tp.Privileges[0].Luid = luid;
+    <span style="color: #859900;">if</span>(bEnableDebugPrivilege)
+    {
+        tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+    }
+    <span style="color: #859900;">else</span>
+    {
+        tp.Privileges[0].Attributes = 0;
+    }
+
+    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>::AdjustTokenPrivileges(hToken, FALSE, &amp;tp, <span style="color: #859900;">sizeof</span>(tp), <span style="color: #6c71c4;">NULL</span>, <span style="color: #6c71c4;">NULL</span>))
+    {
+        ::MessageBox(this-&gt;GetSafeHwnd(), ADJUST_PRIVILEGE_ERROR, MSG_BOX_TITLE, MB_OK);
+        ::CloseHandle(hToken);
+        <span style="color: #859900;">return</span> FALSE;
+    }
+
+    ::CloseHandle(hToken);
+
+    <span style="color: #859900;">if</span>(::GetLastError() == ERROR_NOT_ALL_ASSIGNED)
+    {
+        ::MessageBox(this-&gt;GetSafeHwnd(), ENABLE_DEBUG_ERROR, MSG_BOX_TITLE, MB_OK);
+        <span style="color: #859900;">return</span> FALSE;
+    }
+    <span style="color: #859900;">return</span> TRUE;
+}
+</pre>
+</div>
+
+<p>
+利用这个函数给自己的WarKey开启Debug权限，再访问魔兽进程的内存时，就可以读出其中的数据了。
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-06-05</span>
+        <span title="last modification date" class="post-info">2013-06-14</span>
+        <span title="tags" class="post-info"><a href="/tags/windows/">Windows</a>, <a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/06/05/windows-program-debug-previlege/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/06/05/windows-program-debug-previlege/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
