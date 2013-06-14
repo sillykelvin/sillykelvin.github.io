@@ -1,0 +1,101 @@
+#+TITLE:       C#通过WMI操作远程机器
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-08-11 Thu
+#+URI:         /blog/%y/%m/%d/control-remote-machine-through-wmi/
+#+KEYWORDS:    wmi, windows, C#
+#+TAGS:        :Windows:CSharp:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to control remote machine through WMI
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+在几天前，我对于WMI还是一窍不通的，连它是什么的缩写都不知道。。。但项目用到这方面的知识，于是便把这几天学的到东西跟大家共享一下。
+
+以下是来自MSDN对于WMI描述的原文：
+
+#+BEGIN_QUOTE
+Windows Management Instrumentation (WMI) is the infrastructure for management data
+and operations on Windows-based operating systems. You can write WMI scripts or
+applications to automate administrative tasks on remote computers but WMI also supplies
+management data to other parts of the operating system and products.
+#+END_QUOTE
+
+大意是说，WMI(Windows管理规范)是用来对Windows进行数据和操作管理的基本工具。可以写些WMI脚本或者程序来自动地在远程机器上执行一些任务，同时，WMI也提供一些管理数据的功能。（这不废话嘛，说了跟没说一样）
+
+那我来说一下我的理解：WMI其实就是一种对Windows进行管理的工具，它的管理范围不限于本机，只要是能连接上的装的Windows的并且开了WMI服务的机器它都可以管理。这个管理的范围有点广，包括查询机器的硬盘、注册表信息，控制机器执行一些程序，共享机器的某些文件或文件夹。。。（其实从比较邪恶的角度来看，WMI是一种很危险的技术。。。）
+
+废话少说，言归正传，既然要操纵远程机器，首先就要连接到远程机器，关键代码如下：
+
+#+BEGIN_SRC C#
+ConnectionOptions ops = new ConnectionOptions();  // 新建连接选项
+ops.Username = "Administrator";  // 远程机器的用户名，假设为Administrator
+ops.Password = "123456";         // 对应用户名的密码
+ops.EnablePrivileges = true;
+string address = "127.0.0.1";    // 远程机器IP地址
+ManagementScope scope = new ManagementScope(@"\\" + address + @"\root\cimv2", ops);  // 新建一个到远程机器的连接
+scope.Connect();  // 进行连接
+#+END_SRC
+
+好了，如果用户名、密码、IP地址正确的话，就可以连上了。细心的童鞋可能会问，上面连接中的"\root\cimv2"是神马？好吧，这是一个命名空间，在连接时要指定连接到哪个命令空间。其实这和编程语言中的命令空间有点类似，假设F1功能在命令空间N1下，F2在N2下，如果你连接到N2，那么你能使用N2中的F2却不能使用N1中的F1，因为连接在N2空间而不在N1空间。那为什么这里要连接"<address>\root\cimv2"空间呢？这是因为Windows常用的管理功能基本都在这个空间下(对注册表的操作类StdRegProv在这个空间下有，在"<address>\root\DEFAULT"下面也有，但某些版本的Windows只存在于DEFAULT空间，所以对注册表进行操作时建议连接到DEFAULT空间)。
+
+连接了，就可以干些事情了。那怎么控制远程电脑呢？WMI提供了一系列的类，类中有相应的方法，通过对这些方法进行调用，就可以完成自己的想法。下面看一个实例：
+
+#+BEGIN_SRC C#
+if(scope.IsConnected) {  // 先判断连接是不是成功
+    ObjectGetOptions obj = new ObjectGetOptions(null, System.TimeSpan.MaxValue, true);  // 对象接收选项
+    ManagementClass registry = new ManagementClass(scope, new ManagementPath("StdRegProv"), obj);  // 生成远程的StdRegProv对象
+    ManagementBaseObject inParams = registry.GetMethodParameters("GetStringValue");  // 获得StdRegProv的GetStringValue()方法的输入参数
+    inParams["hDefKey"] = 0x80000002;            // 代表HKEY_LOCAL_MACHINE
+    inParams["sSubKeyName"] = "SOFTWARE\7-Zip";  // 注册表的键
+    inParams["sValueName"] = "Path";             // 注册表值的名字
+    ManagementBaseObject outParams = registry.InvokeMethod("GetStringValue", inParams, null);  // 根据inParams中的参数调用GetStringValue()方法
+    if((uint)outParams.Properties["ReturnValue"].Value == 0) {  // 如果返回0表明方法执行成功
+        Console.WriteLine((string)outParams.Properties["sValue"].Value);
+    } else {
+        Console.WriteLine("GetStringValue() failed.");
+    }
+}
+#+END_SRC
+
+上面的代码先远程创建了一个StdRegProv类的对象，再获得它的 =GetStringValue()= 方法参数的名字等信息，再对其进行赋值，再对已赋值的参数调用 =GetStringValue()= 方法，方法返回值在返回参数中用"ReturnValue"标识，另外一些类似C#的ref关键字标明的参数返回值用其定义的名字标识。看起来很绕吧？其实看看StdRegProv类的 =GetStringValue()= 方法声明就什么都明白了：
+
+#+BEGIN_SRC C#
+uint32 GetStringValue(
+    [in]   uint32 hDefKey = 2147483650,
+    [in]   string sSubKeyName,
+    [in]   string sValueName,
+    [out]  string sValue
+);
+#+END_SRC
+
+很清楚吧？[in]标识的参数是要输入传递给方法的，用[out]标识的参数是要输出的，它们的名字与上面代码中的输入输出参数一一对应。
+
+好了，解释一下上面代码的功能：从注册表"HKEY_LOCAL_MACHINE\SOFTWARE\7-Zip"键下读取Path的值，然后显示出来，如果安装了7-Zip，则执行会成功，如果没安装，注册表相应的键都不存在，自然会执行失败，那么这段代码的作用就可以用来判断远程机器上有没有安装7-Zip。
+
+那hDefKey这个参数是什么样一种情况呢？MSDN上有如下说明：
+
+: HKEY_CLASSES_ROOT (2147483648 (0x80000000))
+: HKEY_CURRENT_USER (2147483649 (0x80000001))
+: HKEY_LOCAL_MACHINE (2147483650 (0x80000002))
+: HKEY_USERS (2147483651 (0x80000003))
+: HKEY_CURRENT_CONFIG (2147483653 (0x80000005))
+: HKEY_DYN_DATA (2147483654 (0x80000006))
+
+这就是注册表各个根对应的无符号32位数的由来，其定义在Winreg.h中。
+
+这篇随笔的标题是说操作远程机器，但说了半天，好像一直在解释如何操作远程Windows机器的注册表，而且还只是在解释如何读，这离标题差得还有点远吧？是的，但我不想一一去写如何操作硬盘，如何共享，如何远程创建进程，因为功能太多了，要真全写出来的话，那个啥，是吧（PS：其实是我不可能全部写出来 ^_^）。本篇只是解释一下原理和使用C#的初步实现，起一个抛砖引玉的作用，因为其它功能的实现是大同小异的，都是通过远程创建WMI对象然后执行其方法，例如使用Win32_Process类的 =Create()= 方法可以在远程机器上创建一个进程，使用Win32_Share类可以进行共享。。。所以，需要什么功能，去MSDN吧，它知道的可比我多多了（至少这篇随笔是我在MSDN上这里抄点，那里复制点写出来的 ^_^）。
+
+- 参考文档：
+
+  - http://msdn.microsoft.com/en-us/library/ms257364.aspx
+  - http://msdn.microsoft.com/en-us/library/aa390788(v=VS.85).aspx
+  - http://msdn.microsoft.com/en-us/library/aa394554(v=VS.85).aspx
+
+（看，参考文档全部都是MSDN ^_^）
