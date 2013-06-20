@@ -455,3 +455,17 @@
    注：上表没有考虑 =n-1= 的情况，因为 =n-1= 作为常数级的衰减（请原谅，我自己发明了“衰减”这个词），和指数级衰减比起来可以忽略。
 
    可以看到，使用 =square= 的情况是指数级衰减，所以最终是Θ(log n)；直接使用乘法虽然也是指数级衰减，但是衰减的同时，递归调用数却在指数级增加，刚好和衰减抵消，于是就是Θ(n)。
+
+** 练习1.27
+
+   这个题目比较简单，定义的两个函数如下：
+
+   : (define (carmichael-check n a)
+   :   (cond ((not (= (expmod a n n) a)) false)
+   :         ((> a 1) (carmichael-check n (- a 1)))
+   :         (else true)))
+   :
+   : (define (carmichael-test n)
+   :   (carmichael-check n (- n 1)))
+
+   需要测试Carmichael数的时候，执行 =carmichael-test= 即可。这个测试有一点缺陷就是，不能把真正的质数和Carmichael数分开，不过题目是要求验证Carmichael数，而并不是求Carmichael数，所以这点缺陷也不算是缺陷。
