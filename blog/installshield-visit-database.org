@@ -51,4 +51,4 @@ InstallShield提供了数据库操作的相关功能，但如果要实现更加f
 : return SUCCESS;
 : end;
 
-代码还是比较清楚的，其中关于ADO的COM对象的操作参考了http://www.webcheatsheet.com/ASP/database_connection_to_MSSQL.php，这里的连接字符串szConnString使用的是非DSN版本，原文还有一种使用DSN的版本，如果需要可前往参考。
+代码还是比较清楚的，其中关于ADO的COM对象的操作参考了[[http://www.webcheatsheet.com/ASP/database_connection_to_MSSQL.php]]，这里的连接字符串szConnString使用的是非DSN版本，原文还有一种使用DSN的版本，如果需要可前往参考。
