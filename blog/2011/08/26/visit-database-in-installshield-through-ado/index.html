@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>[InstallShield]如何在Script脚本中使用ADO操作数据库 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="how to connect to sql server in installshield through ado" />
+    <meta name="keywords" content="install shield, install script, ado" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>[InstallShield]如何在Script脚本中使用ADO操作数据库</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<p>
+InstallShield提供了数据库操作的相关功能，但如果要实现更加flexible的定制的话，只能通过写script来实现，但InstallShield自带的API对数据库的操作非常弱，不过还好，它提供了使用M$的COM组件的能力，于是有了如下的代码：
+</p>
+
+<pre class="example">
+function number ExecuteSQLScript(szDBAddress, szDBName, szUsername, szPassword, szScript)
+begin
+    OBJECT pADOConnObj, pADOCmdObj;
+    string szADOConnObjID, szADOCmdObjID;
+    string szConnString;
+
+try
+    Sprintf(szConnString, "driver={SQL Server};server=%s;uid=%s;pwd=%s;database=%s",
+                szDBAddress, szUsername, szPassword, szDBName);
+    szADOConnObjID = "ADODB.Connection";
+    set pADOConnObj = CreateObject(szADOConnObjID);    // Create COM Object(Connection)
+    pADOConnObj.Open(szConnString);                    // Open the connection
+    szADOCmdObjID = "ADODB.Command";
+    set pADOCmdObj = CreateObject(szADOCmdObjID);      // Create COM Object(Command)
+    pADOCmdObj.ActiveConnection = pADOConnObj;         // Set the connection
+    pADOCmdObj.CommandTimeout = 2400;                  // Timeout time(second)
+
+    pADOCmdObj.CommandText = szScript;                 // Sample: "select * from xxx_table where xx_id=xxx"
+    pADOCmdObj.Execute();                              // Execute the sql script
+catch
+    set pADOCmdObj = NOTHING;
+    pADOConnObj.Close();
+    set pADOConnObj = NOTHING;
+    return FAIL;
+endcatch;
+
+set pADOCmdObj = NOTHING;
+pADOConnObj.Close();
+set pADOConnObj = NOTHING;
+
+return SUCCESS;
+end;
+</pre>
+
+<p>
+代码还是比较清楚的，其中关于ADO的COM对象的操作参考了<a href="http://www.webcheatsheet.com/ASP/database_connection_to_MSSQL.php">http://www.webcheatsheet.com/ASP/database_connection_to_MSSQL.php</a>，这里的连接字符串szConnString使用的是非DSN版本，原文还有一种使用DSN的版本，如果需要可前往参考。
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-08-26</span>
+        <span title="last modification date" class="post-info">2013-06-22</span>
+        <span title="tags" class="post-info"><a href="/tags/installshield/">InstallShield</a>, <a href="/tags/sqlserver/">SQLServer</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/08/26/visit-database-in-installshield-through-ado/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/08/26/visit-database-in-installshield-through-ado/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
