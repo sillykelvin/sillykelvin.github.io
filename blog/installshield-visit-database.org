@@ -1,0 +1,54 @@
+#+TITLE:       [InstallShield]如何在Script脚本中使用ADO操作数据库
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-08-26 Fri
+#+URI:         /blog/%y/%m/%d/visit-database-in-installshield-through-ado/
+#+KEYWORDS:    install shield, install script, ado
+#+TAGS:        :InstallShield:SQLServer:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to connect to sql server in installshield through ado
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+InstallShield提供了数据库操作的相关功能，但如果要实现更加flexible的定制的话，只能通过写script来实现，但InstallShield自带的API对数据库的操作非常弱，不过还好，它提供了使用M$的COM组件的能力，于是有了如下的代码：
+
+: function number ExecuteSQLScript(szDBAddress, szDBName, szUsername, szPassword, szScript)
+: begin
+:     OBJECT pADOConnObj, pADOCmdObj;
+:     string szADOConnObjID, szADOCmdObjID;
+:     string szConnString;
+:
+: try
+:     Sprintf(szConnString, "driver={SQL Server};server=%s;uid=%s;pwd=%s;database=%s",
+:                 szDBAddress, szUsername, szPassword, szDBName);
+:     szADOConnObjID = "ADODB.Connection";
+:     set pADOConnObj = CreateObject(szADOConnObjID);    // Create COM Object(Connection)
+:     pADOConnObj.Open(szConnString);                    // Open the connection
+:     szADOCmdObjID = "ADODB.Command";
+:     set pADOCmdObj = CreateObject(szADOCmdObjID);      // Create COM Object(Command)
+:     pADOCmdObj.ActiveConnection = pADOConnObj;         // Set the connection
+:     pADOCmdObj.CommandTimeout = 2400;                  // Timeout time(second)
+:
+:     pADOCmdObj.CommandText = szScript;                 // Sample: "select * from xxx_table where xx_id=xxx"
+:     pADOCmdObj.Execute();                              // Execute the sql script
+: catch
+:     set pADOCmdObj = NOTHING;
+:     pADOConnObj.Close();
+:     set pADOConnObj = NOTHING;
+:     return FAIL;
+: endcatch;
+:
+: set pADOCmdObj = NOTHING;
+: pADOConnObj.Close();
+: set pADOConnObj = NOTHING;
+:
+: return SUCCESS;
+: end;
+
+代码还是比较清楚的，其中关于ADO的COM对象的操作参考了http://www.webcheatsheet.com/ASP/database_connection_to_MSSQL.php，这里的连接字符串szConnString使用的是非DSN版本，原文还有一种使用DSN的版本，如果需要可前往参考。
