@@ -1,0 +1,58 @@
+#+TITLE:       批处理文件的几种路径扩展
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-09-21 Wed
+#+URI:         /blog/%y/%m/%d/batch-path-expansion/
+#+KEYWORDS:    batch, path expansion
+#+TAGS:        :Batch:Windows:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: serveral path expansion in batch script
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+前几天写了一个批处理小工具，本来我用着好好的，结果在QA那边用的时候出错了，一问才知道，他们不是在本机运行，而是在局域网的机器上运行的。一查才知道，原来是 =%cd%= 的问题。（ =%cd%= 代表当前文件夹，但如果运行批处理的路径是一个UNC路径，那么 =%cd%= 会被重定义为 /C:\Windows/ ）
+
+也就是说，在含有UNC路径的时候， =%cd%= 已经不再是当前文件夹。
+
+想起批处理中的几种路径扩展，于是忍不住来比了一把，批处理内容如下：
+
+#+BEGIN_SRC batch
+@echo off
+
+cls
+
+echo %~0
+echo %~f0
+echo %~d0
+echo %~p0
+echo %~n0
+echo %~x0
+echo %~s0
+echo %~a0
+echo %~t0
+echo %~z0
+
+pause
+#+END_SRC
+
+内容很简单，就是把几种扩展路径打印出来，0代表第一个输入参数，即批处理文件本身（test.bat），当然也可以是%~1，%~2等，这里1，2就代表第二、第三个输入参数。
+
+在本地（C盘）运行，得到如下结果：
+
+@@html:<img src="http://pic002.cnblogs.com/images/2011/285309/2011092121274831.png" />@@
+
+现在，把test.bat放到局域网，得到如下结果：
+
+@@html:<img src="http://pic002.cnblogs.com/images/2011/285309/2011092121315439.png" />@@
+
+（图中抹去的部分是一个IP地址）
+
+/可以看到，%~0和%~f0都是扩展到全路径的文件名，%~d0是扩展到根路径，%~p0是扩展到除去根路径的子路径名（不包括文件名），%~n0和%~x0分别扩展文件名和文件后缀名。还有s，a，t，z等扩展不是扩展路径，在此不多说，但从图上也很容易看出其作用。/
+
+*所以，根据上图来看，用%~dp0就可以在有UNC路径的情况下来表示当前文件夹。因此，推荐在批处理中都用%~dp0来表示当前文件夹，而不要用%cd%。*
