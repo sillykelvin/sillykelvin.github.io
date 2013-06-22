@@ -1,0 +1,64 @@
+#+TITLE:       python中那纠结的os.system()与空格处理
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-09-26 Mon
+#+URI:         /blog/%y/%m/%d/bug-in-python-os-system-invocation/
+#+KEYWORDS:    python, os.system(), space bug
+#+TAGS:        :Python:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: bug in python os.system(), when there is spaces
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+今天在写一个用来对vmware workstation虚拟机进行操作的小脚本，主要原理是用python来调用vmrun.exe，传递各种不同的参数给它，来进行不同的操作。
+
+原理很简单，实现。。。其实也很简单，你会说：不就是一个 =os.system()= 调用吗？是的，我也是这么想的。
+
+我把vmware装在program files目录下，其完整路径为： *C:\Program Files\VMware\VMware Workstation\vmrun.exe* ，你肯定注意到了，路径中有空格，于是，你会说，那加个双引号括起来不就行了嘛。是的，我也是这么想的。
+
+但是关键是，我们都这么想，程序不这么想，运行时，程序报错：
+
+#+BEGIN_QUOTE
+'C:\Program' is not recognized as an internal or external command, operable program or batch file.
+#+END_QUOTE
+
+这一看就是典型的路径中存在空格的错误，你会怀疑说，你加引号没？我的第一反应也是怀疑加引号没？但这个确实加了。
+
+不管你糊涂没有，反正我到这一步是糊涂了，既然引号加了，但从结果来看， =os.system()= 还是用空格把字符串给拆成了不同的部分，然后再调用shell来执行。但我后来在实验的过程中又发现了一个奇怪的问题：如果参数只是一个加引号的字符串， =os.system()= 就可以正常执行，但如果有多个引号对，就会出现以上错误。也就是说，如果参数类似"xx yy zz"这样的类型， =os.system()= 可以成功执行；如果参数类似"xx yy" "aa bb"这样的类型， =os.system()= 就会出错。
+
+这一下子引起了我的好奇心，想去看看 =os.system()= 的源代码是怎么处理的，但死活没有找到，唉，又要被这该死的好奇心折磨了。
+
+最后说一下解决方法，就是用 =subprocess.Popen()= 代替 =os.system()= ，如下：
+
+#+BEGIN_SRC python
+ps = subprocess.Popen(cmd);
+ps.wait();    #让程序阻塞
+#+END_SRC
+
+最最后，附上python中对 =os.system()= 函数的说明：
+
+#+BEGIN_QUOTE
+/Execute the command (a string) in a subshell. This is implemented by calling the Standard C function system(), and has the same *limitations*./ Changes to posix.environ, sys.stdin, etc. are not reflected in the environment of the executed command.
+
+On Unix, the return value is the exit status of the process encoded in the format specified for wait(). Note that POSIX does not specify the meaning of the return value of the C system() function, so the return value of the Python function is system-dependent.
+
+On Windows, the return value is that returned by the system shell after running command, given by the Windows environment variable COMSPEC: on command.com systems (Windows 95, 98 and ME) this is always 0; on cmd.exe systems (Windows NT, 2000 and XP) this is the exit status of the command run; on systems using a non-native shell, consult your shell documentation.
+
+Availability: Macintosh, Unix, Windows.
+
+/The subprocess module provides more powerful facilities for spawning new processes and retrieving their results; using that module is preferable to using this function./
+#+END_QUOTE
+
+可以看出， =os.system()= 是调用了C语言的标准函数 =system()= ，不过那个粗体的limitations单词说明这个方法有其局限性。最后一句话话说，subprocess模块更加强大，并建议我们尽量使用subprocess模块。
+
+所以，应该尽量不要使用 =os.system()= 方法，而是用subprocess中的 =Popen= 对象或者 =call()= 方法代替，以免产生不可预知的错误。
+
+--------------------------------------------------------------------------------
+
+写完文章，才发现python的官方网站上有人提交这个bug：[[http://bugs.python.org/issue1524]]，不过这个bug在07年就提交了，但看结果是wont fix（不会修复），看后面的评论，原来是 =os.system()= 只是简单地把字符串传递给 =system()= 函数，自己并不会对字符串进行处理，所以这个bug应该是 =system()= 函数的问题或者windows shell的问题，这确实不是python能修复的。  ^_^
