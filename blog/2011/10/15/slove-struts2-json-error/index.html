@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>struts2整合json出现no result type defined for type &#39;json&#39;的解决方法 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="how to solve &quot;no result type defined for type &#39;json&#39;&quot; error" />
+    <meta name="keywords" content="java, strut2, json" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>struts2整合json出现no result type defined for type &#39;json&#39;的解决方法</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<p>
+struts2的json plugin可以实现struts2和json的完美结合，由于本篇主要是介绍整合过程中遇到的问题，所以编程实现的方法这里就不重复了，具体可以参看struts2的官方文档：<a href="http://struts.apache.org/2.2.1.1/docs/json-plugin.html">http://struts.apache.org/2.2.1.1/docs/json-plugin.html</a>。
+</p>
+
+<p>
+我在struts.xml中有如下action定义：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #268bd2;">action</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">product_group</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">customers.products</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">method</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">getGroups</span><span style="color: #2aa198;">"</span>&gt;
+    &lt;<span style="color: #268bd2;">result</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span>&gt;
+        &lt;<span style="color: #268bd2;">param</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">root</span><span style="color: #2aa198;">"</span>&gt;groupList&lt;/<span style="color: #268bd2;">param</span>&gt;
+    &lt;/<span style="color: #268bd2;">result</span>&gt;
+&lt;/<span style="color: #268bd2;">action</span>&gt;
+</pre>
+</div>
+
+<p>
+在上面的定义中，action的result的type为json，json plugin就可将action中定义为groupList的field自动转换为json格式数据，并返回给前端UI。
+</p>
+
+<p>
+但在deploy后，启动tomcat时却报错：
+</p>
+
+<blockquote>
+<p>
+There is no result type defined for type 'json' mapped with name 'success'. Did you mean 'json'?
+</p>
+</blockquote>
+
+<p>
+因为struts2找不到json这个result type的定义。解决方法有下面两种：
+</p>
+
+<ol class="org-ol">
+<li><b>将当前package的extends属性改为"json-default"</b>，即让当前package从josn-default继承而不是struts-default继承；
+</li>
+
+<li>但如果当前package确实无法继承"json-default"的话，还可以<b>在当前package中定义result-type，将json给加进去</b>，如下：
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #268bd2;">result-types</span>&gt;
+    &lt;<span style="color: #268bd2;">result-type</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">org.apache.struts2.json.JSONResult</span><span style="color: #2aa198;">"</span>/&gt;
+&lt;/<span style="color: #268bd2;">result-types</span>&gt;
+</pre>
+</div>
+</li>
+</ol>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">两种方法的原理</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+json这个result type是在json-default(struts2-json-plugin-2.1.8.1.jar\struts-plugin.xml)里面定义的，内容如下（省去了xml和doctype标签）：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #268bd2;">struts</span>&gt;
+    &lt;<span style="color: #268bd2;">package</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json-default</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">extends</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">struts-default</span><span style="color: #2aa198;">"</span>&gt;
+        &lt;<span style="color: #268bd2;">result-types</span>&gt;
+            &lt;<span style="color: #268bd2;">result-type</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">org.apache.struts2.json.JSONResult</span><span style="color: #2aa198;">"</span>/&gt;
+        &lt;/<span style="color: #268bd2;">result-types</span>&gt;
+        &lt;<span style="color: #268bd2;">interceptors</span>&gt;
+            &lt;<span style="color: #268bd2;">interceptor</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">org.apache.struts2.json.JSONInterceptor</span><span style="color: #2aa198;">"</span>/&gt;
+        &lt;/<span style="color: #268bd2;">interceptors</span>&gt;
+    &lt;/<span style="color: #268bd2;">package</span>&gt;
+&lt;/<span style="color: #268bd2;">struts</span>&gt;
+</pre>
+</div>
+
+<p>
+可见，name为"json"的result type是在json-default中定义的，所以，从json-default继承就可以使用json这个result。另外json-default还定义了一个name为"json"的interceptor。
+</p>
+
+<p>
+另外，依json-default的定义来看，方法2中还应该再加一个json的interceptor定义才比较合适。
+</p>
+</div>
+</div>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-10-15</span>
+        <span title="last modification date" class="post-info">2013-06-22</span>
+        <span title="tags" class="post-info"><a href="/tags/java/">Java</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/10/15/slove-struts2-json-error/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/10/15/slove-struts2-json-error/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
