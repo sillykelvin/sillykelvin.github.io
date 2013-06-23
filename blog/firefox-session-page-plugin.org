@@ -1,0 +1,93 @@
+#+TITLE:       让Session Page插件能在高版本的firefox中使用
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-10-23 Sun
+#+URI:         /blog/%y/%m/%d/fix-firefox-session-page-plugin/
+#+KEYWORDS:    firefox, session page
+#+TAGS:        :Firefox:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: make session page available in high version firefox
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+在使用firefox之前，我一直使用的是Maxthon。Maxthon在打开的时候，会有一个about:last的页面显示上次session未关闭的标签页列表，这个功能让我爱不释手。但Maxthon在播放flash视频时那极高的CPU占用和内存占用让我的破本子实在是吃不消，于是转向firefox。
+
+至于Maxthon的其它功能，firefox都可以用插件来很好地完成，甚至完成得更好，但就是Maxthon的about:last这个功能在firefox中却没有合适的插件。firefox有Tab Mix Plus和Session Manager这样强大的session管理插件，但是，TMP和SM要么只能保存session，要么就是把session的页面全部打开，却不能选择一个或几个打开。我一般打开的页面会很多，如果全部打开的话会很卡，而且也可能只是其中几个页面今天需要用到，其它页面也许明天才需要用到，所以根本没必要全部打开。
+
+我在Mozilla的Addon上、在Google上搜得快要绝望了时，终于搜出来一个叫Session Page的插件，看作者提供的图片好像是可以实现Maxthon中的about:last页面功能。只可惜作者早就已经没有维护了，所以在高版本的firefox上无法安装（我的firefox目前是7.0.1版本）。于是，抱着死马当活医的心态，DIY开始了：
+
+先在sourceforge上下载该插件，得到一个 /sessionpage-fx-0.2.1.xpi/ 文件，xpi是firefox插件的特有格式，其实就是zip格式，改了个名而已。于是，将其解压到sessionpage-fx-0.2.1目录。
+
+用Vim打开该目录下的 /install.rdf/ 文件（这其实是一个xml格式的文件），其中一段代码如下：
+
+#+BEGIN_SRC xml
+<em:targetApplication>                                               <!-- 代表插件安装的目标程序 -->
+    <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>        <!-- firefox的GUID，说明该插件是firefox插件 -->
+        <em:minVersion>2.0</em:minVersion>                           <!-- 能安装的最低firefox版本 -->
+        <em:maxVersion>7.0.1</em:maxVersion>                         <!-- 能安装的最高firefox版本，已修改 -->
+    </Description>
+</em:targetApplication>
+#+END_SRC
+
+将 =<em:maxVersion>= 结点的值改为7.0.1，保存，再将该文件压缩回 /sessionpage-fx-0.2.1.xpi/ 文件，并拖进firefox安装，果然，可以安装了。
+
+本以为到这里就结束了，但没想到的是，插件倒是安装上去了，而且在启动firefox时也能打开该插件要显示标签页列表的页面，但该页面中却死活不显示上个session未关闭的标签页列表，好吧，继续。。。
+
+该插件对应的URI是 *chrome://sessionpage/content/SessionPage.xul* ，SessionPage.xul这个文件在chrome/content目录下，这是一个类似HTML但却不是HTML的文件，在该文件的开头可以看到其引用了三个js文件，并在onload事件调用了 =SessionPageController.init()= 函数：
+
+#+BEGIN_SRC html
+<window
+  id="SessionPage"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  title="&SessionPage.Title;"
+  orient="vertical"
+  onload="SessionPageController.init();">
+
+<script type="application/x-javascript" src="chrome://sessionpage/content/SessionPage.js" />
+<script type="application/x-javascript" src="chrome://sessionpage/content/SessionManager.js" />
+<script type="application/x-javascript" src="chrome://sessionpage/content/SessionPageUtils.js" />
+
+...以下代码省略...
+#+END_SRC
+
+于是，打开相同目录下的SessionPage.js、SessionManager.js看了看，看不出所以然来，于是给init()会调用的每个函数都加了一个alert()，再试，发现：在执行到SessionManager.js文件中SessionStoreManager对象上的convertToObject()函数的时候（完整的调用层次为：SessionPageController.init() -> SessionStoreManager().init() -> gotoSession() -> convertToObject()），函数不返回，于是后面的代码无法执行，造成了插件的工作不正常。convertToObject()函数的代码如下：
+
+#+BEGIN_SRC javascript
+convertToObject: function(aStr)
+{
+    var s = new Components.utils.Sandbox("about:blank");
+    return Components.utils.evalInSandbox(aStr, s);
+}
+#+END_SRC
+
+该函数的功能是把一个字符串转换为JSON对象，但函数中的转换方法却从来没见过，经测试，函数第一句代码可以通过，第二句代码却不返回。
+
+放狗一搜，在Mozilla Developer Network上找到了关于这两个方法的docs：
+
+https://developer.mozilla.org/en/Components.utils.Sandbox
+
+https://developer.mozilla.org/en/Components.utils.evalInSandbox
+
+两个页面中都写有关于Gecko 2.0的note（Gecko是firefox的内核引擎，Gecko 2.0对应firefox 4，firefox 7则对应于Gecko 7。。。暴汗啊，又一个版本帝。。。），但是note中又没有明确说明不准在Gecko 2.0及以后版本使用Sandbox和evalInSandbox，但它却又确实执行不成功。。。唉，罢了，找到问题就好。
+
+找到问题的根本原因就好办了，因为该函数是转换字符串为JSON对象的函数，于是，将该函数改为：
+
+#+BEGIN_SRC javascript
+convertToObject: function(aStr)
+{
+    return JSON.parse(aStr);
+}
+#+END_SRC
+
+保存后，再重启firefox，OK，那美妙的标签面列表出现了，如下图：
+
+@@html:<img src="http://pic002.cnblogs.com/images/2011/285309/2011102321181937.png" />@@
+
+（附：Session Page还不太完美，如果打开标签页列表中的一个标签页后，这个标签页应该从列表中去掉才是，但目前该功能并未实现。这个功能，以后再做吧。今天为了搞定Sesison Page这个插件，看了一天MDN上关于firefox的extension开发的英文，都快要吐了。。。）
