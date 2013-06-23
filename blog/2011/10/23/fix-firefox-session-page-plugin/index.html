@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>让Session Page插件能在高版本的firefox中使用 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="make session page available in high version firefox" />
+    <meta name="keywords" content="firefox, session page" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>让Session Page插件能在高版本的firefox中使用</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<p>
+在使用firefox之前，我一直使用的是Maxthon。Maxthon在打开的时候，会有一个about:last的页面显示上次session未关闭的标签页列表，这个功能让我爱不释手。但Maxthon在播放flash视频时那极高的CPU占用和内存占用让我的破本子实在是吃不消，于是转向firefox。
+</p>
+
+<p>
+至于Maxthon的其它功能，firefox都可以用插件来很好地完成，甚至完成得更好，但就是Maxthon的about:last这个功能在firefox中却没有合适的插件。firefox有Tab Mix Plus和Session Manager这样强大的session管理插件，但是，TMP和SM要么只能保存session，要么就是把session的页面全部打开，却不能选择一个或几个打开。我一般打开的页面会很多，如果全部打开的话会很卡，而且也可能只是其中几个页面今天需要用到，其它页面也许明天才需要用到，所以根本没必要全部打开。
+</p>
+
+<p>
+我在Mozilla的Addon上、在Google上搜得快要绝望了时，终于搜出来一个叫Session Page的插件，看作者提供的图片好像是可以实现Maxthon中的about:last页面功能。只可惜作者早就已经没有维护了，所以在高版本的firefox上无法安装（我的firefox目前是7.0.1版本）。于是，抱着死马当活医的心态，DIY开始了：
+</p>
+
+<p>
+先在sourceforge上下载该插件，得到一个 <i>sessionpage-fx-0.2.1.xpi</i> 文件，xpi是firefox插件的特有格式，其实就是zip格式，改了个名而已。于是，将其解压到sessionpage-fx-0.2.1目录。
+</p>
+
+<p>
+用Vim打开该目录下的 <i>install.rdf</i> 文件（这其实是一个xml格式的文件），其中一段代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-xml">&lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">targetApplication</span>&gt;                                               <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #657b83; font-style: italic;"> &#20195;&#34920;&#25554;&#20214;&#23433;&#35013;&#30340;&#30446;&#26631;&#31243;&#24207; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
+    &lt;<span style="color: #268bd2;">Description</span>&gt;
+        &lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">id</span>&gt;{ec8030f7-c20a-464f-9b0e-13a3a9e97384}&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">id</span>&gt;        <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #657b83; font-style: italic;"> firefox&#30340;GUID&#65292;&#35828;&#26126;&#35813;&#25554;&#20214;&#26159;firefox&#25554;&#20214; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
+        &lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">minVersion</span>&gt;2.0&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">minVersion</span>&gt;                           <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #657b83; font-style: italic;"> &#33021;&#23433;&#35013;&#30340;&#26368;&#20302;firefox&#29256;&#26412; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
+        &lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">maxVersion</span>&gt;7.0.1&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">maxVersion</span>&gt;                         <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #657b83; font-style: italic;"> &#33021;&#23433;&#35013;&#30340;&#26368;&#39640;firefox&#29256;&#26412;&#65292;&#24050;&#20462;&#25913; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
+    &lt;/<span style="color: #268bd2;">Description</span>&gt;
+&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">targetApplication</span>&gt;
+</pre>
+</div>
+
+<p>
+将 <code>&lt;em:maxVersion&gt;</code> 结点的值改为7.0.1，保存，再将该文件压缩回 <i>sessionpage-fx-0.2.1.xpi</i> 文件，并拖进firefox安装，果然，可以安装了。
+</p>
+
+<p>
+本以为到这里就结束了，但没想到的是，插件倒是安装上去了，而且在启动firefox时也能打开该插件要显示标签页列表的页面，但该页面中却死活不显示上个session未关闭的标签页列表，好吧，继续。。。
+</p>
+
+<p>
+该插件对应的URI是 <b>chrome://sessionpage/content/SessionPage.xul</b> ，SessionPage.xul这个文件在chrome/content目录下，这是一个类似HTML但却不是HTML的文件，在该文件的开头可以看到其引用了三个js文件，并在onload事件调用了 <code>SessionPageController.init()</code> 函数：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-html">&lt;<span style="color: #268bd2;">window</span>
+  <span style="color: #b58900;">id</span>=<span style="color: #2aa198;">"SessionPage"</span>
+  <span style="color: #b58900;">xmlns</span>=<span style="color: #2aa198;">"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"</span>
+  <span style="color: #b58900;">title</span>=<span style="color: #2aa198;">"&amp;SessionPage.Title;"</span>
+  <span style="color: #b58900;">orient</span>=<span style="color: #2aa198;">"vertical"</span>
+  <span style="color: #b58900;">onload</span>=<span style="color: #2aa198;">"SessionPageController.init();"</span>&gt;
+
+&lt;<span style="color: #268bd2;">script</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"application/x-javascript"</span> <span style="color: #b58900;">src</span>=<span style="color: #2aa198;">"chrome://sessionpage/content/SessionPage.js"</span> /&gt;
+&lt;<span style="color: #268bd2;">script</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"application/x-javascript"</span> <span style="color: #b58900;">src</span>=<span style="color: #2aa198;">"chrome://sessionpage/content/SessionManager.js"</span> /&gt;
+&lt;<span style="color: #268bd2;">script</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"application/x-javascript"</span> <span style="color: #b58900;">src</span>=<span style="color: #2aa198;">"chrome://sessionpage/content/SessionPageUtils.js"</span> /&gt;
+
+...&#20197;&#19979;&#20195;&#30721;&#30465;&#30053;...
+</pre>
+</div>
+
+<p>
+于是，打开相同目录下的SessionPage.js、SessionManager.js看了看，看不出所以然来，于是给init()会调用的每个函数都加了一个alert()，再试，发现：在执行到SessionManager.js文件中SessionStoreManager对象上的convertToObject()函数的时候（完整的调用层次为：SessionPageController.init() -&gt; SessionStoreManager().init() -&gt; gotoSession() -&gt; convertToObject()），函数不返回，于是后面的代码无法执行，造成了插件的工作不正常。convertToObject()函数的代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-javascript"><span style="color: #268bd2;">convertToObject</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">aStr</span>)
+{
+    <span style="color: #859900;">var</span> <span style="color: #b58900;">s</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">Components.utils.Sandbox</span>(<span style="color: #2aa198;">"about:blank"</span>);
+    <span style="color: #859900;">return</span> Components.utils.evalInSandbox(aStr, s);
+}
+</pre>
+</div>
+
+<p>
+该函数的功能是把一个字符串转换为JSON对象，但函数中的转换方法却从来没见过，经测试，函数第一句代码可以通过，第二句代码却不返回。
+</p>
+
+<p>
+放狗一搜，在Mozilla Developer Network上找到了关于这两个方法的docs：
+</p>
+
+<p>
+<a href="https://developer.mozilla.org/en/Components.utils.Sandbox">https://developer.mozilla.org/en/Components.utils.Sandbox</a>
+</p>
+
+<p>
+<a href="https://developer.mozilla.org/en/Components.utils.evalInSandbox">https://developer.mozilla.org/en/Components.utils.evalInSandbox</a>
+</p>
+
+<p>
+两个页面中都写有关于Gecko 2.0的note（Gecko是firefox的内核引擎，Gecko 2.0对应firefox 4，firefox 7则对应于Gecko 7。。。暴汗啊，又一个版本帝。。。），但是note中又没有明确说明不准在Gecko 2.0及以后版本使用Sandbox和evalInSandbox，但它却又确实执行不成功。。。唉，罢了，找到问题就好。
+</p>
+
+<p>
+找到问题的根本原因就好办了，因为该函数是转换字符串为JSON对象的函数，于是，将该函数改为：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-javascript"><span style="color: #268bd2;">convertToObject</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">aStr</span>)
+{
+    <span style="color: #859900;">return</span> JSON.parse(aStr);
+}
+</pre>
+</div>
+
+<p>
+保存后，再重启firefox，OK，那美妙的标签面列表出现了，如下图：
+</p>
+
+<p>
+<img src="http://pic002.cnblogs.com/images/2011/285309/2011102321181937.png" />
+</p>
+
+<p>
+（附：Session Page还不太完美，如果打开标签页列表中的一个标签页后，这个标签页应该从列表中去掉才是，但目前该功能并未实现。这个功能，以后再做吧。今天为了搞定Sesison Page这个插件，看了一天MDN上关于firefox的extension开发的英文，都快要吐了。。。）
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-10-23</span>
+        <span title="last modification date" class="post-info">2013-06-23</span>
+        <span title="tags" class="post-info"><a href="/tags/firefox/">Firefox</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/10/23/fix-firefox-session-page-plugin/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/10/23/fix-firefox-session-page-plugin/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
