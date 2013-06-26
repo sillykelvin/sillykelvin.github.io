@@ -469,3 +469,31 @@
    :   (carmichael-check n (- n 1)))
 
    需要测试Carmichael数的时候，执行 =carmichael-test= 即可。这个测试有一点缺陷就是，不能把真正的质数和Carmichael数分开，不过题目是要求验证Carmichael数，而并不是求Carmichael数，所以这点缺陷也不算是缺陷。
+
+** 练习1.28
+
+   这个题目是费马测试的一个变形，因为费马测试会被Carmichael数骗，所以这个Miller-Rabin检查增强了限制，Carmichael数也通不过检查。增强的条件是：如果大于1小于n - 1的一个数的平方取模n等于1，则n不是素数。这样，需要我们将费马测试中的 =expmod= 函数加以改进，所有相关的过程如下：
+
+   : (define (determine-result a n)
+   :   (cond ((and (not (= a 1))
+   :               (not (= a (- n 1)))
+   :               (= (remainder (square a) n) 1)) 0)
+   :         (else (remainder (square a) n))))
+   :
+   : (define (expmod base exp m)
+   :   (cond ((= exp 0) 1)
+   :         ((even? exp)
+   :          (determine-result (expmod base (/ exp 2) m) m))
+   :         (else (remainder (* base (expmod base (- exp 1) m)) m))))
+   :
+   : (define (miller-rabin-test n)
+   :   (define (try-it a)
+   :     (= (expmod a (- n 1) n) 1))
+   :   (try-it (+ 1 (random (- n 1)))))
+   :
+   : (define (miller-rabin-prime? n times)
+   :   (cond ((= times 0) true)
+   :         ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
+   :         (else false)))
+
+   再用 =miller-rabin-prime?= 检测素数的时候，就算连561，1105等Carmichael数也无处遁形了。
