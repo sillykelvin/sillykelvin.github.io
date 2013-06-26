@@ -443,6 +443,34 @@ It appears that you have answered your own question. There is nothing quite like
 
   “标准答案”咱就不看了，没看太懂。。
 
+* Problem 10
+
+  关于问题10的描述：
+
+  #+BEGIN_QUOTE
+  The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+
+  Find the sum of all the primes below two million.
+  #+END_QUOTE
+
+  描述挺简单，就是求小于两百万的所有素数的和。
+
+  又是素数。。关于素数的测试，自然不能用费马测试了，不可能把小于两百万的所有Carmichael数都列出来排除掉。。
+
+  不过，在SICP的练习1.28中，提到一种改进的素数测试方法，叫Miller-Rabin检查，可以避开Carmichael数，刚好我也在做SICP的习题，于是把这个题做了一下，然后有下面的代码（因为SICP的代码都是用Scheme写的，所以图方便，就不把相关的函数一一porting到Elisp了，直接用Scheme写了）：
+
+  : (define (find-prime-sum max)
+  :   (cond ((> max 2)
+  :          (+ (if (miller-rabin-prime? max 5) max 0)
+  :             (find-prime-sum (- max (if (even? max) 1 2)))))
+  :         (else 2)))
+  :
+  : (find-prime-sum 2000000)
+
+  上面用到的 =miller-rabin-prime?= 过程，在我的[[http://kelvinh.github.io/wiki/sicp/#outline-container-sec-1-28][SICP习题解]]可以找到，这里就不再抄一遍了。
+
+  至于“标准答案”，我搞出一个能正确判断素数的函数就很不容易了，结果它宣称能在一秒内算出答案，太伤心了，不看鸟。。
+
 * Footnotes
 
 [fn:1] 关于费马小定理以及费马检查部分的内容来自SICP的1.2.6节，代码实现是我根据书上的Scheme实现来写了一个Elisp的版本。
