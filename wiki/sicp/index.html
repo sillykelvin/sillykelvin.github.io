@@ -780,6 +780,42 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </p>
 </div>
 </div>
+<div id="outline-container-sec-1-28" class="outline-3">
+<h3 id="sec-1-28">练习1.28</h3>
+<div class="outline-text-3" id="text-1-28">
+<p>
+这个题目是费马测试的一个变形，因为费马测试会被Carmichael数骗，所以这个Miller-Rabin检查增强了限制，Carmichael数也通不过检查。增强的条件是：如果大于1小于n - 1的一个数的平方取模n等于1，则n不是素数。这样，需要我们将费马测试中的 <code>expmod</code> 函数加以改进，所有相关的过程如下：
+</p>
+
+<pre class="example">
+(define (determine-result a n)
+  (cond ((and (not (= a 1))
+              (not (= a (- n 1)))
+              (= (remainder (square a) n) 1)) 0)
+        (else (remainder (square a) n))))
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (determine-result (expmod base (/ exp 2) m) m))
+        (else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+(define (miller-rabin-test n)
+  (define (try-it a)
+    (= (expmod a (- n 1) n) 1))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (miller-rabin-prime? n times)
+  (cond ((= times 0) true)
+        ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
+        (else false)))
+</pre>
+
+<p>
+再用 <code>miller-rabin-prime?</code> 检测素数的时候，就算连561，1105等Carmichael数也无处遁形了。
+</p>
+</div>
+</div>
 </div>
 
       </div>
@@ -787,7 +823,7 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-06-21</span>
+        <span title="last modification date" class="post-info">2013-06-26</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
