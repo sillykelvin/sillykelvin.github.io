@@ -681,6 +681,54 @@ There exists exactly one Pythagorean triplet for which <var>a</var> + <var>b</va
 </p>
 </div>
 </div>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">Problem 10</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+关于问题10的描述：
+</p>
+
+<blockquote>
+<p>
+The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+</p>
+
+<p>
+Find the sum of all the primes below two million.
+</p>
+</blockquote>
+
+<p>
+描述挺简单，就是求小于两百万的所有素数的和。
+</p>
+
+<p>
+又是素数。。关于素数的测试，自然不能用费马测试了，不可能把小于两百万的所有Carmichael数都列出来排除掉。。
+</p>
+
+<p>
+不过，在SICP的练习1.28中，提到一种改进的素数测试方法，叫Miller-Rabin检查，可以避开Carmichael数，刚好我也在做SICP的习题，于是把这个题做了一下，然后有下面的代码（因为SICP的代码都是用Scheme写的，所以图方便，就不把相关的函数一一porting到Elisp了，直接用Scheme写了）：
+</p>
+
+<pre class="example">
+(define (find-prime-sum max)
+  (cond ((&gt; max 2)
+         (+ (if (miller-rabin-prime? max 5) max 0)
+            (find-prime-sum (- max (if (even? max) 1 2)))))
+        (else 2)))
+
+(find-prime-sum 2000000)
+</pre>
+
+<p>
+上面用到的 <code>miller-rabin-prime?</code> 过程，在我的<a href="http://kelvinh.github.io/wiki/sicp/#outline-container-sec-1-28">SICP习题解</a>可以找到，这里就不再抄一遍了。
+</p>
+
+<p>
+至于“标准答案”，我搞出一个能正确判断素数的函数就很不容易了，结果它宣称能在一秒内算出答案，太伤心了，不看鸟。。
+</p>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -697,7 +745,7 @@ There exists exactly one Pythagorean triplet for which <var>a</var> + <var>b</va
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2013-05-05</span>
-        <span title="last modification date" class="post-info">2013-06-07</span>
+        <span title="last modification date" class="post-info">2013-06-27</span>
         <span title="tags" class="post-info"><a href="/tags/math/">Math</a>, <a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/elisp/">Elisp</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
