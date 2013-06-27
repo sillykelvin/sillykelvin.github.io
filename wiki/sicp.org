@@ -497,3 +497,34 @@
    :         (else false)))
 
    再用 =miller-rabin-prime?= 检测素数的时候，就算连561，1105等Carmichael数也无处遁形了。
+
+** 练习1.29
+
+   定义两个过程如下：
+
+   : (define (sum-simpson-rule f k n a b)
+   :   (define (factor)
+   :     (cond ((or (= k 0)
+   :                (= k n)) 1)
+   :           ((= (remainder k 2) 0) 2)
+   :           (else 4)))
+   :   (if (> k n)
+   :       0
+   :       (+ (* (factor) (f (+ a (* k (/ (- b a) n)))))
+   :          (sum-simpson-rule f (+ 1 k) n a b))))
+   :
+   : (define (simpson-rule f n a b)
+   :   (* (/ (/ (- b a) n) 3) (sum-simpson-rule f 0 n a b)))
+
+   经过测试，这个辛普森规则准得过分，在测试 =cube= 函数在0到1之间的积分时，n都不用取到100或者1000，就算取成2，结果也是精确的1/4。。。
+
+** 练习1.30
+
+   采用迭代进行计算的 =sum= 过程如下：
+
+   : (define (sum term a next b)
+   :   (define (iter a result)
+   :     (if (> a b)
+   :         result
+   :         (iter (next a) (+ (term a) result))))
+   :   (iter a 0))
