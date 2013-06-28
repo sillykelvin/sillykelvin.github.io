@@ -528,3 +528,87 @@
    :         result
    :         (iter (next a) (+ (term a) result))))
    :   (iter a 0))
+
+** 练习1.31
+
+   递归的 =product= 过程：
+
+   : (define (product term a next b)
+   :   (if (> a b)
+   :       1
+   :       (* (term a)
+   :          (product term (next a) next b))))
+
+   迭代的 =product= 过程：
+
+   : (define (product term a next b)
+   :   (define (iter a result)
+   :     (if (> a b)
+   :         result
+   :         (iter (next a) (* (term a) result))))
+   :   (iter a 1))
+
+   =factorial= 过程：
+
+   : (define (factorial n)
+   :   (product (lambda (a) a) 1 (lambda (a) (+ 1 a)) n))
+
+   求圆周率PI的过程：
+
+   : (define (cal-pi n)
+   :   (* 2.0           ;; 使用2.0而不用2，是为了让结果展示为小数而不是分数
+   :      (if (even? n) n (+ 1 n)) ;; 这个不可缺少，下面有解释
+   :      (/
+   :       (product (lambda (a) (square a))
+   :                2
+   :                (lambda (a) (+ 2 a))
+   :                (if (even? n) n (+ 1 n)))
+   :       (product (lambda (a) (square a))
+   :                3
+   :                (lambda (a) (+ 2 a))
+   :                (if (even? n) (+ 1 n) (+ 2 n))))))
+
+   书中给出的求PI公式比较tricky，将等式两边乘以2，就会发现形式比书中原来的形式要完美很多，上面的过程的基础正是乘以2后的等式。分别计算分子和分母，相除后，再乘以2，但要注意的是，这时的结果还不是圆周率，还需要乘以最后一个参加计算的分子值，为什么呢？因为我们最初为图方便（为了使用平方计算），把等式两边都乘以2，这样就硬生生把分子部分的序列给向后移了一位，所以要将原来被挤掉的分子最后一个参加计算的数字给补上。
+
+** 练习1.32
+
+   递归的 =accumulate= 过程：
+
+   : (define (accumulate combiner null-value term a next b)
+   :   (if (> a b)
+   :       null-value
+   :       (combiner (term a)
+   :                 (accumulate combiner null-value term (next a) next b))))
+
+   迭代的 =accumulate= 过程：
+
+   : (define (accumulate combiner null-value term a next b)
+   :   (define (iter a result)
+   :     (if (> a b)
+   :         result
+   :         (iter (next a) (combiner (term a) result))))
+   :   (iter a null-value))
+
+   利用 =accumulate= 进行重定义的 =sum= 和 =product= 过程：
+
+   : (define (sum term a next b)
+   :   (accumulate + 0 term a next b))
+   :
+   : (define (product term a next b)
+   :   (accumulate * 1 term a next b))
+
+** 练习1.33
+
+   =filtered-accumulate= 过程以及根据其定义的求素数和、求互素正整数积的过程：
+
+   : (define (filtered-accumulate combiner null-value term a next b filter)
+   :   (if (or (> a b) (not (filter a b)))
+   :       null-value
+   :       (combiner (term a)
+   :                 (filtered-accumulate combiner null-value term (next a) next b filter))))
+   :
+   : (define (sum-prime a b)
+   :   (filtered-accumulate + 0 (lambda (a) a) a (lambda (a) (+ 1 a)) b prime?))
+   :
+   : (define (product-gcd-prime n)
+   :   (filtered-accumulate * 1 (lambda (a) a) 1 (lambda (a) (+ 1 a)) n gcd-eq1?))
