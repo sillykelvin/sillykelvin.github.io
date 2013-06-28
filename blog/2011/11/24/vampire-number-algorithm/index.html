@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>也来写一个吸血鬼数的求法 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="how to calculate vampire numbers" />
+    <meta name="keywords" content="vampire number, algorithm, java" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>也来写一个吸血鬼数的求法</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，删去了一些废话，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<p>
+昨天晚上在看Thinking in Java时，作者在第四章第八节的练习10里面提到了一种有趣的数字：吸血鬼数。以下是来自wikipedia的定义：
+</p>
+
+<blockquote>
+<p>
+從合成數v開始,該合成數需有偶數n個位,然後用v的各個數字組成兩個n/2個位的正整數x和y(x和y不能同時以0為個位數).若x和y的積，剛好就是v，那麼v就是吸血鬼數（vampire number），而x和y則稱為尖牙。
+</p>
+
+<p>
+例如1260是吸血鬼數，21和60是其尖牙，因為21×60=1260。可是126000=210×600卻非，因為210和600都以0為個位數。又例如1023是31和33的積，但31和33並沒有用到原數的所有數字(並沒有用到0)，所以1023不是吸血鬼數。
+</p>
+</blockquote>
+
+<p>
+看起来挺有趣，于是自己也写了一个求吸血鬼数的算法，原练习要求的是求四位数，我改进了一下，可以求任意int型整数，代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-java"><span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">List</span>;
+<span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">LinkedList</span>;
+
+<span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">VampireNumber</span> {
+
+    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">find</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">start</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">end</span>) {
+        System.out.println(<span style="color: #2aa198;">"start: "</span> + start + <span style="color: #2aa198;">", end: "</span> + end);
+
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">slen</span> = VampireNumber.getIntegerLength(start);
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">elen</span> = VampireNumber.getIntegerLength(end);
+        <span style="color: #859900;">if</span>(slen % 2 != 0) {
+            slen++;
+        }
+        <span style="color: #859900;">if</span>(elen % 2 == 0) {
+            elen++;
+        }
+        <span style="color: #859900;">if</span>(slen &gt;= elen) {
+            System.out.println(<span style="color: #2aa198;">"No suitable number exists in this section."</span>);
+            <span style="color: #859900;">return</span>;
+        }
+
+        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#26681;&#25454;&#33539;&#22260;&#30830;&#23450;&#19979;&#38754;&#24490;&#29615;&#24320;&#22987;&#21644;&#32467;&#26463;&#30340;&#25968;&#23383;</span>
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">begin</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, slen / 2 - 1);
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">finish</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, (elen - 1) / 2);
+        System.out.println(<span style="color: #2aa198;">"begin: "</span> + begin + <span style="color: #2aa198;">", finish: "</span> + finish);
+
+        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = begin; i &lt; finish; i++) {
+            <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">j</span> = i; j &lt; finish; j++) {    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#20174;i&#24320;&#22987;&#65292;&#36991;&#20813;&#20986;&#29616;(17, 27)&#12289;(27, 17)&#36825;&#26679;&#30340;&#37325;&#22797;</span>
+                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#22914;&#26524;&#20004;&#20010;&#25968;&#32467;&#23614;&#37117;&#26159;0&#65292;&#21017;&#32487;&#32493;</span>
+                <span style="color: #859900;">if</span>(i % 10 == 0 &amp;&amp; j % 10 == 0) {
+                    <span style="color: #859900;">continue</span>;
+                }
+                <span style="color: #b58900;">int</span> <span style="color: #b58900;">first</span> = VampireNumber.getIntegerLength(i);
+                <span style="color: #b58900;">int</span> <span style="color: #b58900;">second</span> = VampireNumber.getIntegerLength(j);
+                <span style="color: #859900;">if</span>(second &gt; first) {
+                    <span style="color: #859900;">break</span>;
+                } <span style="color: #859900;">else</span> <span style="color: #859900;">if</span>(second &lt; first) {
+                    <span style="color: #859900;">continue</span>;
+                }
+
+                <span style="color: #b58900;">int</span> <span style="color: #b58900;">value</span> = i * j;
+                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#26816;&#27979;value&#26159;&#21542;&#24050;&#28322;&#20986;</span>
+                <span style="color: #859900;">if</span>(value &lt; 0) {
+                    <span style="color: #859900;">break</span>;
+                }
+                <span style="color: #859900;">if</span>(value &lt; start) {
+                    <span style="color: #859900;">continue</span>;
+                }
+                <span style="color: #859900;">if</span>(value &gt; end) {
+                    <span style="color: #859900;">break</span>;
+                }
+
+                <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = VampireNumber.getIntegerLength(value);
+                <span style="color: #859900;">if</span>(len != first + second) {
+                    <span style="color: #859900;">continue</span>;
+                }
+
+                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#23558;&#20004;&#20010;&#20056;&#25968;&#30340;&#25968;&#23383;&#25918;&#20837;List</span>
+                List&lt;Integer&gt; numList = <span style="color: #859900;">new</span> <span style="color: #b58900;">LinkedList</span>&lt;Integer&gt;();
+                VampireNumber.getNumberList(i, first, numList);
+                VampireNumber.getNumberList(j, second, numList);
+
+                <span style="color: #b58900;">boolean</span> <span style="color: #b58900;">isVampireNumber</span> = <span style="color: #6c71c4;">true</span>;
+                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#23558;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#36827;&#34892;&#27604;&#36739;</span>
+                <span style="color: #859900;">while</span>(value != 0) {
+                    <span style="color: #b58900;">int</span> <span style="color: #b58900;">current</span> = value % 10;
+                    value /= 10;
+
+                    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>numList.contains(current)) {
+                        isVampireNumber = <span style="color: #6c71c4;">false</span>;
+                        <span style="color: #859900;">break</span>;
+                    }
+                    numList.remove(<span style="color: #859900;">new</span> <span style="color: #b58900;">Integer</span>(current));
+                }
+                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#22914;&#26524;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#21563;&#21512;&#65292;&#21017;&#26159;&#21560;&#34880;&#39740;&#25968;</span>
+                <span style="color: #859900;">if</span>(isVampireNumber) {
+                    System.out.println(<span style="color: #2aa198;">"A vampire number found: "</span> + i * j + <span style="color: #2aa198;">", ("</span> + i + <span style="color: #2aa198;">", "</span> + j + <span style="color: #2aa198;">")."</span>);
+                }
+            }
+        }
+    }
+
+    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#23558;num&#30340;&#21508;&#20010;&#20301;&#30340;&#25968;&#23383;&#25918;&#20837;list</span>
+    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">getNumberList</span>(<span style="color: #859900;">final</span> <span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">length</span>, List&lt;Integer&gt; list) {
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">copy</span> = num;
+        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = 0; i &lt; length; i++) {
+            list.add(copy % 10);
+            copy /= 10;
+        }
+    }
+
+    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#21462;&#24471;num&#30340;&#20301;&#25968;</span>
+    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">int</span> <span style="color: #268bd2;">getIntegerLength</span>(<span style="color: #859900;">final</span> <span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>) {
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = 0;
+        <span style="color: #b58900;">int</span> <span style="color: #b58900;">copy</span> = num;
+        <span style="color: #859900;">if</span>(copy == 0) {
+            <span style="color: #859900;">return</span> ++len;
+        }
+        <span style="color: #859900;">while</span>(copy != 0) {
+            copy /= 10;
+            len++;
+        }
+        <span style="color: #859900;">return</span> len;
+    }
+
+    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>) {
+        System.out.println(<span style="color: #2aa198;">"----------- Now start computing... -----------"</span>);
+        <span style="color: #b58900;">long</span> <span style="color: #b58900;">s</span> = System.currentTimeMillis();
+        VampireNumber.find(0, <span style="color: #6c71c4;">Integer</span>.MAX_VALUE);
+        <span style="color: #b58900;">long</span> <span style="color: #b58900;">f</span> = System.currentTimeMillis();
+        System.out.println(<span style="color: #2aa198;">"----- Computing finished, time used: "</span> + (f - s) + <span style="color: #2aa198;">" ms. -----"</span>);
+    }
+}
+</pre>
+</div>
+
+<p>
+上述程序用于求出0与 <code>Integer.MAX_VALUE</code> 之间的所有吸血鬼数，经实际测试（机器为四核3.3G的CPU，4G内存），运行时间为746259ms，超过了12分钟，在这么高配置的机器中运行速度还这么慢，可见整个算法的低效程度，有待优化~~~ ^_^
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-11-24</span>
+        <span title="last modification date" class="post-info">2013-06-28</span>
+        <span title="tags" class="post-info"><a href="/tags/math/">Math</a>, <a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/java/">Java</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/11/24/vampire-number-algorithm/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/11/24/vampire-number-algorithm/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
