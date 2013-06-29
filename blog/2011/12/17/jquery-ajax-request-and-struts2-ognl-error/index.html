@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>jQuery发送含有数组参数的ajax请求以及后台Struts2的OGNL解析错误 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="slove jquery ajax request contains array" />
+    <meta name="keywords" content="jQuery, javascript, java, struts2" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>jQuery发送含有数组参数的ajax请求以及后台Struts2的OGNL解析错误</h1>
+        <p>
+<b>这是我在博客园的博客中的文章。</b>
+</p>
+
+<p>
+下面是原文（未大改，稍作了一些格式上的调整）：
+</p>
+
+<hr/>
+
+<p>
+前几天回家了一趟，唉，回家的感觉真爽。
+</p>
+
+<p>
+不多废话，jQuery在发送ajax请求时，如果请求的参数里有数组对象，后台的Struts2在用 <code>List</code> 作为接收对象的时候，会报OGNL错误：
+</p>
+
+<blockquote>
+<p>
+ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.ParseException: Encountered " "]" "] "" at line xx, column xx.
+</p>
+</blockquote>
+
+<p>
+放狗搜到一篇相关的文章：<a href="http://www.cnblogs.com/tanhao/archive/2011/06/22/2086513.html，在数组参数的外层套一个">http://www.cnblogs.com/tanhao/archive/2011/06/22/2086513.html，在数组参数的外层套一个</a> <code>$.param()</code> 函数即可，例子如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-javascript">$.ajax({
+    url: _this.get_detail_url,
+    type: <span style="color: #2aa198;">'POST'</span>,
+    data: $.param(_this.params, <span style="color: #6c71c4;">true</span>),    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#27880;&#24847;&#35201;&#20256;&#36882;&#31532;&#20108;&#20010;&#21442;&#25968;</span>
+    dataType: <span style="color: #2aa198;">'json'</span>,
+    timeout: 30000,
+
+    <span style="color: #268bd2;">success</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">returnData</span>, <span style="color: #b58900;">textStatus</span>) {
+        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">do something here</span>
+    },
+
+    <span style="color: #268bd2;">error</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">xhr</span>, <span style="color: #b58900;">textStatus</span>, <span style="color: #b58900;">errorThrown</span>) {
+        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">do something here</span>
+    }
+});
+</pre>
+</div>
+
+<p>
+这样处理之后，后台Struts2就可以正确地去 <code>List</code> 去存储这个数组了。
+</p>
+
+<hr/>
+
+<p>
+下面深究一下：
+</p>
+
+<p>
+经过查看源代码，jQuery在处理ajax请求的data时，如果直接传递非string类型的数据给它（包括object，array等），那么它会调用 <code>$.param()</code> 将其转换成string：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-javascript"><span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">Convert data if not already a string</span>
+<span style="color: #859900;">if</span> ( s.data &amp;&amp; s.processData &amp;&amp; <span style="color: #859900;">typeof</span> s.data !== <span style="color: #2aa198;">"string"</span> ) {
+    s.data = jQuery.param(s.data, s.traditional);
+}
+</pre>
+</div>
+
+<p>
+第二个参数 <code>s.traditional</code> 用来控制是否转换为传统格式，默认为 <code>false</code> 。在w3school上找到这样一段说明：
+</p>
+
+<hr/>
+
+<p>
+我们可以如下显示对象的查询字符串表示以及 URI 编码版本：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-javascript"><span style="color: #859900;">var</span> <span style="color: #b58900;">myObject</span> = {
+    a: {
+        one: 1,
+        two: 2,
+        three: 3
+    },
+    b: [1,2,3]
+};
+<span style="color: #859900;">var</span> <span style="color: #b58900;">recursiveEncoded</span> = $.param(myObject);
+<span style="color: #859900;">var</span> <span style="color: #b58900;">recursiveDecoded</span> = decodeURIComponent($.param(myObject));
+
+alert(recursiveEncoded);
+alert(recursiveDecoded);
+</pre>
+</div>
+
+<p>
+<code>recursiveEncoded</code> 和 <code>recursiveDecoded</code> 的值输出如下：
+</p>
+
+<blockquote>
+<p>
+a%5Bone%5D=1&amp;a%5Btwo%5D=2&amp;a%5Bthree%5D=3&amp;b%5B%5D=1&amp;b%5B%5D=2&amp;b%5B%5D=3
+a[one]=1&amp;a[two]=2&amp;a[three]=3&amp;b[]=1&amp;b[]=2&amp;b[]=3
+</p>
+</blockquote>
+
+<p>
+可以将 <code>traditional</code> 参数设置为 <code>true</code> ，来模拟jQuery 1.4之前版本中 <code>$.param()</code> 的行为：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-javascript"><span style="color: #859900;">var</span> <span style="color: #b58900;">myObject</span> = {
+    a: {
+        one: 1,
+        two: 2,
+        three: 3
+    },
+    b: [1,2,3]
+};
+<span style="color: #859900;">var</span> <span style="color: #b58900;">shallowEncoded</span> = $.param(myObject, <span style="color: #6c71c4;">true</span>);
+<span style="color: #859900;">var</span> <span style="color: #b58900;">shallowDecoded</span> = decodeURIComponent(shallowEncoded);
+
+alert(shallowEncoded);
+alert(shallowDecoded);
+</pre>
+</div>
+
+<p>
+<code>recursiveEncoded</code> 和 <code>recursiveDecoded</code> 的值输出如下：
+</p>
+
+<blockquote>
+<p>
+a=%5Bobject+Object%5D&amp;b=1&amp;b=2&amp;b=3
+a=[object+Object]&amp;b=1&amp;b=2&amp;b=3
+</p>
+</blockquote>
+
+<p>
+可以看到，如果不加 <code>true</code> 参数，数组会被转换成 <code>b[]=1&amp;b[]=2&amp;b[]=3</code> 的形式，Struts2目前还不能正确解析该形式；而加 <code>true</code> 参数的所谓“传统”解析方式会把数组解析成 <code>b=1&amp;b=2&amp;b=3</code> 的形式，所以Struts2就可以正确解析了。
+</p>
+
+<p>
+jQuery从1.4版本开始就有了如此蛋疼的解析方式（据说是为了满足PHP、RoR等后台的需要），不过幸好它还保留了原来的解析方式，对Struts2等框架最简单的解决方法就是将其ajax的 <code>traditional</code> 属性设为 <code>true</code> 即可：
+</p>
+
+<pre class="example">
+jQuery.ajaxSettings.traditional = true
+</pre>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2011-12-17</span>
+        <span title="last modification date" class="post-info">2013-06-30</span>
+        <span title="tags" class="post-info"><a href="/tags/jquery/">jQuery</a>, <a href="/tags/javascript/">Javascript</a>, <a href="/tags/java/">Java</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/";
+          var disqus_url = "http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
