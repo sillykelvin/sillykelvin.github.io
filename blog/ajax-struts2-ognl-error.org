@@ -1,0 +1,120 @@
+#+TITLE:       jQuery发送含有数组参数的ajax请求以及后台Struts2的OGNL解析错误
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2011-12-17 Sat
+#+URI:         /blog/%y/%m/%d/jquery-ajax-request-and-struts2-ognl-error/
+#+KEYWORDS:    jQuery, javascript, java, struts2
+#+TAGS:        :jQuery:Javascript:Java:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: slove jquery ajax request contains array
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+前几天回家了一趟，唉，回家的感觉真爽。
+
+不多废话，jQuery在发送ajax请求时，如果请求的参数里有数组对象，后台的Struts2在用 =List= 作为接收对象的时候，会报OGNL错误：
+
+#+BEGIN_QUOTE
+ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.ParseException: Encountered " "]" "] "" at line xx, column xx.
+#+END_QUOTE
+
+放狗搜到一篇相关的文章：http://www.cnblogs.com/tanhao/archive/2011/06/22/2086513.html，在数组参数的外层套一个 =$.param()= 函数即可，例子如下：
+
+#+BEGIN_SRC javascript
+$.ajax({
+    url: _this.get_detail_url,
+    type: 'POST',
+    data: $.param(_this.params, true),    // 注意要传递第二个参数
+    dataType: 'json',
+    timeout: 30000,
+
+    success: function(returnData, textStatus) {
+        // do something here
+    },
+
+    error: function(xhr, textStatus, errorThrown) {
+        // do something here
+    }
+});
+#+END_SRC
+
+这样处理之后，后台Struts2就可以正确地去 =List= 去存储这个数组了。
+
+--------------------------------------------------------------------------------
+
+下面深究一下：
+
+经过查看源代码，jQuery在处理ajax请求的data时，如果直接传递非string类型的数据给它（包括object，array等），那么它会调用 =$.param()= 将其转换成string：
+
+#+BEGIN_SRC javascript
+// Convert data if not already a string
+if ( s.data && s.processData && typeof s.data !== "string" ) {
+    s.data = jQuery.param(s.data, s.traditional);
+}
+#+END_SRC
+
+第二个参数 =s.traditional= 用来控制是否转换为传统格式，默认为 =false= 。在w3school上找到这样一段说明：
+
+--------------------------------------------------------------------------------
+
+我们可以如下显示对象的查询字符串表示以及 URI 编码版本：
+
+#+BEGIN_SRC javascript
+var myObject = {
+    a: {
+        one: 1,
+        two: 2,
+        three: 3
+    },
+    b: [1,2,3]
+};
+var recursiveEncoded = $.param(myObject);
+var recursiveDecoded = decodeURIComponent($.param(myObject));
+
+alert(recursiveEncoded);
+alert(recursiveDecoded);
+#+END_SRC
+
+=recursiveEncoded= 和 =recursiveDecoded= 的值输出如下：
+
+#+BEGIN_QUOTE
+a%5Bone%5D=1&a%5Btwo%5D=2&a%5Bthree%5D=3&b%5B%5D=1&b%5B%5D=2&b%5B%5D=3
+a[one]=1&a[two]=2&a[three]=3&b[]=1&b[]=2&b[]=3
+#+END_QUOTE
+
+可以将 =traditional= 参数设置为 =true= ，来模拟jQuery 1.4之前版本中 =$.param()= 的行为：
+
+#+BEGIN_SRC javascript
+var myObject = {
+    a: {
+        one: 1,
+        two: 2,
+        three: 3
+    },
+    b: [1,2,3]
+};
+var shallowEncoded = $.param(myObject, true);
+var shallowDecoded = decodeURIComponent(shallowEncoded);
+
+alert(shallowEncoded);
+alert(shallowDecoded);
+#+END_SRC
+
+=recursiveEncoded= 和 =recursiveDecoded= 的值输出如下：
+
+#+BEGIN_QUOTE
+a=%5Bobject+Object%5D&b=1&b=2&b=3
+a=[object+Object]&b=1&b=2&b=3
+#+END_QUOTE
+
+可以看到，如果不加 =true= 参数，数组会被转换成 =b[]=1&b[]=2&b[]=3= 的形式，Struts2目前还不能正确解析该形式；而加 =true= 参数的所谓“传统”解析方式会把数组解析成 =b=1&b=2&b=3= 的形式，所以Struts2就可以正确解析了。
+
+jQuery从1.4版本开始就有了如此蛋疼的解析方式（据说是为了满足PHP、RoR等后台的需要），不过幸好它还保留了原来的解析方式，对Struts2等框架最简单的解决方法就是将其ajax的 =traditional= 属性设为 =true= 即可：
+
+: jQuery.ajaxSettings.traditional = true

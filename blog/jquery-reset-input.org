@@ -1,0 +1,41 @@
+#+TITLE:       用jQuery重置用于文件上传的input (type="file")
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-02-29 Wed
+#+URI:         /blog/%y/%m/%d/jquery-reset-input-whose-type-is-file/
+#+KEYWORDS:    jquery, javascript
+#+TAGS:        :jQuery:Javascript:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to reset input content whose type is file using jquery
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+页面中有如下标签：
+
+: <input type="file" id="upload"/>
+
+此标签本用于文件上传，现在有需要将其值重置为空。于是想当然地写出如下代码：
+
+: $('#upload').val('');
+
+但经测试，该处理方法对IE无效，因为IE不允许javascript改变type为file的input的值，又是让人蛋疼的IE。。。
+
+在浏览器兼容性方面本人是白痴一个，遂放狗一搜，有解决方案如下：
+
+#+BEGIN_SRC javascript
+if(ie) {    // 此处判断是否是IE
+    $('#upload').replaceWith($('#upload').clone(true));
+} else {
+    $('#upload').val('');
+}
+#+END_SRC
+
+解决方案简单优雅，记于此，欢迎有需要的童鞋来此围观。
+
+本文参考自[[http://www.technowise.in/2009/12/clear-file-input-field-using-jquery.html]]，原文为英文，建议英文基础不错的童鞋去原文围观。

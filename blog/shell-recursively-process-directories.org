@@ -1,0 +1,52 @@
+#+TITLE:       Linux通过shell实现递归列目录及对文件的处理
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-03-23 Fri
+#+URI:         /blog/%y/%m/%d/recursively-list-directories-and-process-files-in-shell/
+#+KEYWORDS:    shell, linux, directory listing
+#+TAGS:        :Linux:Shell:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to recursively list directories through shell
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+之前本子一直是windows 7和Linux双系统，后来把windows 7换成了windows xp，而xp的试用期过了之后，却再也进不了xp系统了。我记得windows 7就算过期后，至少系统还能进，只不过黑黑屏而已，但是xp却是直接连系统都不让进了。这让我很不爽，于是，一怒之下，在上周末把硬盘格了，全部换成ext分区，全部装上Linux。
+
+在我把vim的一些插件从windows迁移过来时，在打开vim时很自然地报了E492: not an editor command: ^M的错误。因为插件中有dos格式的。
+
+我随便打开一个插件，发现就是dos格式的，如果人工把这些插件转换成unix格式的话。。。那我今天晚上又不用睡觉了。（PS：昨天晚上因为搞挂了一台机器直接导致我三点多才睡）
+
+记得Linux下有个 /dos2unix/ 的小工具，但看了下文档，只支持文件格式的转换，不支持对目录的批量转换。。。
+
+好吧，那看来得自己写个shell脚本处理了，这对强大的shell来说只是个小case：
+
+#+BEGIN_SRC shell
+#!/bin/bash
+
+function batch_convert() {
+    for file in `ls $1`
+    do
+        if [ -d $1"/"$file ]
+        then
+            batch_convert $1"/"$file
+        else
+            dos2unix $1"/"$file
+            #echo $1"/"$file
+        fi
+    done
+}
+
+batch_convert ~/.vim
+#+END_SRC
+
+保存为sh，然后加上可执行属性，运行一下，整个.vim文件夹内的所有文件就都被转换好了。
+
+再打开vim，再也没有那烦人的E492: not an editor command: ^M错误了。
+
+GR的M$，非要搞另类。

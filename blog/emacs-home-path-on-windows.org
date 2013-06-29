@@ -1,0 +1,54 @@
+#+TITLE:       windows系统中Emacs的HOME目录及配置文件的正确路径
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2012-04-27 Fri
+#+URI:         /blog/%y/%m/%d/set-emacs-home-directory-on-windows/
+#+KEYWORDS:    emacs, windows
+#+TAGS:        :Emacs:Windows:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to set emacs home directory on windows
+
+
+*这是我在博客园的博客中的文章。*
+
+下面是原文（未大改，稍作了一些格式上的调整）：
+
+--------------------------------------------------------------------------------
+
+最近爱折腾的毛病又犯了，开始折腾起Emacs，在自定义Emacs的配置文件存放位置时遇到一点问题，不过，在GNU的Emacs站点，看到这么一段话：
+
+#+BEGIN_QUOTE
+On Windows, the .emacs file may be called _emacs for backward compatibility with DOS and FAT filesystems where filenames could not start with a dot. Some users prefer to continue using such a name, because Explorer cannot create a file with a name starting with a dot, even though the filesystem and most other programs can handle it. In Emacs 22 and later, the init file may also be called =.emacs.d/init.el=. Many of the other files that are created by lisp packages are now stored in the =.emacs.d= directory too, so this keeps all your Emacs related files in one place.
+
+All the files mentioned above should go in your =HOME= directory. The =HOME= directory is determined by following the steps below:
+
+1. If the environment variableHOME is set, use the directory it indicates.
+2. If the registry entry =HKCU\SOFTWARE\GNU\Emacs\HOME= is set, use the directory it indicates.
+3. If the registry entry =HKLM\SOFTWARE\GNU\Emacs\HOME= is set, use the directory it indicates. Not recommended, as it results in users sharing the same HOME directory.
+4. If =C:\.emacs= exists, then use =C:/=. This is for backward compatibility, as previous versions defaulted to =C:/= if =HOME= was not set.
+5. Use the user's AppData directory, usually a directory called =Application Data= under the user's profile directory, the location of which varies according to Windows version and whether the computer is part of a domain.
+#+END_QUOTE
+
+也就是说，Emacs的配置文件有三种格式：.emacs文件、_emacs文件或者.emacs.d目录下的init.el（22或者更高版本）文件，但是，不管哪种格式，必须放对正确的目录Emacs才能找到，这个正确的目录就是HOME目录。
+
+熟悉Linux的朋友一般都知道home目录，简单的用~表示，或者用全路径表示为/home/<xxx>，其中xxx表示用户名字，所以，在Linux下将.emacs和.emacs.d放到这个目录下就行了，但windows没有home目录的概念，所以，Emacs就按如下方式来查找配置文件：
+
+1. 如果设置了HOME环境变量，那么就用它的值作为home目录~
+2. 如果存在注册表键值HKCU\SOFTWARE\GNU\Emacs\HOME，就用它的值作为home目录~
+3. 如果存在注册表键值HKLM\SOFTWARE\GNU\Emacs\HOME，就用它的值作为home目录~（和2的区别是，2只是针对当前用户的注册表路径，3则是针对所有用户）
+4. 如果存在C:\.emacs，就用C:\作为home目录~
+5. 如果以上都不存在的话，就使用<system root>\Users\<user name>\AppData\Roaming作为home目录~（对于XP和较早windows用户，需要到Documents and Settings目录下去找）
+
++从以上策略来看，1是比较好的做法，所以优先级也最高，应该是属于建议的方式，于是，新建一个HOME环境变量，将它的值设为想要放置Emacs配置文件的地方既可。+
+
+之前我是按以上方法设置的HOME目录，不过现在我后悔了，因为我发现不光是Emacs会使用HOME这个环境变量，会使用这个变量的至少还有以下程序或者插件：
+
+1. VIM，VIM会把_viminfo文件放在这个目录；
+2. VIM的neocomplcache插件，它会放置一个.neocon目录进去；
+3. firefox的pentadactyl插件，它会放一个pentadactyl目录进去。
+
+*所以，个人建议：*
+
+1. *如果你希望有一个公共的目录存放这些配置，就像Linux下的~目录一样，那么设置HOME这个环境变量最适合不过；*
+2. *如果你希望这个目录只存放Emacs的配置，那么，还是不要用HOME环境变量了，去注册表里面添加一个HOME键值吧。（至少我个人比较偏向于这个方式）*
