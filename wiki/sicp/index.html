@@ -985,6 +985,177 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </pre>
 </div>
 </div>
+<div id="outline-container-sec-1-34" class="outline-3">
+<h3 id="sec-1-34">练习1.34</h3>
+<div class="outline-text-3" id="text-1-34">
+<p>
+如果求值 <code>(f f)</code> ，展开的流程如下：
+</p>
+
+<pre class="example">
+(f f) =&gt; (f 2) =&gt; (2 2)
+</pre>
+
+<p>
+因为2不是一个过程名，所以出错。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-35" class="outline-3">
+<h3 id="sec-1-35">练习1.35</h3>
+<div class="outline-text-3" id="text-1-35">
+<p>
+<code>x |-&gt; 1 + 1/x</code> 的不动点即要求满足 <code>x = 1 + 1/x</code> ，两边乘以x得到 <code>x^2 = x + 1</code> ，即黄金分割满足的方程。
+</p>
+
+<p>
+通过 <code>fixed-point</code> 来计算黄金分割率：
+</p>
+
+<pre class="example">
+(fixed-point (lambda (x) (+ 1 (/ 1 x))) 0.5)
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-36" class="outline-3">
+<h3 id="sec-1-36">练习1.36</h3>
+<div class="outline-text-3" id="text-1-36">
+<p>
+修改后的 <code>fixed-point</code> 过程：
+</p>
+
+<pre class="example">
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (&lt; (abs (- v1 v2)) 0.0000001))
+  (define (try guess)
+    (let ((next (f guess)))
+      (display next)
+      (newline)
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+</pre>
+
+<p>
+不使用平均阻尼：
+</p>
+
+<pre class="example">
+(fixed-point (lambda (x) (/ (log 1000) (log x))) 2)
+</pre>
+
+<p>
+使用平均阻尼：
+</p>
+
+<pre class="example">
+(fixed-point (lambda (x) (average x (/ (log 1000) (log x)))) 2)
+</pre>
+
+<p>
+允许误差为10e-7的情况下，不使用平均阻尼需要46步，使用平均阻尼只需要13步。可见使用平均阻尼能大大减少必要的计算步数。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-37" class="outline-3">
+<h3 id="sec-1-37">练习1.37</h3>
+<div class="outline-text-3" id="text-1-37">
+<p>
+递归的 <code>cont-frac</code> 过程：
+</p>
+
+<pre class="example">
+(define (cont-frac n d k)
+  (define (frac i)
+    (if (&gt; i k)
+        0
+        (/ (n i)
+           (+ (d i) (frac (+ 1 i))))))
+  (frac 1))
+</pre>
+
+<p>
+迭代的 <code>cont-frac</code> 过程：
+</p>
+
+<pre class="example">
+(define (cont-frac n d k)
+  (define (iter i result)
+    (if (&lt; i 1)
+        result
+        (iter (- i 1)
+              (/ (n i)
+                 (+ (d i) result)))))
+  (iter k 0))
+</pre>
+
+<p>
+用下面的lambda过程来确定满足条件的k：
+</p>
+
+<pre class="example">
+((lambda (k)
+   (&lt; (abs (- (/ 1 (cont-frac (lambda (i) 1.0)
+                              (lambda (i) 1.0)
+                              k))
+              1.61803401))
+      0.0001))
+ 11)
+</pre>
+
+<p>
+最后确定，k取11即可保证4位的十进制精度。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-38" class="outline-3">
+<h3 id="sec-1-38">练习1.38</h3>
+<div class="outline-text-3" id="text-1-38">
+<p>
+这个题目最关键的是确定 <code>D(i)</code> 函数的值，观察规律，可以知道，序列中的3n项和3n+1项都是1，而3n+2项的值是2n+2，这里n是非负整数。所以，=D(i)= 相应的过程定义如下：
+</p>
+
+<pre class="example">
+(define (d i)
+  (cond ((or (= (remainder i 3) 0)
+             (= (remainder i 3) 1)) 1)
+        (else (/ (* 2 (+ 1 i)) 3))))
+</pre>
+
+<p>
+用来求e的程序：
+</p>
+
+<pre class="example">
+(+ 2
+   (cont-frac (lambda (i) 1.0) d 100000))
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-39" class="outline-3">
+<h3 id="sec-1-39">练习1.39</h3>
+<div class="outline-text-3" id="text-1-39">
+<p>
+<code>tan-cf</code> 过程如下：
+</p>
+
+<pre class="example">
+(define (tan-cf x k)
+  (define (n i)
+    (if (= i 1) x (square x)))
+  (define (d i)
+    (- (* 2 i) 1))
+  (define (cf i)
+    (if (&gt; i k)
+        0
+        (/ (n i)
+           (- (d i) (cf (+ 1 i))))))
+  (cf 1))
+</pre>
+</div>
+</div>
 </div>
 
       </div>
