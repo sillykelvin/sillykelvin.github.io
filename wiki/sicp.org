@@ -720,3 +720,11 @@
    :            (- (d i) (cf (+ 1 i))))))
    :   (cf 1))
 
+** 练习1.40
+
+   : (define (cubic a b c)
+   :   (lambda (x)
+   :     (+ (cube x)
+   :        (* a (square x))
+   :        (* b x)
+   :        c)))
