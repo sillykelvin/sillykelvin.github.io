@@ -26,24 +26,22 @@
 
 好吧，那看来得自己写个shell脚本处理了，这对强大的shell来说只是个小case：
 
-#+BEGIN_SRC shell
-#!/bin/bash
-
-function batch_convert() {
-    for file in `ls $1`
-    do
-        if [ -d $1"/"$file ]
-        then
-            batch_convert $1"/"$file
-        else
-            dos2unix $1"/"$file
-            #echo $1"/"$file
-        fi
-    done
-}
-
-batch_convert ~/.vim
-#+END_SRC
+: #!/bin/bash
+:
+: function batch_convert() {
+:     for file in `ls $1`
+:     do
+:         if [ -d $1"/"$file ]
+:         then
+:             batch_convert $1"/"$file
+:         else
+:             dos2unix $1"/"$file
+:             #echo $1"/"$file
+:         fi
+:     done
+: }
+:
+: batch_convert ~/.vim
 
 保存为sh，然后加上可执行属性，运行一下，整个.vim文件夹内的所有文件就都被转换好了。
 
