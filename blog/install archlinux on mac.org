@@ -6,7 +6,7 @@
 #+KEYWORDS:    linux, archlinux, macbook air
 #+TAGS:        :Linux:Archlinux:
 #+LANGUAGE:    en
-#+OPTIONS:     H:3 num:nil toc:nil \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: how to install archlinux on a macbook air
 
 
