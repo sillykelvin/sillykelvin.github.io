@@ -1169,6 +1169,48 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </pre>
 </div>
 </div>
+<div id="outline-container-sec-1-41" class="outline-3">
+<h3 id="sec-1-41">练习1.41</h3>
+<div class="outline-text-3" id="text-1-41">
+<p>
+<code>double</code> 过程：
+</p>
+
+<pre class="example">
+(define (double f)
+  (lambda (x) (f (f x))))
+</pre>
+
+<p>
+表达式的值是21，因为两次 <code>double</code> 调用就得到4层 <code>double</code> 嵌套的过程，再对 <code>inc</code> 作用，就会得到2的4次方，即16次 <code>inc</code> 过程的调用，所以结果是5 + 16 = 21。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-1-42" class="outline-3">
+<h3 id="sec-1-42">练习1.42</h3>
+<div class="outline-text-3" id="text-1-42">
+<pre class="example">
+(define (compose f g)
+  (lambda (x) (f (g x))))
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1-43" class="outline-3">
+<h3 id="sec-1-43">练习1.43</h3>
+<div class="outline-text-3" id="text-1-43">
+<pre class="example">
+(define (repeated f n)
+  (if (&lt;= n 1)
+      (lambda (x) (f x))
+      ;(repeated (compose f f) (- n 1))
+      (compose f (repeated f (- n 1)))))
+</pre>
+
+<p>
+需要注意 <code>repeated</code> 和 <code>compose</code> 的调用顺序，如果先调用 <code>compose</code> 再调用 <code>repeated</code> （如代码中注释所示），那过程 <code>f</code> 会被重复2的n-1次方（注意是次方关系）；但是反之，则 <code>f</code> 就只会被重复n次，是加和关系。
+</p>
+</div>
+</div>
 </div>
 
       </div>
@@ -1176,7 +1218,7 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-06-30</span>
+        <span title="last modification date" class="post-info">2013-07-01</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
