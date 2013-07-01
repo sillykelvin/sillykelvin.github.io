@@ -752,3 +752,17 @@
    :       (compose f (repeated f (- n 1)))))
 
    需要注意 =repeated= 和 =compose= 的调用顺序，如果先调用 =compose= 再调用 =repeated= （如代码中注释所示），那过程 =f= 会被重复2的n-1次方（注意是次方关系）；但是反之，则 =f= 就只会被重复n次，是加和关系。
+
+** 练习1.44
+
+   平滑过程 =smooth= ：
+
+   : (define dx 0.0000000001)
+   :
+   : (define (smooth f)
+   :   (lambda (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
+
+   n次平滑过程 =smooth-n= ：
+
+   : (define (smooth-n f n)
+   :   ((repeated smooth n) f))
