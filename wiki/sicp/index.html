@@ -1478,6 +1478,21 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 </div>
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4">练习2.4</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cdr</span> z)
+  (z (<span style="color: #859900;">lambda</span> (p q) q)))
+</pre>
+</div>
+
+<p>
+这三个过程充分利用了第一章讲的构造过程抽象： <code>cons</code> 返回一个过程，这个过程将一个参数过程作用于两个元素x和y上；于是，在定义 <code>car</code> 和 <code>cdr</code> 的时候，需要构造一个过程，分别返回第一个元素和第二个元素，然后把这个过程作为参数传递给 <code>cons</code> 返回的过程。
+</p>
+</div>
+</div>
 </div>
 
       </div>
