@@ -56,12 +56,14 @@
 <div id="outline-container-sec-1-3" class="outline-3">
 <h3 id="sec-1-3">练习1.3</h3>
 <div class="outline-text-3" id="text-1-3">
-<pre class="example">
-the answer below is wrong!!!
-(define (sum-of-max-two a b c)
-    (cond ((&lt; a b) (if (&lt; a c) (+ b c) (+ a b)))
-          (else (if (&lt; b c) (+ a c) (+ a b)))))
+<div class="org-src-container">
+
+<pre class="src src-scheme"><span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">the answer below is wrong!!!</span>
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum-of-max-two</span> a b c)
+    (<span style="color: #859900;">cond</span> ((&lt; a b) (<span style="color: #859900;">if</span> (&lt; a c) (+ b c) (+ a b)))
+          (<span style="color: #859900;">else</span> (<span style="color: #859900;">if</span> (&lt; b c) (+ a c) (+ a b)))))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-4" class="outline-3">
@@ -105,10 +107,12 @@ the answer below is wrong!!!
 另一个 <code>good-enough?</code> 函数：
 </p>
 
-<pre class="example">
-(define (good-enough? guess x)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">good-enough?</span> guess x)
   (&lt; (/ (abs (- (improve guess x) guess)) guess) 0.00001))
 </pre>
+</div>
 
 <p>
 这个函数不是用绝对误差来作比较，而是用两次guess的变化率来比较，这在处理很小的数时会比较有用，比方说小数0.0000000001这种，但在处理大数时，反而会增加误差，因为计算变化率的分母很大，导致分子很大时依然能满足要求，所以在处理大数时不如先前版本的绝对误差精确。
@@ -122,18 +126,20 @@ the answer below is wrong!!!
 牛顿法解立方根：
 </p>
 
-<pre class="example">
-(define (3sqrt guess x)
-  (if (good-enough? guess x)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">3sqrt</span> guess x)
+  (<span style="color: #859900;">if</span> (good-enough? guess x)
       guess
       (3sqrt (improve guess x) x)))
 
-(define (improve guess x)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">improve</span> guess x)
   (/ (+ (/ x (* guess guess)) (* 2 guess)) 3))
 
-(define (good-enough? guess x)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">good-enough?</span> guess x)
   (&lt; (/ (abs (- (improve guess x) guess)) guess) 0.00001))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-8" class="outline-3">
@@ -143,23 +149,27 @@ the answer below is wrong!!!
 作为一个递归过程，但其计算过程可能会是递归的，也可能是迭代的。以阶乘计算为例：
 </p>
 
-<pre class="example">
-;; 第一种定义
-(define (factorial n)
-  (if (= n 1)
+<div class="org-src-container">
+
+<pre class="src src-scheme"><span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#31532;&#19968;&#31181;&#23450;&#20041;</span>
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factorial</span> n)
+  (<span style="color: #859900;">if</span> (= n 1)
       1
       (* n (factorial (- n 1)))))
 </pre>
+</div>
 
-<pre class="example">
-;; 第二种定义
-(define (factorial n)
-  (define (fact-iter result counter)
-    (if (&gt; counter n)
+<div class="org-src-container">
+
+<pre class="src src-scheme"><span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#31532;&#20108;&#31181;&#23450;&#20041;</span>
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factorial</span> n)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fact-iter</span> result counter)
+    (<span style="color: #859900;">if</span> (&gt; counter n)
         result
         (fact-iter (* result counter) (+ counter 1))))
   (fact-iter 1 1))
 </pre>
+</div>
 
 <p>
 毫无疑问两种定义都使用了递归过程，但两者有些不同：第一种在计算时会导致 <code>factorial</code> 自身的展开，而且用于计算的n越大，展开的层数越多；第二种在计算时，只需要维护 <code>result</code> 以及 <code>counter</code> 两个变量即可。
@@ -173,6 +183,10 @@ the answer below is wrong!!!
 <div id="outline-container-sec-1-9" class="outline-3">
 <h3 id="sec-1-9">练习1.9</h3>
 <div class="outline-text-3" id="text-1-9">
+<p>
+这是一个递归计算过程：
+</p>
+
 <pre class="example">
 (inc (+ 3 5))
 (inc (inc (+ 2 5)))
@@ -186,7 +200,7 @@ the answer below is wrong!!!
 </pre>
 
 <p>
-这是一个递归计算过程
+这是一个迭代计算过程：
 </p>
 
 <pre class="example">
@@ -196,10 +210,6 @@ the answer below is wrong!!!
 (+ 0 9)
 9
 </pre>
-
-<p>
-这是一个迭代计算过程
-</p>
 </div>
 </div>
 <div id="outline-container-sec-1-10" class="outline-3">
@@ -229,13 +239,15 @@ n &lt; 3, f(n) = n; n &gt;= 3, f(n) = f(n-1) + 2f(n-2) + 3f(n-3)
 递归过程：
 </p>
 
-<pre class="example">
-(define (f n)
-  (cond ((&lt; n 3) n)
-        (else (+ (f (- n 1))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">f</span> n)
+  (<span style="color: #859900;">cond</span> ((&lt; n 3) n)
+        (<span style="color: #859900;">else</span> (+ (f (- n 1))
                  (* 2 (f (- n 2)))
                  (* 3 (f (- n 3)))))))
 </pre>
+</div>
 
 <p>
 迭代过程：
@@ -248,15 +260,17 @@ b &lt;= a
 c &lt;= b
 </p>
 
-<pre class="example">
-(define (f2 n)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">f2</span> n)
   (f2-iter 2 1 0 n))
 
-(define (f2-iter a b c count)
-  (if (= count 0)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">f2-iter</span> a b c count)
+  (<span style="color: #859900;">if</span> (= count 0)
       c
       (f2-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-12" class="outline-3">
@@ -266,13 +280,15 @@ c &lt;= b
 杨辉三角的规律：f(n, 1) = f(n, n) = 1, f(n, m) = f(n-1, m-1) + f(n-1, m), 1 &lt; m &lt; n
 </p>
 
-<pre class="example">
-(define (pascal-triangle n m)
-  (if (or (= m 1) (= m n))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">pascal-triangle</span> n m)
+  (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (= m 1) (= m n))
       1
       (+ (pascal-triangle (- n 1) (- m 1))
          (pascal-triangle (- n 1) m))))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-13" class="outline-3">
@@ -370,18 +386,20 @@ n &lt;= n - 1
 于是，解答如下：
 </p>
 
-<pre class="example">
-(define (fast-expt b n)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fast-expt</span> b n)
   (fast-expt-iter 1 b n))
 
-(define (fast-expt-iter a b n)
-  (cond ((= n 0) a)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fast-expt-iter</span> a b n)
+  (<span style="color: #859900;">cond</span> ((= n 0) a)
         ((even? n) (fast-expt-iter a (* b b) (/ n 2)))
-        (else (fast-expt-iter (* a b) b (- n 1)))))
+        (<span style="color: #859900;">else</span> (fast-expt-iter (* a b) b (- n 1)))))
 
-(define (even? n)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">even?</span> n)
   (= (remainder n 2) 0))
 </pre>
+</div>
 
 <p>
 这明明是a和b共同保存中间值，以2^10为例，10 =&gt; 5 =&gt; 4 =&gt; 2 =&gt; 1 =&gt; 0，大多时候a都在打酱油，而b才是保存中间值的主力。。
@@ -391,18 +409,20 @@ n &lt;= n - 1
 <div id="outline-container-sec-1-17" class="outline-3">
 <h3 id="sec-1-17">练习1.17</h3>
 <div class="outline-text-3" id="text-1-17">
-<pre class="example">
-(define (my* a b)
-  (cond ((= b 0) 0)
-        ((even? b) (my* (double a) (halve b)))
-        (else (+ a (my* a (- b 1))))))
+<div class="org-src-container">
 
-(define (double a)
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">my*</span> a b)
+  (<span style="color: #859900;">cond</span> ((= b 0) 0)
+        ((even? b) (my* (double a) (halve b)))
+        (<span style="color: #859900;">else</span> (+ a (my* a (- b 1))))))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">double</span> a)
   (+ a a))
 
-(define (halve a)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">halve</span> a)
   (/ a 2))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-18" class="outline-3">
@@ -423,15 +443,17 @@ n &lt;= n - 1
 于是，有如下解：
 </p>
 
-<pre class="example">
-(define (my* a b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">my*</span> a b)
   (my*-iter 0 a b))
 
-(define (my*-iter s a b)
-  (cond ((= b 0) s)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">my*-iter</span> s a b)
+  (<span style="color: #859900;">cond</span> ((= b 0) s)
         ((even? b) (my*-iter s (double a) (halve b)))
-        (else (my*-iter (+ s a) a (- b 1)))))
+        (<span style="color: #859900;">else</span> (my*-iter (+ s a) a (- b 1)))))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-19" class="outline-3">
@@ -492,31 +514,33 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 这个题目的实现代码如下：
 </p>
 
-<pre class="example">
-(define (timed-prime-test n)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">timed-prime-test</span> n)
   (newline)
   (display n)
   (start-prime-test n (current-inexact-milliseconds)))
 
-(define (start-prime-test n start-time)
-  (if (prime? n)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-prime-test</span> n start-time)
+  (<span style="color: #859900;">if</span> (prime? n)
       (report-time (- (current-inexact-milliseconds) start-time))
-      #f))  ;; 这里因为Racket实现不允许if只有一个分支，所以用#f来表示另一个分支
+      #f))  <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#36825;&#37324;&#22240;&#20026;Racket&#23454;&#29616;&#19981;&#20801;&#35768;if&#21482;&#26377;&#19968;&#20010;&#20998;&#25903;&#65292;&#25152;&#20197;&#29992;#f&#26469;&#34920;&#31034;&#21478;&#19968;&#20010;&#20998;&#25903;</span>
 
-(define (report-time elapsed-time)
-  (display " *** ")
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">report-time</span> elapsed-time)
+  (display <span style="color: #2aa198;">" *** "</span>)
   (display elapsed-time))
 
-(define (search-for-primes start count)
-  (cond ((= count 0) (newline))
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">search-for-primes</span> start count)
+  (<span style="color: #859900;">cond</span> ((= count 0) (newline))
         ((timed-prime-test start) (search-for-primes (next-odd start) (- count 1)))
-        (else (search-for-primes (next-odd start) count))))
+        (<span style="color: #859900;">else</span> (search-for-primes (next-odd start) count))))
 
-(define (next-odd n)
-  (if (= (remainder n 2) 0)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">next-odd</span> n)
+  (<span style="color: #859900;">if</span> (= (remainder n 2) 0)
       (+ 1 n)
       (+ 2 n)))
 </pre>
+</div>
 
 <p>
 测试了几组数据，得到以下结果（不是奇数的行已删去）：
@@ -544,17 +568,19 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <div id="outline-container-sec-1-23" class="outline-3">
 <h3 id="sec-1-23">练习1.23</h3>
 <div class="outline-text-3" id="text-1-23">
-<pre class="example">
-(define (next n)
-  (if (= n 2)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">next</span> n)
+  (<span style="color: #859900;">if</span> (= n 2)
       3
       (+ n 2)))
 
-(define (find-divisor n test)
-  (cond ((&gt; (* test test) n) n)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">find-divisor</span> n test)
+  (<span style="color: #859900;">cond</span> ((&gt; (* test test) n) n)
         ((divides? n test) test)
-        (else (find-divisor n (next test)))))
+        (<span style="color: #859900;">else</span> (find-divisor n (next test)))))
 </pre>
+</div>
 
 <p>
 得到结果如下（取了三组和1.22中对应的值）：
@@ -582,15 +608,17 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 然后我又试了一下，证明这多出来的时间消耗是来自 <code>next</code> 过程调用，将 <code>find-divisor</code> 以及 <code>smallest-divisor</code> 过程进行重定义为以下形式：
 </p>
 
-<pre class="example">
-(define (find-divisor n test)
-  (cond ((&gt; (* test test) n) n)
-        ((divides? n test) test)
-        (else (find-divisor n (+ test 2))))) ;; 直接加2，不再调用next过程
+<div class="org-src-container">
 
-(define (smallest-divisor n)
-  (find-divisor n 3)) ;; 直接从3开始
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">find-divisor</span> n test)
+  (<span style="color: #859900;">cond</span> ((&gt; (* test test) n) n)
+        ((divides? n test) test)
+        (<span style="color: #859900;">else</span> (find-divisor n (+ test 2))))) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#30452;&#25509;&#21152;2&#65292;&#19981;&#20877;&#35843;&#29992;next&#36807;&#31243;</span>
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">smallest-divisor</span> n)
+  (find-divisor n 3)) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#30452;&#25509;&#20174;3&#24320;&#22987;</span>
 </pre>
+</div>
 
 <p>
 结果如下：
@@ -622,12 +650,14 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 这个练习，将 <code>start-prime-test</code> 中的 <code>prime?</code> 换成 <code>fast-prime?</code> 即可：
 </p>
 
-<pre class="example">
-(define (start-prime-test n start-time)
-  (if (fast-prime? n 3)  ;; 测试的次数取3
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-prime-test</span> n start-time)
+  (<span style="color: #859900;">if</span> (fast-prime? n 3)  <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#27979;&#35797;&#30340;&#27425;&#25968;&#21462;3</span>
       (report-time (- (current-inexact-milliseconds) start-time))
       #f))
 </pre>
+</div>
 
 <p>
 然后进行测试，得到以下结果（最高只能到10的9次方，因为再高的话，超过了int型的最大值，这时 <code>random</code> 函数会报错）：
@@ -765,15 +795,17 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 这个题目比较简单，定义的两个函数如下：
 </p>
 
-<pre class="example">
-(define (carmichael-check n a)
-  (cond ((not (= (expmod a n n) a)) false)
-        ((&gt; a 1) (carmichael-check n (- a 1)))
-        (else true)))
+<div class="org-src-container">
 
-(define (carmichael-test n)
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">carmichael-check</span> n a)
+  (<span style="color: #859900;">cond</span> ((not (= (expmod a n n) a)) false)
+        ((&gt; a 1) (carmichael-check n (- a 1)))
+        (<span style="color: #859900;">else</span> true)))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">carmichael-test</span> n)
   (carmichael-check n (- n 1)))
 </pre>
+</div>
 
 <p>
 需要测试Carmichael数的时候，执行 <code>carmichael-test</code> 即可。这个测试有一点缺陷就是，不能把真正的质数和Carmichael数分开，不过题目是要求验证Carmichael数，而并不是求Carmichael数，所以这点缺陷也不算是缺陷。
@@ -787,29 +819,31 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 这个题目是费马测试的一个变形，因为费马测试会被Carmichael数骗，所以这个Miller-Rabin检查增强了限制，Carmichael数也通不过检查。增强的条件是：如果大于1小于n - 1的一个数的平方取模n等于1，则n不是素数。这样，需要我们将费马测试中的 <code>expmod</code> 函数加以改进，所有相关的过程如下：
 </p>
 
-<pre class="example">
-(define (determine-result a n)
-  (cond ((and (not (= a 1))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">determine-result</span> a n)
+  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">and</span> (not (= a 1))
               (not (= a (- n 1)))
               (= (remainder (square a) n) 1)) 0)
-        (else (remainder (square a) n))))
+        (<span style="color: #859900;">else</span> (remainder (square a) n))))
 
-(define (expmod base exp m)
-  (cond ((= exp 0) 1)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">expmod</span> base exp m)
+  (<span style="color: #859900;">cond</span> ((= exp 0) 1)
         ((even? exp)
          (determine-result (expmod base (/ exp 2) m) m))
-        (else (remainder (* base (expmod base (- exp 1) m)) m))))
+        (<span style="color: #859900;">else</span> (remainder (* base (expmod base (- exp 1) m)) m))))
 
-(define (miller-rabin-test n)
-  (define (try-it a)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">miller-rabin-test</span> n)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">try-it</span> a)
     (= (expmod a (- n 1) n) 1))
   (try-it (+ 1 (random (- n 1)))))
 
-(define (miller-rabin-prime? n times)
-  (cond ((= times 0) true)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">miller-rabin-prime?</span> n times)
+  (<span style="color: #859900;">cond</span> ((= times 0) true)
         ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
-        (else false)))
+        (<span style="color: #859900;">else</span> false)))
 </pre>
+</div>
 
 <p>
 再用 <code>miller-rabin-prime?</code> 检测素数的时候，就算连561，1105等Carmichael数也无处遁形了。
@@ -823,21 +857,23 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 定义两个过程如下：
 </p>
 
-<pre class="example">
-(define (sum-simpson-rule f k n a b)
-  (define (factor)
-    (cond ((or (= k 0)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum-simpson-rule</span> f k n a b)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factor</span>)
+    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (= k 0)
                (= k n)) 1)
           ((= (remainder k 2) 0) 2)
-          (else 4)))
-  (if (&gt; k n)
+          (<span style="color: #859900;">else</span> 4)))
+  (<span style="color: #859900;">if</span> (&gt; k n)
       0
       (+ (* (factor) (f (+ a (* k (/ (- b a) n)))))
          (sum-simpson-rule f (+ 1 k) n a b))))
 
-(define (simpson-rule f n a b)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">simpson-rule</span> f n a b)
   (* (/ (/ (- b a) n) 3) (sum-simpson-rule f 0 n a b)))
 </pre>
+</div>
 
 <p>
 经过测试，这个辛普森规则准得过分，在测试 <code>cube</code> 函数在0到1之间的积分时，n都不用取到100或者1000，就算取成2，结果也是精确的1/4。。。
@@ -851,14 +887,16 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 采用迭代进行计算的 <code>sum</code> 过程如下：
 </p>
 
-<pre class="example">
-(define (sum term a next b)
-  (define (iter a result)
-    (if (&gt; a b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum</span> term a next b)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> a result)
+    (<span style="color: #859900;">if</span> (&gt; a b)
         result
         (iter (next a) (+ (term a) result))))
   (iter a 0))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-31" class="outline-3">
@@ -868,54 +906,62 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 递归的 <code>product</code> 过程：
 </p>
 
-<pre class="example">
-(define (product term a next b)
-  (if (&gt; a b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product</span> term a next b)
+  (<span style="color: #859900;">if</span> (&gt; a b)
       1
       (* (term a)
          (product term (next a) next b))))
 </pre>
+</div>
 
 <p>
 迭代的 <code>product</code> 过程：
 </p>
 
-<pre class="example">
-(define (product term a next b)
-  (define (iter a result)
-    (if (&gt; a b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product</span> term a next b)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> a result)
+    (<span style="color: #859900;">if</span> (&gt; a b)
         result
         (iter (next a) (* (term a) result))))
   (iter a 1))
 </pre>
+</div>
 
 <p>
 <code>factorial</code> 过程：
 </p>
 
-<pre class="example">
-(define (factorial n)
-  (product (lambda (a) a) 1 (lambda (a) (+ 1 a)) n))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factorial</span> n)
+  (product (<span style="color: #859900;">lambda</span> (a) a) 1 (<span style="color: #859900;">lambda</span> (a) (+ 1 a)) n))
 </pre>
+</div>
 
 <p>
 求圆周率PI的过程：
 </p>
 
-<pre class="example">
-(define (cal-pi n)
-  (* 2.0           ;; 使用2.0而不用2，是为了让结果展示为小数而不是分数
-     (if (even? n) n (+ 1 n)) ;; 这个不可缺少，下面有解释
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cal-pi</span> n)
+  (* 2.0           <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#20351;&#29992;2.0&#32780;&#19981;&#29992;2&#65292;&#26159;&#20026;&#20102;&#35753;&#32467;&#26524;&#23637;&#31034;&#20026;&#23567;&#25968;&#32780;&#19981;&#26159;&#20998;&#25968;</span>
+     (<span style="color: #859900;">if</span> (even? n) n (+ 1 n)) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#36825;&#20010;&#19981;&#21487;&#32570;&#23569;&#65292;&#19979;&#38754;&#26377;&#35299;&#37322;</span>
      (/
-      (product (lambda (a) (square a))
+      (product (<span style="color: #859900;">lambda</span> (a) (square a))
                2
-               (lambda (a) (+ 2 a))
-               (if (even? n) n (+ 1 n)))
-      (product (lambda (a) (square a))
+               (<span style="color: #859900;">lambda</span> (a) (+ 2 a))
+               (<span style="color: #859900;">if</span> (even? n) n (+ 1 n)))
+      (product (<span style="color: #859900;">lambda</span> (a) (square a))
                3
-               (lambda (a) (+ 2 a))
-               (if (even? n) (+ 1 n) (+ 2 n))))))
+               (<span style="color: #859900;">lambda</span> (a) (+ 2 a))
+               (<span style="color: #859900;">if</span> (even? n) (+ 1 n) (+ 2 n))))))
 </pre>
+</div>
 
 <p>
 书中给出的求PI公式比较tricky，将等式两边乘以2，就会发现形式比书中原来的形式要完美很多，上面的过程的基础正是乘以2后的等式。分别计算分子和分母，相除后，再乘以2，但要注意的是，这时的结果还不是圆周率，还需要乘以最后一个参加计算的分子值，为什么呢？因为我们最初为图方便（为了使用平方计算），把等式两边都乘以2，这样就硬生生把分子部分的序列给向后移了一位，所以要将原来被挤掉的分子最后一个参加计算的数字给补上。
@@ -929,38 +975,44 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 递归的 <code>accumulate</code> 过程：
 </p>
 
-<pre class="example">
-(define (accumulate combiner null-value term a next b)
-  (if (&gt; a b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">accumulate</span> combiner null-value term a next b)
+  (<span style="color: #859900;">if</span> (&gt; a b)
       null-value
       (combiner (term a)
                 (accumulate combiner null-value term (next a) next b))))
 </pre>
+</div>
 
 <p>
 迭代的 <code>accumulate</code> 过程：
 </p>
 
-<pre class="example">
-(define (accumulate combiner null-value term a next b)
-  (define (iter a result)
-    (if (&gt; a b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">accumulate</span> combiner null-value term a next b)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> a result)
+    (<span style="color: #859900;">if</span> (&gt; a b)
         result
         (iter (next a) (combiner (term a) result))))
   (iter a null-value))
 </pre>
+</div>
 
 <p>
 利用 <code>accumulate</code> 进行重定义的 <code>sum</code> 和 <code>product</code> 过程：
 </p>
 
-<pre class="example">
-(define (sum term a next b)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum</span> term a next b)
   (accumulate + 0 term a next b))
 
-(define (product term a next b)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product</span> term a next b)
   (accumulate * 1 term a next b))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-33" class="outline-3">
@@ -970,19 +1022,21 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <code>filtered-accumulate</code> 过程以及根据其定义的求素数和、求互素正整数积的过程：
 </p>
 
-<pre class="example">
-(define (filtered-accumulate combiner null-value term a next b filter)
-  (if (or (&gt; a b) (not (filter a b)))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">filtered-accumulate</span> combiner null-value term a next b filter)
+  (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (&gt; a b) (not (filter a b)))
       null-value
       (combiner (term a)
                 (filtered-accumulate combiner null-value term (next a) next b filter))))
 
-(define (sum-prime a b)
-  (filtered-accumulate + 0 (lambda (a) a) a (lambda (a) (+ 1 a)) b prime?))
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum-prime</span> a b)
+  (filtered-accumulate + 0 (<span style="color: #859900;">lambda</span> (a) a) a (<span style="color: #859900;">lambda</span> (a) (+ 1 a)) b prime?))
 
-(define (product-gcd-prime n)
-  (filtered-accumulate * 1 (lambda (a) a) 1 (lambda (a) (+ 1 a)) n gcd-eq1?))
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product-gcd-prime</span> n)
+  (filtered-accumulate * 1 (<span style="color: #859900;">lambda</span> (a) a) 1 (<span style="color: #859900;">lambda</span> (a) (+ 1 a)) n gcd-eq1?))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-34" class="outline-3">
@@ -1024,19 +1078,21 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 修改后的 <code>fixed-point</code> 过程：
 </p>
 
-<pre class="example">
-(define (fixed-point f first-guess)
-  (define (close-enough? v1 v2)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fixed-point</span> f first-guess)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">close-enough?</span> v1 v2)
     (&lt; (abs (- v1 v2)) 0.0000001))
-  (define (try guess)
-    (let ((next (f guess)))
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">try</span> guess)
+    (<span style="color: #859900;">let</span> ((next (f guess)))
       (display next)
       (newline)
-      (if (close-enough? guess next)
+      (<span style="color: #859900;">if</span> (close-enough? guess next)
           next
           (try next))))
   (try first-guess))
 </pre>
+</div>
 
 <p>
 不使用平均阻尼：
@@ -1066,44 +1122,50 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 递归的 <code>cont-frac</code> 过程：
 </p>
 
-<pre class="example">
-(define (cont-frac n d k)
-  (define (frac i)
-    (if (&gt; i k)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cont-frac</span> n d k)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">frac</span> i)
+    (<span style="color: #859900;">if</span> (&gt; i k)
         0
         (/ (n i)
            (+ (d i) (frac (+ 1 i))))))
   (frac 1))
 </pre>
+</div>
 
 <p>
 迭代的 <code>cont-frac</code> 过程：
 </p>
 
-<pre class="example">
-(define (cont-frac n d k)
-  (define (iter i result)
-    (if (&lt; i 1)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cont-frac</span> n d k)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> i result)
+    (<span style="color: #859900;">if</span> (&lt; i 1)
         result
         (iter (- i 1)
               (/ (n i)
                  (+ (d i) result)))))
   (iter k 0))
 </pre>
+</div>
 
 <p>
 用下面的lambda过程来确定满足条件的k：
 </p>
 
-<pre class="example">
-((lambda (k)
-   (&lt; (abs (- (/ 1 (cont-frac (lambda (i) 1.0)
-                              (lambda (i) 1.0)
+<div class="org-src-container">
+
+<pre class="src src-scheme">((<span style="color: #859900;">lambda</span> (k)
+   (&lt; (abs (- (/ 1 (cont-frac (<span style="color: #859900;">lambda</span> (i) 1.0)
+                              (<span style="color: #859900;">lambda</span> (i) 1.0)
                               k))
               1.61803401))
       0.0001))
  11)
 </pre>
+</div>
 
 <p>
 最后确定，k取11即可保证4位的十进制精度。
@@ -1117,12 +1179,14 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 这个题目最关键的是确定 <code>D(i)</code> 函数的值，观察规律，可以知道，序列中的3n项和3n+1项都是1，而3n+2项的值是2n+2，这里n是非负整数。所以，=D(i)= 相应的过程定义如下：
 </p>
 
-<pre class="example">
-(define (d i)
-  (cond ((or (= (remainder i 3) 0)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">d</span> i)
+  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (= (remainder i 3) 0)
              (= (remainder i 3) 1)) 1)
-        (else (/ (* 2 (+ 1 i)) 3))))
+        (<span style="color: #859900;">else</span> (/ (* 2 (+ 1 i)) 3))))
 </pre>
+</div>
 
 <p>
 用来求e的程序：
@@ -1141,14 +1205,15 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <code>tan-cf</code> 过程如下：
 </p>
 
-<pre class="example">
-(define (tan-cf x k)
-  (define (n i)
-    (if (= i 1) x (square x)))
-  (define (d i)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">tan-cf</span> x k)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">n</span> i)
+    (<span style="color: #859900;">if</span> (= i 1) x (square x)))
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">d</span> i)
     (- (* 2 i) 1))
-  (define (cf i)
-    (if (&gt; i k)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cf</span> i)
+    (<span style="color: #859900;">if</span> (&gt; i k)
         0
         (/ (n i)
            (- (d i) (cf (+ 1 i))))))
@@ -1156,17 +1221,20 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </pre>
 </div>
 </div>
+</div>
 <div id="outline-container-sec-1-40" class="outline-3">
 <h3 id="sec-1-40">练习1.40</h3>
 <div class="outline-text-3" id="text-1-40">
-<pre class="example">
-(define (cubic a b c)
-  (lambda (x)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cubic</span> a b c)
+  (<span style="color: #859900;">lambda</span> (x)
     (+ (cube x)
        (* a (square x))
        (* b x)
        c)))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-41" class="outline-3">
@@ -1176,10 +1244,12 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <code>double</code> 过程：
 </p>
 
-<pre class="example">
-(define (double f)
-  (lambda (x) (f (f x))))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">double</span> f)
+  (<span style="color: #859900;">lambda</span> (x) (f (f x))))
 </pre>
+</div>
 
 <p>
 表达式的值是21，因为两次 <code>double</code> 调用就得到4层 <code>double</code> 嵌套的过程，再对 <code>inc</code> 作用，就会得到2的4次方，即16次 <code>inc</code> 过程的调用，所以结果是5 + 16 = 21。
@@ -1189,22 +1259,26 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <div id="outline-container-sec-1-42" class="outline-3">
 <h3 id="sec-1-42">练习1.42</h3>
 <div class="outline-text-3" id="text-1-42">
-<pre class="example">
-(define (compose f g)
-  (lambda (x) (f (g x))))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">compose</span> f g)
+  (<span style="color: #859900;">lambda</span> (x) (f (g x))))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-43" class="outline-3">
 <h3 id="sec-1-43">练习1.43</h3>
 <div class="outline-text-3" id="text-1-43">
-<pre class="example">
-(define (repeated f n)
-  (if (&lt;= n 1)
-      (lambda (x) (f x))
-      ;(repeated (compose f f) (- n 1))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">repeated</span> f n)
+  (<span style="color: #859900;">if</span> (&lt;= n 1)
+      (<span style="color: #859900;">lambda</span> (x) (f x))
+      <span style="color: #586e75; font-style: italic;">;</span><span style="color: #657b83; font-style: italic;">(repeated (compose f f) (- n 1))</span>
       (compose f (repeated f (- n 1)))))
 </pre>
+</div>
 
 <p>
 需要注意 <code>repeated</code> 和 <code>compose</code> 的调用顺序，如果先调用 <code>compose</code> 再调用 <code>repeated</code> （如代码中注释所示），那过程 <code>f</code> 会被重复2的n-1次方（注意是次方关系）；但是反之，则 <code>f</code> 就只会被重复n次，是加和关系。
@@ -1218,21 +1292,25 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 平滑过程 <code>smooth</code> ：
 </p>
 
-<pre class="example">
-(define dx 0.0000000001)
+<div class="org-src-container">
 
-(define (smooth f)
-  (lambda (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">dx</span> 0.0000000001)
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">smooth</span> f)
+  (<span style="color: #859900;">lambda</span> (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
 </pre>
+</div>
 
 <p>
 n次平滑过程 <code>smooth-n</code> ：
 </p>
 
-<pre class="example">
-(define (smooth-n f n)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">smooth-n</span> f n)
   ((repeated smooth n) f))
 </pre>
+</div>
 </div>
 </div>
 <div id="outline-container-sec-1-45" class="outline-3">
@@ -1258,13 +1336,15 @@ n次平滑过程 <code>smooth-n</code> ：
 写出求n次方根的过程如下：
 </p>
 
-<pre class="example">
-(define (nth-root x n)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">nth-root</span> x n)
   (fixed-point
    ((repeated average-damp
               (floor (/ (log n) (log 2))))
-    (lambda (y) (/ x (expt y (- n 1))))) 1.0))
+    (<span style="color: #859900;">lambda</span> (y) (/ x (expt y (- n 1))))) 1.0))
 </pre>
+</div>
 
 <p>
 可以用以下的调用验证：
@@ -1286,31 +1366,35 @@ n次平滑过程 <code>smooth-n</code> ：
 <code>iterative-improve</code> 过程：
 </p>
 
-<pre class="example">
-(define (iterative-improve good-enough? improve-guess)
-  (lambda (guess)
-    (let ((next (improve-guess guess)))
-      (if (good-enough? next guess)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iterative-improve</span> good-enough? improve-guess)
+  (<span style="color: #859900;">lambda</span> (guess)
+    (<span style="color: #859900;">let</span> ((next (improve-guess guess)))
+      (<span style="color: #859900;">if</span> (good-enough? next guess)
           next
           ((iterative-improve good-enough? improve-guess)
            (improve-guess guess))))))
 </pre>
+</div>
 
 <p>
 改进后的 <code>sqrt</code> 和 <code>fixed-point</code> 过程：
 </p>
 
-<pre class="example">
-(define (sqrt x)
-  ((iterative-improve (lambda (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
-                      (lambda (y) (average y (/ x y))))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sqrt</span> x)
+  ((iterative-improve (<span style="color: #859900;">lambda</span> (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
+                      (<span style="color: #859900;">lambda</span> (y) (average y (/ x y))))
    1.0))
 
-(define (fixed-point f first-guess)
-  ((iterative-improve (lambda (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
-                      (lambda (y) (f y)))
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fixed-point</span> f first-guess)
+  ((iterative-improve (<span style="color: #859900;">lambda</span> (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
+                      (<span style="color: #859900;">lambda</span> (y) (f y)))
    first-guess))
 </pre>
+</div>
 </div>
 </div>
 </div>
@@ -1320,40 +1404,43 @@ n次平滑过程 <code>smooth-n</code> ：
 </div><div id="outline-container-sec-2-1" class="outline-3">
 <h3 id="sec-2-1">练习2.1</h3>
 <div class="outline-text-3" id="text-2-1">
-<pre class="example">
-(define (make-rat n d)
-  (define (make-rat-inner n d)
-    (let ((g (gcd n d)))
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-rat</span> n d)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-rat-inner</span> n d)
+    (<span style="color: #859900;">let</span> ((g (gcd n d)))
       (cons (/ n g) (/ d g))))
-  (if (&lt; (/ n d) 0)
+  (<span style="color: #859900;">if</span> (&lt; (/ n d) 0)
       (make-rat-inner (- (abs n))  (abs d))
       (make-rat-inner (abs n) (abs d))))
 </pre>
 </div>
 </div>
+</div>
 <div id="outline-container-sec-2-2" class="outline-3">
 <h3 id="sec-2-2">练习2.2</h3>
 <div class="outline-text-3" id="text-2-2">
-<pre class="example">
-(define (make-segment point-x point-y)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-segment</span> point-x point-y)
   (cons point-x point-y))
 
-(define (start-segment segment)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-segment</span> segment)
   (car segment))
 
-(define (end-segment segment)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">end-segment</span> segment)
   (cdr segment))
 
-(define (make-point x y)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-point</span> x y)
   (cons x y))
 
-(define (x-point point)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">x-point</span> point)
   (car point))
 
-(define (y-point point)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">y-point</span> point)
   (cdr point))
 
-(define (midpoint-segment segment)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">midpoint-segment</span> segment)
   (make-point (average (x-point (start-segment segment))
                        (x-point (end-segment segment)))
               (average (y-point (start-segment segment))
@@ -1361,31 +1448,34 @@ n次平滑过程 <code>smooth-n</code> ：
 </pre>
 </div>
 </div>
+</div>
 <div id="outline-container-sec-2-3" class="outline-3">
 <h3 id="sec-2-3">练习2.3</h3>
 <div class="outline-text-3" id="text-2-3">
-<pre class="example">
-(define (make-rectangle p-lu p-rd)
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-rectangle</span> p-lu p-rd)
   (cons p-lu p-rd))
 
-(define (rect-left-up-point rect)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rect-left-up-point</span> rect)
   (car rect))
 
-(define (rect-right-down-point rect)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rect-right-down-point</span> rect)
   (cdr rect))
 
-(define (perimeter rect)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">perimeter</span> rect)
   (* 2 (+ (- (x-point (rect-right-down-point rect))
              (x-point (rect-left-up-point rect)))
           (- (y-point (rect-left-up-point rect))
              (y-point (rect-right-down-point rect))))))
 
-(define (area rect)
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">area</span> rect)
   (* (- (x-point (rect-right-down-point rect))
         (x-point (rect-left-up-point rect)))
      (- (y-point (rect-left-up-point rect))
         (y-point (rect-right-down-point rect)))))
 </pre>
+</div>
 </div>
 </div>
 </div>
