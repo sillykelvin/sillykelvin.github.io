@@ -26,10 +26,12 @@
 
 ** 练习1.3
 
-   : the answer below is wrong!!!
-   : (define (sum-of-max-two a b c)
-   :     (cond ((< a b) (if (< a c) (+ b c) (+ a b)))
-   :           (else (if (< b c) (+ a c) (+ a b)))))
+   #+BEGIN_SRC scheme
+   ;; the answer below is wrong!!!
+   (define (sum-of-max-two a b c)
+       (cond ((< a b) (if (< a c) (+ b c) (+ a b)))
+             (else (if (< b c) (+ a c) (+ a b)))))
+   #+END_SRC
 
 ** 练习1.5
 
@@ -53,8 +55,10 @@
 
    另一个 =good-enough?= 函数：
 
-   : (define (good-enough? guess x)
-   :   (< (/ (abs (- (improve guess x) guess)) guess) 0.00001))
+   #+BEGIN_SRC scheme
+   (define (good-enough? guess x)
+     (< (/ (abs (- (improve guess x) guess)) guess) 0.00001))
+   #+END_SRC
 
    这个函数不是用绝对误差来作比较，而是用两次guess的变化率来比较，这在处理很小的数时会比较有用，比方说小数0.0000000001这种，但在处理大数时，反而会增加误差，因为计算变化率的分母很大，导致分子很大时依然能满足要求，所以在处理大数时不如先前版本的绝对误差精确。
 
@@ -62,40 +66,48 @@
 
    牛顿法解立方根：
 
-   : (define (3sqrt guess x)
-   :   (if (good-enough? guess x)
-   :       guess
-   :       (3sqrt (improve guess x) x)))
-   :
-   : (define (improve guess x)
-   :   (/ (+ (/ x (* guess guess)) (* 2 guess)) 3))
-   :
-   : (define (good-enough? guess x)
-   :   (< (/ (abs (- (improve guess x) guess)) guess) 0.00001))
+   #+BEGIN_SRC scheme
+   (define (3sqrt guess x)
+     (if (good-enough? guess x)
+         guess
+         (3sqrt (improve guess x) x)))
+
+   (define (improve guess x)
+     (/ (+ (/ x (* guess guess)) (* 2 guess)) 3))
+
+   (define (good-enough? guess x)
+     (< (/ (abs (- (improve guess x) guess)) guess) 0.00001))
+   #+END_SRC
 
 ** 线性递归和迭代
 
    作为一个递归过程，但其计算过程可能会是递归的，也可能是迭代的。以阶乘计算为例：
 
-   : ;; 第一种定义
-   : (define (factorial n)
-   :   (if (= n 1)
-   :       1
-   :       (* n (factorial (- n 1)))))
+   #+BEGIN_SRC scheme
+   ;; 第一种定义
+   (define (factorial n)
+     (if (= n 1)
+         1
+         (* n (factorial (- n 1)))))
+   #+END_SRC
 
-   : ;; 第二种定义
-   : (define (factorial n)
-   :   (define (fact-iter result counter)
-   :     (if (> counter n)
-   :         result
-   :         (fact-iter (* result counter) (+ counter 1))))
-   :   (fact-iter 1 1))
+   #+BEGIN_SRC scheme
+   ;; 第二种定义
+   (define (factorial n)
+     (define (fact-iter result counter)
+       (if (> counter n)
+           result
+           (fact-iter (* result counter) (+ counter 1))))
+     (fact-iter 1 1))
+   #+END_SRC
 
    毫无疑问两种定义都使用了递归过程，但两者有些不同：第一种在计算时会导致 =factorial= 自身的展开，而且用于计算的n越大，展开的层数越多；第二种在计算时，只需要维护 =result= 以及 =counter= 两个变量即可。
 
    在上面的例子中，第一种定义就是递归计算过程，第二种则是迭代计算过程。由于两者都是线性的，所以都是线性过程。（所谓线性是指，第一种的展开长度对于n是线性增长的；第二种的计算步骤对于n是线性增长的）
 
 ** 练习1.9
+
+   这是一个递归计算过程：
 
    : (inc (+ 3 5))
    : (inc (inc (+ 2 5)))
@@ -107,15 +119,13 @@
    : (inc 8)
    : 9
 
-   这是一个递归计算过程
+   这是一个迭代计算过程：
 
    : (+ 3 6)
    : (+ 2 7)
    : (+ 1 8)
    : (+ 0 9)
    : 9
-
-   这是一个迭代计算过程
 
 ** 练习1.10
 
@@ -133,11 +143,13 @@
 
    递归过程：
 
-   : (define (f n)
-   :   (cond ((< n 3) n)
-   :         (else (+ (f (- n 1))
-   :                  (* 2 (f (- n 2)))
-   :                  (* 3 (f (- n 3)))))))
+   #+BEGIN_SRC scheme
+   (define (f n)
+     (cond ((< n 3) n)
+           (else (+ (f (- n 1))
+                    (* 2 (f (- n 2)))
+                    (* 3 (f (- n 3)))))))
+   #+END_SRC
 
    迭代过程：
 
@@ -146,23 +158,27 @@
    b <= a
    c <= b
 
-   : (define (f2 n)
-   :   (f2-iter 2 1 0 n))
-   :
-   : (define (f2-iter a b c count)
-   :   (if (= count 0)
-   :       c
-   :       (f2-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
+   #+BEGIN_SRC scheme
+   (define (f2 n)
+     (f2-iter 2 1 0 n))
+
+   (define (f2-iter a b c count)
+     (if (= count 0)
+         c
+         (f2-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
+   #+END_SRC
 
 ** 练习1.12
 
    杨辉三角的规律：f(n, 1) = f(n, n) = 1, f(n, m) = f(n-1, m-1) + f(n-1, m), 1 < m < n
 
-   : (define (pascal-triangle n m)
-   :   (if (or (= m 1) (= m n))
-   :       1
-   :       (+ (pascal-triangle (- n 1) (- m 1))
-   :          (pascal-triangle (- n 1) m))))
+   #+BEGIN_SRC scheme
+   (define (pascal-triangle n m)
+     (if (or (= m 1) (= m n))
+         1
+         (+ (pascal-triangle (- n 1) (- m 1))
+            (pascal-triangle (- n 1) m))))
+   #+END_SRC
 
 ** 练习1.13
 
@@ -216,31 +232,35 @@
 
    于是，解答如下：
 
-   : (define (fast-expt b n)
-   :   (fast-expt-iter 1 b n))
-   :
-   : (define (fast-expt-iter a b n)
-   :   (cond ((= n 0) a)
-   :         ((even? n) (fast-expt-iter a (* b b) (/ n 2)))
-   :         (else (fast-expt-iter (* a b) b (- n 1)))))
-   :
-   : (define (even? n)
-   :   (= (remainder n 2) 0))
+   #+BEGIN_SRC scheme
+   (define (fast-expt b n)
+     (fast-expt-iter 1 b n))
+
+   (define (fast-expt-iter a b n)
+     (cond ((= n 0) a)
+           ((even? n) (fast-expt-iter a (* b b) (/ n 2)))
+           (else (fast-expt-iter (* a b) b (- n 1)))))
+
+   (define (even? n)
+     (= (remainder n 2) 0))
+   #+END_SRC
 
    这明明是a和b共同保存中间值，以2^10为例，10 => 5 => 4 => 2 => 1 => 0，大多时候a都在打酱油，而b才是保存中间值的主力。。
 
 ** 练习1.17
 
-   : (define (my* a b)
-   :   (cond ((= b 0) 0)
-   :         ((even? b) (my* (double a) (halve b)))
-   :         (else (+ a (my* a (- b 1))))))
-   :
-   : (define (double a)
-   :   (+ a a))
-   :
-   : (define (halve a)
-   :   (/ a 2))
+   #+BEGIN_SRC scheme
+   (define (my* a b)
+     (cond ((= b 0) 0)
+           ((even? b) (my* (double a) (halve b)))
+           (else (+ a (my* a (- b 1))))))
+
+   (define (double a)
+     (+ a a))
+
+   (define (halve a)
+     (/ a 2))
+   #+END_SRC
 
 ** 练习1.18
 
@@ -251,13 +271,15 @@
 
    于是，有如下解：
 
-   : (define (my* a b)
-   :   (my*-iter 0 a b))
-   :
-   : (define (my*-iter s a b)
-   :   (cond ((= b 0) s)
-   :         ((even? b) (my*-iter s (double a) (halve b)))
-   :         (else (my*-iter (+ s a) a (- b 1)))))
+   #+BEGIN_SRC scheme
+   (define (my* a b)
+     (my*-iter 0 a b))
+
+   (define (my*-iter s a b)
+     (cond ((= b 0) s)
+           ((even? b) (my*-iter s (double a) (halve b)))
+           (else (my*-iter (+ s a) a (- b 1)))))
+   #+END_SRC
 
 ** 练习1.19
 
@@ -290,29 +312,31 @@
 
    这个题目的实现代码如下：
 
-   : (define (timed-prime-test n)
-   :   (newline)
-   :   (display n)
-   :   (start-prime-test n (current-inexact-milliseconds)))
-   :
-   : (define (start-prime-test n start-time)
-   :   (if (prime? n)
-   :       (report-time (- (current-inexact-milliseconds) start-time))
-   :       #f))  ;; 这里因为Racket实现不允许if只有一个分支，所以用#f来表示另一个分支
-   :
-   : (define (report-time elapsed-time)
-   :   (display " *** ")
-   :   (display elapsed-time))
-   :
-   : (define (search-for-primes start count)
-   :   (cond ((= count 0) (newline))
-   :         ((timed-prime-test start) (search-for-primes (next-odd start) (- count 1)))
-   :         (else (search-for-primes (next-odd start) count))))
-   :
-   : (define (next-odd n)
-   :   (if (= (remainder n 2) 0)
-   :       (+ 1 n)
-   :       (+ 2 n)))
+   #+BEGIN_SRC scheme
+   (define (timed-prime-test n)
+     (newline)
+     (display n)
+     (start-prime-test n (current-inexact-milliseconds)))
+
+   (define (start-prime-test n start-time)
+     (if (prime? n)
+         (report-time (- (current-inexact-milliseconds) start-time))
+         #f))  ;; 这里因为Racket实现不允许if只有一个分支，所以用#f来表示另一个分支
+
+   (define (report-time elapsed-time)
+     (display " *** ")
+     (display elapsed-time))
+
+   (define (search-for-primes start count)
+     (cond ((= count 0) (newline))
+           ((timed-prime-test start) (search-for-primes (next-odd start) (- count 1)))
+           (else (search-for-primes (next-odd start) count))))
+
+   (define (next-odd n)
+     (if (= (remainder n 2) 0)
+         (+ 1 n)
+         (+ 2 n)))
+   #+END_SRC
 
    测试了几组数据，得到以下结果（不是奇数的行已删去）：
 
@@ -332,15 +356,17 @@
 
 ** 练习1.23
 
-   : (define (next n)
-   :   (if (= n 2)
-   :       3
-   :       (+ n 2)))
-   :
-   : (define (find-divisor n test)
-   :   (cond ((> (* test test) n) n)
-   :         ((divides? n test) test)
-   :         (else (find-divisor n (next test)))))
+   #+BEGIN_SRC scheme
+   (define (next n)
+     (if (= n 2)
+         3
+         (+ n 2)))
+
+   (define (find-divisor n test)
+     (cond ((> (* test test) n) n)
+           ((divides? n test) test)
+           (else (find-divisor n (next test)))))
+   #+END_SRC
 
    得到结果如下（取了三组和1.22中对应的值）：
 
@@ -360,13 +386,15 @@
 
    然后我又试了一下，证明这多出来的时间消耗是来自 =next= 过程调用，将 =find-divisor= 以及 =smallest-divisor= 过程进行重定义为以下形式：
 
-   : (define (find-divisor n test)
-   :   (cond ((> (* test test) n) n)
-   :         ((divides? n test) test)
-   :         (else (find-divisor n (+ test 2))))) ;; 直接加2，不再调用next过程
-   :
-   : (define (smallest-divisor n)
-   :   (find-divisor n 3)) ;; 直接从3开始
+   #+BEGIN_SRC scheme
+   (define (find-divisor n test)
+     (cond ((> (* test test) n) n)
+           ((divides? n test) test)
+           (else (find-divisor n (+ test 2))))) ;; 直接加2，不再调用next过程
+
+   (define (smallest-divisor n)
+     (find-divisor n 3)) ;; 直接从3开始
+   #+END_SRC
 
    结果如下：
 
@@ -388,10 +416,12 @@
 
    这个练习，将 =start-prime-test= 中的 =prime?= 换成 =fast-prime?= 即可：
 
-   : (define (start-prime-test n start-time)
-   :   (if (fast-prime? n 3)  ;; 测试的次数取3
-   :       (report-time (- (current-inexact-milliseconds) start-time))
-   :       #f))
+   #+BEGIN_SRC scheme
+   (define (start-prime-test n start-time)
+     (if (fast-prime? n 3)  ;; 测试的次数取3
+         (report-time (- (current-inexact-milliseconds) start-time))
+         #f))
+   #+END_SRC
 
    然后进行测试，得到以下结果（最高只能到10的9次方，因为再高的话，超过了int型的最大值，这时 =random= 函数会报错）：
 
@@ -460,13 +490,15 @@
 
    这个题目比较简单，定义的两个函数如下：
 
-   : (define (carmichael-check n a)
-   :   (cond ((not (= (expmod a n n) a)) false)
-   :         ((> a 1) (carmichael-check n (- a 1)))
-   :         (else true)))
-   :
-   : (define (carmichael-test n)
-   :   (carmichael-check n (- n 1)))
+   #+BEGIN_SRC scheme
+   (define (carmichael-check n a)
+     (cond ((not (= (expmod a n n) a)) false)
+           ((> a 1) (carmichael-check n (- a 1)))
+           (else true)))
+
+   (define (carmichael-test n)
+     (carmichael-check n (- n 1)))
+   #+END_SRC
 
    需要测试Carmichael数的时候，执行 =carmichael-test= 即可。这个测试有一点缺陷就是，不能把真正的质数和Carmichael数分开，不过题目是要求验证Carmichael数，而并不是求Carmichael数，所以这点缺陷也不算是缺陷。
 
@@ -474,27 +506,29 @@
 
    这个题目是费马测试的一个变形，因为费马测试会被Carmichael数骗，所以这个Miller-Rabin检查增强了限制，Carmichael数也通不过检查。增强的条件是：如果大于1小于n - 1的一个数的平方取模n等于1，则n不是素数。这样，需要我们将费马测试中的 =expmod= 函数加以改进，所有相关的过程如下：
 
-   : (define (determine-result a n)
-   :   (cond ((and (not (= a 1))
-   :               (not (= a (- n 1)))
-   :               (= (remainder (square a) n) 1)) 0)
-   :         (else (remainder (square a) n))))
-   :
-   : (define (expmod base exp m)
-   :   (cond ((= exp 0) 1)
-   :         ((even? exp)
-   :          (determine-result (expmod base (/ exp 2) m) m))
-   :         (else (remainder (* base (expmod base (- exp 1) m)) m))))
-   :
-   : (define (miller-rabin-test n)
-   :   (define (try-it a)
-   :     (= (expmod a (- n 1) n) 1))
-   :   (try-it (+ 1 (random (- n 1)))))
-   :
-   : (define (miller-rabin-prime? n times)
-   :   (cond ((= times 0) true)
-   :         ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
-   :         (else false)))
+   #+BEGIN_SRC scheme
+   (define (determine-result a n)
+     (cond ((and (not (= a 1))
+                 (not (= a (- n 1)))
+                 (= (remainder (square a) n) 1)) 0)
+           (else (remainder (square a) n))))
+
+   (define (expmod base exp m)
+     (cond ((= exp 0) 1)
+           ((even? exp)
+            (determine-result (expmod base (/ exp 2) m) m))
+           (else (remainder (* base (expmod base (- exp 1) m)) m))))
+
+   (define (miller-rabin-test n)
+     (define (try-it a)
+       (= (expmod a (- n 1) n) 1))
+     (try-it (+ 1 (random (- n 1)))))
+
+   (define (miller-rabin-prime? n times)
+     (cond ((= times 0) true)
+           ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
+           (else false)))
+   #+END_SRC
 
    再用 =miller-rabin-prime?= 检测素数的时候，就算连561，1105等Carmichael数也无处遁形了。
 
@@ -502,19 +536,21 @@
 
    定义两个过程如下：
 
-   : (define (sum-simpson-rule f k n a b)
-   :   (define (factor)
-   :     (cond ((or (= k 0)
-   :                (= k n)) 1)
-   :           ((= (remainder k 2) 0) 2)
-   :           (else 4)))
-   :   (if (> k n)
-   :       0
-   :       (+ (* (factor) (f (+ a (* k (/ (- b a) n)))))
-   :          (sum-simpson-rule f (+ 1 k) n a b))))
-   :
-   : (define (simpson-rule f n a b)
-   :   (* (/ (/ (- b a) n) 3) (sum-simpson-rule f 0 n a b)))
+   #+BEGIN_SRC scheme
+   (define (sum-simpson-rule f k n a b)
+     (define (factor)
+       (cond ((or (= k 0)
+                  (= k n)) 1)
+             ((= (remainder k 2) 0) 2)
+             (else 4)))
+     (if (> k n)
+         0
+         (+ (* (factor) (f (+ a (* k (/ (- b a) n)))))
+            (sum-simpson-rule f (+ 1 k) n a b))))
+
+   (define (simpson-rule f n a b)
+     (* (/ (/ (- b a) n) 3) (sum-simpson-rule f 0 n a b)))
+   #+END_SRC
 
    经过测试，这个辛普森规则准得过分，在测试 =cube= 函数在0到1之间的积分时，n都不用取到100或者1000，就算取成2，结果也是精确的1/4。。。
 
@@ -522,51 +558,61 @@
 
    采用迭代进行计算的 =sum= 过程如下：
 
-   : (define (sum term a next b)
-   :   (define (iter a result)
-   :     (if (> a b)
-   :         result
-   :         (iter (next a) (+ (term a) result))))
-   :   (iter a 0))
+   #+BEGIN_SRC scheme
+   (define (sum term a next b)
+     (define (iter a result)
+       (if (> a b)
+           result
+           (iter (next a) (+ (term a) result))))
+     (iter a 0))
+   #+END_SRC
 
 ** 练习1.31
 
    递归的 =product= 过程：
 
-   : (define (product term a next b)
-   :   (if (> a b)
-   :       1
-   :       (* (term a)
-   :          (product term (next a) next b))))
+   #+BEGIN_SRC scheme
+   (define (product term a next b)
+     (if (> a b)
+         1
+         (* (term a)
+            (product term (next a) next b))))
+   #+END_SRC
 
    迭代的 =product= 过程：
 
-   : (define (product term a next b)
-   :   (define (iter a result)
-   :     (if (> a b)
-   :         result
-   :         (iter (next a) (* (term a) result))))
-   :   (iter a 1))
+   #+BEGIN_SRC scheme
+   (define (product term a next b)
+     (define (iter a result)
+       (if (> a b)
+           result
+           (iter (next a) (* (term a) result))))
+     (iter a 1))
+   #+END_SRC
 
    =factorial= 过程：
 
-   : (define (factorial n)
-   :   (product (lambda (a) a) 1 (lambda (a) (+ 1 a)) n))
+   #+BEGIN_SRC scheme
+   (define (factorial n)
+     (product (lambda (a) a) 1 (lambda (a) (+ 1 a)) n))
+   #+END_SRC
 
    求圆周率PI的过程：
 
-   : (define (cal-pi n)
-   :   (* 2.0           ;; 使用2.0而不用2，是为了让结果展示为小数而不是分数
-   :      (if (even? n) n (+ 1 n)) ;; 这个不可缺少，下面有解释
-   :      (/
-   :       (product (lambda (a) (square a))
-   :                2
-   :                (lambda (a) (+ 2 a))
-   :                (if (even? n) n (+ 1 n)))
-   :       (product (lambda (a) (square a))
-   :                3
-   :                (lambda (a) (+ 2 a))
-   :                (if (even? n) (+ 1 n) (+ 2 n))))))
+   #+BEGIN_SRC scheme
+   (define (cal-pi n)
+     (* 2.0           ;; 使用2.0而不用2，是为了让结果展示为小数而不是分数
+        (if (even? n) n (+ 1 n)) ;; 这个不可缺少，下面有解释
+        (/
+         (product (lambda (a) (square a))
+                  2
+                  (lambda (a) (+ 2 a))
+                  (if (even? n) n (+ 1 n)))
+         (product (lambda (a) (square a))
+                  3
+                  (lambda (a) (+ 2 a))
+                  (if (even? n) (+ 1 n) (+ 2 n))))))
+   #+END_SRC
 
    书中给出的求PI公式比较tricky，将等式两边乘以2，就会发现形式比书中原来的形式要完美很多，上面的过程的基础正是乘以2后的等式。分别计算分子和分母，相除后，再乘以2，但要注意的是，这时的结果还不是圆周率，还需要乘以最后一个参加计算的分子值，为什么呢？因为我们最初为图方便（为了使用平方计算），把等式两边都乘以2，这样就硬生生把分子部分的序列给向后移了一位，所以要将原来被挤掉的分子最后一个参加计算的数字给补上。
 
@@ -574,44 +620,52 @@
 
    递归的 =accumulate= 过程：
 
-   : (define (accumulate combiner null-value term a next b)
-   :   (if (> a b)
-   :       null-value
-   :       (combiner (term a)
-   :                 (accumulate combiner null-value term (next a) next b))))
+   #+BEGIN_SRC scheme
+   (define (accumulate combiner null-value term a next b)
+     (if (> a b)
+         null-value
+         (combiner (term a)
+                   (accumulate combiner null-value term (next a) next b))))
+   #+END_SRC
 
    迭代的 =accumulate= 过程：
 
-   : (define (accumulate combiner null-value term a next b)
-   :   (define (iter a result)
-   :     (if (> a b)
-   :         result
-   :         (iter (next a) (combiner (term a) result))))
-   :   (iter a null-value))
+   #+BEGIN_SRC scheme
+   (define (accumulate combiner null-value term a next b)
+     (define (iter a result)
+       (if (> a b)
+           result
+           (iter (next a) (combiner (term a) result))))
+     (iter a null-value))
+   #+END_SRC
 
    利用 =accumulate= 进行重定义的 =sum= 和 =product= 过程：
 
-   : (define (sum term a next b)
-   :   (accumulate + 0 term a next b))
-   :
-   : (define (product term a next b)
-   :   (accumulate * 1 term a next b))
+   #+BEGIN_SRC scheme
+   (define (sum term a next b)
+     (accumulate + 0 term a next b))
+
+   (define (product term a next b)
+     (accumulate * 1 term a next b))
+   #+END_SRC
 
 ** 练习1.33
 
    =filtered-accumulate= 过程以及根据其定义的求素数和、求互素正整数积的过程：
 
-   : (define (filtered-accumulate combiner null-value term a next b filter)
-   :   (if (or (> a b) (not (filter a b)))
-   :       null-value
-   :       (combiner (term a)
-   :                 (filtered-accumulate combiner null-value term (next a) next b filter))))
-   :
-   : (define (sum-prime a b)
-   :   (filtered-accumulate + 0 (lambda (a) a) a (lambda (a) (+ 1 a)) b prime?))
-   :
-   : (define (product-gcd-prime n)
-   :   (filtered-accumulate * 1 (lambda (a) a) 1 (lambda (a) (+ 1 a)) n gcd-eq1?))
+   #+BEGIN_SRC scheme
+   (define (filtered-accumulate combiner null-value term a next b filter)
+     (if (or (> a b) (not (filter a b)))
+         null-value
+         (combiner (term a)
+                   (filtered-accumulate combiner null-value term (next a) next b filter))))
+
+   (define (sum-prime a b)
+     (filtered-accumulate + 0 (lambda (a) a) a (lambda (a) (+ 1 a)) b prime?))
+
+   (define (product-gcd-prime n)
+     (filtered-accumulate * 1 (lambda (a) a) 1 (lambda (a) (+ 1 a)) n gcd-eq1?))
+   #+END_SRC
 
 ** 练习1.34
 
@@ -633,17 +687,19 @@
 
    修改后的 =fixed-point= 过程：
 
-   : (define (fixed-point f first-guess)
-   :   (define (close-enough? v1 v2)
-   :     (< (abs (- v1 v2)) 0.0000001))
-   :   (define (try guess)
-   :     (let ((next (f guess)))
-   :       (display next)
-   :       (newline)
-   :       (if (close-enough? guess next)
-   :           next
-   :           (try next))))
-   :   (try first-guess))
+   #+BEGIN_SRC scheme
+   (define (fixed-point f first-guess)
+     (define (close-enough? v1 v2)
+       (< (abs (- v1 v2)) 0.0000001))
+     (define (try guess)
+       (let ((next (f guess)))
+         (display next)
+         (newline)
+         (if (close-enough? guess next)
+             next
+             (try next))))
+     (try first-guess))
+   #+END_SRC
 
    不使用平均阻尼：
 
@@ -659,34 +715,40 @@
 
    递归的 =cont-frac= 过程：
 
-   : (define (cont-frac n d k)
-   :   (define (frac i)
-   :     (if (> i k)
-   :         0
-   :         (/ (n i)
-   :            (+ (d i) (frac (+ 1 i))))))
-   :   (frac 1))
+   #+BEGIN_SRC scheme
+   (define (cont-frac n d k)
+     (define (frac i)
+       (if (> i k)
+           0
+           (/ (n i)
+              (+ (d i) (frac (+ 1 i))))))
+     (frac 1))
+   #+END_SRC
 
    迭代的 =cont-frac= 过程：
 
-   : (define (cont-frac n d k)
-   :   (define (iter i result)
-   :     (if (< i 1)
-   :         result
-   :         (iter (- i 1)
-   :               (/ (n i)
-   :                  (+ (d i) result)))))
-   :   (iter k 0))
+   #+BEGIN_SRC scheme
+   (define (cont-frac n d k)
+     (define (iter i result)
+       (if (< i 1)
+           result
+           (iter (- i 1)
+                 (/ (n i)
+                    (+ (d i) result)))))
+     (iter k 0))
+   #+END_SRC
 
    用下面的lambda过程来确定满足条件的k：
 
-   : ((lambda (k)
-   :    (< (abs (- (/ 1 (cont-frac (lambda (i) 1.0)
-   :                               (lambda (i) 1.0)
-   :                               k))
-   :               1.61803401))
-   :       0.0001))
-   :  11)
+   #+BEGIN_SRC scheme
+   ((lambda (k)
+      (< (abs (- (/ 1 (cont-frac (lambda (i) 1.0)
+                                 (lambda (i) 1.0)
+                                 k))
+                 1.61803401))
+         0.0001))
+    11)
+   #+END_SRC
 
    最后确定，k取11即可保证4位的十进制精度。
 
@@ -694,10 +756,12 @@
 
    这个题目最关键的是确定 =D(i)= 函数的值，观察规律，可以知道，序列中的3n项和3n+1项都是1，而3n+2项的值是2n+2，这里n是非负整数。所以，=D(i)= 相应的过程定义如下：
 
-   : (define (d i)
-   :   (cond ((or (= (remainder i 3) 0)
-   :              (= (remainder i 3) 1)) 1)
-   :         (else (/ (* 2 (+ 1 i)) 3))))
+   #+BEGIN_SRC scheme
+   (define (d i)
+     (cond ((or (= (remainder i 3) 0)
+                (= (remainder i 3) 1)) 1)
+           (else (/ (* 2 (+ 1 i)) 3))))
+   #+END_SRC
 
    用来求e的程序：
 
@@ -708,48 +772,58 @@
 
    =tan-cf= 过程如下：
 
-   : (define (tan-cf x k)
-   :   (define (n i)
-   :     (if (= i 1) x (square x)))
-   :   (define (d i)
-   :     (- (* 2 i) 1))
-   :   (define (cf i)
-   :     (if (> i k)
-   :         0
-   :         (/ (n i)
-   :            (- (d i) (cf (+ 1 i))))))
-   :   (cf 1))
+   #+BEGIN_SRC scheme
+   (define (tan-cf x k)
+     (define (n i)
+       (if (= i 1) x (square x)))
+     (define (d i)
+       (- (* 2 i) 1))
+     (define (cf i)
+       (if (> i k)
+           0
+           (/ (n i)
+              (- (d i) (cf (+ 1 i))))))
+     (cf 1))
+   #+END_SRC
 
 ** 练习1.40
 
-   : (define (cubic a b c)
-   :   (lambda (x)
-   :     (+ (cube x)
-   :        (* a (square x))
-   :        (* b x)
-   :        c)))
+   #+BEGIN_SRC scheme
+   (define (cubic a b c)
+     (lambda (x)
+       (+ (cube x)
+          (* a (square x))
+          (* b x)
+          c)))
+   #+END_SRC
 
 ** 练习1.41
 
    =double= 过程：
 
-   : (define (double f)
-   :   (lambda (x) (f (f x))))
+   #+BEGIN_SRC scheme
+   (define (double f)
+     (lambda (x) (f (f x))))
+   #+END_SRC
 
    表达式的值是21，因为两次 =double= 调用就得到4层 =double= 嵌套的过程，再对 =inc= 作用，就会得到2的4次方，即16次 =inc= 过程的调用，所以结果是5 + 16 = 21。
 
 ** 练习1.42
 
-   : (define (compose f g)
-   :   (lambda (x) (f (g x))))
+   #+BEGIN_SRC scheme
+   (define (compose f g)
+     (lambda (x) (f (g x))))
+   #+END_SRC
 
 ** 练习1.43
 
-   : (define (repeated f n)
-   :   (if (<= n 1)
-   :       (lambda (x) (f x))
-   :       ;(repeated (compose f f) (- n 1))
-   :       (compose f (repeated f (- n 1)))))
+   #+BEGIN_SRC scheme
+   (define (repeated f n)
+     (if (<= n 1)
+         (lambda (x) (f x))
+         ;(repeated (compose f f) (- n 1))
+         (compose f (repeated f (- n 1)))))
+   #+END_SRC
 
    需要注意 =repeated= 和 =compose= 的调用顺序，如果先调用 =compose= 再调用 =repeated= （如代码中注释所示），那过程 =f= 会被重复2的n-1次方（注意是次方关系）；但是反之，则 =f= 就只会被重复n次，是加和关系。
 
@@ -757,15 +831,19 @@
 
    平滑过程 =smooth= ：
 
-   : (define dx 0.0000000001)
-   :
-   : (define (smooth f)
-   :   (lambda (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
+   #+BEGIN_SRC scheme
+   (define dx 0.0000000001)
+
+   (define (smooth f)
+     (lambda (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
+   #+END_SRC
 
    n次平滑过程 =smooth-n= ：
 
-   : (define (smooth-n f n)
-   :   ((repeated smooth n) f))
+   #+BEGIN_SRC scheme
+   (define (smooth-n f n)
+     ((repeated smooth n) f))
+   #+END_SRC
 
 ** 练习1.45
 
@@ -781,11 +859,13 @@
 
    写出求n次方根的过程如下：
 
-   : (define (nth-root x n)
-   :   (fixed-point
-   :    ((repeated average-damp
-   :               (floor (/ (log n) (log 2))))
-   :     (lambda (y) (/ x (expt y (- n 1))))) 1.0))
+   #+BEGIN_SRC scheme
+   (define (nth-root x n)
+     (fixed-point
+      ((repeated average-damp
+                 (floor (/ (log n) (log 2))))
+       (lambda (y) (/ x (expt y (- n 1))))) 1.0))
+   #+END_SRC
 
    可以用以下的调用验证：
 
@@ -797,83 +877,93 @@
 
    =iterative-improve= 过程：
 
-   : (define (iterative-improve good-enough? improve-guess)
-   :   (lambda (guess)
-   :     (let ((next (improve-guess guess)))
-   :       (if (good-enough? next guess)
-   :           next
-   :           ((iterative-improve good-enough? improve-guess)
-   :            (improve-guess guess))))))
+   #+BEGIN_SRC scheme
+   (define (iterative-improve good-enough? improve-guess)
+     (lambda (guess)
+       (let ((next (improve-guess guess)))
+         (if (good-enough? next guess)
+             next
+             ((iterative-improve good-enough? improve-guess)
+              (improve-guess guess))))))
+   #+END_SRC
 
    改进后的 =sqrt= 和 =fixed-point= 过程：
 
-   : (define (sqrt x)
-   :   ((iterative-improve (lambda (v1 v2) (< (abs (- v1 v2)) 0.0001))
-   :                       (lambda (y) (average y (/ x y))))
-   :    1.0))
-   :
-   : (define (fixed-point f first-guess)
-   :   ((iterative-improve (lambda (v1 v2) (< (abs (- v1 v2)) 0.0001))
-   :                       (lambda (y) (f y)))
-   :    first-guess))
+   #+BEGIN_SRC scheme
+   (define (sqrt x)
+     ((iterative-improve (lambda (v1 v2) (< (abs (- v1 v2)) 0.0001))
+                         (lambda (y) (average y (/ x y))))
+      1.0))
+
+   (define (fixed-point f first-guess)
+     ((iterative-improve (lambda (v1 v2) (< (abs (- v1 v2)) 0.0001))
+                         (lambda (y) (f y)))
+      first-guess))
+   #+END_SRC
 
 * 构造数据抽象
 
 ** 练习2.1
 
-   : (define (make-rat n d)
-   :   (define (make-rat-inner n d)
-   :     (let ((g (gcd n d)))
-   :       (cons (/ n g) (/ d g))))
-   :   (if (< (/ n d) 0)
-   :       (make-rat-inner (- (abs n))  (abs d))
-   :       (make-rat-inner (abs n) (abs d))))
+   #+BEGIN_SRC scheme
+   (define (make-rat n d)
+     (define (make-rat-inner n d)
+       (let ((g (gcd n d)))
+         (cons (/ n g) (/ d g))))
+     (if (< (/ n d) 0)
+         (make-rat-inner (- (abs n))  (abs d))
+         (make-rat-inner (abs n) (abs d))))
+   #+END_SRC
 
 ** 练习2.2
 
-   : (define (make-segment point-x point-y)
-   :   (cons point-x point-y))
-   :
-   : (define (start-segment segment)
-   :   (car segment))
-   :
-   : (define (end-segment segment)
-   :   (cdr segment))
-   :
-   : (define (make-point x y)
-   :   (cons x y))
-   :
-   : (define (x-point point)
-   :   (car point))
-   :
-   : (define (y-point point)
-   :   (cdr point))
-   :
-   : (define (midpoint-segment segment)
-   :   (make-point (average (x-point (start-segment segment))
-   :                        (x-point (end-segment segment)))
-   :               (average (y-point (start-segment segment))
-   :                        (y-point (end-segment segment)))))
+   #+BEGIN_SRC scheme
+   (define (make-segment point-x point-y)
+     (cons point-x point-y))
+
+   (define (start-segment segment)
+     (car segment))
+
+   (define (end-segment segment)
+     (cdr segment))
+
+   (define (make-point x y)
+     (cons x y))
+
+   (define (x-point point)
+     (car point))
+
+   (define (y-point point)
+     (cdr point))
+
+   (define (midpoint-segment segment)
+     (make-point (average (x-point (start-segment segment))
+                          (x-point (end-segment segment)))
+                 (average (y-point (start-segment segment))
+                          (y-point (end-segment segment)))))
+   #+END_SRC
 
 ** 练习2.3
 
-   : (define (make-rectangle p-lu p-rd)
-   :   (cons p-lu p-rd))
-   :
-   : (define (rect-left-up-point rect)
-   :   (car rect))
-   :
-   : (define (rect-right-down-point rect)
-   :   (cdr rect))
-   :
-   : (define (perimeter rect)
-   :   (* 2 (+ (- (x-point (rect-right-down-point rect))
-   :              (x-point (rect-left-up-point rect)))
-   :           (- (y-point (rect-left-up-point rect))
-   :              (y-point (rect-right-down-point rect))))))
-   :
-   : (define (area rect)
-   :   (* (- (x-point (rect-right-down-point rect))
-   :         (x-point (rect-left-up-point rect)))
-   :      (- (y-point (rect-left-up-point rect))
-   :         (y-point (rect-right-down-point rect)))))
+   #+BEGIN_SRC scheme
+   (define (make-rectangle p-lu p-rd)
+     (cons p-lu p-rd))
+
+   (define (rect-left-up-point rect)
+     (car rect))
+
+   (define (rect-right-down-point rect)
+     (cdr rect))
+
+   (define (perimeter rect)
+     (* 2 (+ (- (x-point (rect-right-down-point rect))
+                (x-point (rect-left-up-point rect)))
+             (- (y-point (rect-left-up-point rect))
+                (y-point (rect-right-down-point rect))))))
+
+   (define (area rect)
+     (* (- (x-point (rect-right-down-point rect))
+           (x-point (rect-left-up-point rect)))
+        (- (y-point (rect-left-up-point rect))
+           (y-point (rect-right-down-point rect)))))
+   #+END_SRC
