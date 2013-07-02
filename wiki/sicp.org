@@ -816,3 +816,15 @@
    :   ((iterative-improve (lambda (v1 v2) (< (abs (- v1 v2)) 0.0001))
    :                       (lambda (y) (f y)))
    :    first-guess))
+
+* 构造数据抽象
+
+** 练习2.1
+
+   : (define (make-rat n d)
+   :   (define (make-rat-inner n d)
+   :     (let ((g (gcd n d)))
+   :       (cons (/ n g) (/ d g))))
+   :   (if (< (/ n d) 0)
+   :       (make-rat-inner (- (abs n))  (abs d))
+   :       (make-rat-inner (abs n) (abs d))))
