@@ -828,3 +828,52 @@
    :   (if (< (/ n d) 0)
    :       (make-rat-inner (- (abs n))  (abs d))
    :       (make-rat-inner (abs n) (abs d))))
+
+** 练习2.2
+
+   : (define (make-segment point-x point-y)
+   :   (cons point-x point-y))
+   :
+   : (define (start-segment segment)
+   :   (car segment))
+   :
+   : (define (end-segment segment)
+   :   (cdr segment))
+   :
+   : (define (make-point x y)
+   :   (cons x y))
+   :
+   : (define (x-point point)
+   :   (car point))
+   :
+   : (define (y-point point)
+   :   (cdr point))
+   :
+   : (define (midpoint-segment segment)
+   :   (make-point (average (x-point (start-segment segment))
+   :                        (x-point (end-segment segment)))
+   :               (average (y-point (start-segment segment))
+   :                        (y-point (end-segment segment)))))
+
+** 练习2.3
+
+   : (define (make-rectangle p-lu p-rd)
+   :   (cons p-lu p-rd))
+   :
+   : (define (rect-left-up-point rect)
+   :   (car rect))
+   :
+   : (define (rect-right-down-point rect)
+   :   (cdr rect))
+   :
+   : (define (perimeter rect)
+   :   (* 2 (+ (- (x-point (rect-right-down-point rect))
+   :              (x-point (rect-left-up-point rect)))
+   :           (- (y-point (rect-left-up-point rect))
+   :              (y-point (rect-right-down-point rect))))))
+   :
+   : (define (area rect)
+   :   (* (- (x-point (rect-right-down-point rect))
+   :         (x-point (rect-left-up-point rect)))
+   :      (- (y-point (rect-left-up-point rect))
+   :         (y-point (rect-right-down-point rect)))))
