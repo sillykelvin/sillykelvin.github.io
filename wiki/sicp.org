@@ -976,3 +976,35 @@
    #+END_SRC
 
    这三个过程充分利用了第一章讲的构造过程抽象： =cons= 返回一个过程，这个过程将一个参数过程作用于两个元素x和y上；于是，在定义 =car= 和 =cdr= 的时候，需要构造一个过程，分别返回第一个元素和第二个元素，然后把这个过程作为参数传递给 =cons= 返回的过程。
+
+** 练习2.5
+
+   几个过程的定义如下：
+
+   #+BEGIN_SRC scheme
+   (define (cons a b)
+     (* (expt 2 a) (expt 3 b)))
+
+   (define (a x n)
+     (if (= (remainder x n) 0)
+         (a (/ x n) n)
+         x))
+
+   (define (car z)
+     (define (d x n)
+       (if (= (remainder x n) 0)
+           (a (/ x n) n)
+           x))
+     (/ (log (d z 3))
+        (log 2)))
+
+   (define (cdr z)
+     (define (d x n)
+       (if (= (remainder x n) 0)
+           (a (/ x n) n)
+           x))
+     (/ (log (d z 2))
+        (log 3)))
+   #+END_SRC
+
+   不过这几个过程还是有缺陷的，只能用于整数，例如 =(car (cons 1.2 3))= 就会返回不正确的结果，不过这是必然的。
