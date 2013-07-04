@@ -1,0 +1,57 @@
+#+TITLE:       蒙特卡罗与π
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-07-04 Thu
+#+URI:         /blog/%y/%m/%d/montecarlo-and-pi/
+#+KEYWORDS:    monte carlo method
+#+TAGS:        :Algorithm:Math:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to calculate pi using monte carlo method
+
+
+其实这是一篇很早就应该要填上的坑，但因为那时候专注于 *org-page* ，一心想着等 *org-page* 比较完善之后再填。好了，现在终于可以填上了。。
+
+这个坑的来源是因为我3月份（已经过去好久了 =_=#!）在看《Win32多线程程序设计》的时候，在第三章“快跑与等待”看到的第一个例子程序，其中有下面这样一段代码：
+
+#+BEGIN_SRC C
+/*
+ * Cute little busy work routine that computes the value
+ * of PI using probability. Highly dependent on having
+ * a good random number generator (rand is iffy)
+ */
+DWORD WINAPI ThreadFunc(LPVOID n)
+{
+    int i;
+    int inside = 0;
+    double val;
+
+    UNREFERENCED_PARAMETER(n);
+
+    /* Seed the random-number generator */
+    srand( (unsigned)time( NULL ) );
+
+    for (i=0; i<1000000; i++)
+    {
+        double x = (double)(rand())/RAND_MAX;
+        double y = (double)(rand())/RAND_MAX;
+        if ( (x*x + y*y) <= 1.0 )
+            inside++;
+    }
+    val = (double)inside / i;
+    printf("PI = %.4g\n", val*4);
+    return 0;
+}
+#+END_SRC
+
+从最后的 =printf= 语句来看，这个程序似乎是在计算π，但是，我实在是没有办法一眼看出来这个for循环是怎么算出π的，于是，我很快把看这本书的目的（了解Windows线程机制）丢在脑后，开始研究这个程序是如何算出π的，我似乎经常这样（=_=#!）。。
+
+这个程序本身还是很简单的：循环一百万次，每次随机生成两个在区间[0, 1]内的数，如果二者的平方和也在[0, 1]内的话，就将某个计数器加1。在循环结束后，用这个计数器的值，除以循环次数，再乘以4，就是π的值了。
+
+从 =val = (double)inside / i;= 可以看出，这是在求某种比例的值，而x和y的平方和让我联想到了解析几何中圆的方程，再仔细看看程序，我猛然醒悟：原来这货是在求随机点中落在单位圆中及圆上的点占总的点的数量的比值！
+
+x和y可以看成是二维解析平面上的点坐标(x, y)，由于二者的取值都只能限于[0, 1]区间，所以这些随机点就只能分布于一个边长为1的正方形内以及边上，而 =(x*x + y*y) ≦ 1.0= 则是在统计落在单位圆内及圆上的点的数量，要注意的是，因为坐标的取值区间限制，这并不是一个完整的单位圆，而只是第一象限的1/4个单位圆。而最后的比值，实际上是在求这1/4个单位圆的面积和单位正方形面积的比值。于是，计算一下就知道，这个比值是：(1/4 * π*1^2) / 1^2 = π/4。所以，最后的结果需要再乘以4才能得到π。
+
+当然，因为计算机不可能模拟无限，所以只能有有限个循环，从而求得的也不可能是π的准确值而只能是近似值，当然循环次数越多结果就越准确。而且，从理论上讲，落在正方形边上的点和圆上的点是否加入统计对结果是构不成影响的，但因为同样的原因，它们还是会影响结果的，但循环次数比较多的话，影响效果可以忽略不计。
+
+想明白这个弯儿后，去Google搜索了一下，才发现这个方法叫蒙特卡罗法。。好吧，原来这就是久闻大名的蒙特卡罗法。。长“姿势”了。。
