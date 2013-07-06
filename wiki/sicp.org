@@ -1053,3 +1053,40 @@
    (define (lower-bound z)
      (car z))
    #+END_SRC
+
+** 练习2.8
+
+   根据之前的 =add-interval= 和 =mul-interval= 来看，对两个区间操作的结果，是这样一个区间：其下界是两个区间分别取一个点执行相应操作的可能取的最小值，而上界则是相应的可能的最大值。
+
+   所以，对于减操作一样，需要确定两个区间中点相减的可能最小值与最大值，这就是新区间的界。假设两个区间分别为[a1, b1]和[a2, b2]，那么，有以下结论：
+
+   : a1 - a2 > a1 - b2
+   : b1 - a2 > b1 - b2
+   :
+   : b1 - a2 > a1 - a2
+   : b1 - b2 > a1 - b2
+
+   所以，很容易就可以看出，新区间的下界是 =a1 - b2= ，上界是 =b1 - a2= ，于是，有以下定义：
+
+   #+BEGIN_SRC scheme
+   (define (sub-interval x y)
+     (make-interval (- (lower-bound x) (upper-bound y))
+                    (- (upper-bound x) (lower-bound y))))
+   #+END_SRC
+
+** 练习2.9
+
+   对于加法和减法的证明，实在是不能再简单了，所以这里也就不写了，最后结果是，和和差的宽度都是两个操作数的宽度的算术平均值。至于乘和除，从定义上就可以看出来，其上界和下界的确定有一定的随机性（不像加和减，能完完全全推导出其上界和下界），所以，其宽度自然也不会是关于两个操作数的宽度的函数。
+
+** 练习2.10
+
+   #+BEGIN_SRC scheme
+   (define (div-interval x y)
+     (if (and (<= (lower-bound y) 0)
+              (>= (upper-bound y) 0))
+         (error "cannot divide an interval contains zero.")
+         (mul-interval
+          x
+          (make-interval (/ 1.0 (upper-bound y))
+                         (/ 1.0 (lower-bound y))))))
+   #+END_SRC
