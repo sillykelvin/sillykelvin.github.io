@@ -1695,6 +1695,111 @@ aR, bR
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-12" class="outline-3">
+<h3 id="sec-2-12">练习2.12</h3>
+<div class="outline-text-3" id="text-2-12">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-center-percent</span> c p)
+  (make-interval (- c (* c p)) (+ c (* c p))))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">percent</span> i)
+  (/ (width i) (center i)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-13" class="outline-3">
+<h3 id="sec-2-13">练习2.13</h3>
+<div class="outline-text-3" id="text-2-13">
+<p>
+这个证明还比较简单，假设两个区间的中点和误差百分比分别为c1, p1和c2, p2，所以，两个区间可以表示为：
+</p>
+
+<pre class="example">
+i1 = [c1 - c1 * p1, c1 + c1 * p1]
+i2 = [c2 - c2 * p2, c2 + c2 * p2]
+</pre>
+
+<p>
+而题目假设所有的数为正，所以，区间相乘的下界即为原来的区间的下界相乘，上界即为原来的上界相乘，新区间如下：
+</p>
+
+<pre class="example">
+i = i1 * i2 = [(c1 - c1 * p1)(c2 - c2 * p2), (c1 + c1 * p1)(c2 + c2 * p2)]
+  = [c1c2 - c1c2p1 - c1c2p2 + c1c2p1p2, c1c2 + c1c2p1 + c1c2p2 + c1c2p1p2]
+</pre>
+
+<p>
+所以，按照定义，新生成的区间的百分比误差为：
+</p>
+
+<pre class="example">
+p = width / center = (ub - lb) / (ub + lb)
+  = ...
+  = (p1 + p2) / (1 + p1 * p2)
+</pre>
+
+<p>
+上面的计算公式中， <code>width</code> 和 <code>center</code> 分别代表新生成区间宽度和中点， <code>ub</code> 和 <code>lb</code> 分别代表新生成区间的上界和下界。中间的具体计算步骤比较难用纯文字表达，所以略去，其实也不难，将相应的值代入计算即可。
+</p>
+
+<p>
+可以看到，最后的误差百分比跟原来的中点c1和c2是没有关系的，命题即得证。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-14" class="outline-3">
+<h3 id="sec-2-14">练习2.14</h3>
+<div class="outline-text-3" id="text-2-14">
+<p>
+根据给出的 <code>par1</code> 和 <code>par2</code> 过程的定义，作如下验证：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(par1 (make-center-percent 1 0.05)
+      (make-center-percent 2 0.02))
+
+(par2 (make-center-percent 1 0.05)
+      (make-center-percent 2 0.02))
+</pre>
+</div>
+
+<p>
+结果如下：
+</p>
+
+<pre class="example">
+&gt; '(0.6025889967637541 . 0.7360824742268043)
+&gt; '(0.6398625429553264 . 0.6932038834951456)
+</pre>
+
+<p>
+可以看到，两次的结果确实不同。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-15" class="outline-3">
+<h3 id="sec-2-15">练习2.15</h3>
+<div class="outline-text-3" id="text-2-15">
+<p>
+<del>个人感觉，这个说法是站不住脚的。因为，根据当前的区间四则运算定义，数据精度的损失是跟计算次数有关的，而不是跟什么非准确性变量的出现次数有关。</del>
+</p>
+
+<p>
+<del>根据 <code>par1</code> 和 <code>par2</code> 的定义可以看出，前者使用了三次区间运算，而后者使用了四次运算，所以后者的精度要比前者差。</del>
+</p>
+
+<p>
+感觉上面的想法不靠谱，于是去google了一下这个题目，才发现“真理”跟我的想法完全不同：我以为所谓的精度损失是跟计算机无法完全表示浮点数有关，在计算的过程中逐渐损失了精度，但事实上，根本就没有所谓的精度，也跟计算机的浮点计算精度没有任何关系！！
+</p>
+
+<p>
+根本原因是因为，我们的计算对象本来就是一个不确定具体值的区间，所以，在将两个区间进行相加和相乘操作的时候，无形中扩大了区间的宽度，也改变了误差百分比！！但是有一点需要注意的是，并不是所有的区间计算都会改变宽度，“元区间”（我自己起的名字） <code>[1, 1]</code> 就不会增加宽度，其它的“非准确性变量”都会改变区间宽度。所以，题目中的Eva Lu Ator的说法是对的，非准确性变量出现得越少，最后生成的区间就越紧凑。根据这个观点， <code>par2</code> 总共有四次计算，其中三次都有元区间参与而只有一次是两个非准确性变量参与；而 <code>par1</code> 的三次计算全部都是非准确性变量参与的，所以确实 <code>par2</code> 是比 <code>par1</code> 更好的程序。
+</p>
+</div>
+</div>
 </div>
 
       </div>
@@ -1702,7 +1807,7 @@ aR, bR
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-07-08</span>
+        <span title="last modification date" class="post-info">2013-07-09</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
