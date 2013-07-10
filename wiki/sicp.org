@@ -1214,3 +1214,23 @@
    #+END_SRC
 
    算法中根本就没有涉及到有关硬币顺序的内容，所以表 =coin-values= 的顺序显然不会影响最后的结果。
+
+** 练习2.20
+
+   这个题目还很花了我一点时间。。主要是这货不是普通的 =if...else...= 型的简单的递归调用，而是有三个分支，而且递归终止条件也不太好控制。。
+
+   #+BEGIN_SRC scheme
+   (define (same-parity . items)
+     (define (sp? a b)
+       (cond ((and (odd? a) (odd? b)) true)
+             ((and (even? a) (even? b)) true)
+             (else false)))
+     (define (sp a others)
+       (cond ((null? others) (list a))
+             ((sp? a (car others)) (append (list a)
+                                           (sp (car others) (cdr others))))
+             (else (sp a (cdr others)))))
+     (if (null? items)
+         items
+         (sp (car items) (cdr items))))
+   #+END_SRC
