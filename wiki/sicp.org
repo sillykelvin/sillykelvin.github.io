@@ -1181,3 +1181,36 @@
    后来再深入地想了想，这种问题的出现，是因为区间运算的约束条件所造成的，以乘法为例，要确保约束条件满足（即结果区间必须要包含因子区间所有可能取值的乘积），就必然会导致区间的扩大。所以，只要设计出来的计算法则满足区间计算的约束条件，那么无论怎么精心设计，都会碰上这一不可避免的问题。
 
    PS：这个题目的后面有一个警告，说是这个问题非常难，所以，我就不再去深究了，以我目前的数学水平，还达不到深入研究这一问题的层次。。
+
+** 练习2.17
+
+   #+BEGIN_SRC scheme
+   (define (last-pair items)
+     (if (or (null? items) (null? (cdr items)))
+         items
+         (last-pair (cdr items))))
+   #+END_SRC
+
+** 练习2.18
+
+   #+BEGIN_SRC scheme
+   (define (reverse items)
+     (if (null? items)
+         items
+         (append (reverse (cdr items)) (list (car items)))))
+   #+END_SRC
+
+** 练习2.19
+
+   #+BEGIN_SRC scheme
+   (define (first-denomination coin-values)
+     (car coin-values))
+
+   (define (except-first-denomination coin-values)
+     (cdr coin-values))
+
+   (define (no-more? coin-values)
+     (null? coin-values))
+   #+END_SRC
+
+   算法中根本就没有涉及到有关硬币顺序的内容，所以表 =coin-values= 的顺序显然不会影响最后的结果。
