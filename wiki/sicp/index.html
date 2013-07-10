@@ -1867,6 +1867,32 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-20" class="outline-3">
+<h3 id="sec-2-20">练习2.20</h3>
+<div class="outline-text-3" id="text-2-20">
+<p>
+这个题目还很花了我一点时间。。主要是这货不是普通的 <code>if&#x2026;else&#x2026;</code> 型的简单的递归调用，而是有三个分支，而且递归终止条件也不太好控制。。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">same-parity</span> . items)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sp?</span> a b)
+    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">and</span> (odd? a) (odd? b)) true)
+          ((<span style="color: #859900;">and</span> (even? a) (even? b)) true)
+          (<span style="color: #859900;">else</span> false)))
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sp</span> a others)
+    (<span style="color: #859900;">cond</span> ((null? others) (list a))
+          ((sp? a (car others)) (append (list a)
+                                        (sp (car others) (cdr others))))
+          (<span style="color: #859900;">else</span> (sp a (cdr others)))))
+  (<span style="color: #859900;">if</span> (null? items)
+      items
+      (sp (car items) (cdr items))))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
@@ -1874,7 +1900,7 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-07-10</span>
+        <span title="last modification date" class="post-info">2013-07-11</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
