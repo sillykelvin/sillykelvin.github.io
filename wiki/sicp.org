@@ -1234,3 +1234,50 @@
          items
          (sp (car items) (cdr items))))
    #+END_SRC
+
+** 练习2.21
+
+   #+BEGIN_SRC scheme
+   (define (square-list items)
+     (if (null? items)
+         '()
+         (cons (expt (car items) 2) (square-list (cdr items)))))
+
+   (define (square-list items)
+     (map (lambda (x) (expt x 2))
+          items))
+   #+END_SRC
+
+** 练习2.22
+
+   两种实现都是有问题的，例如对于如下调用：
+
+   : (square-list '(1 2 3))
+
+   两种实现的展开过程分别如下：
+
+   : ;; implementation 1
+   :
+   : =>  (iter '(1 2 3) nil)
+   : =>  (iter '(2 3) '(1))
+   : =>  (iter '(3) '(4 1))
+   : =>  (iter '() '(9 4 1))
+   : =>  '(9 4 1)
+
+   : ;; implementation 2
+   :
+   : =>  (iter '(1 2 3) nil)
+   : =>  (iter '(2 3) '(nil . 1))
+   : =>  (iter '(3) '((nil . 1) . 4))
+   : =>  (iter '() '(((nil . 1) . 4) . 9))
+   : =>  '(((nil . 1) . 4) . 9)
+
+** 练习2.23
+
+   #+BEGIN_SRC scheme
+   (define (for-each proc items)
+     (if (null? items)
+         '()
+         (begin (proc (car items))
+                (for-each proc (cdr items)))))
+   #+END_SRC
