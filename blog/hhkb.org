@@ -1,0 +1,51 @@
+#+TITLE:       Happy Hacking - 我的HHKB
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-05-12 Sun
+#+URI:         /blog/%y/%m/%d/hhkb/
+#+KEYWORDS:    programming, keyboard, hhkb
+#+TAGS:        :HHKB:Misc:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: HHKB keyboard
+
+
+已经不记得第一次知道HHKB这个名字是什么时候了，我的第一反应是，我靠，还有长这样的键盘！！第二反应是，我擦，居然还卖得这么贵！！
+
+在慢慢对它有一些认识之后，我的好奇心就开始作祟，总想一探究竟为什么HHKB被称作程序员的终极神器，但总归要那么多米，于是一忍再忍。
+
+终于，给我逮着一个好理由：自己本命年生日，总得弄点什么，作为自己在这世间第二个轮回的纪念吧。好吧，盯了好久的HHKB，就你了。于是，3月14号在萌购下单，HHKB Pro2黑无刻。终于，在4月27号——在我的生日已经过得连影都不见的时候，这货经过了飘洋过海的旅程，总算到了我的手中。
+
+俗话说，无图无G8（:-D），下面骚两张图片：
+
+这个是盒子：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/9181934631/" title="HHKB by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2872/9181934631_d51abd9a45_o.jpg" alt="HHKB"></a>@@
+
+这个就是庐山真面目了（黑无刻，够装13了吧）：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/9181927457/" title="HHKB by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7333/9181927457_5abc2b2626_o.jpg" alt="HHKB`"></a>@@
+
+* 键位映射
+
+  拿到HHKB的第一件事，就是把我原来的键位映射改回来（之前为了使用Emacs，我把CapsLock和左Ctrl对调了），现在有了神器，Ctrl本来就在原来CapsLock的键位，妈妈再也不用担心我按Control按得小手指疼了。 :-p
+
+  而且，HHKB的背后有六个开关用来设计模式，不同的模式有些功能键位不一样，根据说明书的介绍，我把开关1、3、4、5设置为ON，2和6设置为OFF。于是，最下面的一排的键位从左往右依次是：Fn、Alt、Space、Alt、Super，这个键位用来搭配Emacs再适合不过。
+
+* 击键感觉
+
+  初拿到HHKB的时候，我和原来的渣键盘比了一下，没有什么明显的感觉，除了HHKB敲起来感觉涩涩的之外。可是，用了一段时间之后，再去敲原来的键盘时，就明显不能适应了，不管是击键的感觉，还是声音。毫不夸张地说，一旦用了HHKB，就再也用不回原来的键盘了。
+
+* 缺点
+
+  当然，HHKB也不是没有缺点的。其中之一就是数字键。虽然已经使用了这么久，但我还是不太习惯它的一些数字键位，尤其是3、4、8、9这几个键，如果手放的位置有些偏的话，就会经常敲错。这在平常输入错误的话，改过来就可以了，但在输入带数字的密码的时候，由于密码一般不回显，所以就比较痛苦了。
+
+  另外还有一点就是，键的数量少了，那组合键自然就多了。比方说，作为Total Commander（嗯？Total Commander？这货不是Windows下的吗？没错，我工作的电脑就是万恶的Windows。。-____-）的重度用户，我使用F2、F3、F4、F7的频率相当高，但使用HHKB的话，这些功能键都要通过组合键来实现，这直接导致我使用Total Commander的频率显著降低了。。 -____-
+
+* 总结
+
+  现在，HHKB已经成为我每天生活的一部分了，上下班时都背着它，上班时，搭配Windows + Emacs写代码，下班后，搭配Mac + Archlinux + I3 + Emacs，写写博客，写写小程序。刚开始，有同事很不解：不就一个键盘么，看起来也就是小了点，键少了点，敲起来也没什么特别的感觉，至于那么贵么，我几十块一把的键盘也用得好好的啊？对此，我只能淡淡一笑，对于HHKB来说，懂者自懂，不懂者自不懂。使用HHKB，最有感觉的时候，还是夜深人静时，一个人坐在床上，码码字，听着轻脆的击键音，不能不说是一种享受。
+
+  但话说回来，个人觉得，如果你不是VIM/Emacs的用户，其实没有太大必要选择HHKB，其它拥有更多键位的机械键盘才是你正确的选择。
+
+最后，祝各位，不管使用什么键盘，都能Happy Hacking  :-)
