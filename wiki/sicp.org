@@ -1312,3 +1312,16 @@
    #+END_SRC
 
    在上述代码中，有两个地方都对 =car= 进行了 =list= 包装处理，这是因为，按前面例子中所说的， =car= 只取出一个元素，所以，在结果中需要重新将其包装成一个表，而 =cdr= 取出的本身就是一个表，所以不需要包装。
+
+** 练习2.28
+
+   这个题又是一个坑，不过有了上题的经验，这一题就好控制多了，与上一题不同的是，这一题用迭代来完成，因为要将树形的结构给转换成线性表，所以需要一个“全局”变量来存储中间转换结果，迭代是最适合的，用递归的话，可能需要 =let= 声明，而我是比较讨厌 =let= 的，能尽量不用就尽量不用。。
+
+   #+BEGIN_SRC scheme
+   (define (fringe items)
+     (define (iter items result)
+       (cond ((null? items) result)
+             ((not (pair? items)) (append result (list items)))
+             (else (iter (cdr items) (iter (car items) result)))))
+     (iter items '()))
+   #+END_SRC
