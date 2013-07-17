@@ -1299,3 +1299,16 @@
    : (append x y) = (1 2 3 4 5 6)
    : (cons x y)   = ((1 2 3) 4 5 6)
    : (list x y)   = ((1 2 3) (4 5 6))
+
+** 练习2.27
+
+   被这个题坑了好久才做出来。。这个题需要注意的是，假设x是 =((1 2) (3 4))= 的话，那么 =(car x)= 返回 =(1 2)= ，而 =(cdr x)= 返回 =((3 4))= ！！千万不要以为 =car= 和 =cdr= 是对等的！！前者是取元素，而后者是取剩下的表！！我就是坑在这一点上，在线性表的时候，这个坑还算比较小，如果是一棵树的话，这个坑就大了。。
+
+   #+BEGIN_SRC scheme
+   (define (deep-reverse items)
+     (cond ((not (pair? items)) items)
+           ((null? (cdr items)) (list (deep-reverse (car items))))
+           (else (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+   #+END_SRC
+
+   在上述代码中，有两个地方都对 =car= 进行了 =list= 包装处理，这是因为，按前面例子中所说的， =car= 只取出一个元素，所以，在结果中需要重新将其包装成一个表，而 =cdr= 取出的本身就是一个表，所以不需要包装。
