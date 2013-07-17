@@ -2013,6 +2013,25 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-28" class="outline-3">
+<h3 id="sec-2-28">练习2.28</h3>
+<div class="outline-text-3" id="text-2-28">
+<p>
+这个题又是一个坑，不过有了上题的经验，这一题就好控制多了，与上一题不同的是，这一题用迭代来完成，因为要将树形的结构给转换成线性表，所以需要一个“全局”变量来存储中间转换结果，迭代是最适合的，用递归的话，可能需要 <code>let</code> 声明，而我是比较讨厌 <code>let</code> 的，能尽量不用就尽量不用。。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fringe</span> items)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> items result)
+    (<span style="color: #859900;">cond</span> ((null? items) result)
+          ((not (pair? items)) (append result (list items)))
+          (<span style="color: #859900;">else</span> (iter (cdr items) (iter (car items) result)))))
+  (iter items '()))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
