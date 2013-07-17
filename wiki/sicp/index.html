@@ -1992,6 +1992,27 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </pre>
 </div>
 </div>
+<div id="outline-container-sec-2-27" class="outline-3">
+<h3 id="sec-2-27">练习2.27</h3>
+<div class="outline-text-3" id="text-2-27">
+<p>
+被这个题坑了好久才做出来。。这个题需要注意的是，假设x是 <code>((1 2) (3 4))</code> 的话，那么 <code>(car x)</code> 返回 <code>(1 2)</code> ，而 <code>(cdr x)</code> 返回 <code>((3 4))</code> ！！千万不要以为 <code>car</code> 和 <code>cdr</code> 是对等的！！前者是取元素，而后者是取剩下的表！！我就是坑在这一点上，在线性表的时候，这个坑还算比较小，如果是一棵树的话，这个坑就大了。。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">deep-reverse</span> items)
+  (<span style="color: #859900;">cond</span> ((not (pair? items)) items)
+        ((null? (cdr items)) (list (deep-reverse (car items))))
+        (<span style="color: #859900;">else</span> (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+</pre>
+</div>
+
+<p>
+在上述代码中，有两个地方都对 <code>car</code> 进行了 <code>list</code> 包装处理，这是因为，按前面例子中所说的， <code>car</code> 只取出一个元素，所以，在结果中需要重新将其包装成一个表，而 <code>cdr</code> 取出的本身就是一个表，所以不需要包装。
+</p>
+</div>
+</div>
 </div>
 
       </div>
@@ -1999,7 +2020,7 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-07-15</span>
+        <span title="last modification date" class="post-info">2013-07-18</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
