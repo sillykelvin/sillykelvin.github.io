@@ -1325,3 +1325,48 @@
              (else (iter (cdr items) (iter (car items) result)))))
      (iter items '()))
    #+END_SRC
+
+** 练习2.29
+
+   a) 这几个过程还是相对比较简单的，取对应元素即可，需要注意的是，在取活动体右边的部分时，要用 =cadr= 而不是 =cdr= 。
+
+      #+BEGIN_SRC scheme
+      (define (left-branch mobile)
+        (car mobile))
+
+      (define (right-branch mobile)
+        (cadr mobile))
+
+      (define (branch-length branch)
+        (car branch))
+
+      (define (branch-structure branch)
+        (cadr branch))
+      #+END_SRC
+
+   b) =total-weight= 过程如下：
+
+      #+BEGIN_SRC scheme
+      (define (total-weight mobile)
+        (cond ((null? mobile) 0)
+              ((not (pair? mobile)) mobile)
+              (else (+ (total-weight (branch-structure (left-branch mobile)))
+                       (total-weight (branch-structure (right-branch mobile)))))))
+      #+END_SRC
+
+   c) 用于检查平衡的 =check-balance= 过程如下：
+
+      #+BEGIN_SRC scheme
+      (define (check-balance mobile)
+        (cond ((null? mobile) #f)
+              ((not (pair? mobile)) #t)
+              ((not (= (* (branch-length (left-branch mobile))
+                          (total-weight (branch-structure (left-branch mobile))))
+                       (* (branch-length (right-branch mobile))
+                          (total-weight (branch-structure (right-branch mobile))))))
+               #f)
+              (else (and (check-balance (branch-structure (left-branch mobile)))
+                         (check-balance (branch-structure (right-branch mobile)))))))
+      #+END_SRC
+
+   d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底层具体数据结构相关的只有在a)中定义的那几个选择过程，而b)和c)中的过程都是构建在a)中的选择过程之上，所以并不会受到影响，因此只需要简单改a)中的四个选择过程即可。
