@@ -1370,3 +1370,20 @@
       #+END_SRC
 
    d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底层具体数据结构相关的只有在a)中定义的那几个选择过程，而b)和c)中的过程都是构建在a)中的选择过程之上，所以并不会受到影响，因此只需要简单改a)中的四个选择过程即可。
+
+** 练习2.30
+
+   #+BEGIN_SRC scheme
+   (define (square-tree tree)
+     (map (lambda (sub-tree)
+            (if (pair? sub-tree)
+                (square-tree sub-tree)
+                (expt sub-tree 2)))
+          tree))
+
+   (define (square-tree tree)
+     (cond ((null? tree) #nil)
+           ((not (pair? tree)) (expt tree 2))
+           (else (cons (square-tree (car tree))
+                       (square-tree (cdr tree))))))
+   #+END_SRC
