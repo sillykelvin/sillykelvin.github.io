@@ -2093,6 +2093,27 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-30" class="outline-3">
+<h3 id="sec-2-30">练习2.30</h3>
+<div class="outline-text-3" id="text-2-30">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-tree</span> tree)
+  (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (sub-tree)
+         (<span style="color: #859900;">if</span> (pair? sub-tree)
+             (square-tree sub-tree)
+             (expt sub-tree 2)))
+       tree))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-tree</span> tree)
+  (<span style="color: #859900;">cond</span> ((null? tree) #nil)
+        ((not (pair? tree)) (expt tree 2))
+        (<span style="color: #859900;">else</span> (cons (square-tree (car tree))
+                    (square-tree (cdr tree))))))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
@@ -2100,7 +2121,7 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-07-19</span>
+        <span title="last modification date" class="post-info">2013-07-20</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
