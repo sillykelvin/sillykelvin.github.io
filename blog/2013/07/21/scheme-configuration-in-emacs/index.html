@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>在Emacs中为Scheme设置更为舒服的编程环境 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="how to make a better programming environment in emacs for scheme" />
+    <meta name="keywords" content="scheme, emacs" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div> 
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="https://google.com/search?q=site:kelvinh.github.io">Search</a></li>
+        </ul>
+      </header>
+    </div>
+    <div> 
+      <div class="post">
+        <h1>在Emacs中为Scheme设置更为舒服的编程环境</h1>
+        <p>
+其实自己折腾Emacs一直没有什么记笔记的习惯，折腾好了，能工作了，就算了。这次，在彻底折腾好Scheme的环境之后，趁热情还没消退到懒得记笔记之前，赶紧写一篇把所做的折腾给记下来。
+</p>
+
+<p>
+其实除了看SICP需要用到Scheme之外，我并没有在其它的地方使用Scheme，虽然每次用起来麻烦一点，但毕竟用的不多，这也是看SICP都这么久了才想起来好好配置一番的原因。
+</p>
+
+<p>
+<b>需要说明的是，这篇文章要讲的是Emacs自带的地地道道的cmuscheme的配置，而不是针对Scheme的SLIME的相关配置，因为前面说过，我只用Scheme来做SICP的习题，所以并不需要SLIME这么重量级的家伙，而且，SLIME主要是针对Common Lisp的，对于Scheme其实并不太友好。</b>
+</p>
+
+<p>
+那么，在没有配置之前，有哪些麻烦呢？
+</p>
+
+<ol class="org-ol">
+<li>括号
+
+<p>
+是的，这对于初学Lisp相关的方言的人来说，那无穷无尽的小括号简直就是地狱。想起一个笑话，细节记不太清了，大致是说，俄罗斯某特工费尽全力终于从美国NASA偷得了美国最新火箭控制系统的源代码的最后一页，他把源代码打印出来，结果是：
+</p>
+
+<pre class="example">
+)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+</pre>
+
+<p>
+最终这名特工吐血而亡。这当然只是一个笑话，但是也说明Lisp相关的方言中，小括号使用的量是如此之多。如果不适应这一点，想必最终会被淹死在Lisp的括号海里。 :-D
+</p>
+
+<p>
+废话少说，言归正传。其实关于括号的配置我在很早之前就做了相关配置，这里只是重新提一下，我关于括号的配置很简单，一是能匹配括号高亮，二是能自动补全即可。前者是通过Emacs自带的一个minor mode来实现；后者用到一个插件，叫 <b>autopair</b> ，关于它们的设置也很简单：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp">(show-paren-mode t) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#21305;&#37197;&#25324;&#21495;&#39640;&#20142;</span>&#57344;&#57345;&#57345;
+&#57344;&#57345;&#57345;
+(<span style="color: #859900;">require</span> '<span style="color: #6c71c4;">autopair</span>)&#57344;&#57345;&#57345;
+(autopair-global-mode) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#33258;&#21160;&#34917;&#20840;&#25324;&#21495;</span>&#57344;&#57345;&#57345;
+</pre>
+</div>
+
+<p>
+有了上述配置之后，对括号海的晕眩想必能减轻一点了吧？
+</p>
+</li>
+
+<li>解释器启动
+
+<p>
+在刚启动Emacs的时候，自然是没有Scheme解释器进程的，在一个Scheme mode的buffer里按 <code>C-x C-e</code> 执行代码的时候，必然报错。于是，每次启动Emacs，我们都得去 <code>M-x run-scheme</code> 一下，更有甚者，如果你的 <code>scheme-program-name</code> 没有设置，你还得必须设置对这个变量才能执行 <code>run-scheme</code> ，不然Emacs不知道哪个是Scheme解释器。
+</p>
+
+<p>
+我不得承认，我之前一直这么干的，启动Emacs，在Scheme的buffer里执行 <code>C-x C-e</code> 报错，然后想起来没有启动解释器，执行 <code>run-scheme</code> 又报错，然后想起来 <code>scheme-program-name</code> 还没有设置。。于是，再反过来把三个步骤都执行一遍。。写到这里，我发现我的忍耐力还真强，都过了这么久，才终于想起来把这一切给做成自动化的。。
+</p>
+</li>
+
+<li>执行窗口与结果窗口的显示
+
+<p>
+这也是一个问题，为了能够及时看到代码的执行结果，我想正常人应该都是将Emacs分成两个窗口，一个关联源代码buffer，另一个关联Scheme解释器的执行结果buffer，在源代码窗口里面按一下 <code>C-x C-e</code> 立马就能在另一个窗口里面看到结果。好吧，我不得不承认这一切在之前我也是手动做的：先将Emacs切成两个窗口，切换到另外一个窗口，将其换成Scheme解释器的buffer，然后切换回原来的窗口，按 <code>C-x C-e</code> 执行代码。。好累啊。。
+</p>
+</li>
+</ol>
+
+<hr/>
+
+<p>
+针对问题2和3，我终于忍不住了，决定把这一切都给自动化起来，理想的情况是：当我在Scheme代码的buffer里面执行 <code>C-x C-e</code> 的时候，Emacs帮我检测Scheme解释器是否已经启动，没有启动的话，帮我启动起来；然后确保当前Frame已经被切分成两个窗口并且另一个窗口是Scheme解释器的buffer；最后，再执行我想要执行的代码。
+</p>
+
+<p>
+下面的代码片断就是用来达到以上目的的：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp">(<span style="color: #859900;">require</span> '<span style="color: #6c71c4;">cmuscheme</span>)&#57344;&#57345;&#57345;
+&#57344;&#57345;&#57345;
+(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">kh/get-scheme-proc-create</span> ()&#57344;&#57345;&#57345;
+  <span style="color: #d33682;">"Create one scheme process if no one is created."</span>&#57344;&#57345;&#57345;
+  (<span style="color: #859900;">unless</span> (and scheme-buffer&#57344;&#57345;&#57345;
+               (get-buffer scheme-buffer)&#57344;&#57345;&#57345;
+               (comint-check-proc scheme-buffer))&#57344;&#57345;&#57345;
+    (<span style="color: #859900;">save-window-excursion</span>&#57344;&#57345;&#57345;
+      (run-scheme scheme-program-name))))&#57344;&#57345;&#57345;
+&#57344;&#57345;&#57345;
+(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">kh/scheme-send-last-sexp</span> ()&#57344;&#57345;&#57345;
+  <span style="color: #d33682;">"A replacement of original `</span><span style="color: #6c71c4;">scheme-send-last-sexp</span><span style="color: #d33682;">':</span>&#57344;&#57345;&#57345;
+<span style="color: #d33682;">1. check if scheme process exists, otherwise create one</span>&#57344;&#57345;&#57345;
+<span style="color: #d33682;">2. make sure the frame is splitted into two windows, current one is the scheme</span>&#57344;&#57345;&#57345;
+<span style="color: #d33682;">   source code window, the other one is the scheme process window</span>&#57344;&#57345;&#57345;
+<span style="color: #d33682;">3. run `</span><span style="color: #6c71c4;">scheme-send-last-sexp</span><span style="color: #d33682;">'</span>&#57344;&#57345;&#57345;
+&#57344;&#57345;&#57345;
+<span style="color: #d33682;">PS: this function is inspired by Wang Yin."</span>&#57344;&#57345;&#57345;
+  (interactive)&#57344;&#57345;&#57345;
+  (kh/get-scheme-proc-create)&#57344;&#57345;&#57345;
+  (<span style="color: #859900;">cond</span> ((= 2 (count-windows))&#57344;&#57345;&#57345;
+         (other-window 1)&#57344;&#57345;&#57345;
+         (<span style="color: #859900;">unless</span> (string= (buffer-name)&#57344;&#57345;&#57345;
+                          scheme-buffer)&#57344;&#57345;&#57345;
+           (switch-to-buffer scheme-buffer))&#57344;&#57345;&#57345;
+         (other-window 1))&#57344;&#57345;&#57345;
+        (t&#57344;&#57345;&#57345;
+         (delete-other-windows)&#57344;&#57345;&#57345;
+         (split-window-vertically (floor (* 0.68 (window-height))))&#57344;&#57345;&#57345;
+         (other-window 1)&#57344;&#57345;&#57345;
+         (switch-to-buffer scheme-buffer)&#57344;&#57345;&#57345;
+         (other-window 1)))&#57344;&#57345;&#57345;
+  (scheme-send-last-sexp))&#57344;&#57345;&#57345;
+</pre>
+</div>
+
+<p>
+上面的代码定义了两个函数，这两个函数的作用在它们的注释里面也写清楚了，第一个是用来检测Scheme解释器进程的，第二个是完成整个过程的函数。这两个函数是在<a href="http://www.yinwang.org/blog-cn/2013/04/11/scheme-setup/">这里</a>的基础上，根据我自己的需要做了一些自定义。
+</p>
+
+<p>
+光有上面的代码还不行，我们还要设置 <code>scheme-program-name</code> ，以及设置Scheme mode的hook来让上面的代码起作用：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp">(<span style="color: #859900;">if</span> is-os-windows&#57344;&#57345;&#57345;
+    (setq scheme-program-name <span style="color: #2aa198;">"racket"</span>)&#57344;&#57345;&#57345;
+  (setq scheme-program-name <span style="color: #2aa198;">"guile"</span>))&#57344;&#57345;&#57345;
+&#57344;&#57345;&#57345;
+(kh/add-hook '(scheme-mode-hook)&#57344;&#57345;&#57345;
+             '((<span style="color: #859900;">lambda</span> ()&#57344;&#57345;&#57345;
+                 (local-set-key (kbd <span style="color: #2aa198;">"C-x C-e"</span>) 'kh/scheme-send-last-sexp))))&#57344;&#57345;&#57345;
+</pre>
+</div>
+
+<p>
+这段代码的第一部分是根据系统类型来设置Scheme解释器，我在Windows上装的是racket，Linux上装的是guile；第二部分就是向Scheme mode的hook添加函数，大致意思是，在Scheme mode中，把 <code>C-x C-e</code> 组合键重新映射为我们上面自己定义的 <code>kh/scheme-send-last-sexp</code> 函数。
+</p>
+
+<p>
+好了，经过一番折腾，上面提到的三个问题都完美解决了，从此，妈妈再也不用担心我会重复劳动了。 :-D
+</p>
+
+<p>
+PS：上面的代码中有涉及到一些我自己定义的变量及函数，想了解更多，请参考我的Emacs配置：<a href="https://github.com/kelvinh/.emacs.d">https://github.com/kelvinh/.emacs.d</a>
+</p>
+
+      </div>
+    </div>
+    <div> 
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-07-21</span>
+        <span title="last modification date" class="post-info">2013-07-23</span>
+        <span title="tags" class="post-info"><a href="/tags/emacs/">Emacs</a>, <a href="/tags/scheme/">Scheme</a>, <a href="/tags/elisp/">Elisp</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/07/21/scheme-configuration-in-emacs/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/07/21/scheme-configuration-in-emacs/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.3)</p>
+        <p> 
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
