@@ -1,0 +1,110 @@
+#+TITLE:       在Emacs中为Scheme设置更为舒服的编程环境
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-07-21 Sun
+#+URI:         /blog/%y/%m/%d/scheme-configuration-in-emacs/
+#+KEYWORDS:    scheme, emacs
+#+TAGS:        :Emacs:Scheme:Elisp:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to make a better programming environment in emacs for scheme
+
+
+其实自己折腾Emacs一直没有什么记笔记的习惯，折腾好了，能工作了，就算了。这次，在彻底折腾好Scheme的环境之后，趁热情还没消退到懒得记笔记之前，赶紧写一篇把所做的折腾给记下来。
+
+其实除了看SICP需要用到Scheme之外，我并没有在其它的地方使用Scheme，虽然每次用起来麻烦一点，但毕竟用的不多，这也是看SICP都这么久了才想起来好好配置一番的原因。
+
+*需要说明的是，这篇文章要讲的是Emacs自带的地地道道的cmuscheme的配置，而不是针对Scheme的SLIME的相关配置，因为前面说过，我只用Scheme来做SICP的习题，所以并不需要SLIME这么重量级的家伙，而且，SLIME主要是针对Common Lisp的，对于Scheme其实并不太友好。*
+
+那么，在没有配置之前，有哪些麻烦呢？
+
+1. 括号
+
+   是的，这对于初学Lisp相关的方言的人来说，那无穷无尽的小括号简直就是地狱。想起一个笑话，细节记不太清了，大致是说，俄罗斯某特工费尽全力终于从美国NASA偷得了美国最新火箭控制系统的源代码的最后一页，他把源代码打印出来，结果是：
+
+   : )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+
+   最终这名特工吐血而亡。这当然只是一个笑话，但是也说明Lisp相关的方言中，小括号使用的量是如此之多。如果不适应这一点，想必最终会被淹死在Lisp的括号海里。 :-D
+
+   废话少说，言归正传。其实关于括号的配置我在很早之前就做了相关配置，这里只是重新提一下，我关于括号的配置很简单，一是能匹配括号高亮，二是能自动补全即可。前者是通过Emacs自带的一个minor mode来实现；后者用到一个插件，叫 *autopair* ，关于它们的设置也很简单：
+
+   #+BEGIN_SRC emacs-lisp
+   (show-paren-mode t) ;; 匹配括号高亮
+
+   (require 'autopair)
+   (autopair-global-mode) ;; 自动补全括号
+   #+END_SRC
+
+   有了上述配置之后，对括号海的晕眩想必能减轻一点了吧？
+
+2. 解释器启动
+
+   在刚启动Emacs的时候，自然是没有Scheme解释器进程的，在一个Scheme mode的buffer里按 =C-x C-e= 执行代码的时候，必然报错。于是，每次启动Emacs，我们都得去 =M-x run-scheme= 一下，更有甚者，如果你的 =scheme-program-name= 没有设置，你还得必须设置对这个变量才能执行 =run-scheme= ，不然Emacs不知道哪个是Scheme解释器。
+
+   我不得承认，我之前一直这么干的，启动Emacs，在Scheme的buffer里执行 =C-x C-e= 报错，然后想起来没有启动解释器，执行 =run-scheme= 又报错，然后想起来 =scheme-program-name= 还没有设置。。于是，再反过来把三个步骤都执行一遍。。写到这里，我发现我的忍耐力还真强，都过了这么久，才终于想起来把这一切给做成自动化的。。
+
+3. 执行窗口与结果窗口的显示
+
+   这也是一个问题，为了能够及时看到代码的执行结果，我想正常人应该都是将Emacs分成两个窗口，一个关联源代码buffer，另一个关联Scheme解释器的执行结果buffer，在源代码窗口里面按一下 =C-x C-e= 立马就能在另一个窗口里面看到结果。好吧，我不得不承认这一切在之前我也是手动做的：先将Emacs切成两个窗口，切换到另外一个窗口，将其换成Scheme解释器的buffer，然后切换回原来的窗口，按 =C-x C-e= 执行代码。。好累啊。。
+
+--------------------------------------------------------------------------------
+
+针对问题2和3，我终于忍不住了，决定把这一切都给自动化起来，理想的情况是：当我在Scheme代码的buffer里面执行 =C-x C-e= 的时候，Emacs帮我检测Scheme解释器是否已经启动，没有启动的话，帮我启动起来；然后确保当前Frame已经被切分成两个窗口并且另一个窗口是Scheme解释器的buffer；最后，再执行我想要执行的代码。
+
+下面的代码片断就是用来达到以上目的的：
+
+#+BEGIN_SRC emacs-lisp
+(require 'cmuscheme)
+
+(defun kh/get-scheme-proc-create ()
+  "Create one scheme process if no one is created."
+  (unless (and scheme-buffer
+               (get-buffer scheme-buffer)
+               (comint-check-proc scheme-buffer))
+    (save-window-excursion
+      (run-scheme scheme-program-name))))
+
+(defun kh/scheme-send-last-sexp ()
+  "A replacement of original `scheme-send-last-sexp':
+1. check if scheme process exists, otherwise create one
+2. make sure the frame is splitted into two windows, current one is the scheme
+   source code window, the other one is the scheme process window
+3. run `scheme-send-last-sexp'
+
+PS: this function is inspired by Wang Yin."
+  (interactive)
+  (kh/get-scheme-proc-create)
+  (cond ((= 2 (count-windows))
+         (other-window 1)
+         (unless (string= (buffer-name)
+                          scheme-buffer)
+           (switch-to-buffer scheme-buffer))
+         (other-window 1))
+        (t
+         (delete-other-windows)
+         (split-window-vertically (floor (* 0.68 (window-height))))
+         (other-window 1)
+         (switch-to-buffer scheme-buffer)
+         (other-window 1)))
+  (scheme-send-last-sexp))
+#+END_SRC
+
+上面的代码定义了两个函数，这两个函数的作用在它们的注释里面也写清楚了，第一个是用来检测Scheme解释器进程的，第二个是完成整个过程的函数。这两个函数是在[[http://www.yinwang.org/blog-cn/2013/04/11/scheme-setup/][这里]]的基础上，根据我自己的需要做了一些自定义。
+
+光有上面的代码还不行，我们还要设置 =scheme-program-name= ，以及设置Scheme mode的hook来让上面的代码起作用：
+
+#+BEGIN_SRC emacs-lisp
+(if is-os-windows
+    (setq scheme-program-name "racket")
+  (setq scheme-program-name "guile"))
+
+(kh/add-hook '(scheme-mode-hook)
+             '((lambda ()
+                 (local-set-key (kbd "C-x C-e") 'kh/scheme-send-last-sexp))))
+#+END_SRC
+
+这段代码的第一部分是根据系统类型来设置Scheme解释器，我在Windows上装的是racket，Linux上装的是guile；第二部分就是向Scheme mode的hook添加函数，大致意思是，在Scheme mode中，把 =C-x C-e= 组合键重新映射为我们上面自己定义的 =kh/scheme-send-last-sexp= 函数。
+
+好了，经过一番折腾，上面提到的三个问题都完美解决了，从此，妈妈再也不用担心我会重复劳动了。 :-D
+
+PS：上面的代码中有涉及到一些我自己定义的变量及函数，想了解更多，请参考我的Emacs配置：https://github.com/kelvinh/.emacs.d
