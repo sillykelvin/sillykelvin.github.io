@@ -1435,3 +1435,23 @@
    (define (length sequence)
      (accumulate (lambda (x y) (+ y 1)) 0 sequence))
    #+END_SRC
+
+** 练习2.34
+
+   #+BEGIN_SRC scheme
+   (define (hornor-eval x coefficient-sequence)
+     (accumulate (lambda (this-coeff higher-terms)
+                   (+ this-coeff (* x higher-terms)))
+                 0
+                 coefficient-sequence))
+   #+END_SRC
+
+** 练习2.35
+
+   #+BEGIN_SRC scheme
+   (define (count-leaves tree)
+     (accumulate (lambda (x y) (+ x y))
+                 0
+                 (map (lambda (x) (length (enumerate-tree x)))
+                      tree)))
+   #+END_SRC
