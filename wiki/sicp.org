@@ -1455,3 +1455,55 @@
                  (map (lambda (x) (length (enumerate-tree x)))
                       tree)))
    #+END_SRC
+
+** 练习2.36
+
+   #+BEGIN_SRC scheme
+   (define (accumulate-n op init seqs)
+     (if (null? (car seqs))
+         #nil
+         (cons (accumulate op init (map car seqs))
+               (accumulate-n op init (map cdr seqs)))))
+   #+END_SRC
+
+** 练习2.37
+
+   关于矩阵运算基本都忘光了，这个题目中的定义又不太清楚，摸索了老半天才战战兢兢地写出答案（其实矩阵和行向量不太能相乘的，因为矩阵乘法规定第一个矩阵的列数和第二个矩阵的行数必须相等，如果矩阵乘以行向量，那这个矩阵必须是列向量才行）：
+
+   #+BEGIN_SRC scheme
+   (define (dot-product v w)
+     (accumulate + 0 (map * v w)))
+
+   (define (matrix-*-vector m v)
+     (map (lambda (row)
+            (dot-product v row)) m))
+
+   (define (transpose mat)
+     (accumulate-n cons #nil mat))
+
+   (define (matrix-*-matrix m n)
+     (let ((cols (transpose n)))
+       (map (lambda (row)
+              (matrix-*-vector n row)) m)))
+   #+END_SRC
+
+** 练习2.38
+
+   =fold-left= 和 =fold-right= 不相同的不仅仅是累计作用的顺序，还有两个操作数的顺序也相反：
+
+   : (fold-left list #nil '(1 2 3))   ;; -> (((#nil 1) 2) 3)
+   : (fold-right list #nil '(1 2 3))  ;; -> (1 (2 (3 #nil)))
+
+   前者产生的第一个序列是 =(#nil 1)= ，而后者产生的第一个序列是 =(3 #nil)= ，由此可以看出，操作数的顺序也是相反的。
+
+   所以，要想 =fold-left= 和 =fold-right= 产生相同的结果，那么 =op= 操作只要满足交换律即可，比如 =+= 或者 =*= 。
+
+** 练习2.39
+
+   #+BEGIN_SRC scheme
+   (define (reverse1 sequence)
+     (fold-right (lambda (x y) (append y (list x))) #nil sequence))
+
+   (define (reverse2 sequence)
+     (fold-left (lambda (x y) (cons y x)) #nil sequence))
+   #+END_SRC
