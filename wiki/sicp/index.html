@@ -2214,6 +2214,82 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 </div>
+<div id="outline-container-sec-2-36" class="outline-3">
+<h3 id="sec-2-36">练习2.36</h3>
+<div class="outline-text-3" id="text-2-36">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">accumulate-n</span> op init seqs)
+  (<span style="color: #859900;">if</span> (null? (car seqs))
+      #nil
+      (cons (accumulate op init (<span style="color: #859900;">map</span> car seqs))
+            (accumulate-n op init (<span style="color: #859900;">map</span> cdr seqs)))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-37" class="outline-3">
+<h3 id="sec-2-37">练习2.37</h3>
+<div class="outline-text-3" id="text-2-37">
+<p>
+关于矩阵运算基本都忘光了，这个题目中的定义又不太清楚，摸索了老半天才战战兢兢地写出答案（其实矩阵和行向量不太能相乘的，因为矩阵乘法规定第一个矩阵的列数和第二个矩阵的行数必须相等，如果矩阵乘以行向量，那这个矩阵必须是列向量才行）：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">dot-product</span> v w)
+  (accumulate + 0 (<span style="color: #859900;">map</span> * v w)))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">matrix-*-vector</span> m v)
+  (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (row)
+         (dot-product v row)) m))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">transpose</span> mat)
+  (accumulate-n cons #nil mat))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">matrix-*-matrix</span> m n)
+  (<span style="color: #859900;">let</span> ((cols (transpose n)))
+    (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (row)
+           (matrix-*-vector n row)) m)))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-38" class="outline-3">
+<h3 id="sec-2-38">练习2.38</h3>
+<div class="outline-text-3" id="text-2-38">
+<p>
+<code>fold-left</code> 和 <code>fold-right</code> 不相同的不仅仅是累计作用的顺序，还有两个操作数的顺序也相反：
+</p>
+
+<pre class="example">
+(fold-left list #nil '(1 2 3))   ;; -&gt; (((#nil 1) 2) 3)
+(fold-right list #nil '(1 2 3))  ;; -&gt; (1 (2 (3 #nil)))
+</pre>
+
+<p>
+前者产生的第一个序列是 <code>(#nil 1)</code> ，而后者产生的第一个序列是 <code>(3 #nil)</code> ，由此可以看出，操作数的顺序也是相反的。
+</p>
+
+<p>
+所以，要想 <code>fold-left</code> 和 <code>fold-right</code> 产生相同的结果，那么 <code>op</code> 操作只要满足交换律即可，比如 <code>+</code> 或者 <code>*</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-39" class="outline-3">
+<h3 id="sec-2-39">练习2.39</h3>
+<div class="outline-text-3" id="text-2-39">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">reverse1</span> sequence)
+  (fold-right (<span style="color: #859900;">lambda</span> (x y) (append y (list x))) #nil sequence))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">reverse2</span> sequence)
+  (fold-left (<span style="color: #859900;">lambda</span> (x y) (cons y x)) #nil sequence))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
