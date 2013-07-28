@@ -1507,3 +1507,34 @@
    (define (reverse2 sequence)
      (fold-left (lambda (x y) (cons y x)) #nil sequence))
    #+END_SRC
+
+** 练习2.40
+
+   #+BEGIN_SRC scheme
+   (define (unique-pairs n)
+     (flatmap (lambda (i)
+                (map (lambda (j) (list i j))
+                     (enumerate-interval 1 (- i 1))))
+              (enumerate-interval 1 n)))
+   #+END_SRC
+
+** 练习2.41
+
+   在定义 =unique=triples= 的时候借用了前面的 =flatmap= ，但由于 =flatmap= 只能除去多余的一层括号，而我们的三元组有三层嵌套映射，比二元组多了一层，所以需要在外面再加上一层 =accumulate= 来去除多出来的一层括号。
+
+   #+BEGIN_SRC scheme
+   (define (unique-triples n)
+     (accumulate append
+                 #nil
+                 (flatmap (lambda (i)
+                            (map (lambda (j)
+                                   (map (lambda (k) (list i j k))
+                                        (enumerate-interval 1 (- j 1))))
+                                 (enumerate-interval 1 (- i 1))))
+                          (enumerate-interval 1 n))))
+
+   (define (const-sum-triples n s)
+     (filter (lambda (item)
+               (= s (+ (car item) (cadr item) (caddr item))))
+             (unique-triples n)))
+   #+END_SRC
