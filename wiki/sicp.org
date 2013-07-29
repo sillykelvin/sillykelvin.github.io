@@ -1538,3 +1538,29 @@
                (= s (+ (car item) (cadr item) (caddr item))))
              (unique-triples n)))
    #+END_SRC
+
+** 练习2.42
+
+   这个是经典的八皇后问题，题目把框架给写好了，我们只需要填好 =empty-board= 变量、 =adjoin-position= 过程以及 =safe?= 过程即可。不过这个框架抽象程度比较高，要看懂还不太容易。。
+
+   废话少说，其实这个框架设计得是很巧妙的：它已经把数据层给我们剥离开来了，也就是说，跟数据结构相关的过程都要我们自己实现，这样，就算采用不同的数据结构来表示棋盘构造和皇后位置，只要上面的两个过程和一个变量逻辑正确，这个框架也是可以正常工作的，这就是数据抽象的威力！！
+
+   我的数据结构：本来是打算构建一个向量，第k个元素代表第k列的皇后的行数，但是这个向量在 =safe?= 过程中操作有点麻烦，于是把这个向量给颠倒了过来，第k个元素代表第n-k+1列皇后的行数，这样在 =safe?= 过程中就好操作多了。按道理，在最后的结果中，还是要把这个向量给再颠倒过来的，但是由于对称的关系，如果存在一个解 =(5 2 4 7 3 8 6 1)= 的话，那么必然存在解 =(1 6 8 3 7 4 2 5)= ，所以没必要再给颠倒回来。
+
+   相关的代码如下：
+
+   #+BEGIN_SRC scheme
+   (define empty-board #nil)
+
+   (define (adjoin-position new-row k rest-of-queens)
+     (append (list new-row) rest-of-queens))
+
+   (define (safe? k positions)
+     (define (iter k row c pos)
+       (cond ((null? pos) #t)
+             ((or (= row (car pos))
+                  (= (abs (- row (car pos)))
+                     (abs (- k c)))) #f)
+             (else (iter k row (- c 1) (cdr pos)))))
+     (iter k (car positions) (- k 1) (cdr positions)))
+   #+END_SRC
