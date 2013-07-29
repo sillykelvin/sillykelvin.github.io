@@ -2331,6 +2331,44 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 </div>
+<div id="outline-container-sec-2-42" class="outline-3">
+<h3 id="sec-2-42">练习2.42</h3>
+<div class="outline-text-3" id="text-2-42">
+<p>
+这个是经典的八皇后问题，题目把框架给写好了，我们只需要填好 <code>empty-board</code> 变量、 <code>adjoin-position</code> 过程以及 <code>safe?</code> 过程即可。不过这个框架抽象程度比较高，要看懂还不太容易。。
+</p>
+
+<p>
+废话少说，其实这个框架设计得是很巧妙的：它已经把数据层给我们剥离开来了，也就是说，跟数据结构相关的过程都要我们自己实现，这样，就算采用不同的数据结构来表示棋盘构造和皇后位置，只要上面的两个过程和一个变量逻辑正确，这个框架也是可以正常工作的，这就是数据抽象的威力！！
+</p>
+
+<p>
+我的数据结构：本来是打算构建一个向量，第k个元素代表第k列的皇后的行数，但是这个向量在 <code>safe?</code> 过程中操作有点麻烦，于是把这个向量给颠倒了过来，第k个元素代表第n-k+1列皇后的行数，这样在 <code>safe?</code> 过程中就好操作多了。按道理，在最后的结果中，还是要把这个向量给再颠倒过来的，但是由于对称的关系，如果存在一个解 <code>(5 2 4 7 3 8 6 1)</code> 的话，那么必然存在解 <code>(1 6 8 3 7 4 2 5)</code> ，所以没必要再给颠倒回来。
+</p>
+
+<p>
+相关的代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">empty-board</span> #nil)
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">adjoin-position</span> new-row k rest-of-queens)
+  (append (list new-row) rest-of-queens))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">safe?</span> k positions)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> k row c pos)
+    (<span style="color: #859900;">cond</span> ((null? pos) #t)
+          ((<span style="color: #859900;">or</span> (= row (car pos))
+               (= (abs (- row (car pos)))
+                  (abs (- k c)))) #f)
+          (<span style="color: #859900;">else</span> (iter k row (- c 1) (cdr pos)))))
+  (iter k (car positions) (- k 1) (cdr positions)))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
@@ -2338,7 +2376,7 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-07-29</span>
+        <span title="last modification date" class="post-info">2013-07-30</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
