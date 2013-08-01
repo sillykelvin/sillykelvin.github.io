@@ -1650,3 +1650,16 @@
    (define (edge2-frame frame)
      (cddr frame))
    #+END_SRC
+
+** 练习2.48
+
+   #+BEGIN_SRC scheme
+   (define (make-segment start-vect end-vect)
+     (cons start-vect end-vect))
+
+   (define (start-segment segment)
+     (car segment))
+
+   (define (end-segment segment)
+     (cdr segment))
+   #+END_SRC
