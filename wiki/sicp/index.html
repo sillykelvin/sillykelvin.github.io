@@ -2369,6 +2369,22 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 </div>
+<div id="outline-container-sec-2-43" class="outline-3">
+<h3 id="sec-2-43">练习2.43</h3>
+<div class="outline-text-3" id="text-2-43">
+<p>
+这个题目，开始看了半天没看出来为什么：假设 <code>(queen-cols k)</code> 的解有 <code>f(k)</code> 个，那么一个是内层循环n次，外层循环f(k-1)次；另一个是内层循环f(k-1)次，外层循环n次，看起来好像没有区别。。于是把这两层循环换了一下，果然慢。。
+</p>
+
+<p>
+又看了半天，终于看出点眉目了：正常的解的内层循环代价很小，但是Louis的解的内层是递归调用，所以代价很大！ <code>(queen-cols k)</code> 需要调用n次 <code>(queen-cols (- k 1))</code> ，而 <code>(queen-cols (- k 1))</code> 又需要调用n次 <code>(queen-cols (- k 2))</code> ，如此递归下去，可以推出： <code>(queen-cols k)</code> 最终调用了n的n次方次 <code>(queen-cols 0)</code> （因为到这一级才是常数级调用，所以要一直展开到这一级）！！
+</p>
+
+<p>
+所以，如果正常解的时间为T的话，那么Louis的解针对8x8的棋盘就是 <code>8^8 * T</code> 。。
+</p>
+</div>
+</div>
 </div>
 
       </div>
@@ -2376,7 +2392,7 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-07-30</span>
+        <span title="last modification date" class="post-info">2013-08-01</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
