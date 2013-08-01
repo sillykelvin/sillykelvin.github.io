@@ -2502,6 +2502,101 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 </div>
+<div id="outline-container-sec-2-49" class="outline-3">
+<h3 id="sec-2-49">练习2.49</h3>
+<div class="outline-text-3" id="text-2-49">
+<p>
+这个题目，只需要学好高中数学的向量部分就可以做了。
+</p>
+
+<p>
+对于a)、b)、c)三个小题，基本是一样的，都需要先确定四个基本点，然后根据这四个基本点调用 <code>make-segment</code> 产生线段再交给 <code>segments-&gt;painter</code> 即可。其中a)和b)需要确定的是框架的四个顶点；c)需要确定的是框架四条边的中点。
+</p>
+
+<p>
+确定四个顶点和四个中点都是很容易的，假设三个基本向量分别为 <b>origin</b> 、 <b>edge1</b> 、 <b>edge2</b> ，那么四个顶点和四个中点分别可以表示为：
+</p>
+
+<pre class="example">
+origin
+origin + edge1
+origin + edge2
+origin + edge1 + edge2
+</pre>
+
+<pre class="example">
+origin + 0.5 * edge1
+origin + 0.5 * edge2
+origin + edge2 + 0.5 * edge1
+origin + edeg1 + 0.5 * edge2
+</pre>
+
+<p>
+所以，很容易写出前三个小题的解答：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">border-painter</span> frame)
+  (<span style="color: #859900;">let</span> ((point1 (origin-frame frame))
+        (point2 (add-vect (origin-frame frame)
+                          (edge1-frame frame)))
+        (point3 (add-vect (origin-frame frame)
+                          (edge2-frame frame)))
+        (point4 (add-vect (origin-frame frame)
+                          (edge1-frame frame)
+                          (edge2-frame frame))))
+    ((segments-&gt;painter (list (make-segment point1 point2)
+                              (make-segment point1 point3)
+                              (make-segment point2 point4)
+                              (make-segment point3 point4)))
+     frame)))
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cross-painter</span> frame)
+  (<span style="color: #859900;">let</span> ((point1 (origin-frame frame))
+        (point2 (add-vect (origin-frame frame)
+                          (edge1-frame frame)))
+        (point3 (add-vect (origin-frame frame)
+                          (edge2-frame frame)))
+        (point4 (add-vect (origin-frame frame)
+                          (edge1-frame frame)
+                          (edge2-frame frame))))
+    ((segments-&gt;painter (list (make-segment point1 point4)
+                              (make-segment point2 point3)))
+     frame)))
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">middle-point-painter</span> frame)
+  (<span style="color: #859900;">let</span> ((middle-point1 (add-vect (origin-frame frame)
+                                 (scale-vect 0.5 (edge1-frame frame))))
+        (middle-point2 (add-vect (origin-frame frame)
+                                 (scale-vect 0.5 (edge2-frame frame))))
+        (middle-point3 (add-vect (origin-frame frame)
+                                 (edge2-frame frame)
+                                 (scale-vect 0.5 (edge1-frame frame))))
+        (middle-point4 (add-vect (origin-frame frame)
+                                 (edge1-frame frame)
+                                 (scale-vect 0.5 (edge2-frame frame)))))
+    ((segments-&gt;painter (list (make-segment middle-point1 middle-point2)
+                              (make-segment middle-point2 middle-point3)
+                              (make-segment middle-point3 middle-point4)
+                              (make-segment middle-point4 middle-point1)))
+     frame)))
+</pre>
+</div>
+
+<p>
+对于小题d)，我就不想再说什么了。。我数了一下，总共有17条线段。。而且，每条线段顶点的位置（注意是每条）都不是一眼能看出来的。。所以。。我们得首先拿直尺量出34个点的准确位置。。而我没有直尺。。所以。。我就不做了。。哪位有直尺、有兴趣、有闲情逸致的，可以慢慢去量。。
+</p>
+</div>
+</div>
 </div>
 
       </div>
@@ -2509,7 +2604,7 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-08-01</span>
+        <span title="last modification date" class="post-info">2013-08-02</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
