@@ -1663,3 +1663,76 @@
    (define (end-segment segment)
      (cdr segment))
    #+END_SRC
+
+** 练习2.49
+
+   这个题目，只需要学好高中数学的向量部分就可以做了。
+
+   对于a)、b)、c)三个小题，基本是一样的，都需要先确定四个基本点，然后根据这四个基本点调用 =make-segment= 产生线段再交给 =segments->painter= 即可。其中a)和b)需要确定的是框架的四个顶点；c)需要确定的是框架四条边的中点。
+
+   确定四个顶点和四个中点都是很容易的，假设三个基本向量分别为 *origin* 、 *edge1* 、 *edge2* ，那么四个顶点和四个中点分别可以表示为：
+
+   : origin
+   : origin + edge1
+   : origin + edge2
+   : origin + edge1 + edge2
+
+   : origin + 0.5 * edge1
+   : origin + 0.5 * edge2
+   : origin + edge2 + 0.5 * edge1
+   : origin + edeg1 + 0.5 * edge2
+
+   所以，很容易写出前三个小题的解答：
+
+   #+BEGIN_SRC scheme
+   (define (border-painter frame)
+     (let ((point1 (origin-frame frame))
+           (point2 (add-vect (origin-frame frame)
+                             (edge1-frame frame)))
+           (point3 (add-vect (origin-frame frame)
+                             (edge2-frame frame)))
+           (point4 (add-vect (origin-frame frame)
+                             (edge1-frame frame)
+                             (edge2-frame frame))))
+       ((segments->painter (list (make-segment point1 point2)
+                                 (make-segment point1 point3)
+                                 (make-segment point2 point4)
+                                 (make-segment point3 point4)))
+        frame)))
+   #+END_SRC
+
+   #+BEGIN_SRC scheme
+   (define (cross-painter frame)
+     (let ((point1 (origin-frame frame))
+           (point2 (add-vect (origin-frame frame)
+                             (edge1-frame frame)))
+           (point3 (add-vect (origin-frame frame)
+                             (edge2-frame frame)))
+           (point4 (add-vect (origin-frame frame)
+                             (edge1-frame frame)
+                             (edge2-frame frame))))
+       ((segments->painter (list (make-segment point1 point4)
+                                 (make-segment point2 point3)))
+        frame)))
+   #+END_SRC
+
+   #+BEGIN_SRC scheme
+   (define (middle-point-painter frame)
+     (let ((middle-point1 (add-vect (origin-frame frame)
+                                    (scale-vect 0.5 (edge1-frame frame))))
+           (middle-point2 (add-vect (origin-frame frame)
+                                    (scale-vect 0.5 (edge2-frame frame))))
+           (middle-point3 (add-vect (origin-frame frame)
+                                    (edge2-frame frame)
+                                    (scale-vect 0.5 (edge1-frame frame))))
+           (middle-point4 (add-vect (origin-frame frame)
+                                    (edge1-frame frame)
+                                    (scale-vect 0.5 (edge2-frame frame)))))
+       ((segments->painter (list (make-segment middle-point1 middle-point2)
+                                 (make-segment middle-point2 middle-point3)
+                                 (make-segment middle-point3 middle-point4)
+                                 (make-segment middle-point4 middle-point1)))
+        frame)))
+   #+END_SRC
+
+   对于小题d)，我就不想再说什么了。。我数了一下，总共有17条线段。。而且，每条线段顶点的位置（注意是每条）都不是一眼能看出来的。。所以。。我们得首先拿直尺量出34个点的准确位置。。而我没有直尺。。所以。。我就不做了。。哪位有直尺、有兴趣、有闲情逸致的，可以慢慢去量。。
