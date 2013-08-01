@@ -1622,3 +1622,31 @@
      (make-vect (* s (xcor-vect vect))
                 (* s (ycor-vect vect))))
    #+END_SRC
+
+** 练习2.47
+
+   方案1：
+
+   #+BEGIN_SRC scheme
+   (define (origin-frame frame)
+     (car frame))
+
+   (define (edge1-frame frame)
+     (cadr frame))
+
+   (define (edge2-frame frame)
+     (caddr frame))
+   #+END_SRC
+
+   方案2（和方案1仅仅只有 =edge2-frame= 的定义不同）：
+
+   #+BEGIN_SRC scheme
+   (define (origin-frame frame)
+     (car frame))
+
+   (define (edge1-frame frame)
+     (cadr frame))
+
+   (define (edge2-frame frame)
+     (cddr frame))
+   #+END_SRC
