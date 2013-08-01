@@ -1572,3 +1572,24 @@
    又看了半天，终于看出点眉目了：正常的解的内层循环代价很小，但是Louis的解的内层是递归调用，所以代价很大！ =(queen-cols k)= 需要调用n次 =(queen-cols (- k 1))= ，而 =(queen-cols (- k 1))= 又需要调用n次 =(queen-cols (- k 2))= ，如此递归下去，可以推出： =(queen-cols k)= 最终调用了n的n次方次 =(queen-cols 0)= （因为到这一级才是常数级调用，所以要一直展开到这一级）！！
 
    所以，如果正常解的时间为T的话，那么Louis的解针对8x8的棋盘就是 =8^8 * T= 。。
+
+** 练习2.44
+
+   #+BEGIN_SRC scheme
+   (define (up-split painter n)
+     (if (= n 0)
+         painter
+         (let ((smaller (up-split painter (- n 1))))
+           (below painter (beside smaller smaller)))))
+   #+END_SRC
+
+** 练习2.45
+
+   #+BEGIN_SRC scheme
+   (define (split proc1 proc2)
+     (lambda (painter n)
+       (if (= n 0)
+           painter
+           (let ((smaller ((split proc1 proc2) painter (- n 1))))
+             (proc1 painter (proc2 smaller smaller))))))
+   #+END_SRC
