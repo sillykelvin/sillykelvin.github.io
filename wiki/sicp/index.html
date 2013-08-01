@@ -2385,6 +2385,35 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-44" class="outline-3">
+<h3 id="sec-2-44">练习2.44</h3>
+<div class="outline-text-3" id="text-2-44">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">up-split</span> painter n)
+  (<span style="color: #859900;">if</span> (= n 0)
+      painter
+      (<span style="color: #859900;">let</span> ((smaller (up-split painter (- n 1))))
+        (below painter (beside smaller smaller)))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-45" class="outline-3">
+<h3 id="sec-2-45">练习2.45</h3>
+<div class="outline-text-3" id="text-2-45">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">split</span> proc1 proc2)
+  (<span style="color: #859900;">lambda</span> (painter n)
+    (<span style="color: #859900;">if</span> (= n 0)
+        painter
+        (<span style="color: #859900;">let</span> ((smaller ((split proc1 proc2) painter (- n 1))))
+          (proc1 painter (proc2 smaller smaller))))))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
