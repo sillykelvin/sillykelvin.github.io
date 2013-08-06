@@ -1736,3 +1736,41 @@
    #+END_SRC
 
    对于小题d)，我就不想再说什么了。。我数了一下，总共有17条线段。。而且，每条线段顶点的位置（注意是每条）都不是一眼能看出来的。。所以。。我们得首先拿直尺量出34个点的准确位置。。而我没有直尺。。所以。。我就不做了。。哪位有直尺、有兴趣、有闲情逸致的，可以慢慢去量。。
+
+** 练习2.50
+
+   这个题目训练的就是空间想象能力（其实还不是空间，只是二维的），而这刚好是我的强项。。
+
+   从 =flip-vert= 的定义可以看到，它是将 /origin/ 变换为 /origin + edge2/ ，然后 /edge1/ 保持不变（看起来好像是变化了，但是因为要减去new origin，所以新的edge1和原来的edge1其实是同一个向量），再将 /edge2/ 反向。所以，我们的 =flip-horiz= 要做的，就是将 /origin/ 变换为 /origin + edge1/ ，然后 /edge2/ 保持不变，将 /edge1/ 反向：
+
+   #+BEGIN_SRC scheme
+   (define (flip-horiz painter)
+     (transform-painter painter
+                        (make-vect 1.0 0.0)
+                        (make-vect 0.0 0.0)
+                        (make-vect 1.0 1.0)))
+   #+END_SRC
+
+   +对于旋转变换，需要先说一点的是，书中的 =rotate90= 定义其实是顺时针旋转90度，并不是逆时针，因为它的变换为：将 /origin/ 变换为 /origin + edge1/ ，将 /edge1/ 变换为 /edge2/ ，将 /edge2/ 变换为 /edge1/ 反向，从直观来看，这就是顺时针旋转90度才有的结果。+
+
+   后来仔细看了看，发现，我自己想象中的 /edge1/ 和 /edge2/ 跟书中画的那个frame的 /edge1/ 和 /edge2/ 位置相好相反，正因为如此，所以，才会觉得 =rotate90= 是顺时针旋转90度。。各位不妨把 /edge1/ 和 /edge2/ 交换个位置再试试，怎么样，是不是现在 =rotate90= 变成顺时针90度旋转了。。
+
+   既然如此，我们就照葫芦画瓢好了，对于逆时针180度的旋转，变换如下：将 /origin/ 变换为 /origin + edge1 + edge2/ ，将 /edge1/ 和 /edge2/ 都反向，代码如下：
+
+   #+BEGIN_SRC scheme
+   (define (rotate180 painter)
+     (transform-painter painter
+                        (make-vect 1.0 1.0)
+                        (make-vect 0.0 1.0)
+                        (make-vect 1.0 0.0)))
+   #+END_SRC
+
+   对于逆时针270度旋转，其实等价于顺时针90度旋转，变换如下：将 /origin/ 变换为 /origin + edge2/ ，将 /edge1/ 变换为 /edge2/ 反向，将 /edge2/ 变换为 /edge1/ ，代码如下：
+
+   #+BEGIN_SRC scheme
+   (define (rotate270 painter)
+     (transform-painter painter
+                        (make-vect 0.0 1.0)
+                        (make-vect 0.0 0.0)
+                        (make-vect 1.0 1.0)))
+   #+END_SRC
