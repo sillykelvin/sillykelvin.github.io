@@ -2597,6 +2597,64 @@ origin + edeg1 + 0.5 * edge2
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-50" class="outline-3">
+<h3 id="sec-2-50">练习2.50</h3>
+<div class="outline-text-3" id="text-2-50">
+<p>
+这个题目训练的就是空间想象能力（其实还不是空间，只是二维的），而这刚好是我的强项。。
+</p>
+
+<p>
+从 <code>flip-vert</code> 的定义可以看到，它是将 <i>origin</i> 变换为 <i>origin + edge2</i> ，然后 <i>edge1</i> 保持不变（看起来好像是变化了，但是因为要减去new origin，所以新的edge1和原来的edge1其实是同一个向量），再将 <i>edge2</i> 反向。所以，我们的 <code>flip-horiz</code> 要做的，就是将 <i>origin</i> 变换为 <i>origin + edge1</i> ，然后 <i>edge2</i> 保持不变，将 <i>edge1</i> 反向：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">flip-horiz</span> painter)
+  (transform-painter painter
+                     (make-vect 1.0 0.0)
+                     (make-vect 0.0 0.0)
+                     (make-vect 1.0 1.0)))
+</pre>
+</div>
+
+<p>
+<del>对于旋转变换，需要先说一点的是，书中的 <code>rotate90</code> 定义其实是顺时针旋转90度，并不是逆时针，因为它的变换为：将 <i>origin</i> 变换为 <i>origin + edge1</i> ，将 <i>edge1</i> 变换为 <i>edge2</i> ，将 <i>edge2</i> 变换为 <i>edge1</i> 反向，从直观来看，这就是顺时针旋转90度才有的结果。</del>
+</p>
+
+<p>
+后来仔细看了看，发现，我自己想象中的 <i>edge1</i> 和 <i>edge2</i> 跟书中画的那个frame的 <i>edge1</i> 和 <i>edge2</i> 位置相好相反，正因为如此，所以，才会觉得 <code>rotate90</code> 是顺时针旋转90度。。各位不妨把 <i>edge1</i> 和 <i>edge2</i> 交换个位置再试试，怎么样，是不是现在 <code>rotate90</code> 变成顺时针90度旋转了。。
+</p>
+
+<p>
+既然如此，我们就照葫芦画瓢好了，对于逆时针180度的旋转，变换如下：将 <i>origin</i> 变换为 <i>origin + edge1 + edge2</i> ，将 <i>edge1</i> 和 <i>edge2</i> 都反向，代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rotate180</span> painter)
+  (transform-painter painter
+                     (make-vect 1.0 1.0)
+                     (make-vect 0.0 1.0)
+                     (make-vect 1.0 0.0)))
+</pre>
+</div>
+
+<p>
+对于逆时针270度旋转，其实等价于顺时针90度旋转，变换如下：将 <i>origin</i> 变换为 <i>origin + edge2</i> ，将 <i>edge1</i> 变换为 <i>edge2</i> 反向，将 <i>edge2</i> 变换为 <i>edge1</i> ，代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rotate270</span> painter)
+  (transform-painter painter
+                     (make-vect 0.0 1.0)
+                     (make-vect 0.0 0.0)
+                     (make-vect 1.0 1.0)))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
@@ -2604,7 +2662,7 @@ origin + edeg1 + 0.5 * edge2
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-08-02</span>
+        <span title="last modification date" class="post-info">2013-08-07</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
