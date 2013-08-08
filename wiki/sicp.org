@@ -1828,3 +1828,28 @@
                                      flip-vert rotate180)))
        (combine4 (corner-split painter n))))
    #+END_SRC
+
+** 练习2.53
+
+   : (a b c)
+   : ((george))
+   : ((y1 y2))
+   : (y1 y2)
+   : #f
+   : #f
+   : (red shoes blue socks)
+
+** 练习2.54
+
+   #+BEGIN_SRC scheme
+   (define (equal? seq1 seq2)
+     (if (and (pair? seq1)
+              (pair? seq2))
+         (and (equal? (car seq1) (car seq2))
+              (equal? (cdr seq1) (cdr seq2)))
+         (eq? seq1 seq2)))
+   #+END_SRC
+
+** 练习2.55
+
+   =(car ''abracadabra)= 等价于 =(car (quote (quote abracadabra)))= ，这个表达式第二个元素求值的结果就是列表 =(quote abracadabra)= ，所以再通过 =car= 来取首元素的话，结果自然会是 =quote= 。
