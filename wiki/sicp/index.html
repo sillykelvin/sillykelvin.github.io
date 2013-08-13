@@ -2768,6 +2768,59 @@ c) 这个就不多说了，代码如下：
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-56" class="outline-3">
+<h3 id="sec-2-56">练习2.56</h3>
+<div class="outline-text-3" id="text-2-56">
+<p>
+对于指数求导，将其符号表示定义为 <code>(** base exp)</code> ，剩下的基本也就是照葫芦画瓢，定义好相应的几个过程，在 <code>deriv</code> 过程里面再加一个分支来表示指数求导就可以了：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">exponentiation?</span> x)
+  (<span style="color: #859900;">and</span> (pair? x) (eq? (car x) '**)))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">base</span> e) (cadr e))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">exponent</span> e) (caddr e))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-exponentiation</span> b e)
+  (<span style="color: #859900;">cond</span> ((=number? e 0) 1)
+        ((=number? e 1) b)
+        (<span style="color: #859900;">else</span> (list '** b e))))
+</pre>
+</div>
+
+<p>
+修改后的 <code>deriv</code> 过程：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">deriv</span> exp var)
+  (<span style="color: #859900;">cond</span> ((number? exp) 0)
+        ((variable? exp)
+         (<span style="color: #859900;">if</span> (same-variable? exp var) 1 0))
+        ((sum? exp)
+         (make-sum (deriv (addend exp) var)
+                   (deriv (augend exp) var)))
+        ((product? exp)
+         (make-sum
+          (make-product (multiplier exp)
+                        (deriv (multiplicand exp) var))
+          (make-product (deriv (multiplier exp) var)
+                        (multiplicand exp))))
+        ((exponentiation? exp)
+         (make-product (make-product (exponent exp)
+                                     (make-exponentiation (base exp)
+                                                          (- (exponent exp) 1)))
+                       (deriv (base exp) var)))
+        (<span style="color: #859900;">else</span>
+         (error <span style="color: #2aa198;">"unknown expression type -- DERIV"</span> exp))))
+</pre>
+</div>
+</div>
+</div>
 </div>
 
       </div>
@@ -2775,7 +2828,7 @@ c) 这个就不多说了，代码如下：
     <div> 
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-08-09</span>
+        <span title="last modification date" class="post-info">2013-08-13</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
