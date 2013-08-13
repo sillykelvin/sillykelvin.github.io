@@ -1853,3 +1853,46 @@
 ** 练习2.55
 
    =(car ''abracadabra)= 等价于 =(car (quote (quote abracadabra)))= ，这个表达式第二个元素求值的结果就是列表 =(quote abracadabra)= ，所以再通过 =car= 来取首元素的话，结果自然会是 =quote= 。
+
+** 练习2.56
+
+   对于指数求导，将其符号表示定义为 =(** base exp)= ，剩下的基本也就是照葫芦画瓢，定义好相应的几个过程，在 =deriv= 过程里面再加一个分支来表示指数求导就可以了：
+
+   #+BEGIN_SRC scheme
+   (define (exponentiation? x)
+     (and (pair? x) (eq? (car x) '**)))
+
+   (define (base e) (cadr e))
+
+   (define (exponent e) (caddr e))
+
+   (define (make-exponentiation b e)
+     (cond ((=number? e 0) 1)
+           ((=number? e 1) b)
+           (else (list '** b e))))
+   #+END_SRC
+
+   修改后的 =deriv= 过程：
+
+   #+BEGIN_SRC scheme
+   (define (deriv exp var)
+     (cond ((number? exp) 0)
+           ((variable? exp)
+            (if (same-variable? exp var) 1 0))
+           ((sum? exp)
+            (make-sum (deriv (addend exp) var)
+                      (deriv (augend exp) var)))
+           ((product? exp)
+            (make-sum
+             (make-product (multiplier exp)
+                           (deriv (multiplicand exp) var))
+             (make-product (deriv (multiplier exp) var)
+                           (multiplicand exp))))
+           ((exponentiation? exp)
+            (make-product (make-product (exponent exp)
+                                        (make-exponentiation (base exp)
+                                                             (- (exponent exp) 1)))
+                          (deriv (base exp) var)))
+           (else
+            (error "unknown expression type -- DERIV" exp))))
+   #+END_SRC
