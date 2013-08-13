@@ -1896,3 +1896,21 @@
            (else
             (error "unknown expression type -- DERIV" exp))))
    #+END_SRC
+
+** 练习2.57
+
+   开始我把这题想复杂了，将和与积相关的好多过程都重定义了一遍，结果证明这是没有必要的，例如对于表达式 =(+ x y z)= ，它会被分开成 =x= 和 =(+ y z)= 分别进行求导，再将结果利用 =make-sum= 给加起来。对于 =(+ y z)= 的求导结果来讲，它是独立的，所以 =make-sum= 过程不需要作任何修改，只需要修改 =augend= 过程，让其能产生正确的 =(+ y z)= 即可。同理， =multiplicand= 也需要作相应修改：
+
+   #+BEGIN_SRC scheme
+   (define (augend s)
+     (let ((a (cdr (cdr s))))
+       (cond ((< (length a) 2) (car a))
+             (else (cons '+ a)))))
+
+   (define (multiplicand p)
+     (let ((m (cdr (cdr p))))
+       (cond ((< (length m) 2) (car m))
+             (else (cons '* m)))))
+   #+END_SRC
+
+   上面代码中引入 =cond= 进行条件判断的原因是，对于 =(+ x y z)= ，需要被拆成 =x= 和 =(+ y z)= ，但对于 =(+ y z)= ，就只需要被拆成 =y= 和 =z= ，而不是 =y= 和 =(+ z)= ，所以需要引入参数个数的条件判断。
