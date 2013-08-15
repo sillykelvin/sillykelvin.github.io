@@ -1914,3 +1914,101 @@
    #+END_SRC
 
    上面代码中引入 =cond= 进行条件判断的原因是，对于 =(+ x y z)= ，需要被拆成 =x= 和 =(+ y z)= ，但对于 =(+ y z)= ，就只需要被拆成 =y= 和 =z= ，而不是 =y= 和 =(+ z)= ，所以需要引入参数个数的条件判断。
+
+** 练习2.58
+
+   a) 这个小题比较简单，之前所使用的是前缀表达式，现在要换成中缀表达式，所以，需要修改几个构造和访问表达式的过程，如下：
+
+   #+BEGIN_SRC scheme
+   (define (make-sum a1 a2)
+     (cond ((=number? a1 0) a2)
+           ((=number? a2 0) a1)
+           ((and (number? a1) (number? a2) (+ a1 a2)))
+           (else (list a1 '+ a2))))
+
+   (define (make-product m1 m2)
+     (cond ((or (=number? m1 0) (=number? m2 0)) 0)
+           ((=number? m1 1) m2)
+           ((=number? m2 1) m1)
+           ((and (number? m1) (number? m2)) (* m1 m2))
+           (else (list m1 '* m2))))
+
+   (define (sum? x)
+     (and (pair? x) (eq? (cadr x) '+)))
+
+   (define (addend s) (car s))
+
+   (define (product? x)
+     (and (pair? x) (eq? (cadr x) '*)))
+
+   (define (multiplier p) (car p))
+   #+END_SRC
+
+   b) 这个小题如题目中所说，确实比较难，相当于我们要实现一个小型的数学语法解析器，我写了三次，终于能正常工作了，以 =(x + x * y + x)= 为例，我第一次的实现，在遇到 =x * y + x= 的时候，没能正常处理运算符优先级，直接按从左到右的顺序解析，所以实际上解析成了 =x * (y + x)= ；第二次的实现，考虑了运算优先级，但是实际解析成了 =x * y= ，把后面的那个x漏掉了，因为虽然局部的优先级考虑了，整体的优先级还是错误的，直接导致后面的x被忽略了。经过两次坑，总结了一下，终于找到以下规则：
+
+   - 在有加法运算符存在的时候，整个表达式必须视为加法运算，否则就会出现上面的漏掉部分表达式的问题
+   - 乘法和加法混合的优先级不用考虑，因为在需要求乘数和被乘数的时候，整个表达式里面已经没有加法运算符了
+
+   除了上面两点之外，还有一些小坑，不过都是比较常规的序列的组织问题，不一一细述。另外，我还写了两个辅助过程 =prefix-sub-exp= 和 =suffix-sub-exp= ，用来求以某个符号分隔的一个序列的前缀和后缀。前者是给我第二次的错误尝试用的，用以从类似 =(x * y + x)= 的表达式中解析出 =(x * y)= ，在正确解中实际上它并没有被用到。
+
+   所有需要修改或者重新定义的过程如下（需要特别指出的是， =deriv= 过程本身并不需要任何修改，我想，大概这就是数据抽象的威力吧）：
+
+   #+BEGIN_SRC scheme
+   (define (prefix-sub-exp exp sep)
+     (define (iter exp sub)
+       (cond ((or (null? exp)
+                  (eq? (car exp) sep))
+              sub)
+             (else (iter (cdr exp) (append sub (list (car exp)))))))
+     (iter exp '()))
+
+   (define (suffix-sub-exp exp sep)
+     (cond ((null? exp) '())
+           ((eq? (car exp) sep) (cdr exp))
+           (else (suffix-sub-exp (cdr exp) sep))))
+
+   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+   (define (make-sum a1 a2)
+     (cond ((=number? a1 0) a2)
+           ((=number? a2 0) a1)
+           ((and (number? a1) (number? a2) (+ a1 a2)))
+           (else (let ((s1 (if (or (variable? a1)
+                                   (number? a1))
+                               (list a1 '+)
+                               (append a1 '(+))))
+                       (s2 (if (or (variable? a2)
+                                   (number? a2))
+                               (list a2)
+                               a2)))
+                   (append s1 s2)))))
+
+   (define (make-product m1 m2)
+     (cond ((or (=number? m1 0) (=number? m2 0)) 0)
+           ((=number? m1 1) m2)
+           ((=number? m2 1) m1)
+           ((and (number? m1) (number? m2)) (* m1 m2))
+           (else (list m1 '* m2))))
+
+   (define (sum? x)
+     (and (pair? x)
+          (not (null? (filter (lambda (e) (eq? e '+)) x)))))
+
+   (define (addend s)
+     (let ((r (prefix-sub-exp s '+)))
+       (if (< (length r) 2) (car r) r)))
+
+   (define (augend s)
+     (let ((r (suffix-sub-exp s '+)))
+       (if (< (length r) 2) (car r) r)))
+
+   (define (product? x)
+     (and (pair? x) (eq? (cadr x) '*)))
+
+   (define (multiplier p) (car p))
+
+   (define (multiplicand p)
+     (let ((r (cdr (cdr p))))
+       (cond ((< (length r) 2) (car r))
+             (else r))))
+   #+END_SRC
