@@ -2012,3 +2012,30 @@
        (cond ((< (length r) 2) (car r))
              (else r))))
    #+END_SRC
+
+   实际上，我又对这个小程序作了第四次修改，改动源于我在测试以下调用的时候：
+
+   : (deriv '(x + (x + x) * 1 * y) 'x)
+
+   发现结果是：
+
+   : (1 + 2 * (1 * y))
+
+   这样的结果中还有多余的括号，还没有达到题目中的要求，所以需要像 =make-sum= 那样，对 =make-product= 过程再进行加工，修改后的代码如下（加入了是否需要去除多余括号的判断）：
+
+   #+BEGIN_SRC scheme
+   (define (make-product m1 m2)
+     (cond ((or (=number? m1 0) (=number? m2 0)) 0)
+           ((=number? m1 1) m2)
+           ((=number? m2 1) m1)
+           ((and (number? m1) (number? m2)) (* m1 m2))
+           (else (let ((p1 (cond ((or (variable? m1) (number? m1))
+                                  (list m1 '*))
+                                 ((sum? m1) (list m1 '*))
+                                 (else (append m1 '(*)))))
+                       (p2 (cond ((or (variable? m2) (number? m2))
+                                  (list m2))
+                                 ((sum? m2) (list m2))
+                                 (else m2))))
+                   (append p1 p2)))))
+   #+END_SRC
