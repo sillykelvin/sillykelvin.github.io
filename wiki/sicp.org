@@ -2065,3 +2065,40 @@
    #+END_SRC
 
    因为简化的是插入和求并集操作，所以在这两个操作比较多的时候，使用有重复元素的集合会比较好。
+
+** 练习2.61
+
+   #+BEGIN_SRC scheme
+   (define (adjoin-set x set)
+     (define (insert x head tail)
+       (cond ((null? tail) (append head (list x)))
+             ((< x (car tail)) (append head (list x) tail))
+             (else (insert x (append head (list (car tail))) (cdr tail)))))
+     (if (element-of-set? x set)
+         set
+         (cond ((null? set) (list x))
+               ((< x (car set)) (cons x set))
+               (else (insert x (list (car set)) (cdr set))))))
+   #+END_SRC
+
+** 练习2.62
+
+   #+BEGIN_SRC scheme
+   (define (union-set set1 set2)
+     (cond ((null? set1) set2)
+           ((null? set2) set1)
+           (else
+            (let ((x1 (car set1))
+                  (x2 (car set2)))
+              (cond ((= x1 x2) (cons x1
+                                     (union-set (cdr set1)
+                                                (cdr set2))))
+                    ((< x1 x2) (cons x1
+                                     (union-set (cdr set1)
+                                                set2)))
+                    ((> x1 x2) (cons x2
+                                     (union-set set1
+                                                (cdr set2)))))))))
+   #+END_SRC
+
+   由于 =union-set= 是 =intersection-set= 的反操作，所以模仿 =interseciont-set= 即可构造出 =union-set= 过程。
