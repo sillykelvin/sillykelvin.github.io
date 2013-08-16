@@ -2051,3 +2051,17 @@
                   (union-set (cdr set1) set2)))
            (else (union-set (cdr set1) set2))))
    #+END_SRC
+
+** 练习2.60
+
+   对于这种类型的集合，只需要重新定义 =adjoin-set= 和 =union-set= 两个过程即可：
+
+   #+BEGIN_SRC scheme
+   (define (adjoin-set x set)
+     (cons x set))
+
+   (define (union-set set1 set2)
+     (append set1 set2))
+   #+END_SRC
+
+   因为简化的是插入和求并集操作，所以在这两个操作比较多的时候，使用有重复元素的集合会比较好。
