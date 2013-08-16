@@ -2961,6 +2961,45 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
           (<span style="color: #859900;">else</span> r))))
 </pre>
 </div>
+
+<p>
+实际上，我又对这个小程序作了第四次修改，改动源于我在测试以下调用的时候：
+</p>
+
+<pre class="example">
+(deriv '(x + (x + x) * 1 * y) 'x)
+</pre>
+
+<p>
+发现结果是：
+</p>
+
+<pre class="example">
+(1 + 2 * (1 * y))
+</pre>
+
+<p>
+这样的结果中还有多余的括号，还没有达到题目中的要求，所以需要像 <code>make-sum</code> 那样，对 <code>make-product</code> 过程再进行加工，修改后的代码如下（加入了是否需要去除多余括号的判断）：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-product</span> m1 m2)
+  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (=number? m1 0) (=number? m2 0)) 0)
+        ((=number? m1 1) m2)
+        ((=number? m2 1) m1)
+        ((<span style="color: #859900;">and</span> (number? m1) (number? m2)) (* m1 m2))
+        (<span style="color: #859900;">else</span> (<span style="color: #859900;">let</span> ((p1 (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (variable? m1) (number? m1))
+                               (list m1 '*))
+                              ((sum? m1) (list m1 '*))
+                              (<span style="color: #859900;">else</span> (append m1 '(*)))))
+                    (p2 (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (variable? m2) (number? m2))
+                               (list m2))
+                              ((sum? m2) (list m2))
+                              (<span style="color: #859900;">else</span> m2))))
+                (append p1 p2)))))
+</pre>
+</div>
 </div>
 </div>
 </div>
