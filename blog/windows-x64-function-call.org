@@ -159,16 +159,6 @@
 
   另外要补充的一点是，在一般情况下，X64平台的RBP栈基指针被废弃掉，只作为普通寄存器来用，所有的栈操作都通过RSP指针来完成，这必然会要求RSP的值在一个函数中不能改动，所以，像 =push= 和 =pop= 这类会改变RSP值的指令是不能随便使用的。
 
-* Footnotes
-
-  [fn:1] 这张图来自Intel的X64汇编介绍文档：http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf
-
-  [fn:2] 同1，这段约定也来自上面的文档
-
-  [fn:3] 这句说明（The callee has the responsibility of dumping the register parameters into their shadow space if needed.）来自MSDN：http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx
-
-  [fn:4] 来源：http://msdn.microsoft.com/en-us/library/ew5tede7.aspx
-
 * 参考文档
 
   1. http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf
@@ -180,3 +170,13 @@
   4. http://msdn.microsoft.com/en-us/library/ew5tede7.aspx
 
   5. 公司内部一个介绍Windows X64 Debug的PPT，这个就不放出来了 :-D
+
+* Footnotes
+
+[fn:1] 这张图来自Intel的X64汇编介绍文档：http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf
+
+[fn:2] 同1，这段约定也来自上面的文档
+
+[fn:3] 这句说明（The callee has the responsibility of dumping the register parameters into their shadow space if needed.）来自MSDN：http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx
+
+[fn:4] 来源：http://msdn.microsoft.com/en-us/library/ew5tede7.aspx
