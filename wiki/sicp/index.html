@@ -3099,6 +3099,67 @@ b) 其实在我看来，因为两者都要遍历所有的结点，都需要n步�
 </p>
 </div>
 </div>
+<div id="outline-container-sec-2-64" class="outline-3">
+<h3 id="sec-2-64">练习2.64</h3>
+<div class="outline-text-3" id="text-2-64">
+<p>
+a) <code>partial-tree</code> 这个函数很精妙，尤其是返回值，为了方便递归调用，将返回值定义成了两部分： <code>car</code> 是真正的转换后的平衡树， <code>cdr</code> 是表中剩下的元素。这样一来，在递归调用时，就很方便地可以取到表中剩下的元素进行操作。过程首先求值了左子树，为了保持树平衡，左子树的元素个数为 <i>(n - 1) / 2</i> 再向下取整，然后，将剩下的元素的首元素作为树的根结点，再利用再次剩下的元素求值右子树，右子树的元素个数为 <i>n - 左子树元素数 - 1</i> 。
+</p>
+
+<p>
+b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所以复杂度就是O(n)，但鉴于上一个练习，所以这次学乖了，还要看看 <code>partial-tree</code> 里面有没有子调用是消耗比较大的，但实际上只有一个常量级的 <code>cons</code> 操作，所以整个步数量级就是O(n)。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-65" class="outline-3">
+<h3 id="sec-2-65">练习2.65</h3>
+<div class="outline-text-3" id="text-2-65">
+<p>
+偷懒的办法：先利用 <code>tree-&gt;list</code> 将树转换成有序表，再利用前面已经定义过的对有序表求交并集的过程得到结果，最后再利用 <code>list-&gt;tree</code> 给转换回来。。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">union-set</span> set1 set2)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">list-union-set</span> set1 set2)
+    (<span style="color: #859900;">cond</span> ((null? set1) set2)
+          ((null? set2) set1)
+          (<span style="color: #859900;">else</span>
+           (<span style="color: #859900;">let</span> ((x1 (car set1))
+                 (x2 (car set2)))
+             (<span style="color: #859900;">cond</span> ((= x1 x2) (cons x1
+                                    (list-union-set (cdr set1)
+                                                    (cdr set2))))
+                   ((&lt; x1 x2) (cons x1
+                                    (list-union-set (cdr set1)
+                                                    set2)))
+                   ((&gt; x1 x2) (cons x2
+                                    (list-union-set set1
+                                                    (cdr set2)))))))))
+  (list-&gt;tree (list-union-set (tree-&gt;list set1)
+                              (tree-&gt;list set2))))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">intersection-set</span> set1 set2)
+  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">list-intersection-set</span> set1 set2)
+    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (null? set1) (null? set2)) '())
+          (<span style="color: #859900;">else</span>
+           (<span style="color: #859900;">let</span> ((x1 (car set1))
+                 (x2 (car set2)))
+             (<span style="color: #859900;">cond</span> ((= x1 x2) (cons x1
+                                    (list-intersection-set (cdr set1)
+                                                           (cdr set2))))
+                   ((&lt; x1 x2) (list-intersection-set (cdr set1) set2))
+                   ((&gt; x1 x2) (list-intersection-set set1
+                                                     (cdr set2))))))))
+  (list-&gt;tree (list-intersection-set (tree-&gt;list set1)
+                                     (tree-&gt;list set2))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-66" class="outline-3">
+<h3 id="sec-2-66">练习2.66</h3>
+</div>
 </div>
 
       </div>
