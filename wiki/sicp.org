@@ -2108,3 +2108,51 @@
    a) 本来以为这两个过程会产生不同的结果的，但试了一下，结果是一样的。。第一个过程好理解，先遍历左子树，然后访问根，再遍历右子树；第二个过程采用了两次迭代，看起来要麻烦一点，但是从整体看，还是比较好理解的：先把右子树放到 =result-list= 里面，再把根加进去放到第一个，再把左子树加进去，至于左子树加的位置，因为 =copy-to-list= 过程只有在加根结点时才会改变 =result-list= ，而根结点会被加在第一个位置，所以可以肯定，左子树的位置是在最前面，因此，第二个过程的生成的表顺序也是左子树、根、右子树，和第一个过程一样。
 
    b) 其实在我看来，因为两者都要遍历所有的结点，都需要n步，所以两者的消耗是一样的。。但既然书上这么问了，那肯定是不一样的。。鉴于算法分析一直是我弱项，所以我果断去Google了一下，发现了[[http://wiki.drewhess.com/wiki/SICP_exercise_2.63][这个解答]]。他讲得挺清楚了，我就简单复述一下：因为第一个过程用到了 =append= ，而 =append= 的步数依赖于第一个参数的长度，这个参数恰好是左子树，对于平衡二叉树来讲，每次都访问某个子树的步数是O(log n)，所以，第一个过程的步数是O(n * log n)；第二个过程，因为每次递归只调用到了一个常量级别的 =cons= ，所以它的步数就是O(n)。（吐槽：其实我想对了，不过只想对了一半，谁能想道竟然还要去分析它们子调用的复杂度。。）
+
+** 练习2.64
+
+   a) =partial-tree= 这个函数很精妙，尤其是返回值，为了方便递归调用，将返回值定义成了两部分： =car= 是真正的转换后的平衡树， =cdr= 是表中剩下的元素。这样一来，在递归调用时，就很方便地可以取到表中剩下的元素进行操作。过程首先求值了左子树，为了保持树平衡，左子树的元素个数为 /(n - 1) / 2/ 再向下取整，然后，将剩下的元素的首元素作为树的根结点，再利用再次剩下的元素求值右子树，右子树的元素个数为 /n - 左子树元素数 - 1/ 。
+
+   b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所以复杂度就是O(n)，但鉴于上一个练习，所以这次学乖了，还要看看 =partial-tree= 里面有没有子调用是消耗比较大的，但实际上只有一个常量级的 =cons= 操作，所以整个步数量级就是O(n)。
+
+** 练习2.65
+
+   偷懒的办法：先利用 =tree->list= 将树转换成有序表，再利用前面已经定义过的对有序表求交并集的过程得到结果，最后再利用 =list->tree= 给转换回来。。
+
+   #+BEGIN_SRC scheme
+   (define (union-set set1 set2)
+     (define (list-union-set set1 set2)
+       (cond ((null? set1) set2)
+             ((null? set2) set1)
+             (else
+              (let ((x1 (car set1))
+                    (x2 (car set2)))
+                (cond ((= x1 x2) (cons x1
+                                       (list-union-set (cdr set1)
+                                                       (cdr set2))))
+                      ((< x1 x2) (cons x1
+                                       (list-union-set (cdr set1)
+                                                       set2)))
+                      ((> x1 x2) (cons x2
+                                       (list-union-set set1
+                                                       (cdr set2)))))))))
+     (list->tree (list-union-set (tree->list set1)
+                                 (tree->list set2))))
+
+   (define (intersection-set set1 set2)
+     (define (list-intersection-set set1 set2)
+       (cond ((or (null? set1) (null? set2)) '())
+             (else
+              (let ((x1 (car set1))
+                    (x2 (car set2)))
+                (cond ((= x1 x2) (cons x1
+                                       (list-intersection-set (cdr set1)
+                                                              (cdr set2))))
+                      ((< x1 x2) (list-intersection-set (cdr set1) set2))
+                      ((> x1 x2) (list-intersection-set set1
+                                                        (cdr set2))))))))
+     (list->tree (list-intersection-set (tree->list set1)
+                                        (tree->list set2))))
+   #+END_SRC
+
+** 练习2.66
