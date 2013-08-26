@@ -2164,3 +2164,64 @@
            ((> (key (entry tree-of-records)) given-key) (lookup (left-branch tree-of-records)))
            (else (lookup (right-branch tree-of-records)))))
    #+END_SRC
+
+** 练习2.67
+
+   这个题目的目的，就是让我们把所有的代码都敲一遍。。
+
+   最后结果： =(A D A B B C A)=
+
+** 练习2.68
+
+   #+BEGIN_SRC scheme
+   (define (symbol-on-tree? symbol tree)
+     (memq symbol (symbols tree)))
+
+   (define (encode-symbol symbol tree)
+     (cond ((not (symbol-on-tree? symbol tree))
+            (error "symbol is not on this tree"))
+           ((leaf? tree) '())
+           (else (let ((left (left-branch tree))
+                       (right (right-branch tree)))
+                   (if (symbol-on-tree? symbol left)
+                       (cons 0 (encode-symbol symbol left))
+                       (cons 1 (encode-symbol symbol right)))))))
+   #+END_SRC
+
+** 练习2.69
+
+   其实这个题目我觉得并不难，不知道为什么出题者在题目后面缀了那么大一段说明。。
+
+   #+BEGIN_SRC scheme
+   (define (successive-merge leaf-set)
+     (if (= (length leaf-set) 1)
+         (car leaf-set)
+         (successive-merge (adjoin-set (make-code-tree (cadr leaf-set)
+                                                       (car leaf-set))
+                                       (cdr (cdr leaf-set))))))
+   #+END_SRC
+
+** 练习2.70
+
+   encode消息的相关变量定义及调用：
+
+   #+BEGIN_SRC scheme
+   (define symbol-frequency-pairs
+     '((A 2) (NA 16)
+       (BOOM 1) (SHA 3)
+       (GET 2) (YIP 9)
+       (JOB 2) (WAH 1)))
+
+   (define huffman-tree (generate-huffman-tree symbol-frequency-pairs))
+
+   (encode '(GET A JOB
+             SHA NA NA NA NA NA NA NA NA
+             GET A JOB
+             SHA NA NA NA NA NA NA NA NA
+             WAH YIP YIP YIP YIP YIP YIP YIP YIP YIP
+             SHA BOOM) huffman-tree)
+   #+END_SRC
+
+   由Huffman编码后的二进制位个数为84。
+
+   如果不用Huffman编码而使用定长编码的话，所有的符号共有15个字母，也就是需要4位来表示一个字母，而这些符号总共有89个字母，所以定长编码需要的二进制位个数为 89 * 4 = 356。这一长度是使用Huffman编码长度的四倍还多了20个二进制位。
