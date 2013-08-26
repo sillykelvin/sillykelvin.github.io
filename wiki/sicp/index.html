@@ -3175,6 +3175,93 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 </div>
+<div id="outline-container-sec-2-67" class="outline-3">
+<h3 id="sec-2-67">练习2.67</h3>
+<div class="outline-text-3" id="text-2-67">
+<p>
+这个题目的目的，就是让我们把所有的代码都敲一遍。。
+</p>
+
+<p>
+最后结果： <code>(A D A B B C A)</code>
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-68" class="outline-3">
+<h3 id="sec-2-68">练习2.68</h3>
+<div class="outline-text-3" id="text-2-68">
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">symbol-on-tree?</span> symbol tree)
+  (memq symbol (symbols tree)))
+
+(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">encode-symbol</span> symbol tree)
+  (<span style="color: #859900;">cond</span> ((not (symbol-on-tree? symbol tree))
+         (error <span style="color: #2aa198;">"symbol is not on this tree"</span>))
+        ((leaf? tree) '())
+        (<span style="color: #859900;">else</span> (<span style="color: #859900;">let</span> ((left (left-branch tree))
+                    (right (right-branch tree)))
+                (<span style="color: #859900;">if</span> (symbol-on-tree? symbol left)
+                    (cons 0 (encode-symbol symbol left))
+                    (cons 1 (encode-symbol symbol right)))))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-69" class="outline-3">
+<h3 id="sec-2-69">练习2.69</h3>
+<div class="outline-text-3" id="text-2-69">
+<p>
+其实这个题目我觉得并不难，不知道为什么出题者在题目后面缀了那么大一段说明。。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">successive-merge</span> leaf-set)
+  (<span style="color: #859900;">if</span> (= (length leaf-set) 1)
+      (car leaf-set)
+      (successive-merge (adjoin-set (make-code-tree (cadr leaf-set)
+                                                    (car leaf-set))
+                                    (cdr (cdr leaf-set))))))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-70" class="outline-3">
+<h3 id="sec-2-70">练习2.70</h3>
+<div class="outline-text-3" id="text-2-70">
+<p>
+encode消息的相关变量定义及调用：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">symbol-frequency-pairs</span>
+  '((A 2) (NA 16)
+    (BOOM 1) (SHA 3)
+    (GET 2) (YIP 9)
+    (JOB 2) (WAH 1)))
+
+(<span style="color: #859900;">define</span> <span style="color: #268bd2;">huffman-tree</span> (generate-huffman-tree symbol-frequency-pairs))
+
+(encode '(GET A JOB
+          SHA NA NA NA NA NA NA NA NA
+          GET A JOB
+          SHA NA NA NA NA NA NA NA NA
+          WAH YIP YIP YIP YIP YIP YIP YIP YIP YIP
+          SHA BOOM) huffman-tree)
+</pre>
+</div>
+
+<p>
+由Huffman编码后的二进制位个数为84。
+</p>
+
+<p>
+如果不用Huffman编码而使用定长编码的话，所有的符号共有15个字母，也就是需要4位来表示一个字母，而这些符号总共有89个字母，所以定长编码需要的二进制位个数为 89 * 4 = 356。这一长度是使用Huffman编码长度的四倍还多了20个二进制位。
+</p>
+</div>
+</div>
 </div>
 
 </div>
@@ -3182,7 +3269,7 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2012-12-10</span>
-        <span title="last modification date" class="post-info">2013-08-19</span>
+        <span title="last modification date" class="post-info">2013-08-27</span>
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
