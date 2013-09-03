@@ -1,0 +1,64 @@
+#+TITLE:       修复MacBook Air上的Archlinux
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-08-05 Mon
+#+URI:         /blog/%y/%m/%d/fix-archlinux-on-mac-air/
+#+KEYWORDS:    linux, archlinux, macbook air, kernel panic
+#+TAGS:        :Linux:Archlinux:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: fix the broken archlinux on a macbook air
+
+
+好吧，又是Archlinux出问题了，咦，我为什么会说“又”。。
+
+事情缘于前一阵子，Archlinux莫名其妙地只要一连接网络就Kernel Panic，长这么大，还是第一次碰到Kernel Panic，于是去Archlinux的中文邮件组发了个帖，然后又去Archlinux的BBS搜索了一下，找到[[https://bbs.archlinux.org/viewtopic.php?id%3D168177][这个帖子]]，遇到这个问题的人还不少，看起来好像是网卡驱动有问题，解决方法是downgrade kernel到3.10.5.1，于是，执行以下命令进行downgrade：
+
+: sudo pacman -U /var/cache/pacman/pkg/linux-3.10.5-1-x86_64.pkg.tar.xz
+
+然后，果然就没有问题了。
+
+如果，你觉得事情就这么完了，那就是图样图森破，我也不会装模作样地写篇博客记个这么简单的事情不是。。
+
+后来，我忘了这茬，手贱执行了 =pacman -Syu= ，又把内核的版本给升上去了，然后，就又Kernel Panic了。。
+
+于是，老办法，降级内核。关键是，我当时脑袋抽风，觉得既然是降级内核，不妨降级到更低的版本试试，于是就随便找了个版本3.10.3-1：
+
+: sudo pacman -U /var/cache/pacman/pkg/linux-3.10.3-1-x86_64.pkg.tar.xz
+
+然后，重启时，GRUB引导报错： *error: invalid magic number* ，这下好了，直接连系统都进不去了，连Kernel Panic的机会都没有了。。
+
+没办法，只能找个U盘做Live USB，然后从USB启动去尝试修复了。于是，去Archlinux官网下了最新的ISO镜像，找台Linux机器，用 =dd= 命令把ISO镜像给做到U盘里，然后把U盘插到Mac Air上，在开机时按Option键，能看到U盘的启动项，可是，却无法从U盘启动。。我把Archlinux Wiki上关于制作Live USB Media的相关页面翻了个遍，所有的方法也都试了个遍，都是能看见USB启动项，但没有一个能成功从USB启动的。。苹果的硬件果真是个奇葩啊。。
+
+最后，实在没招的时候，我突然灵光一闪：是不是不是制作USB的问题，而是ISO镜像的问题？于是，果断找了个旧的去年9月的ISO镜像，然后依然用 =dd= 命令给做到U盘里：
+
+: dd if=archlinux-2012.09.07-dual.iso of=/dev/sdb bs=8192   # /dev/sdb是我的U盘
+
+果然，这次能成功从USB启动了！！看来确实最新的镜像有问题。。或许也不是镜像的问题，而是苹果这蛋疼的UEFI引导方式。。
+
+启动之后，就是将硬盘相应的分区给mount到合适的挂载点（我把根分区挂载在/mnt/arch），还有一点需要注意的是，不光要挂载物理硬盘，还需要处理以下挂载点：
+
+: cd /mnt/arch
+: mount -t proc proc proc/
+: mount -t sysfs sys sys/
+: mount -o bind /dev dev/
+
+不然，在后面会报 *failed to open /etc/mtab: No such file or directory* 以及 */dev not mounted* 的错误。
+
+接下来就是修复的重头戏（其实就是更新系统，保证错误的部分被更新操作修复）：
+
+: chroot .
+: pacman -Syu
+
+最后，别忘了降级内核以防止Kernel Panic的再次出现，而且，一定要降级到特定的 *3.10.5-1* 这个特定版本，不然，说不定又是连系统都引导不起来了。。
+
+: sudo pacman -U /var/cache/pacman/pkg/linux-3.10.5-1-x86_64.pkg.tar.xz
+
+好了，这下世界终于清静了。
+
+终于明白，使用Archlinux，就是无尽的折腾。。或许，当不想再折腾的时候，Mac OSX才是最终的归宿吧。。
+
+* 参考文档
+
+  1. https://bbs.archlinux.org/viewtopic.php?id=168177
+  2. http://mzanfardino.wordpress.com/2012/05/24/repairing-broken-arch-linux/
