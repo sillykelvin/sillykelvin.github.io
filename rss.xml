@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Tue, 03 Sep 2013 22:59:35 CST</pubDate>
-    <lastBuildDate>Tue, 03 Sep 2013 22:59:35 CST</lastBuildDate>
+    <pubDate>Wed, 04 Sep 2013 00:22:09 CST</pubDate>
+    <lastBuildDate>Wed, 04 Sep 2013 00:22:09 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>修复MacBook Air上的Archlinux</title>
+      <link>http://kelvinh.github.io/blog/2013/08/05/fix-archlinux-on-mac-air/</link>
+      <description>fix the broken archlinux on a macbook air</description>
+      <pubDate>2013-09-04</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/08/05/fix-archlinux-on-mac-air/</guid>
+    </item>
     <item>
       <title>因不完整类型导致的内存泄露惨案</title>
       <link>http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/</link>
@@ -70,13 +77,6 @@
       <description>variable delayed expansion in batch</description>
       <pubDate>2013-06-30</pubDate>
       <guid>http://kelvinh.github.io/blog/2012/02/16/batch-delayed-expansion/</guid>
-    </item>
-    <item>
-      <title>windows平台Emacs单实例原理、设置及右键菜单的添加</title>
-      <link>http://kelvinh.github.io/blog/2012/04/28/add-emacs-to-context-menu-on-windows/</link>
-      <description>how to add emacs to context menu on windows</description>
-      <pubDate>2013-06-30</pubDate>
-      <guid>http://kelvinh.github.io/blog/2012/04/28/add-emacs-to-context-menu-on-windows/</guid>
     </item>
   </channel>
 </rss>
