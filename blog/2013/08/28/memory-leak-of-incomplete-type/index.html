@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>因不完整类型导致的内存泄露惨案 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="memory leak introduced by incomplete type, which is led by forward declaration and inline destructor" />
+    <meta name="keywords" content="C++, memory leak, incomplete type, forward declaration, inline destructor, VC++ warning C4150" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>因不完整类型导致的内存泄露惨案</h1>
+<p>
+事情起源于项目中一次严重的内存泄露事件。
+</p>
+
+<p>
+在QA的一次测试中，发现我们的程序吃内存直接到3个多GB，这直接导致我们叫停内部的Beta版本测试（因为可能会影响公司同事的工作）。在内部Beta正在测试，正式Beta即将发布的时候，发生这么严重的内存泄露，还是很伤土气的。不过还好，毕竟还只是内部测试，总比发布之后才发现要好很多。
+</p>
+
+<p>
+整个找问题的过程还是很曲折的，用UMDH分析内存分配，用WinDbg分析dump，然后再code review仔细检查，但始终没有办法找到问题所在。最终回到一个很暴力但也很笨的办法：对于经过分析可能出问题的class，在其构造函数和析构函数里面都加上log，然后看其分配数与释放数是否相等。果然，在log中发现，一个很核心的class的分配与释放数不相等。
+</p>
+
+<p>
+整个分析的过程我不想再多写，但分析的结果最后却会令很多人都大跌眼镜（当然，大跌眼镜的前提是，你对C++还没有达到“精通”的程度，并且你之前没有遇到过类似问题）。鉴于项目的代码不大方便拿来做例子，我就另外写一个小示例：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c++"><span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">B.h</span>
+<span style="color: #859900;">class</span> <span style="color: #b58900;">A</span>;
+
+<span style="color: #859900;">class</span> <span style="color: #b58900;">B</span> {
+    <span style="color: #b58900;">A</span> *<span style="color: #b58900;">a</span>;
+<span style="color: #859900;">public</span>:
+    ~<span style="color: #268bd2;">B</span>() {
+        <span style="color: #859900;">if</span>(a) <span style="color: #859900;">delete</span> a;
+    }
+};
+</pre>
+</div>
+
+<p>
+在这个示例中，类A的定义在其头文件 <code>A.h</code> 中提供。这里故意没有include这个文件，而是只提供了前置定义。然后，在类B的定义中，有一个A的指针类型的成员变量，并且内联地定义了其析构函数，在析构函数中将这个成员指针给删除掉。
+</p>
+
+<p>
+假设其它相关的文件都存在并且没有编译错误，那么，如果是使用VS编译的话，在上面的 <code>delete a;</code> 那一行，会报一个Warning: <i>warning C4150: deletion of pointer to incomplete type 'A'; no destructor called</i> 。我当时在看到这个编译警告的时候，去检查了一下代码，没看到有什么问题，于是就这么算了。
+</p>
+
+<p>
+但实际上，问题就出在 <code>delete a;</code> 语句。
+</p>
+
+<p>
+因为A是前置类型，对于编译器来说，在编译到 <code>delete a;</code> 的时候，它仍然只知道A是一个class，对于其具体结构一无所知，更不用说析构函数了。于是， <code>delete a;</code> 就只能是释放掉实例a所占用的内存，但其析构函数不会被调用。如果类A中没有资源需要在析构时释放，这个就没有太大关系；但如果类A中有一些动态内存或者句柄资源需要在析构时释放，那这个就会造成资源泄露。
+</p>
+
+<hr/>
+
+<p>
+实际上，不只是上面的情况会可能造成资源泄露，对于不完整类型的delete操作都会因为其析构函数不被调用从而导致潜在的资源泄露。例如下面的代码：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class A;
+...
+std::auto_ptr&lt;A&gt; a;
+...
+</pre>
+</div>
+
+<p>
+初看起来似乎一切美好，但是，在智能指针a超出作用域的时候其析构函数会删除其中保存的A的实例，这时A依然是不完整类型。但是，使用 <code>shared_ptr</code> 就不会有这样的问题，详细参见StackOverflow上的<a href="http://stackoverflow.com/questions/5606750/deletion-of-pointer-to-incomplete-type-and-smart-pointers">这个讨论</a>。
+</p>
+
+<p>
+个人认为，VS的这一个编译警告（C4150）其实应该算是编译错误的，毕竟有可能会造成严重的问题，但是<a href="http://e-maxx.ru/bookz/files/cpp_standard.pdf">C++规范（ISO/IEC 14882:2003 5.3.5/5）</a>却规定这是合法的：
+</p>
+
+<blockquote>
+<p>
+If the object being deleted has incomplete class type at the point of deletion and the complete class has a non-trivial destructor or a deallocation function, the behavior is undefined.
+</p>
+</blockquote>
+
+<p>
+当然，只不过最后的behavior是undefined。。世界上难道还有比C++规范更不靠谱的规范吗！！
+</p>
+
+<p>
+好吧，这个问题讨论到这里也就没有什么再继续讨论的价值了，遇到不完整类型的时候，一定要非常小心，当然，能不用就尽量不用。小伙伴们，都涨姿势了吗？
+</p>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-08-28</span>
+        <span title="last modification date" class="post-info">2013-09-02</span>
+        <span title="tags" class="post-info"><a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/08/28/memory-leak-of-incomplete-type/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.0.7)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
