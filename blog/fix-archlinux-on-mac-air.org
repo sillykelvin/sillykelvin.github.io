@@ -1,7 +1,7 @@
 #+TITLE:       修复MacBook Air上的Archlinux
 #+AUTHOR:      Kelvin Hu
 #+EMAIL:       ini.kelvin@gmail.com
-#+DATE:        2013-08-05 Mon
+#+DATE:        2013-09-03 Tue
 #+URI:         /blog/%y/%m/%d/fix-archlinux-on-mac-air/
 #+KEYWORDS:    linux, archlinux, macbook air, kernel panic
 #+TAGS:        :Linux:Archlinux:
