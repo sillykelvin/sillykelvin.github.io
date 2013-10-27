@@ -1,0 +1,65 @@
+#+TITLE:       给Archlinux添加swap空间
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-10-27 Sun
+#+URI:         /blog/%y/%m/%d/add-swap-on-archlinux/
+#+KEYWORDS:    linux, archlinux, swap file
+#+TAGS:        :Linux:Archlinux:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: How to create and add swap file on archlinux
+
+
+再次，又是Archlinux出问题了，咦，我好像又一次说了“又”耶。。（当然，这次完全是我自己的问题，跟Archlinux无关。。）
+
+话说当初在这台Macbook Air上装Arch的时候，小本只有2GB的内存，当时想想觉得2GB内存已经够用了，所以就果断没有分swap分区。
+
+后来发现，有时候在浏览器中看视频时，时间一长，本子会莫名其妙地卡，卡到鼠标都不能动，最后会导致X崩溃。那段时间我真是诅咒死flash了，本子一卡，X一崩溃，我就诅咒flash：怎么会有这么烂的产品。。（后来才知道，flash是冤枉的，真是躺着都中枪啊。。）
+
+直到最近，在用gcc编译一个程序的时候，本子也会卡，偶尔也会导致X崩溃，于是我一度认为，gcc真是越做越烂了。。后来，偶然有一次，在编译的时候，本子变卡，但gcc中途退出，提示：
+
+#+BEGIN_QUOTE
+virtual memory exhausted: Cannot allocate memory
+#+END_QUOTE
+
+我当时云里雾里：这是怎么回事，程序明明没有问题啊，怎么会编译出错呢？（好傻啊，当时还以为是代码有问题。。）
+
+后来我终于注意到，在开的应用程序多的时候，编译就出问题，有时会出现上述提示，有时会直接卡到X崩溃；但应用程序比较少的时候，编译就很顺利。那个时候，我终于意识到，跟要编译的程序的代码无关，好像跟自己机器的内存有关。。
+
+于是，在编译的时候，果断开 *htop* 观察，发现gcc编译还是很吃内存的，本来只有2GB的内存，开个firefox本来就要占不少，开个Emacs又占去不少，再加上杂七杂八的，留给gcc的内存就只剩下400MB左右了，然后一运行make，内存就直接飙升，直到吃满。
+
+我终于意识到当初在装Arch时犯下的错误，2GB的内存是多么少，而swap空间又是多么重要。。
+
+好在，Linux系统的可配置性极高，但如果要调整磁盘分区增加一个swap分区的话，可能不太现实，万一把磁盘弄挂掉那悲剧可就不是一点两点了，好在普通文件也能达到同样的效果，于是，果断创建一个文件来作为swap空间。
+
+** 创建一个文件：
+
+   : # dd if=/dev/zero of=/swapfile bs=1M count=512
+
+   利用dd命令在根分区创建了一个swapfile文件，大小为512MB。
+
+** 给这个文件加上正确的权限：
+
+   : # chown root:root /swapfile
+   : # chmod 0600 /swapfile
+
+   让只有root用户有权限访问。
+
+** 设置swap空间：
+
+   : # mkswap /swapfile
+
+** 激活这个刚刚创建的swap空间：
+
+   : # swapon /swapfile
+
+在经过以上步骤后，这个文件就可以作为swap空间来用了，可以使用 =free -m= 命令查看swap空间的使用情况。
+
+在上述步骤后的swap空间在重启之后是需要手动再次设置的，所以，如果要在启动时就自动激活的话，需要将下面的关于swap文件的配置行写入 =/etc/fstab= ：
+
+: /swapfile none swap defaults 0 0
+
+* 参考文档
+
+  1. https://wiki.archlinux.org/index.php/swap
+  2. http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/
