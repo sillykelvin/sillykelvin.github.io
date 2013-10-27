@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>给Archlinux添加swap空间 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="How to create and add swap file on archlinux" />
+    <meta name="keywords" content="linux, archlinux, swap file" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>给Archlinux添加swap空间</h1>
+<p>
+再次，又是Archlinux出问题了，咦，我好像又一次说了“又”耶。。（当然，这次完全是我自己的问题，跟Archlinux无关。。）
+</p>
+
+<p>
+话说当初在这台Macbook Air上装Arch的时候，小本只有2GB的内存，当时想想觉得2GB内存已经够用了，所以就果断没有分swap分区。
+</p>
+
+<p>
+后来发现，有时候在浏览器中看视频时，时间一长，本子会莫名其妙地卡，卡到鼠标都不能动，最后会导致X崩溃。那段时间我真是诅咒死flash了，本子一卡，X一崩溃，我就诅咒flash：怎么会有这么烂的产品。。（后来才知道，flash是冤枉的，真是躺着都中枪啊。。）
+</p>
+
+<p>
+直到最近，在用gcc编译一个程序的时候，本子也会卡，偶尔也会导致X崩溃，于是我一度认为，gcc真是越做越烂了。。后来，偶然有一次，在编译的时候，本子变卡，但gcc中途退出，提示：
+</p>
+
+<blockquote>
+<p>
+virtual memory exhausted: Cannot allocate memory
+</p>
+</blockquote>
+
+<p>
+我当时云里雾里：这是怎么回事，程序明明没有问题啊，怎么会编译出错呢？（好傻啊，当时还以为是代码有问题。。）
+</p>
+
+<p>
+后来我终于注意到，在开的应用程序多的时候，编译就出问题，有时会出现上述提示，有时会直接卡到X崩溃；但应用程序比较少的时候，编译就很顺利。那个时候，我终于意识到，跟要编译的程序的代码无关，好像跟自己机器的内存有关。。
+</p>
+
+<p>
+于是，在编译的时候，果断开 <b>htop</b> 观察，发现gcc编译还是很吃内存的，本来只有2GB的内存，开个firefox本来就要占不少，开个Emacs又占去不少，再加上杂七杂八的，留给gcc的内存就只剩下400MB左右了，然后一运行make，内存就直接飙升，直到吃满。
+</p>
+
+<p>
+我终于意识到当初在装Arch时犯下的错误，2GB的内存是多么少，而swap空间又是多么重要。。
+</p>
+
+<p>
+好在，Linux系统的可配置性极高，但如果要调整磁盘分区增加一个swap分区的话，可能不太现实，万一把磁盘弄挂掉那悲剧可就不是一点两点了，好在普通文件也能达到同样的效果，于是，果断创建一个文件来作为swap空间。
+</p>
+
+<div id="outline-container-sec-0-1" class="outline-3">
+<h3 id="sec-0-1">创建一个文件：</h3>
+<div class="outline-text-3" id="text-0-1">
+<pre class="example">
+# dd if=/dev/zero of=/swapfile bs=1M count=512
+</pre>
+
+<p>
+利用dd命令在根分区创建了一个swapfile文件，大小为512MB。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-0-2" class="outline-3">
+<h3 id="sec-0-2">给这个文件加上正确的权限：</h3>
+<div class="outline-text-3" id="text-0-2">
+<pre class="example">
+# chown root:root /swapfile
+# chmod 0600 /swapfile
+</pre>
+
+<p>
+让只有root用户有权限访问。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-0-3" class="outline-3">
+<h3 id="sec-0-3">设置swap空间：</h3>
+<div class="outline-text-3" id="text-0-3">
+<pre class="example">
+# mkswap /swapfile
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-0-4" class="outline-3">
+<h3 id="sec-0-4">激活这个刚刚创建的swap空间：</h3>
+<div class="outline-text-3" id="text-0-4">
+<pre class="example">
+# swapon /swapfile
+</pre>
+
+<p>
+在经过以上步骤后，这个文件就可以作为swap空间来用了，可以使用 <code>free -m</code> 命令查看swap空间的使用情况。
+</p>
+
+<p>
+在上述步骤后的swap空间在重启之后是需要手动再次设置的，所以，如果要在启动时就自动激活的话，需要将下面的关于swap文件的配置行写入 <code>/etc/fstab</code> ：
+</p>
+
+<pre class="example">
+/swapfile none swap defaults 0 0
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">参考文档</h2>
+<div class="outline-text-2" id="text-1">
+<ol class="org-ol">
+<li><a href="https://wiki.archlinux.org/index.php/swap">https://wiki.archlinux.org/index.php/swap</a>
+</li>
+<li><a href="http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/">http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/</a>
+</li>
+</ol>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-10-27</span>
+        <span title="last modification date" class="post-info">2013-10-27</span>
+        <span title="tags" class="post-info"><a href="/tags/linux/">Linux</a>, <a href="/tags/archlinux/">Archlinux</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/10/27/add-swap-on-archlinux/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/10/27/add-swap-on-archlinux/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.1.1)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
