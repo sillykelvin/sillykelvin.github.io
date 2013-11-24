@@ -1,0 +1,127 @@
+#+TITLE:       C++中对成员访问操作符->的重载
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-11-20 Wed
+#+URI:         /blog/%y/%m/%d/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/
+#+KEYWORDS:    C++, operator overloading, member access operator
+#+TAGS:        :C++:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Introduction to overloading of -> operator in C++
+
+
+前几天在看《C++标准程序库》，看到智能指针 =std::auto_ptr= 的源码的时候，对于运算符 =->= 的重载，我脑袋中突然闪过一个疑问：对于形如 =a + b= 形式的加运算符重载，编译器会将其解释为 =a.operator+(b)= ；那对于形如 =p->i= 形式的智能指针调用，编译器应该也会将其解释为 =p.operator->(i)= 才对，但是， =std::auto_ptr= 的 =->= 运算符重载如下：
+
+#+BEGIN_SRC C++
+template<class T>
+class auto_ptr {
+private:
+    T* ap;
+public:
+    T* operator->() const throw() {
+        return ap;
+    }
+    // ...
+};
+#+END_SRC
+
+可以看到，其声明并没有参数，而且是直接返回保存的指针，不符合我们上面猜想的形式，而且对于 =p->f()= 更是无法解释。那 =->= 的重载到底是如何实现的呢？
+
+这个问题不解决，让我如鲠在喉，于是，经过几番查证，总结出如下结论：
+
+#+BEGIN_QUOTE
+
+运算符 =->= 的重载比较特别，它只能是非静态的成员函数形式，而且没有参数。如果返回值是一个原始指针，那么就将运算符的右操作数当作这个原始指针所指向类型的成员进行访问；如果返回值是另一个类型的实例，那么就继续调用这个返回类型的 =operator->()= ，直到有一个调用返回一个原始指针为止，然后按第一种情况处理。
+
+如果上述条件不满足（如：右操作数不是返回的原始指针指向的类型的成员，或者，返回的非指针类型没有重载 =operator->()= ），那么编译将报错。
+#+END_QUOTE
+
+这下就豁然开朗了，于是，写出下面的用于验证的小程序：
+
+#+BEGIN_SRC C++
+#include <iostream>
+
+struct Origin {
+    int a;
+};
+
+struct Wrapper {
+    Origin *orig;
+    Origin *operator->() const {
+        return orig;
+    }
+};
+
+struct Wrapper2 {
+    Wrapper *wrap;
+    Wrapper& operator->() const {
+        return *wrap;
+    }
+};
+
+int main() {
+    Origin o;
+    o.a = 7;
+    Wrapper w;
+    w.orig = &o;
+    Wrapper2 w2;
+    w2.wrap = &w;
+    std::cout << "w->a" << "\t\t\t\t" << w->a << std::endl;
+    std::cout << "w.operator->()" << "\t\t\t" << w.operator->() << std::endl;
+    std::cout << "w.operator->()->a" << "\t\t" << w.operator->()->a << std::endl;
+    std::cout << "w2->a" << "\t\t\t\t" << w2->a << std::endl;
+    std::cout << "&w2.operator->()" << "\t\t" << &w2.operator->() << std::endl;
+    std::cout << "w2.operator->()->a" << "\t\t" << w2.operator->()->a << std::endl;
+    std::cout << "w2.operator->().operator->()" << "\t" << w2.operator->().operator->() << std::endl;
+    std::cout << "w2.operator->().operator->()->a" << "\t" << w2.operator->().operator->()->a << std::endl;
+}
+#+END_SRC
+
+运行结果为：
+
+#+BEGIN_SRC
+w->a				7
+w.operator->()			0x7fff6b46d6a0
+w.operator->()->a		7
+w2->a				7
+&w2.operator->()		0x7fff6b46d690
+w2.operator->()->a		7
+w2.operator->().operator->()	0x7fff6b46d6a0
+w2.operator->().operator->()->a	7
+#+END_SRC
+
+其中最为诡异的就是 =w2->a= 输出的是7，按照上面总结的结论，这个调用其实会被编译器转换成 =w2.operator->().operator->()->a= 的形式，所以输出是7。
+
+* 调戏编译器
+
+  既然 =->= 的重载可以返回一个类型的实例而非指针，那如果返回本身的类型呢，它会继续调用自己的 =operator->()= ，永无止尽。写个小程序试试：
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  struct Joke {
+      int i;
+      Joke& operator->() {
+          return *this;
+      }
+  };
+
+  int main() {
+      Joke j;
+      std::cout << j->i;
+  }
+
+  #+END_SRC
+
+  其中 =j->i= 会导致自身的 =operator->()= 被无限调用。但编译器不是傻子，在使用GCC 4.8.2编译的时候，直接报错：
+
+  : error: circular pointer delegation detected
+
+* 说明
+
+  本文最开头提到了 =std::auto_ptr= ，但并不代表推荐使用它，如果需要使用智能指针，请根据使用环境要求尽量使用 =std::unique_ptr= 或者 =boost::shared_ptr= 。
+
+* 参考文档
+
+  1. http://www.tutorialspoint.com/cplusplus/class_member_access_operator_overloading.htm
+  2. http://stackoverflow.com/questions/8777845/overloading-member-access-operators-c
