@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Sun, 27 Oct 2013 23:53:17 CST</pubDate>
-    <lastBuildDate>Sun, 27 Oct 2013 23:53:17 CST</lastBuildDate>
+    <pubDate>Sun, 24 Nov 2013 15:10:32 CST</pubDate>
+    <lastBuildDate>Sun, 24 Nov 2013 15:10:32 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>C++中对成员访问操作符-&gt;的重载</title>
+      <link>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</link>
+      <description>Introduction to overloading of -&gt; operator in C++</description>
+      <pubDate>2013-11-24</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</guid>
+    </item>
     <item>
       <title>给Archlinux添加swap空间</title>
       <link>http://kelvinh.github.io/blog/2013/10/27/add-swap-on-archlinux/</link>
@@ -70,13 +77,6 @@
       <description>how to calculate pi using monte carlo method</description>
       <pubDate>2013-07-04</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/07/04/montecarlo-and-pi/</guid>
-    </item>
-    <item>
-      <title>jQuery发送含有数组参数的ajax请求以及后台Struts2的OGNL解析错误</title>
-      <link>http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/</link>
-      <description>slove jquery ajax request contains array</description>
-      <pubDate>2013-06-30</pubDate>
-      <guid>http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/</guid>
     </item>
   </channel>
 </rss>

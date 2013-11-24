@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>C++中对成员访问操作符-&gt;的重载 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="Introduction to overloading of -&gt; operator in C++" />
+    <meta name="keywords" content="C++, operator overloading, member access operator" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>C++中对成员访问操作符-&gt;的重载</h1>
+<p>
+前几天在看《C++标准程序库》，看到智能指针 <code>std::auto_ptr</code> 的源码的时候，对于运算符 <code>-&gt;</code> 的重载，我脑袋中突然闪过一个疑问：对于形如 <code>a + b</code> 形式的加运算符重载，编译器会将其解释为 <code>a.operator+(b)</code> ；那对于形如 <code>p-&gt;i</code> 形式的智能指针调用，编译器应该也会将其解释为 <code>p.operator-&gt;(i)</code> 才对，但是， <code>std::auto_ptr</code> 的 <code>-&gt;</code> 运算符重载如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++"><span style="color: #859900;">template</span>&lt;<span style="color: #859900;">class</span> <span style="color: #b58900;">T</span>&gt;
+<span style="color: #859900;">class</span> <span style="color: #b58900;">auto_ptr</span> {
+<span style="color: #859900;">private</span>:
+    <span style="color: #b58900;">T</span>* <span style="color: #b58900;">ap</span>;
+<span style="color: #859900;">public</span>:
+    <span style="color: #b58900;">T</span>* <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> <span style="color: #859900;">throw</span>() {
+        <span style="color: #859900;">return</span> ap;
+    }
+    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">...</span>
+};
+</pre>
+</div>
+
+<p>
+可以看到，其声明并没有参数，而且是直接返回保存的指针，不符合我们上面猜想的形式，而且对于 <code>p-&gt;f()</code> 更是无法解释。那 <code>-&gt;</code> 的重载到底是如何实现的呢？
+</p>
+
+<p>
+这个问题不解决，让我如鲠在喉，于是，经过几番查证，总结出如下结论：
+</p>
+
+<blockquote>
+
+<div class="figure">
+<p>
+</p>
+</div>
+
+<p>
+运算符 <code>-&gt;</code> 的重载比较特别，它只能是非静态的成员函数形式，而且没有参数。如果返回值是一个原始指针，那么就将运算符的右操作数当作这个原始指针所指向类型的成员进行访问；如果返回值是另一个类型的实例，那么就继续调用这个返回类型的 <code>operator-&gt;()</code> ，直到有一个调用返回一个原始指针为止，然后按第一种情况处理。
+</p>
+
+<p>
+如果上述条件不满足（如：右操作数不是返回的原始指针指向的类型的成员，或者，返回的非指针类型没有重载 <code>operator-&gt;()</code> ），那么编译将报错。
+</p>
+</blockquote>
+
+<p>
+这下就豁然开朗了，于是，写出下面的用于验证的小程序：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+
+<span style="color: #859900;">struct</span> <span style="color: #b58900;">Origin</span> {
+    <span style="color: #b58900;">int</span> <span style="color: #b58900;">a</span>;
+};
+
+<span style="color: #859900;">struct</span> <span style="color: #b58900;">Wrapper</span> {
+    <span style="color: #b58900;">Origin</span> *<span style="color: #b58900;">orig</span>;
+    <span style="color: #b58900;">Origin</span> *<span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> {
+        <span style="color: #859900;">return</span> orig;
+    }
+};
+
+<span style="color: #859900;">struct</span> <span style="color: #b58900;">Wrapper2</span> {
+    <span style="color: #b58900;">Wrapper</span> *<span style="color: #b58900;">wrap</span>;
+    <span style="color: #b58900;">Wrapper</span>&amp; <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> {
+        <span style="color: #859900;">return</span> *wrap;
+    }
+};
+
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
+    <span style="color: #b58900;">Origin</span> <span style="color: #b58900;">o</span>;
+    o.a = 7;
+    <span style="color: #b58900;">Wrapper</span> <span style="color: #b58900;">w</span>;
+    w.orig = &amp;o;
+    <span style="color: #b58900;">Wrapper2</span> <span style="color: #b58900;">w2</span>;
+    w2.wrap = &amp;w;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t\t"</span> &lt;&lt; w-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w.operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t"</span> &lt;&lt; w.<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; w.<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t\t"</span> &lt;&lt; w2-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"&amp;w2.operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; &amp;w2.<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;().operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;().<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;().operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;().<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+}
+</pre>
+</div>
+
+<p>
+运行结果为：
+</p>
+
+<pre class="example">
+w-&gt;a				7
+w.operator-&gt;()			0x7fff6b46d6a0
+w.operator-&gt;()-&gt;a		7
+w2-&gt;a				7
+&amp;w2.operator-&gt;()		0x7fff6b46d690
+w2.operator-&gt;()-&gt;a		7
+w2.operator-&gt;().operator-&gt;()	0x7fff6b46d6a0
+w2.operator-&gt;().operator-&gt;()-&gt;a	7
+</pre>
+
+<p>
+其中最为诡异的就是 <code>w2-&gt;a</code> 输出的是7，按照上面总结的结论，这个调用其实会被编译器转换成 <code>w2.operator-&gt;().operator-&gt;()-&gt;a</code> 的形式，所以输出是7。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">调戏编译器</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+既然 <code>-&gt;</code> 的重载可以返回一个类型的实例而非指针，那如果返回本身的类型呢，它会继续调用自己的 <code>operator-&gt;()</code> ，永无止尽。写个小程序试试：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+
+<span style="color: #859900;">struct</span> <span style="color: #b58900;">Joke</span> {
+    <span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span>;
+    <span style="color: #b58900;">Joke</span>&amp; <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() {
+        <span style="color: #859900;">return</span> *<span style="color: #859900;">this</span>;
+    }
+};
+
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
+    <span style="color: #b58900;">Joke</span> <span style="color: #b58900;">j</span>;
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; j-&gt;i;
+}
+</pre>
+</div>
+
+<p>
+其中 <code>j-&gt;i</code> 会导致自身的 <code>operator-&gt;()</code> 被无限调用。但编译器不是傻子，在使用GCC 4.8.2编译的时候，直接报错：
+</p>
+
+<pre class="example">
+error: circular pointer delegation detected
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">说明</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+本文最开头提到了 <code>std::auto_ptr</code> ，但并不代表推荐使用它，如果需要使用智能指针，请根据使用环境要求尽量使用 <code>std::unique_ptr</code> 或者 <code>boost::shared_ptr</code> 。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">参考文档</h2>
+<div class="outline-text-2" id="text-3">
+<ol class="org-ol">
+<li><a href="http://www.tutorialspoint.com/cplusplus/class_member_access_operator_overloading.htm">http://www.tutorialspoint.com/cplusplus/class_member_access_operator_overloading.htm</a>
+</li>
+<li><a href="http://stackoverflow.com/questions/8777845/overloading-member-access-operators-c">http://stackoverflow.com/questions/8777845/overloading-member-access-operators-c</a>
+</li>
+</ol>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-11-20</span>
+        <span title="last modification date" class="post-info">2013-11-24</span>
+        <span title="tags" class="post-info"><a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.1.1)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
