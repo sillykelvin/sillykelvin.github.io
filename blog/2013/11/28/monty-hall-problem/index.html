@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>三门问题的程序解与解释 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="the famous Monty Hall problem and use program to explain it" />
+    <meta name="keywords" content="Monty Hall problem, math, probability theory" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>三门问题的程序解与解释</h1>
+<p>
+昨天在和同事吃饭时，同事提到了一个有趣的问题：
+</p>
+
+<blockquote>
+<p>
+假设有三扇门，其中一扇门后面有奖，还有一个主持人，主持人知道哪扇门后面有奖。<br  />
+你先随机选择一扇门，然后主持人会帮你打开另外两扇门中的一扇，可以确定的是，打开的这扇门肯定没有奖品。<br  />
+现在，你有一个改变主意的机会，即在剩下的两扇门中，你可以坚持选择你本来选中的这扇门，也可以改变主意选择另外的一扇门。<br  />
+</p>
+
+<p>
+问：你改变主意和不改变主意，中奖的概率分别是多少？
+</p>
+
+<p>
+PS：我后来查了一下，这个问题叫做Monty Hall problem，也叫“三门问题”，最初来自于美国的一个电视游戏节目。
+</p>
+</blockquote>
+
+<p>
+开始的时候，我一直觉得改变主意和不改变主意的概率是一样的，是一个二选一的问题，所以都是二分之一。
+</p>
+
+<p>
+于是，后来，我写了个小程序验证：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+<span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;random&gt;</span>
+
+<span style="color: #859900;">typedef</span> <span style="color: #6c71c4;">std</span>::<span style="color: #b58900;">mt19937</span> <span style="color: #b58900;">EngineType</span>;
+<span style="color: #859900;">typedef</span> <span style="color: #6c71c4;">std</span>::<span style="color: #b58900;">uniform_int_distribution</span>&lt;<span style="color: #6c71c4;">std</span>::<span style="color: #6c71c4;">mt19937</span>::result_type&gt; <span style="color: #b58900;">GeneratorType</span>;
+
+<span style="color: #b58900;">bool</span> <span style="color: #268bd2;">GetIt</span>(<span style="color: #b58900;">EngineType</span>&amp; <span style="color: #b58900;">engine</span>, <span style="color: #859900;">const</span> <span style="color: #b58900;">GeneratorType</span>&amp; <span style="color: #b58900;">generator3</span>, <span style="color: #b58900;">bool</span> <span style="color: #b58900;">change</span>) {
+    <span style="color: #b58900;">int</span> <span style="color: #b58900;">correct_door</span> = generator3(engine);
+    <span style="color: #b58900;">int</span> <span style="color: #b58900;">first_choice</span> = generator3(engine);
+
+    <span style="color: #859900;">if</span>(change) {
+        <span style="color: #859900;">if</span>(first_choice != correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
+        <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
+    } <span style="color: #859900;">else</span> {
+        <span style="color: #859900;">if</span>(first_choice == correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
+        <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
+    }
+}
+
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
+    <span style="color: #b58900;">EngineType</span> <span style="color: #b58900;">eng</span>;
+    eng.seed(<span style="color: #6c71c4;">std</span>::random_device()());
+    <span style="color: #b58900;">GeneratorType</span> <span style="color: #b58900;">dist3</span>(1, 3);
+    <span style="color: #b58900;">int</span> <span style="color: #b58900;">change_sum</span> = 0, <span style="color: #b58900;">unchange_sum</span> = 0;
+    <span style="color: #b58900;">long</span> <span style="color: #b58900;">loop</span> = 100000000;
+    <span style="color: #859900;">for</span>(<span style="color: #b58900;">long</span> <span style="color: #b58900;">i</span> = 0; i &lt; loop; ++i) {
+        <span style="color: #859900;">if</span>(GetIt(eng, dist3, <span style="color: #6c71c4;">true</span>))
+            ++change_sum;
+        <span style="color: #859900;">if</span>(GetIt(eng, dist3, <span style="color: #6c71c4;">false</span>))
+            ++unchange_sum;
+    }
+
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"Testing times: "</span> &lt;&lt; loop &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"Always change choice, hit: "</span> &lt;&lt; change_sum
+              &lt;&lt; <span style="color: #2aa198;">", percentage: "</span> &lt;&lt; <span style="color: #859900;">static_cast</span>&lt;<span style="color: #b58900;">double</span>&gt;(change_sum) / loop
+              &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+
+    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"Always unchange choice, hit: "</span> &lt;&lt; unchange_sum
+              &lt;&lt; <span style="color: #2aa198;">", percentage: "</span> &lt;&lt; <span style="color: #859900;">static_cast</span>&lt;<span style="color: #b58900;">double</span>&gt;(unchange_sum) / loop
+              &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+}
+</pre>
+</div>
+
+<p>
+程序中 <code>GetIt()</code> 函数用来模拟这个生成门以及选择门的过程，在主函数 <code>main()</code> 中跑一亿次之后进行结果统计，最后打印中改变主意的中奖情况，以及不改变主意的中奖情况。
+</p>
+
+<p>
+由于涉及随机数，所以每次程序输出都不一样，下面是其中一次的输出结果：
+</p>
+
+<pre class="example">
+Testing times: 100000000
+Always change choice, hit: 66663376, percentage: 0.666634
+Always unchange choice, hit: 33338904, percentage: 0.333389
+</pre>
+
+<p>
+可以清楚地看到，改变主意大概占了66.6%，不改变主意大概占了33.3%，分别接近2/3和1/3。
+</p>
+
+<p>
+那么，为什么分别是2/3和1/3，而不是各占百分之五十呢？其实程序代码中的逻辑已经很清楚地解释了这个问题，来看程序中 <code>GetIt()</code> 函数的关键部分：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++"><span style="color: #b58900;">int</span> <span style="color: #b58900;">correct_door</span> = generator3(engine);
+<span style="color: #b58900;">int</span> <span style="color: #b58900;">first_choice</span> = generator3(engine);
+
+<span style="color: #859900;">if</span>(change) {
+    <span style="color: #859900;">if</span>(first_choice != correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
+    <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
+} <span style="color: #859900;">else</span> {
+    <span style="color: #859900;">if</span>(first_choice == correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
+    <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
+}
+</pre>
+</div>
+
+<p>
+其中 <code>generator3</code> 是用来产生区间为 <code>[1, 3]</code> 的随机数， <code>correct_door</code> 表示有奖的门牌号， <code>first_choice</code> 表示第一次选择的门牌号， <code>change</code> 布尔变量表示在主持人打开一扇门后，是否改变主意， <code>return true</code> 表示中奖， <code>return false</code> 表示不中奖。
+</p>
+
+<p>
+把中奖情况分为下面两种情况考虑：
+</p>
+
+<ol class="org-ol">
+<li>我们改变主意(change == true)， 然后中奖；
+</li>
+<li>我们不改变主意(change == false)，然后中奖。
+</li>
+</ol>
+
+<p>
+对于第一种情况，程序必须进入if分支中的if分支，条件是第一次没有猜中，很显然第一次没有猜中的概率是2/3；<br  />
+对于第二种情况，程序必须进入else分支中的if分支，条件是第一次要猜中，事实上第一次没有猜中的概率是1/3。
+</p>
+
+<p>
+个人觉得，这个问题最关键的是： <b>在主持人打开某扇门后，我们选择变或者不变，并不是一个二选一的概率问题，而是一个根据已有事实进行逻辑推断的问题。</b> 就像上面程序所表示的一样，我们并没有用类似于 <code>generator2</code> 这样的函数来产生随机数表示是否改变主意，而是用 <code>if...else...</code> 分支来进行的分析。
+</p>
+
+<p>
+所以，结果就是这样：改变主意，中奖的概率会是不改变主意的两倍。但现实中，我更相信，中奖是要靠人品的，公司的年终晚会也不远了，赶紧努力攒攒人品。。
+</p>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-11-28</span>
+        <span title="last modification date" class="post-info">2013-11-28</span>
+        <span title="tags" class="post-info"><a href="/tags/math/">Math</a>, <a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/11/28/monty-hall-problem/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.3c)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

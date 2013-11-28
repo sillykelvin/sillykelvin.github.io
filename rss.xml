@@ -4,10 +4,24 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Sun, 24 Nov 2013 15:10:32 CST</pubDate>
-    <lastBuildDate>Sun, 24 Nov 2013 15:10:32 CST</lastBuildDate>
+    <pubDate>Thu, 28 Nov 2013 21:15:28 China Standard Time</pubDate>
+    <lastBuildDate>Thu, 28 Nov 2013 21:15:28 China Standard Time</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>三门问题的程序解与解释</title>
+      <link>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</link>
+      <description>the famous Monty Hall problem and use program to explain it</description>
+      <pubDate>2013-11-28</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</guid>
+    </item>
+    <item>
+      <title>因不完整类型导致的内存泄露惨案</title>
+      <link>http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/</link>
+      <description>memory leak introduced by incomplete type, which is led by forward declaration and inline destructor</description>
+      <pubDate>2013-11-27</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/</guid>
+    </item>
     <item>
       <title>C++中对成员访问操作符-&gt;的重载</title>
       <link>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</link>
@@ -28,13 +42,6 @@
       <description>fix the broken archlinux on a macbook air</description>
       <pubDate>2013-09-04</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/09/03/fix-archlinux-on-mac-air/</guid>
-    </item>
-    <item>
-      <title>因不完整类型导致的内存泄露惨案</title>
-      <link>http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/</link>
-      <description>memory leak introduced by incomplete type, which is led by forward declaration and inline destructor</description>
-      <pubDate>2013-09-02</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/</guid>
     </item>
     <item>
       <title>SICP学习笔记和习题解答</title>
@@ -70,13 +77,6 @@
       <description>HHKB keyboard</description>
       <pubDate>2013-07-17</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/05/12/hhkb/</guid>
-    </item>
-    <item>
-      <title>蒙特卡罗与π</title>
-      <link>http://kelvinh.github.io/blog/2013/07/04/montecarlo-and-pi/</link>
-      <description>how to calculate pi using monte carlo method</description>
-      <pubDate>2013-07-04</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/07/04/montecarlo-and-pi/</guid>
     </item>
   </channel>
 </rss>
