@@ -1,0 +1,55 @@
+#+TITLE:       C++模板元编程初探
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-08-09 Fri
+#+URI:         /blog/%y/%m/%d/cpp-template-meta-programming/
+#+KEYWORDS:    C++, template meta programming
+#+TAGS:        :C++:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: basic knowledge of C++ template meta-programming
+
+
+这篇博客，主要是为了记一下当初看到C++模板元编程时的震惊程度。
+
+在看Effective C++的时候，条款48，其中有这样一个例子：
+
+#+BEGIN_SRC c++
+template<unsigned n>
+struct Factorial {
+    enum {
+        value = n * Factorial<n-1>::value
+    };
+};
+
+template<>
+struct Factorial<0> {
+    enum {
+        value = 1
+    };
+};
+#+END_SRC
+
+#+BEGIN_SRC c++
+int main() {
+    std::cout << Factorial<5>::value;
+    std::cout << Factorial<10>::value;
+}
+#+END_SRC
+
+这个例子初看很简单，只是一个递归求阶乘的小程序。但和一般的求阶乘的程序有什么区别呢？区别很小，但也很大：普通的程序的阶乘运算发生在运行阶段，而这个程序的阶乘运算发生在编译阶段！！
+
+在模板类 =Factorial<n>= 中，定义了一个枚举，枚举的 =value= 成员值定义为 =n= 和 =Factorial<n-1>::value= 的乘积；而且对模板参数 n = 0 的情况进行了特化，其value为1。实际上这是一个递归终止的条件。
+
+在编译器编译到 =Factorial<5>= 这个表达式的时候，由于递归调用，它会先编译 =Factorial<4>= ，然后继续编译 =Factorial<3>= ……\\
+直到特化后的 =Factorial<0>= 。所以，在编译完程序之后， =Factorial<5>::value= 的值就已经确定，在运行的时候，程序直接输出结果，没有任何计算过程。
+
+--------------------------------------------------------------------------------
+
+记得曾经，同事跟我聊天的时候，有聊到说C++的模板编程可以使运算在编译时发生，而不在运行时发生，但当时他没举具体例子。我当时以为他在吹牛，在我看来，C++模板只不过是为了泛化一些数据结构而已，所以我当时也没太在意。现在看来，是我太孤陋寡闻了。实际上，C++模板元编程是图灵完备的，可以将其看成是一种单独的编程语言，只不过它的运行环境是编译器，输出是普通的C++程序。
+
+但C++模板元编程也不是没有缺点，列举几个如下：
+
+1. 产生多余的代码，导致可执行程序体积增大（这个问题因编译器而定，好的编译器会进行优化）
+2. 编译速度慢
+3. 编译出错信息几乎无法理解（注意：是“无法理解”，不是“难以理解”或者“不好理解”）
