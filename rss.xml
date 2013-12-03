@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Thu, 28 Nov 2013 21:15:28 China Standard Time</pubDate>
-    <lastBuildDate>Thu, 28 Nov 2013 21:15:28 China Standard Time</lastBuildDate>
+    <pubDate>Tue, 03 Dec 2013 15:20:53 China Standard Time</pubDate>
+    <lastBuildDate>Tue, 03 Dec 2013 15:20:53 China Standard Time</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>C++模板元编程初探</title>
+      <link>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</link>
+      <description>basic knowledge of C++ template meta-programming</description>
+      <pubDate>2013-12-03</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</guid>
+    </item>
     <item>
       <title>三门问题的程序解与解释</title>
       <link>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</link>
@@ -70,13 +77,6 @@
       <description>a meaningful day for bicycling</description>
       <pubDate>2013-07-17</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/06/15/a-meaningful-bicycling-day/</guid>
-    </item>
-    <item>
-      <title>Happy Hacking - 我的HHKB</title>
-      <link>http://kelvinh.github.io/blog/2013/05/12/hhkb/</link>
-      <description>HHKB keyboard</description>
-      <pubDate>2013-07-17</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/05/12/hhkb/</guid>
     </item>
   </channel>
 </rss>
