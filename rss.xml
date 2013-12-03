@@ -4,8 +4,8 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Tue, 03 Dec 2013 15:20:53 China Standard Time</pubDate>
-    <lastBuildDate>Tue, 03 Dec 2013 15:20:53 China Standard Time</lastBuildDate>
+    <pubDate>Tue, 03 Dec 2013 18:06:08 China Standard Time</pubDate>
+    <lastBuildDate>Tue, 03 Dec 2013 18:06:08 China Standard Time</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
     <item>
@@ -14,6 +14,13 @@
       <description>basic knowledge of C++ template meta-programming</description>
       <pubDate>2013-12-03</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</guid>
+    </item>
+    <item>
+      <title>[翻译]图解boost::bind</title>
+      <link>http://kelvinh.github.io/blog/2013/12/03/boost-bind-illustrated/</link>
+      <description>translation of &lt;Bind illustrated&gt; from http://blog.think-async.com/2010/04/bind-illustrated.html</description>
+      <pubDate>2013-12-03</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/12/03/boost-bind-illustrated/</guid>
     </item>
     <item>
       <title>三门问题的程序解与解释</title>
@@ -70,13 +77,6 @@
       <description>how to make a better programming environment in emacs for scheme</description>
       <pubDate>2013-07-23</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/07/21/scheme-configuration-in-emacs/</guid>
-    </item>
-    <item>
-      <title>瓜行记</title>
-      <link>http://kelvinh.github.io/blog/2013/06/15/a-meaningful-bicycling-day/</link>
-      <description>a meaningful day for bicycling</description>
-      <pubDate>2013-07-17</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/06/15/a-meaningful-bicycling-day/</guid>
     </item>
   </channel>
 </rss>
