@@ -1,0 +1,77 @@
+#+TITLE:       [翻译]图解boost::bind
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2013-12-03 Tue
+#+URI:         /blog/%y/%m/%d/boost-bind-illustrated/
+#+KEYWORDS:    C++, boost, bind, boost bind mechanism
+#+TAGS:        :Boost:C++:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: translation of <Bind illustrated> from http://blog.think-async.com/2010/04/bind-illustrated.html
+
+
+其实这是很久之前留的一个坑了，一直没有填。。
+
+记得在刚开始看到 =boost::bind= 的使用的时候，我整个人都惊呆了：天哪，C++还能这样！！
+
+于是去google搜索其原理，然后看到一篇 [[http://blog.think-async.com/2010/04/bind-illustrated.html][好文]] ，这篇博客的作者也是 /Boost.Asio/ 的作者。博客中的几张图非常到位，于是就想将其翻译成中文（其实是用于在将来自己忘记了的时候方便再看:-p），结果这个坑一直没有填，今天终于把填上了。
+
+下面是翻译，未完全遵守原文一字一句翻译（其实不仅是不遵守，某些地方我完全按自己的想法来了:-D）：
+
+--------------------------------------------------------------------------------
+
+在Asio中，所有的异步操作都需要一个函数对象参数，亦称为completion handler，用于在异步操作完成时调用。这个handler的签名取决于异步操作的类型。例如：一个用于 =io_service::post()= 的handler必须拥有下面的签名：
+
+: void handler();
+
+但异步等待操作的handler的签名则如下：
+
+: void handler(error_code ec);
+
+而异步读/写操作则需要如下签名的函数：
+
+: void handler(error_code ec, size_t length);
+
+事实上，应用程序可能需要传递某种应用环境（context）给这个completion handler，例如 =this= 指针。用 =boost::bind, std::tr1::bind= 或者C++0x的 =std::bind= 等函数对象适配器来达到这个目的，不失为一种办法。
+
+不幸的是，对于许多C++猿类来说， =bind= 代表了某种魔法。你在使用它时，如果稍有不慎，编译器就会给你一大堆编译错误，关键是你还不知道你错在哪儿。并且，根据我的经验，它的基本概念（有些函数参数预先被绑定，而有些则是在调用时才被绑定）的学习曲线非常陡峭。
+
+为此，我画了一些图来解释 =bind= 是如何工作的。为了清晰，我对图中的语法作了一些简化（例如，省略函数调用操作符的参数类型），并且简化了 =bind= 的实现。最后，the examples are limited to those likely to be useful with Asio（译者注：这句根本不知道是什么意思好吗。。）。欢迎大家给我提建议和留言。
+
+--------------------------------------------------------------------------------
+
+=bind= 可以用来将用户提供的需要一个参数的函数转换成不需要参数的函数对象。绑定的值（在这个例子中是123）存储在函数对象内并且会被自动传递给用户指定的函数：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186646664/" title="bind-plain-function-one-var-zero-args by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7400/11186646664_83038e9c80_o.png" alt="bind plain function one var zero args"></a>@@
+
+参数绑定也可以用于将类成员函数转换成零参数的函数对象。猿类们都知道，非静态成员函数需要一个隐式的 =this= 参数。这意味着需要绑定一个合适的类实例指针到这个函数对象：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186691485/" title="bind-member-function-one-var-zero-args by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3761/11186691485_7abb19f764_o.png" alt="bind member function one var zero args"></a>@@
+
+相应地，隐式的 =this= 指针也可以显式地传递给需要一个参数的函数对象：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186786996/" title="bind-member-function-zero-vars-one-arg by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3763/11186786996_123ea17f76_o.png" alt="bind member function zero vars one arg"></a>@@
+
+函数对象经常同时使用提前绑定的参数和调用时才提供的参数。这个可以用成员函数来实现：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186780845/" title="bind-member-function-one-var-one-arg by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2860/11186780845_49ed0223d1_o.png" alt="bind member function one var one arg"></a>@@
+
+当然也可以使用非成员函数：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186952943/" title="bind-plain-function-one-var-two-args by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2888/11186952943_f43b8fbdbb_o.png" alt="bind plain function one var two args"></a>@@
+
+有些时候函数对象被调用时会提供多余的参数，而这些参数是目标函数不需要的。 =bind= 会自动忽略这些多余的参数：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186896116/" title="bind-plain-function-one-var-two-args-second-ignored by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7452/11186896116_982d3ebebd_o.png" alt="bind plain function one var two args second ignored"></a>@@
+
+这些多余的参数不需要一定在函数对象签名的最后：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186912194/" title="bind-plain-function-one-var-two-args-first-ignored by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7349/11186912194_6feb6a3e00_o.png" alt="bind plain function one var two args first ignored"></a>@@
+
+最后， =bind= 还允许重新组织函数对象的参数顺序：
+
+@@html:<a href="http://www.flickr.com/photos/ini_always/11186950716/" title="bind-plain-function-one-var-two-args-reordered by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7333/11186950716_4867598a6d_o.png" alt="bind plain function one var two args reordered"></a>@@
+
+--------------------------------------------------------------------------------
+
+翻译到此结束，不得不感慨C++的黑魔法真是够强大的。。当然，那句话还是要说的：由于译者水平有限，blablabla。。。
