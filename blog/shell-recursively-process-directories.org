@@ -48,3 +48,19 @@
 再打开vim，再也没有那烦人的E492: not an editor command: ^M错误了。
 
 GR的M$，非要搞另类。
+
+--------------------------------------------------------------------------------
+
+* 更新：
+
+  经过评论中 @Alf 童鞋的提醒，上面的实现在文件或者文件夹有空格时会产生bug，而且上面的功能可以直接通过 =find= 命令加上 =-exec= 选项或者配合 =xargs= 命令来实现，简单易用还不会出错，一个可行的方案如下（可以很好地处理文件空格）：
+
+  : find ~/.vim -type f -print0 | xargs -0 dos2unix
+
+  更多讨论可以参考下面的链接：
+
+  1. http://serverfault.com/questions/205499/how-to-do-dos2unix-to-tpl-recursively-in-linux
+  2. http://stackoverflow.com/questions/11929461/dos2unix-command-on-entire-directory
+  3. http://stackoverflow.com/questions/5607542/why-does-find-exec-mv-target-not-work
+
+  非常感谢 @Alf 童鞋的善意提醒。 :-)
