@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Tue, 03 Dec 2013 18:06:08 China Standard Time</pubDate>
-    <lastBuildDate>Tue, 03 Dec 2013 18:06:08 China Standard Time</lastBuildDate>
+    <pubDate>Thu, 05 Dec 2013 17:45:30 China Standard Time</pubDate>
+    <lastBuildDate>Thu, 05 Dec 2013 17:45:30 China Standard Time</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>Linux通过shell实现递归列目录及对文件的处理</title>
+      <link>http://kelvinh.github.io/blog/2012/03/23/recursively-list-directories-and-process-files-in-shell/</link>
+      <description>how to recursively list directories through shell</description>
+      <pubDate>2013-12-05</pubDate>
+      <guid>http://kelvinh.github.io/blog/2012/03/23/recursively-list-directories-and-process-files-in-shell/</guid>
+    </item>
     <item>
       <title>C++模板元编程初探</title>
       <link>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</link>
@@ -70,13 +77,6 @@
       <description>the calling convention of x64 platform</description>
       <pubDate>2013-08-17</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/08/05/windows-x64-calling-conventions/</guid>
-    </item>
-    <item>
-      <title>在Emacs中为Scheme设置更为舒服的编程环境</title>
-      <link>http://kelvinh.github.io/blog/2013/07/21/scheme-configuration-in-emacs/</link>
-      <description>how to make a better programming environment in emacs for scheme</description>
-      <pubDate>2013-07-23</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/07/21/scheme-configuration-in-emacs/</guid>
     </item>
   </channel>
 </rss>
