@@ -1,0 +1,83 @@
+#+TITLE:       利用Fiddler和Wireshark解密SSL加密流量
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2014-01-12 Sun
+#+URI:         /blog/%y/%m/%d/decrypt-ssl-using-fiddler-and-wireshark/
+#+KEYWORDS:    fiddler, wireshark, network, ssl, https, http
+#+TAGS:        Network, SSL, HTTP, Fiddler, Wireshark, Windows
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: how to decrypt ssl traffic using fiddler and wireshark
+
+
+Fiddler是一个著名的调试代理工具，它不仅能解析HTTP，而且还能解析加密的HTTPS流量。Wireshark则是一个非常强大的网络包监控以及协议分析工具。 *在本文中，只考虑使用SSL来加密HTTP，所以并不严格区分SSL和HTTPS，虽然从广义上来讲，将二者混为一谈是非常不合理的* 。
+
+看到这里，大多数人都会很困惑：Fiddler不就能解密SSL流量吗？为什么还需要Wireshark呢？
+
+是的，在大多数情况下，用Fiddler来解密SSL已经足够了，但在实际使用过程中，我们发现Fiddler在解决HTTP长连接时无能为力。对于特定的应用，比方说Office365的Microsoft MAPI over HTTP，它总是在Outlook和Office365 Exchange server之间维护一个HTTP长连接，并且利用HTTP chunk的特性，在有更新时返回一个chunk来达到实时将server端的变化告知给Outlook的目的。但是Fiddler不能很好地handle这种情况，它总是期望在HTTP response全部返回之后再显示出来。所以，在上述应用中，Fiddler不仅不能实时显示HTTP通信中的内容，而且，即使一个长连接断开之后，它显示的HTTP response也是无效的内容。
+
+所以，我们就想到了Wireshark，它总是能实时监控网络流量。可是我们要监控的HTTP流量是经过SSL加密的，所以它必须要加密SSL流量的private key，才能解密这个SSL流量。因此，直接拦截网络流量是行不通的，因为server端的private key我们无法拿到。
+
+于是，这两种情况综合一下，就促成了我们的解决方案：将Fiddler作为SSL代理以提供private key，然后用Wireshark实时监控以解密流量。
+
+* SSL介绍及SSL代理原理
+
+  SSL（Secure Socket Layer）是Netscape公司设计用来加密Internet通信流量的，最新版本更名为TLS（Transport Layer Security）。它采用X509证书加密来保证通信的保密性和可靠性。加密采用的证书通常由第三方证书颁发机构颁发，而这些机构是被信任的，也就是说，它们不会利用这些颁发的证书来进行窃听等行为。基于此前提，SSL协议本身能够保证：如果发生了窃听，那么用来加密的证书必定是不受信任的（除非用户将这些证书添加到其受信任证书列表中）。
+
+  SSL代理——换种说法，其实就是 *Man-in-the-Middle* 攻击。SSL代理，即是用自己的证书替代原来server端的证书（SSL虽然支持通信两方都提供证书，但目前绝大多数支持HTTPS的服务，都只是一方认证，即server提供证书，不要求client也提供受信任的证书，所以SSL代理只需要替代server端的证书即可），从而解密流量。但这样一来client端就会发现server端证书不是受信任的，但因为这只是我们自己的测试，所以我们需要信任代理生成的证书。
+
+* 设置解密环境
+
+  要同时使用Fiddler和Wireshark，我们需要两台机器：机器A运行Fiddler作为代理，机器B运行Outlook，并且将系统代理设置成机器A以将所有流量导到机器A。然后在机器B上用Wireshark监听。之所以不能只用一台机器，是因为Wireshark的Windows版本在默认情况下，不支持loopback监听，简单说来，就是对127.0.0.1的监听。之于为什么、以及如何让其实现loopback监听，可以参看[[http://wiki.wireshark.org/CaptureSetup/Loopback][这里]]和[[http://www.hsc.fr/ressources/articles/win_net_srv/missing_loopback.html][这里]]。最终的流程如下所示：
+
+  : +------------+           +------------+       +-----------------+
+  : | Computer A | Wireshark | Computer B |       |                 |
+  : |            +---------->|            +------>| Exchange Server |
+  : |  Outlook   |           |  Fiddler   |       |                 |
+  : +------------+           +------------+       +-----------------+
+
+* 设置Fiddler并导出根证书到受信任列表
+
+  Fiddler作为一个能够代理所有HTTPS流量的工具，它需要提供所有网站的HTTPS证书。因此，最通用的做法，是自签一个根证书，然后用这个根证书来签发所有domain的证书，作为client，只需要信任这个根证书即可。这个方法也是流行的梯子工具——goagent所采用的。但是，Fiddler自己生成证书的工具 =makecert.exe= 并不提供导出其生成证书（包括根证书和生成的各个domain的证书）的private key的方法，因此，我们需要安装一个Fiddler的插件—— *CertMaker* 来代替Fiddler作为证书生成工具，因为这个工具可以看到private key。
+
+  CertMaker插件并不影响Fiddler解密SSL的设置，它只是替换了Fiddler默认的证书生成过程。在Fiddler中执行以下设置：
+
+  @@html:<a href="http://www.flickr.com/photos/ini_always/11956358685/" title="fiddler SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5499/11956358685_c71fe5dc70_o.png" alt="fiddler SSL decryption settings"></a>@@\\
+  图1. SSL解密设置，这个会自动导入根证书到Windows证书管理器的受信任列表
+
+  @@html:<a href="http://www.flickr.com/photos/ini_always/11956780284/" title="fiddler remote proxy settings by kelvin_hu, on Flickr"><img src="https://farm4.staticflickr.com/3745/11956780284_68b6a422d0_o.png" alt="fiddler remote proxy settings"></a>@@\\
+  图2. 打开“允许远程连接”的选项，保存后需要重启Fiddler
+
+  别忘了，我们有两台机器，因此，在机器B上面也需要将根证书添加到受信任列表。打开机器B的Windows命令行，输入 =certmgr= 打开证书管理器，然后将导出的根证书分别添加到Personal和Trusted Root Certification Authorities下面的Certificate里，具体操作为：在Certificate上点击右键，选择"All Tasks"->"Import"，然后选择证书存放的位置，确定即可。
+
+* 导出Fiddler生成证书的private key
+
+  在使用了CertMaker插件之后，我们能看到Fiddler的根证书的private key了。 *但需要注意的是，我们需要的，不是Fiddler的根证书的private key，而是监视网站的private key。例如，如果我们要监视和[[https://www.example.com]]的通信流量，我们需要Fiddler针对这个domain签发的证书的private key* 。所以，要做到这点，需要在Fiddler中设置一个属性：
+
+  1. 在Fiddler界面左下角输入框输入 =about:config= 并回车
+  2. 在右侧的about:config标签中添加 =fiddler.certmaker.bc.LogPrivateKeys= ，并设置为 =True=
+
+  因为在还没有连接要监听的HTTPS网站时，Fiddler是不会自动为其生成证书的，而是在连接之后才会为其生成证书。所以，我们打开Wireshark，然后运行Outlook，在连接Exchange HTTPS服务器之后，Fiddler会为这个domain生成证书，现在在其Log标签页就可以看到这个证书了，是Base64编码的，我们将其拷贝出来，保存成文件。 *注意：直接保存到文件不符合pem证书文件的格式，我们需要在文件的开头和结尾分别加上以下内容：*
+
+  : -----BEGIN PRIVATE KEY-----
+  : Base64 encoded private key here
+  : -----END PRIVATE KEY-----
+
+* 导入private key到Wireshark
+
+  在Wireshark中，打开Edit->Preferences->Protocols->SSL，然后点击RSA keys list的Edit按钮，点击New，添加一个新的Rule，IP和Port设置为代理机器A的地址和端口，然后Protocol设置为http，Key File选择我们刚生成的文件，然后确定，如下图：
+
+  @@html:<a href="http://www.flickr.com/photos/ini_always/11957184676/" title="wireshark SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5515/11957184676_5b087fb217_o.png" alt="wireshark SSL decryption settings"></a>@@\\
+  图3. 在Wireshark中添加新的SSL private key
+
+  好了，现在在Wireshark中，是不是就可以看到已经解密的绿色的HTTP流量了呢？
+
+* Reference
+
+  1. https://en.wikipedia.org/wiki/Secure_Sockets_Layer
+  2. http://wiki.wireshark.org/CaptureSetup/Loopback
+  3. http://www.hsc.fr/ressources/articles/win_net_srv/missing_loopback.html
+  4. https://fiddler2.com/add-ons
+  5. http://security14.blogspot.com/2010/07/how-to-use-fiddler-and-wireshark-to.html
+  6. http://www.iprotocolsec.com/2012/11/07/wireshark%E6%8A%80%E5%B7%A7-%E8%A7%A3%E5%AF%86ssl%E5%8D%8F%E8%AE%AE/
+  7. https://groups.google.com/forum/#!topic/httpfiddler/lofwICmb7PQ
