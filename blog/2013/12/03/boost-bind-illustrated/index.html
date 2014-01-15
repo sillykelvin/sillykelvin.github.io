@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>[翻译]图解boost::bind - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="translation of &lt;Bind illustrated&gt; from http://blog.think-async.com/2010/04/bind-illustrated.html" />
+    <meta name="keywords" content="C++, boost, bind, boost bind mechanism" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>[翻译]图解boost::bind</h1>
+<p>
+其实这是很久之前留的一个坑了，一直没有填。。
+</p>
+
+<p>
+记得在刚开始看到 <code>boost::bind</code> 的使用的时候，我整个人都惊呆了：天哪，C++还能这样！！
+</p>
+
+<p>
+于是去google搜索其原理，然后看到一篇 <a href="http://blog.think-async.com/2010/04/bind-illustrated.html">好文</a> ，这篇博客的作者也是 <i>Boost.Asio</i> 的作者。博客中的几张图非常到位，于是就想将其翻译成中文（其实是用于在将来自己忘记了的时候方便再看:-p），结果这个坑一直没有填，今天终于把填上了。
+</p>
+
+<p>
+下面是翻译，未完全遵守原文一字一句翻译（其实不仅是不遵守，某些地方我完全按自己的想法来了:-D）：
+</p>
+
+<hr  />
+
+<p>
+在Asio中，所有的异步操作都需要一个函数对象参数，亦称为completion handler，用于在异步操作完成时调用。这个handler的签名取决于异步操作的类型。例如：一个用于 <code>io_service::post()</code> 的handler必须拥有下面的签名：
+</p>
+
+<pre class="example">
+void handler();
+</pre>
+
+<p>
+但异步等待操作的handler的签名则如下：
+</p>
+
+<pre class="example">
+void handler(error_code ec);
+</pre>
+
+<p>
+而异步读/写操作则需要如下签名的函数：
+</p>
+
+<pre class="example">
+void handler(error_code ec, size_t length);
+</pre>
+
+<p>
+事实上，应用程序可能需要传递某种应用环境（context）给这个completion handler，例如 <code>this</code> 指针。用 <code>boost::bind, std::tr1::bind</code> 或者C++0x的 <code>std::bind</code> 等函数对象适配器来达到这个目的，不失为一种办法。
+</p>
+
+<p>
+不幸的是，对于许多C++猿类来说， <code>bind</code> 代表了某种魔法。你在使用它时，如果稍有不慎，编译器就会给你一大堆编译错误，关键是你还不知道你错在哪儿。并且，根据我的经验，它的基本概念（有些函数参数预先被绑定，而有些则是在调用时才被绑定）的学习曲线非常陡峭。
+</p>
+
+<p>
+为此，我画了一些图来解释 <code>bind</code> 是如何工作的。为了清晰，我对图中的语法作了一些简化（例如，省略函数调用操作符的参数类型），并且简化了 <code>bind</code> 的实现。最后，the examples are limited to those likely to be useful with Asio（译者注：这句根本不知道是什么意思好吗。。）。欢迎大家给我提建议和留言。
+</p>
+
+<hr  />
+
+<p>
+<code>bind</code> 可以用来将用户提供的需要一个参数的函数转换成不需要参数的函数对象。绑定的值（在这个例子中是123）存储在函数对象内并且会被自动传递给用户指定的函数：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186646664/" title="bind-plain-function-one-var-zero-args by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7400/11186646664_83038e9c80_o.png" alt="bind plain function one var zero args"></a>
+</p>
+
+<p>
+参数绑定也可以用于将类成员函数转换成零参数的函数对象。猿类们都知道，非静态成员函数需要一个隐式的 <code>this</code> 参数。这意味着需要绑定一个合适的类实例指针到这个函数对象：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186691485/" title="bind-member-function-one-var-zero-args by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3761/11186691485_7abb19f764_o.png" alt="bind member function one var zero args"></a>
+</p>
+
+<p>
+相应地，隐式的 <code>this</code> 指针也可以显式地传递给需要一个参数的函数对象：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186786996/" title="bind-member-function-zero-vars-one-arg by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3763/11186786996_123ea17f76_o.png" alt="bind member function zero vars one arg"></a>
+</p>
+
+<p>
+函数对象经常同时使用提前绑定的参数和调用时才提供的参数。这个可以用成员函数来实现：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186780845/" title="bind-member-function-one-var-one-arg by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2860/11186780845_49ed0223d1_o.png" alt="bind member function one var one arg"></a>
+</p>
+
+<p>
+当然也可以使用非成员函数：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186952943/" title="bind-plain-function-one-var-two-args by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2888/11186952943_f43b8fbdbb_o.png" alt="bind plain function one var two args"></a>
+</p>
+
+<p>
+有些时候函数对象被调用时会提供多余的参数，而这些参数是目标函数不需要的。 <code>bind</code> 会自动忽略这些多余的参数：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186896116/" title="bind-plain-function-one-var-two-args-second-ignored by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7452/11186896116_982d3ebebd_o.png" alt="bind plain function one var two args second ignored"></a>
+</p>
+
+<p>
+这些多余的参数不需要一定在函数对象签名的最后：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186912194/" title="bind-plain-function-one-var-two-args-first-ignored by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7349/11186912194_6feb6a3e00_o.png" alt="bind plain function one var two args first ignored"></a>
+</p>
+
+<p>
+最后， <code>bind</code> 还允许重新组织函数对象的参数顺序：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11186950716/" title="bind-plain-function-one-var-two-args-reordered by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7333/11186950716_4867598a6d_o.png" alt="bind plain function one var two args reordered"></a>
+</p>
+
+<hr  />
+
+<p>
+翻译到此结束，不得不感慨C++的黑魔法真是够强大的。。当然，那句话还是要说的：由于译者水平有限，blablabla。。。
+</p>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2013-12-03</span>
+        <span title="last modification date" class="post-info">2013-12-03</span>
+        <span title="tags" class="post-info"><a href="/tags/boost/">Boost</a>, <a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2013/12/03/boost-bind-illustrated/";
+          var disqus_url = "http://kelvinh.github.io/blog/2013/12/03/boost-bind-illustrated/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5c)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+
+  </body>
+</html>
