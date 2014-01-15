@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>利用Fiddler和Wireshark解密SSL加密流量 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="how to decrypt ssl traffic using fiddler and wireshark" />
+    <meta name="keywords" content="fiddler, wireshark, network, ssl, https, http" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>利用Fiddler和Wireshark解密SSL加密流量</h1>
+<p>
+Fiddler是一个著名的调试代理工具，它不仅能解析HTTP，而且还能解析加密的HTTPS流量。Wireshark则是一个非常强大的网络包监控以及协议分析工具。 <b>在本文中，只考虑使用SSL来加密HTTP，所以并不严格区分SSL和HTTPS，虽然从广义上来讲，将二者混为一谈是非常不合理的</b> 。
+</p>
+
+<p>
+看到这里，大多数人都会很困惑：Fiddler不就能解密SSL流量吗？为什么还需要Wireshark呢？
+</p>
+
+<p>
+是的，在大多数情况下，用Fiddler来解密SSL已经足够了，但在实际使用过程中，我们发现Fiddler在解决HTTP长连接时无能为力。对于特定的应用，比方说Office365的Microsoft MAPI over HTTP，它总是在Outlook和Office365 Exchange server之间维护一个HTTP长连接，并且利用HTTP chunk的特性，在有更新时返回一个chunk来达到实时将server端的变化告知给Outlook的目的。但是Fiddler不能很好地handle这种情况，它总是期望在HTTP response全部返回之后再显示出来。所以，在上述应用中，Fiddler不仅不能实时显示HTTP通信中的内容，而且，即使一个长连接断开之后，它显示的HTTP response也是无效的内容。
+</p>
+
+<p>
+所以，我们就想到了Wireshark，它总是能实时监控网络流量。可是我们要监控的HTTP流量是经过SSL加密的，所以它必须要加密SSL流量的private key，才能解密这个SSL流量。因此，直接拦截网络流量是行不通的，因为server端的private key我们无法拿到。
+</p>
+
+<p>
+于是，这两种情况综合一下，就促成了我们的解决方案：将Fiddler作为SSL代理以提供private key，然后用Wireshark实时监控以解密流量。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">SSL介绍及SSL代理原理</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+SSL（Secure Socket Layer）是Netscape公司设计用来加密Internet通信流量的，最新版本更名为TLS（Transport Layer Security）。它采用X509证书加密来保证通信的保密性和可靠性。加密采用的证书通常由第三方证书颁发机构颁发，而这些机构是被信任的，也就是说，它们不会利用这些颁发的证书来进行窃听等行为。基于此前提，SSL协议本身能够保证：如果发生了窃听，那么用来加密的证书必定是不受信任的（除非用户将这些证书添加到其受信任证书列表中）。
+</p>
+
+<p>
+SSL代理——换种说法，其实就是 <b>Man-in-the-Middle</b> 攻击。SSL代理，即是用自己的证书替代原来server端的证书（SSL虽然支持通信两方都提供证书，但目前绝大多数支持HTTPS的服务，都只是一方认证，即server提供证书，不要求client也提供受信任的证书，所以SSL代理只需要替代server端的证书即可），从而解密流量。但这样一来client端就会发现server端证书不是受信任的，但因为这只是我们自己的测试，所以我们需要信任代理生成的证书。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">设置解密环境</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+要同时使用Fiddler和Wireshark，我们需要两台机器：机器A运行Fiddler作为代理，机器B运行Outlook，并且将系统代理设置成机器A以将所有流量导到机器A。然后在机器B上用Wireshark监听。之所以不能只用一台机器，是因为Wireshark的Windows版本在默认情况下，不支持loopback监听，简单说来，就是对127.0.0.1的监听。之于为什么、以及如何让其实现loopback监听，可以参看<a href="http://wiki.wireshark.org/CaptureSetup/Loopback">这里</a>和<a href="http://www.hsc.fr/ressources/articles/win_net_srv/missing_loopback.html">这里</a>。最终的流程如下所示：
+</p>
+
+<pre class="example">
++------------+           +------------+       +-----------------+
+| Computer A | Wireshark | Computer B |       |                 |
+|            +----------&gt;|            +------&gt;| Exchange Server |
+|  Outlook   |           |  Fiddler   |       |                 |
++------------+           +------------+       +-----------------+
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">设置Fiddler并导出根证书到受信任列表</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Fiddler作为一个能够代理所有HTTPS流量的工具，它需要提供所有网站的HTTPS证书。因此，最通用的做法，是自签一个根证书，然后用这个根证书来签发所有domain的证书，作为client，只需要信任这个根证书即可。这个方法也是流行的梯子工具——goagent所采用的。但是，Fiddler自己生成证书的工具 <code>makecert.exe</code> 并不提供导出其生成证书（包括根证书和生成的各个domain的证书）的private key的方法，因此，我们需要安装一个Fiddler的插件—— <b>CertMaker</b> 来代替Fiddler作为证书生成工具，因为这个工具可以看到private key。
+</p>
+
+<p>
+CertMaker插件并不影响Fiddler解密SSL的设置，它只是替换了Fiddler默认的证书生成过程。在Fiddler中执行以下设置：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11956358685/" title="fiddler SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5499/11956358685_c71fe5dc70_o.png" alt="fiddler SSL decryption settings"></a><br  />
+  图1. SSL解密设置，这个会自动导入根证书到Windows证书管理器的受信任列表
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11956780284/" title="fiddler remote proxy settings by kelvin_hu, on Flickr"><img src="https://farm4.staticflickr.com/3745/11956780284_68b6a422d0_o.png" alt="fiddler remote proxy settings"></a><br  />
+  图2. 打开“允许远程连接”的选项，保存后需要重启Fiddler
+</p>
+
+<p>
+别忘了，我们有两台机器，因此，在机器B上面也需要将根证书添加到受信任列表。打开机器B的Windows命令行，输入 <code>certmgr</code> 打开证书管理器，然后将导出的根证书分别添加到Personal和Trusted Root Certification Authorities下面的Certificate里，具体操作为：在Certificate上点击右键，选择"All Tasks"-&gt;"Import"，然后选择证书存放的位置，确定即可。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">导出Fiddler生成证书的private key</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+在使用了CertMaker插件之后，我们能看到Fiddler的根证书的private key了。 <b>但需要注意的是，我们需要的，不是Fiddler的根证书的private key，而是监视网站的private key。例如，如果我们要监视和<a href="https://www.example.com">https://www.example.com</a>的通信流量，我们需要Fiddler针对这个domain签发的证书的private key</b> 。所以，要做到这点，需要在Fiddler中设置一个属性：
+</p>
+
+<ol class="org-ol">
+<li>在Fiddler界面左下角输入框输入 <code>about:config</code> 并回车
+</li>
+<li>在右侧的about:config标签中添加 <code>fiddler.certmaker.bc.LogPrivateKeys</code> ，并设置为 <code>True</code>
+</li>
+</ol>
+
+<p>
+因为在还没有连接要监听的HTTPS网站时，Fiddler是不会自动为其生成证书的，而是在连接之后才会为其生成证书。所以，我们打开Wireshark，然后运行Outlook，在连接Exchange HTTPS服务器之后，Fiddler会为这个domain生成证书，现在在其Log标签页就可以看到这个证书了，是Base64编码的，我们将其拷贝出来，保存成文件。 <b>注意：直接保存到文件不符合pem证书文件的格式，我们需要在文件的开头和结尾分别加上以下内容：</b>
+</p>
+
+<pre class="example">
+-----BEGIN PRIVATE KEY-----
+Base64 encoded private key here
+-----END PRIVATE KEY-----
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">导入private key到Wireshark</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+在Wireshark中，打开Edit-&gt;Preferences-&gt;Protocols-&gt;SSL，然后点击RSA keys list的Edit按钮，点击New，添加一个新的Rule，IP和Port设置为代理机器A的地址和端口，然后Protocol设置为http，Key File选择我们刚生成的文件，然后确定，如下图：
+</p>
+
+<p>
+<a href="http://www.flickr.com/photos/ini_always/11957184676/" title="wireshark SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5515/11957184676_5b087fb217_o.png" alt="wireshark SSL decryption settings"></a><br  />
+  图3. 在Wireshark中添加新的SSL private key
+</p>
+
+<p>
+好了，现在在Wireshark中，是不是就可以看到已经解密的绿色的HTTP流量了呢？
+</p>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Reference</h2>
+<div class="outline-text-2" id="text-6">
+<ol class="org-ol">
+<li><a href="https://en.wikipedia.org/wiki/Secure_Sockets_Layer">https://en.wikipedia.org/wiki/Secure_Sockets_Layer</a>
+</li>
+<li><a href="http://wiki.wireshark.org/CaptureSetup/Loopback">http://wiki.wireshark.org/CaptureSetup/Loopback</a>
+</li>
+<li><a href="http://www.hsc.fr/ressources/articles/win_net_srv/missing_loopback.html">http://www.hsc.fr/ressources/articles/win_net_srv/missing_loopback.html</a>
+</li>
+<li><a href="https://fiddler2.com/add-ons">https://fiddler2.com/add-ons</a>
+</li>
+<li><a href="http://security14.blogspot.com/2010/07/how-to-use-fiddler-and-wireshark-to.html">http://security14.blogspot.com/2010/07/how-to-use-fiddler-and-wireshark-to.html</a>
+</li>
+<li><a href="http://www.iprotocolsec.com/2012/11/07/wireshark%E6%8A%80%E5%B7%A7-%E8%A7%A3%E5%AF%86ssl%E5%8D%8F%E8%AE%AE/">http://www.iprotocolsec.com/2012/11/07/wireshark%E6%8A%80%E5%B7%A7-%E8%A7%A3%E5%AF%86ssl%E5%8D%8F%E8%AE%AE/</a>
+</li>
+<li><a href="https://groups.google.com/forum/#!topic/httpfiddler/lofwICmb7PQ">https://groups.google.com/forum/#!topic/httpfiddler/lofwICmb7PQ</a>
+</li>
+</ol>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2014-01-12</span>
+        <span title="last modification date" class="post-info">2014-01-15</span>
+        <span title="tags" class="post-info"><a href="/tags/network/">Network</a>, <a href="/tags/ssl/">SSL</a>, <a href="/tags/http/">HTTP</a>, <a href="/tags/fiddler/">Fiddler</a>, <a href="/tags/wireshark/">Wireshark</a>, <a href="/tags/windows/">Windows</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/";
+          var disqus_url = "http://kelvinh.github.io/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5c)</p>
+        <p>
+          Copyright &copy; 2012 - 2013 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+
+  </body>
+</html>
