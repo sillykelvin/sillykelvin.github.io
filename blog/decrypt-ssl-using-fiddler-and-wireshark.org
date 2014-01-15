@@ -42,10 +42,10 @@ Fiddler是一个著名的调试代理工具，它不仅能解析HTTP，而且还
 
   CertMaker插件并不影响Fiddler解密SSL的设置，它只是替换了Fiddler默认的证书生成过程。在Fiddler中执行以下设置：
 
-  @@html:<a href="http://www.flickr.com/photos/ini_always/11956358685/" title="fiddler SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5499/11956358685_c71fe5dc70_o.png" alt="fiddler SSL decryption settings"></a>@@\\
+  @@html:<a href="http://www.flickr.com/photos/ini_always/11956358685/" title="fiddler SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5499/11956358685_c71fe5dc70_o.png" alt="fiddler SSL decryption settings"></a>@@
   图1. SSL解密设置，这个会自动导入根证书到Windows证书管理器的受信任列表
 
-  @@html:<a href="http://www.flickr.com/photos/ini_always/11956780284/" title="fiddler remote proxy settings by kelvin_hu, on Flickr"><img src="https://farm4.staticflickr.com/3745/11956780284_68b6a422d0_o.png" alt="fiddler remote proxy settings"></a>@@\\
+  @@html:<a href="http://www.flickr.com/photos/ini_always/11956780284/" title="fiddler remote proxy settings by kelvin_hu, on Flickr"><img src="https://farm4.staticflickr.com/3745/11956780284_68b6a422d0_o.png" alt="fiddler remote proxy settings"></a>@@
   图2. 打开“允许远程连接”的选项，保存后需要重启Fiddler
 
   别忘了，我们有两台机器，因此，在机器B上面也需要将根证书添加到受信任列表。打开机器B的Windows命令行，输入 =certmgr= 打开证书管理器，然后将导出的根证书分别添加到Personal和Trusted Root Certification Authorities下面的Certificate里，具体操作为：在Certificate上点击右键，选择"All Tasks"->"Import"，然后选择证书存放的位置，确定即可。
@@ -67,7 +67,7 @@ Fiddler是一个著名的调试代理工具，它不仅能解析HTTP，而且还
 
   在Wireshark中，打开Edit->Preferences->Protocols->SSL，然后点击RSA keys list的Edit按钮，点击New，添加一个新的Rule，IP和Port设置为代理机器A的地址和端口，然后Protocol设置为http，Key File选择我们刚生成的文件，然后确定，如下图：
 
-  @@html:<a href="http://www.flickr.com/photos/ini_always/11957184676/" title="wireshark SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5515/11957184676_5b087fb217_o.png" alt="wireshark SSL decryption settings"></a>@@\\
+  @@html:<a href="http://www.flickr.com/photos/ini_always/11957184676/" title="wireshark SSL decryption settings by kelvin_hu, on Flickr"><img src="https://farm6.staticflickr.com/5515/11957184676_5b087fb217_o.png" alt="wireshark SSL decryption settings"></a>@@
   图3. 在Wireshark中添加新的SSL private key
 
   好了，现在在Wireshark中，是不是就可以看到已经解密的绿色的HTTP流量了呢？
