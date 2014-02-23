@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Sun, 23 Feb 2014 18:36:33 China Standard Time</pubDate>
-    <lastBuildDate>Sun, 23 Feb 2014 18:36:33 China Standard Time</lastBuildDate>
+    <pubDate>Sun, 23 Feb 2014 23:48:05 CST</pubDate>
+    <lastBuildDate>Sun, 23 Feb 2014 23:48:05 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>愿你们的国降临</title>
+      <link>http://kelvinh.github.io/blog/2013/12/07/may-you-rest-in-peace/</link>
+      <description>谨以此文，献给我那已远在天国的亲爱的外公，三姨</description>
+      <pubDate>2014-02-23</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/12/07/may-you-rest-in-peace/</guid>
+    </item>
     <item>
       <title>利用Fiddler和Wireshark解密SSL加密流量</title>
       <link>http://kelvinh.github.io/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/</link>
@@ -70,13 +77,6 @@
       <description>fix the broken archlinux on a macbook air</description>
       <pubDate>2013-09-04</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/09/03/fix-archlinux-on-mac-air/</guid>
-    </item>
-    <item>
-      <title>SICP学习笔记和习题解答</title>
-      <link>http://kelvinh.github.io/wiki/sicp/</link>
-      <description>learning notes of book Structure and Interpretation of Computer Programs</description>
-      <pubDate>2013-08-29</pubDate>
-      <guid>http://kelvinh.github.io/wiki/sicp/</guid>
     </item>
   </channel>
 </rss>
