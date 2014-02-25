@@ -24,7 +24,7 @@
 ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.ParseException: Encountered " "]" "] "" at line xx, column xx.
 #+END_QUOTE
 
-放狗搜到一篇相关的文章：http://www.cnblogs.com/tanhao/archive/2011/06/22/2086513.html，在数组参数的外层套一个 =$.param()= 函数即可，例子如下：
+放狗搜到一篇相关的文章： http://www.cnblogs.com/tanhao/archive/2011/06/22/2086513.html ，在数组参数的外层套一个 =$.param()= 函数即可，例子如下：
 
 #+BEGIN_SRC javascript
 $.ajax({
