@@ -71,10 +71,10 @@ public static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] inter
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b58900;">Class</span> <span style="color: #b58900;">cl</span> = getProxyClass(loader, interfaces);
-<span style="color: #b58900;">Constructor</span> <span style="color: #b58900;">cons</span> = cl.getConstructor(constructorParams);
-<span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">constructorParams&#30340;&#23450;&#20041;&#20026;&#65306;private final static Class[] constructorParams = {InvocationHandler.class};</span>
-<span style="color: #859900;">return</span> (<span style="color: #b58900;">Object</span>)cons.newInstance(<span style="color: #859900;">new</span> <span style="color: #b58900;">Object</span>[]{h});
+<pre class="src src-java"><span style="color: #a57705;">Class</span> <span style="color: #a57705;">cl</span> = getProxyClass(loader, interfaces);
+<span style="color: #a57705;">Constructor</span> <span style="color: #a57705;">cons</span> = cl.getConstructor(constructorParams);
+<span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">constructorParams&#30340;&#23450;&#20041;&#20026;&#65306;private final static Class[] constructorParams = {InvocationHandler.class};</span>
+<span style="color: #728a05;">return</span> (<span style="color: #a57705;">Object</span>)cons.newInstance(<span style="color: #728a05;">new</span> <span style="color: #a57705;">Object</span>[]{h});
 </pre>
 </div>
 
@@ -92,56 +92,56 @@ public static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] inter
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #859900;">package</span> <span style="color: #6c71c4;">ini</span>.<span style="color: #6c71c4;">always</span>.<span style="color: #b58900;">DynamicProxy</span>;
+<pre class="src src-java"><span style="color: #728a05;">package</span> <span style="color: #5859b7;">ini</span>.<span style="color: #5859b7;">always</span>.<span style="color: #a57705;">DynamicProxy</span>;
 
-<span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">lang</span>.<span style="color: #6c71c4;">reflect</span>.*;
+<span style="color: #728a05;">import</span> <span style="color: #5859b7;">java</span>.<span style="color: #5859b7;">lang</span>.<span style="color: #5859b7;">reflect</span>.*;
 
-<span style="color: #859900;">interface</span> <span style="color: #b58900;">Logic</span>
+<span style="color: #728a05;">interface</span> <span style="color: #a57705;">Logic</span>
 {
-    <span style="color: #859900;">public</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">doSomeBusinessLogic</span>();
+    <span style="color: #728a05;">public</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">doSomeBusinessLogic</span>();
 }
 
-<span style="color: #859900;">class</span> <span style="color: #b58900;">BusinessLogic</span> <span style="color: #859900;">implements</span> <span style="color: #b58900;">Logic</span>
+<span style="color: #728a05;">class</span> <span style="color: #a57705;">BusinessLogic</span> <span style="color: #728a05;">implements</span> <span style="color: #a57705;">Logic</span>
 {
-    <span style="color: #859900;">public</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">doSomeBusinessLogic</span>()
+    <span style="color: #728a05;">public</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">doSomeBusinessLogic</span>()
     {
-        System.out.println(<span style="color: #2aa198;">"in method doSomeBusinessLogic()"</span>);
+        System.out.println(<span style="color: #259185;">"in method doSomeBusinessLogic()"</span>);
     }
 }
 
-<span style="color: #859900;">class</span> <span style="color: #b58900;">ProxyHandler</span> <span style="color: #859900;">implements</span> <span style="color: #b58900;">InvocationHandler</span>
+<span style="color: #728a05;">class</span> <span style="color: #a57705;">ProxyHandler</span> <span style="color: #728a05;">implements</span> <span style="color: #a57705;">InvocationHandler</span>
 {
-    <span style="color: #859900;">private</span> <span style="color: #b58900;">Object</span> <span style="color: #b58900;">target</span>;
+    <span style="color: #728a05;">private</span> <span style="color: #a57705;">Object</span> <span style="color: #a57705;">target</span>;
 
-    <span style="color: #859900;">public</span> ProxyHandler(<span style="color: #b58900;">Object</span> <span style="color: #b58900;">target</span>)
+    <span style="color: #728a05;">public</span> <span style="color: #2075c7;">ProxyHandler</span>(<span style="color: #a57705;">Object</span> <span style="color: #a57705;">target</span>)
     {
-        <span style="color: #859900;">this</span>.target = target;
+        <span style="color: #728a05;">this</span>.target = target;
     }
-    <span style="color: #859900;">public</span> <span style="color: #b58900;">Object</span> <span style="color: #268bd2;">invoke</span>(<span style="color: #b58900;">Object</span> <span style="color: #b58900;">proxy</span>, <span style="color: #b58900;">Method</span> <span style="color: #b58900;">method</span>, <span style="color: #b58900;">Object</span>[] <span style="color: #b58900;">args</span>) <span style="color: #859900;">throws</span> <span style="color: #b58900;">Exception</span>
+    <span style="color: #728a05;">public</span> <span style="color: #a57705;">Object</span> <span style="color: #2075c7;">invoke</span>(<span style="color: #a57705;">Object</span> <span style="color: #a57705;">proxy</span>, <span style="color: #a57705;">Method</span> <span style="color: #a57705;">method</span>, <span style="color: #a57705;">Object</span>[] <span style="color: #a57705;">args</span>) <span style="color: #728a05;">throws</span> <span style="color: #a57705;">Exception</span>
     {
-        <span style="color: #b58900;">Object</span> <span style="color: #b58900;">result</span>;
+        <span style="color: #a57705;">Object</span> <span style="color: #a57705;">result</span>;
         before();
         result = method.invoke(target, args);
         after();
-        <span style="color: #859900;">return</span> result;
+        <span style="color: #728a05;">return</span> result;
     }
-    <span style="color: #859900;">private</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">before</span>()
+    <span style="color: #728a05;">private</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">before</span>()
     {
-        System.out.println(<span style="color: #2aa198;">"before method doSomeBusinessLogic()"</span>);
+        System.out.println(<span style="color: #259185;">"before method doSomeBusinessLogic()"</span>);
     }
-    <span style="color: #859900;">private</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">after</span>()
+    <span style="color: #728a05;">private</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">after</span>()
     {
-        System.out.println(<span style="color: #2aa198;">"after method doSomeBusinessLogic()"</span>);
+        System.out.println(<span style="color: #259185;">"after method doSomeBusinessLogic()"</span>);
     }
 }
 
-<span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">TestProxy</span>
+<span style="color: #728a05;">public</span> <span style="color: #728a05;">class</span> <span style="color: #a57705;">TestProxy</span>
 {
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>)
+    <span style="color: #728a05;">public</span> <span style="color: #728a05;">static</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">main</span>(<span style="color: #a57705;">String</span>[] <span style="color: #a57705;">args</span>)
     {
-        <span style="color: #b58900;">Logic</span> <span style="color: #b58900;">logic</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">BusinessLogic</span>();
-        <span style="color: #b58900;">InvocationHandler</span> <span style="color: #b58900;">h</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">ProxyHandler</span>(logic);
-        <span style="color: #b58900;">Logic</span> <span style="color: #b58900;">proxy</span> = (<span style="color: #b58900;">Logic</span>) Proxy.newProxyInstance(Logic.<span style="color: #859900;">class</span>.getClassLoader(),logic.getClass().getInterfaces(), h);
+        <span style="color: #a57705;">Logic</span> <span style="color: #a57705;">logic</span> = <span style="color: #728a05;">new</span> <span style="color: #a57705;">BusinessLogic</span>();
+        <span style="color: #a57705;">InvocationHandler</span> <span style="color: #a57705;">h</span> = <span style="color: #728a05;">new</span> <span style="color: #a57705;">ProxyHandler</span>(logic);
+        <span style="color: #a57705;">Logic</span> <span style="color: #a57705;">proxy</span> = (<span style="color: #a57705;">Logic</span>) Proxy.newProxyInstance(Logic.<span style="color: #728a05;">class</span>.getClassLoader(),logic.getClass().getInterfaces(), h);
         proxy.doSomeBusinessLogic();
     }
 }
@@ -200,7 +200,7 @@ after method doSomeBusinessLogic()
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

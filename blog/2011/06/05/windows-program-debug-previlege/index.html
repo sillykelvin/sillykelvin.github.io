@@ -59,57 +59,57 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;windows.h&gt;</span>
-<span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;stdio.h&gt;</span>
-<span style="color: #d33682;">#pragma</span> comment(lib, <span style="color: #2aa198;">"cmcfg32.lib"</span>)
+<pre class="src src-C"><span style="color: #c61b6e;">#include</span> <span style="color: #259185;">&lt;windows.h&gt;</span>
+<span style="color: #c61b6e;">#include</span> <span style="color: #259185;">&lt;stdio.h&gt;</span>
+<span style="color: #c61b6e;">#pragma</span> comment(lib, <span style="color: #259185;">"cmcfg32.lib"</span>)
 
-<span style="color: #b58900;">BOOL</span> <span style="color: #268bd2;">SetPrivilege</span>(
-    <span style="color: #b58900;">HANDLE</span> <span style="color: #b58900;">hToken</span>,          <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">access token handle</span>
-    <span style="color: #b58900;">LPCTSTR</span> <span style="color: #b58900;">lpszPrivilege</span>,  <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">name of privilege to enable/disable</span>
-    <span style="color: #b58900;">BOOL</span> <span style="color: #b58900;">bEnablePrivilege</span>   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">to enable or disable privilege</span>
+<span style="color: #a57705;">BOOL</span> <span style="color: #2075c7;">SetPrivilege</span>(
+    <span style="color: #a57705;">HANDLE</span> <span style="color: #a57705;">hToken</span>,          <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">access token handle</span>
+    <span style="color: #a57705;">LPCTSTR</span> <span style="color: #a57705;">lpszPrivilege</span>,  <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">name of privilege to enable/disable</span>
+    <span style="color: #a57705;">BOOL</span> <span style="color: #a57705;">bEnablePrivilege</span>   <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">to enable or disable privilege</span>
     )
 {
-    <span style="color: #b58900;">TOKEN_PRIVILEGES</span> <span style="color: #b58900;">tp</span>;
-    <span style="color: #b58900;">LUID</span> <span style="color: #b58900;">luid</span>;
+    <span style="color: #a57705;">TOKEN_PRIVILEGES</span> <span style="color: #a57705;">tp</span>;
+    <span style="color: #a57705;">LUID</span> <span style="color: #a57705;">luid</span>;
 
-    <span style="color: #859900;">if</span> ( <span style="color: #859900;">!</span>LookupPrivilegeValue(
-            <span style="color: #6c71c4;">NULL</span>,            <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">lookup privilege on local system</span>
-            lpszPrivilege,   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">privilege to lookup</span>
-            &amp;luid ) )        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">receives LUID of privilege</span>
+    <span style="color: #728a05;">if</span> ( <span style="color: #728a05;">!</span>LookupPrivilegeValue(
+            <span style="color: #5859b7;">NULL</span>,            <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">lookup privilege on local system</span>
+            lpszPrivilege,   <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">privilege to lookup</span>
+            &amp;luid ) )        <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">receives LUID of privilege</span>
     {
-        printf(<span style="color: #2aa198;">"LookupPrivilegeValue error: %u\n"</span>, GetLastError() );
-        <span style="color: #859900;">return</span> FALSE;
+        printf(<span style="color: #259185;">"LookupPrivilegeValue error: %u\n"</span>, GetLastError() );
+        <span style="color: #728a05;">return</span> FALSE;
     }
 
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Luid = luid;
-    <span style="color: #859900;">if</span> (bEnablePrivilege)
+    <span style="color: #728a05;">if</span> (bEnablePrivilege)
         tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    <span style="color: #859900;">else</span>
+    <span style="color: #728a05;">else</span>
         tp.Privileges[0].Attributes = 0;
 
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">Enable the privilege or disable all privileges.</span>
+    <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">Enable the privilege or disable all privileges.</span>
 
-    <span style="color: #859900;">if</span> ( <span style="color: #859900;">!</span>AdjustTokenPrivileges(
+    <span style="color: #728a05;">if</span> ( <span style="color: #728a05;">!</span>AdjustTokenPrivileges(
            hToken,
            FALSE,
            &amp;tp,
-           <span style="color: #859900;">sizeof</span>(TOKEN_PRIVILEGES),
-           (PTOKEN_PRIVILEGES) <span style="color: #6c71c4;">NULL</span>,
-           (PDWORD) <span style="color: #6c71c4;">NULL</span>) )
+           <span style="color: #728a05;">sizeof</span>(TOKEN_PRIVILEGES),
+           (PTOKEN_PRIVILEGES) <span style="color: #5859b7;">NULL</span>,
+           (PDWORD) <span style="color: #5859b7;">NULL</span>) )
     {
-          printf(<span style="color: #2aa198;">"AdjustTokenPrivileges error: %u\n"</span>, GetLastError() );
-          <span style="color: #859900;">return</span> FALSE;
+          printf(<span style="color: #259185;">"AdjustTokenPrivileges error: %u\n"</span>, GetLastError() );
+          <span style="color: #728a05;">return</span> FALSE;
     }
 
-    <span style="color: #859900;">if</span> (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
+    <span style="color: #728a05;">if</span> (GetLastError() == ERROR_NOT_ALL_ASSIGNED)
 
     {
-          printf(<span style="color: #2aa198;">"The token does not have the specified privilege. \n"</span>);
-          <span style="color: #859900;">return</span> FALSE;
+          printf(<span style="color: #259185;">"The token does not have the specified privilege. \n"</span>);
+          <span style="color: #728a05;">return</span> FALSE;
     }
 
-    <span style="color: #859900;">return</span> TRUE;
+    <span style="color: #728a05;">return</span> TRUE;
 }
 </pre>
 </div>
@@ -120,51 +120,51 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #b58900;">BOOL</span> <span style="color: #268bd2;">CWarKeyDlg</span>::EnableDebugPrivilege(<span style="color: #b58900;">BOOL</span> <span style="color: #b58900;">bEnableDebugPrivilege</span>)
+<pre class="src src-C"><span style="color: #a57705;">BOOL</span> <span style="color: #2075c7;">CWarKeyDlg</span>::EnableDebugPrivilege(<span style="color: #a57705;">BOOL</span> <span style="color: #a57705;">bEnableDebugPrivilege</span>)
 {
-    <span style="color: #b58900;">HANDLE</span> <span style="color: #b58900;">hToken</span>;
-    <span style="color: #b58900;">TOKEN_PRIVILEGES</span> <span style="color: #b58900;">tp</span>;
-    <span style="color: #b58900;">LUID</span> <span style="color: #b58900;">luid</span>;
+    <span style="color: #a57705;">HANDLE</span> <span style="color: #a57705;">hToken</span>;
+    <span style="color: #a57705;">TOKEN_PRIVILEGES</span> <span style="color: #a57705;">tp</span>;
+    <span style="color: #a57705;">LUID</span> <span style="color: #a57705;">luid</span>;
 
-    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>::OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &amp;hToken))
+    <span style="color: #728a05;">if</span>(<span style="color: #728a05;">!</span>::OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, &amp;hToken))
     {
         ::MessageBox(this-&gt;GetSafeHwnd(), GET_TOKEN_ERROR, MSG_BOX_TITLE, MB_OK);
-        <span style="color: #859900;">return</span> FALSE;
+        <span style="color: #728a05;">return</span> FALSE;
     }
 
-    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>::LookupPrivilegeValue(<span style="color: #6c71c4;">NULL</span>, SE_DEBUG_NAME, &amp;luid))
+    <span style="color: #728a05;">if</span>(<span style="color: #728a05;">!</span>::LookupPrivilegeValue(<span style="color: #5859b7;">NULL</span>, SE_DEBUG_NAME, &amp;luid))
     {
         ::MessageBox(this-&gt;GetSafeHwnd(), GET_PRIVILEGE_VALUE_ERROR, MSG_BOX_TITLE, MB_OK);
         ::CloseHandle(hToken);
-        <span style="color: #859900;">return</span> FALSE;
+        <span style="color: #728a05;">return</span> FALSE;
     }
 
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Luid = luid;
-    <span style="color: #859900;">if</span>(bEnableDebugPrivilege)
+    <span style="color: #728a05;">if</span>(bEnableDebugPrivilege)
     {
         tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
     }
-    <span style="color: #859900;">else</span>
+    <span style="color: #728a05;">else</span>
     {
         tp.Privileges[0].Attributes = 0;
     }
 
-    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>::AdjustTokenPrivileges(hToken, FALSE, &amp;tp, <span style="color: #859900;">sizeof</span>(tp), <span style="color: #6c71c4;">NULL</span>, <span style="color: #6c71c4;">NULL</span>))
+    <span style="color: #728a05;">if</span>(<span style="color: #728a05;">!</span>::AdjustTokenPrivileges(hToken, FALSE, &amp;tp, <span style="color: #728a05;">sizeof</span>(tp), <span style="color: #5859b7;">NULL</span>, <span style="color: #5859b7;">NULL</span>))
     {
         ::MessageBox(this-&gt;GetSafeHwnd(), ADJUST_PRIVILEGE_ERROR, MSG_BOX_TITLE, MB_OK);
         ::CloseHandle(hToken);
-        <span style="color: #859900;">return</span> FALSE;
+        <span style="color: #728a05;">return</span> FALSE;
     }
 
     ::CloseHandle(hToken);
 
-    <span style="color: #859900;">if</span>(::GetLastError() == ERROR_NOT_ALL_ASSIGNED)
+    <span style="color: #728a05;">if</span>(::GetLastError() == ERROR_NOT_ALL_ASSIGNED)
     {
         ::MessageBox(this-&gt;GetSafeHwnd(), ENABLE_DEBUG_ERROR, MSG_BOX_TITLE, MB_OK);
-        <span style="color: #859900;">return</span> FALSE;
+        <span style="color: #728a05;">return</span> FALSE;
     }
-    <span style="color: #859900;">return</span> TRUE;
+    <span style="color: #728a05;">return</span> TRUE;
 }
 </pre>
 </div>
@@ -211,7 +211,7 @@
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

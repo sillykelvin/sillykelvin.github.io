@@ -61,117 +61,117 @@
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">List</span>;
-<span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">LinkedList</span>;
+<pre class="src src-java"><span style="color: #728a05;">import</span> <span style="color: #5859b7;">java</span>.<span style="color: #5859b7;">util</span>.<span style="color: #a57705;">List</span>;
+<span style="color: #728a05;">import</span> <span style="color: #5859b7;">java</span>.<span style="color: #5859b7;">util</span>.<span style="color: #a57705;">LinkedList</span>;
 
-<span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">VampireNumber</span> {
+<span style="color: #728a05;">public</span> <span style="color: #728a05;">class</span> <span style="color: #a57705;">VampireNumber</span> {
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">find</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">start</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">end</span>) {
-        System.out.println(<span style="color: #2aa198;">"start: "</span> + start + <span style="color: #2aa198;">", end: "</span> + end);
+    <span style="color: #728a05;">public</span> <span style="color: #728a05;">static</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">find</span>(<span style="color: #a57705;">int</span> <span style="color: #a57705;">start</span>, <span style="color: #a57705;">int</span> <span style="color: #a57705;">end</span>) {
+        System.out.println(<span style="color: #259185;">"start: "</span> + start + <span style="color: #259185;">", end: "</span> + end);
 
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">slen</span> = VampireNumber.getIntegerLength(start);
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">elen</span> = VampireNumber.getIntegerLength(end);
-        <span style="color: #859900;">if</span>(slen % 2 != 0) {
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">slen</span> = VampireNumber.getIntegerLength(start);
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">elen</span> = VampireNumber.getIntegerLength(end);
+        <span style="color: #728a05;">if</span>(slen % 2 != 0) {
             slen++;
         }
-        <span style="color: #859900;">if</span>(elen % 2 == 0) {
+        <span style="color: #728a05;">if</span>(elen % 2 == 0) {
             elen++;
         }
-        <span style="color: #859900;">if</span>(slen &gt;= elen) {
-            System.out.println(<span style="color: #2aa198;">"No suitable number exists in this section."</span>);
-            <span style="color: #859900;">return</span>;
+        <span style="color: #728a05;">if</span>(slen &gt;= elen) {
+            System.out.println(<span style="color: #259185;">"No suitable number exists in this section."</span>);
+            <span style="color: #728a05;">return</span>;
         }
 
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#26681;&#25454;&#33539;&#22260;&#30830;&#23450;&#19979;&#38754;&#24490;&#29615;&#24320;&#22987;&#21644;&#32467;&#26463;&#30340;&#25968;&#23383;</span>
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">begin</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, slen / 2 - 1);
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">finish</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, (elen - 1) / 2);
-        System.out.println(<span style="color: #2aa198;">"begin: "</span> + begin + <span style="color: #2aa198;">", finish: "</span> + finish);
+        <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#26681;&#25454;&#33539;&#22260;&#30830;&#23450;&#19979;&#38754;&#24490;&#29615;&#24320;&#22987;&#21644;&#32467;&#26463;&#30340;&#25968;&#23383;</span>
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">begin</span> = (<span style="color: #a57705;">int</span>)Math.pow(10, slen / 2 - 1);
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">finish</span> = (<span style="color: #a57705;">int</span>)Math.pow(10, (elen - 1) / 2);
+        System.out.println(<span style="color: #259185;">"begin: "</span> + begin + <span style="color: #259185;">", finish: "</span> + finish);
 
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = begin; i &lt; finish; i++) {
-            <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">j</span> = i; j &lt; finish; j++) {    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#20174;i&#24320;&#22987;&#65292;&#36991;&#20813;&#20986;&#29616;(17, 27)&#12289;(27, 17)&#36825;&#26679;&#30340;&#37325;&#22797;</span>
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#22914;&#26524;&#20004;&#20010;&#25968;&#32467;&#23614;&#37117;&#26159;0&#65292;&#21017;&#32487;&#32493;</span>
-                <span style="color: #859900;">if</span>(i % 10 == 0 &amp;&amp; j % 10 == 0) {
-                    <span style="color: #859900;">continue</span>;
+        <span style="color: #728a05;">for</span>(<span style="color: #a57705;">int</span> <span style="color: #a57705;">i</span> = begin; i &lt; <span style="color: #a57705;">finish</span>; i++) {
+            <span style="color: #728a05;">for</span>(<span style="color: #a57705;">int</span> <span style="color: #a57705;">j</span> = i; j &lt; <span style="color: #a57705;">finish</span>; j++) {    <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#20174;i&#24320;&#22987;&#65292;&#36991;&#20813;&#20986;&#29616;(17, 27)&#12289;(27, 17)&#36825;&#26679;&#30340;&#37325;&#22797;</span>
+                <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#22914;&#26524;&#20004;&#20010;&#25968;&#32467;&#23614;&#37117;&#26159;0&#65292;&#21017;&#32487;&#32493;</span>
+                <span style="color: #728a05;">if</span>(i % 10 == 0 &amp;&amp; j % 10 == 0) {
+                    <span style="color: #728a05;">continue</span>;
                 }
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">first</span> = VampireNumber.getIntegerLength(i);
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">second</span> = VampireNumber.getIntegerLength(j);
-                <span style="color: #859900;">if</span>(second &gt; first) {
-                    <span style="color: #859900;">break</span>;
-                } <span style="color: #859900;">else</span> <span style="color: #859900;">if</span>(second &lt; first) {
-                    <span style="color: #859900;">continue</span>;
-                }
-
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">value</span> = i * j;
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#26816;&#27979;value&#26159;&#21542;&#24050;&#28322;&#20986;</span>
-                <span style="color: #859900;">if</span>(value &lt; 0) {
-                    <span style="color: #859900;">break</span>;
-                }
-                <span style="color: #859900;">if</span>(value &lt; start) {
-                    <span style="color: #859900;">continue</span>;
-                }
-                <span style="color: #859900;">if</span>(value &gt; end) {
-                    <span style="color: #859900;">break</span>;
+                <span style="color: #a57705;">int</span> <span style="color: #a57705;">first</span> = VampireNumber.getIntegerLength(i);
+                <span style="color: #a57705;">int</span> <span style="color: #a57705;">second</span> = VampireNumber.getIntegerLength(j);
+                <span style="color: #728a05;">if</span>(second &gt; first) {
+                    <span style="color: #728a05;">break</span>;
+                } <span style="color: #728a05;">else</span> <span style="color: #728a05;">if</span>(second &lt; <span style="color: #a57705;">first</span>) {
+                    <span style="color: #728a05;">continue</span>;
                 }
 
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = VampireNumber.getIntegerLength(value);
-                <span style="color: #859900;">if</span>(len != first + second) {
-                    <span style="color: #859900;">continue</span>;
+                <span style="color: #a57705;">int</span> <span style="color: #a57705;">value</span> = i * j;
+                <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#26816;&#27979;value&#26159;&#21542;&#24050;&#28322;&#20986;</span>
+                <span style="color: #728a05;">if</span>(value &lt; 0) {
+                    <span style="color: #728a05;">break</span>;
+                }
+                <span style="color: #728a05;">if</span>(value &lt; <span style="color: #a57705;">start</span>) {
+                    <span style="color: #728a05;">continue</span>;
+                }
+                <span style="color: #728a05;">if</span>(value &gt; end) {
+                    <span style="color: #728a05;">break</span>;
                 }
 
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#23558;&#20004;&#20010;&#20056;&#25968;&#30340;&#25968;&#23383;&#25918;&#20837;List</span>
-                List&lt;Integer&gt; numList = <span style="color: #859900;">new</span> <span style="color: #b58900;">LinkedList</span>&lt;Integer&gt;();
+                <span style="color: #a57705;">int</span> <span style="color: #a57705;">len</span> = VampireNumber.getIntegerLength(value);
+                <span style="color: #728a05;">if</span>(len != first + second) {
+                    <span style="color: #728a05;">continue</span>;
+                }
+
+                <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#23558;&#20004;&#20010;&#20056;&#25968;&#30340;&#25968;&#23383;&#25918;&#20837;List</span>
+                <span style="color: #a57705;">List</span>&lt;<span style="color: #a57705;">Integer</span>&gt; <span style="color: #a57705;">numList</span> = <span style="color: #728a05;">new</span> <span style="color: #a57705;">LinkedList</span>&lt;<span style="color: #a57705;">Integer</span>&gt;();
                 VampireNumber.getNumberList(i, first, numList);
                 VampireNumber.getNumberList(j, second, numList);
 
-                <span style="color: #b58900;">boolean</span> <span style="color: #b58900;">isVampireNumber</span> = <span style="color: #6c71c4;">true</span>;
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#23558;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#36827;&#34892;&#27604;&#36739;</span>
-                <span style="color: #859900;">while</span>(value != 0) {
-                    <span style="color: #b58900;">int</span> <span style="color: #b58900;">current</span> = value % 10;
+                <span style="color: #a57705;">boolean</span> <span style="color: #a57705;">isVampireNumber</span> = <span style="color: #5859b7;">true</span>;
+                <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#23558;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#36827;&#34892;&#27604;&#36739;</span>
+                <span style="color: #728a05;">while</span>(value != 0) {
+                    <span style="color: #a57705;">int</span> <span style="color: #a57705;">current</span> = value % 10;
                     value /= 10;
 
-                    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>numList.contains(current)) {
-                        isVampireNumber = <span style="color: #6c71c4;">false</span>;
-                        <span style="color: #859900;">break</span>;
+                    <span style="color: #728a05;">if</span>(<span style="color: #728a05;">!</span>numList.contains(current)) {
+                        isVampireNumber = <span style="color: #5859b7;">false</span>;
+                        <span style="color: #728a05;">break</span>;
                     }
-                    numList.remove(<span style="color: #859900;">new</span> <span style="color: #b58900;">Integer</span>(current));
+                    numList.remove(<span style="color: #728a05;">new</span> <span style="color: #a57705;">Integer</span>(current));
                 }
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#22914;&#26524;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#21563;&#21512;&#65292;&#21017;&#26159;&#21560;&#34880;&#39740;&#25968;</span>
-                <span style="color: #859900;">if</span>(isVampireNumber) {
-                    System.out.println(<span style="color: #2aa198;">"A vampire number found: "</span> + i * j + <span style="color: #2aa198;">", ("</span> + i + <span style="color: #2aa198;">", "</span> + j + <span style="color: #2aa198;">")."</span>);
+                <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#22914;&#26524;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#21563;&#21512;&#65292;&#21017;&#26159;&#21560;&#34880;&#39740;&#25968;</span>
+                <span style="color: #728a05;">if</span>(isVampireNumber) {
+                    System.out.println(<span style="color: #259185;">"A vampire number found: "</span> + i * j + <span style="color: #259185;">", ("</span> + i + <span style="color: #259185;">", "</span> + j + <span style="color: #259185;">")."</span>);
                 }
             }
         }
     }
 
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#23558;num&#30340;&#21508;&#20010;&#20301;&#30340;&#25968;&#23383;&#25918;&#20837;list</span>
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">getNumberList</span>(<span style="color: #859900;">final</span> <span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">length</span>, List&lt;Integer&gt; list) {
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">copy</span> = num;
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = 0; i &lt; length; i++) {
+    <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#23558;num&#30340;&#21508;&#20010;&#20301;&#30340;&#25968;&#23383;&#25918;&#20837;list</span>
+    <span style="color: #728a05;">public</span> <span style="color: #728a05;">static</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">getNumberList</span>(<span style="color: #728a05;">final</span> <span style="color: #a57705;">int</span> <span style="color: #a57705;">num</span>, <span style="color: #a57705;">int</span> <span style="color: #a57705;">length</span>, <span style="color: #a57705;">List</span>&lt;<span style="color: #a57705;">Integer</span>&gt; <span style="color: #a57705;">list</span>) {
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">copy</span> = num;
+        <span style="color: #728a05;">for</span>(<span style="color: #a57705;">int</span> <span style="color: #a57705;">i</span> = 0; i &lt; <span style="color: #a57705;">length</span>; i++) {
             list.add(copy % 10);
             copy /= 10;
         }
     }
 
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#21462;&#24471;num&#30340;&#20301;&#25968;</span>
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">int</span> <span style="color: #268bd2;">getIntegerLength</span>(<span style="color: #859900;">final</span> <span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>) {
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = 0;
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">copy</span> = num;
-        <span style="color: #859900;">if</span>(copy == 0) {
-            <span style="color: #859900;">return</span> ++len;
+    <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#21462;&#24471;num&#30340;&#20301;&#25968;</span>
+    <span style="color: #728a05;">public</span> <span style="color: #728a05;">static</span> <span style="color: #a57705;">int</span> <span style="color: #2075c7;">getIntegerLength</span>(<span style="color: #728a05;">final</span> <span style="color: #a57705;">int</span> <span style="color: #a57705;">num</span>) {
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">len</span> = 0;
+        <span style="color: #a57705;">int</span> <span style="color: #a57705;">copy</span> = num;
+        <span style="color: #728a05;">if</span>(copy == 0) {
+            <span style="color: #728a05;">return</span> ++len;
         }
-        <span style="color: #859900;">while</span>(copy != 0) {
+        <span style="color: #728a05;">while</span>(copy != 0) {
             copy /= 10;
             len++;
         }
-        <span style="color: #859900;">return</span> len;
+        <span style="color: #728a05;">return</span> len;
     }
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>) {
-        System.out.println(<span style="color: #2aa198;">"----------- Now start computing... -----------"</span>);
-        <span style="color: #b58900;">long</span> <span style="color: #b58900;">s</span> = System.currentTimeMillis();
-        VampireNumber.find(0, <span style="color: #6c71c4;">Integer</span>.MAX_VALUE);
-        <span style="color: #b58900;">long</span> <span style="color: #b58900;">f</span> = System.currentTimeMillis();
-        System.out.println(<span style="color: #2aa198;">"----- Computing finished, time used: "</span> + (f - s) + <span style="color: #2aa198;">" ms. -----"</span>);
+    <span style="color: #728a05;">public</span> <span style="color: #728a05;">static</span> <span style="color: #a57705;">void</span> <span style="color: #2075c7;">main</span>(<span style="color: #a57705;">String</span>[] <span style="color: #a57705;">args</span>) {
+        System.out.println(<span style="color: #259185;">"----------- Now start computing... -----------"</span>);
+        <span style="color: #a57705;">long</span> <span style="color: #a57705;">s</span> = System.currentTimeMillis();
+        VampireNumber.find(0, <span style="color: #5859b7;">Integer</span>.MAX_VALUE);
+        <span style="color: #a57705;">long</span> <span style="color: #a57705;">f</span> = System.currentTimeMillis();
+        System.out.println(<span style="color: #259185;">"----- Computing finished, time used: "</span> + (f - s) + <span style="color: #259185;">" ms. -----"</span>);
     }
 }
 </pre>
@@ -219,7 +219,7 @@
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

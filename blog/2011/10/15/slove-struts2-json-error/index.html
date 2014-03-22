@@ -51,11 +51,11 @@ struts2的json plugin可以实现struts2和json的完美结合，由于本篇主
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #268bd2;">action</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">product_group</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">customers.products</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">method</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">getGroups</span><span style="color: #2aa198;">"</span>&gt;
-    &lt;<span style="color: #268bd2;">result</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span>&gt;
-        &lt;<span style="color: #268bd2;">param</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">root</span><span style="color: #2aa198;">"</span>&gt;groupList&lt;/<span style="color: #268bd2;">param</span>&gt;
-    &lt;/<span style="color: #268bd2;">result</span>&gt;
-&lt;/<span style="color: #268bd2;">action</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #2075c7;">action</span> <span style="color: #a57705;">name</span>=<span style="color: #259185;">"</span><span style="color: #259185;">product_group</span><span style="color: #259185;">"</span> <span style="color: #a57705;">class</span>=<span style="color: #259185;">"</span><span style="color: #259185;">customers.products</span><span style="color: #259185;">"</span> <span style="color: #a57705;">method</span>=<span style="color: #259185;">"</span><span style="color: #259185;">getGroups</span><span style="color: #259185;">"</span>&gt;
+    &lt;<span style="color: #2075c7;">result</span> <span style="color: #a57705;">type</span>=<span style="color: #259185;">"</span><span style="color: #259185;">json</span><span style="color: #259185;">"</span>&gt;
+        &lt;<span style="color: #2075c7;">param</span> <span style="color: #a57705;">name</span>=<span style="color: #259185;">"</span><span style="color: #259185;">root</span><span style="color: #259185;">"</span>&gt;groupList&lt;/<span style="color: #2075c7;">param</span>&gt;
+    &lt;/<span style="color: #2075c7;">result</span>&gt;
+&lt;/<span style="color: #2075c7;">action</span>&gt;
 </pre>
 </div>
 
@@ -85,9 +85,9 @@ There is no result type defined for type 'json' mapped with name 'success'. Did 
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #268bd2;">result-types</span>&gt;
-    &lt;<span style="color: #268bd2;">result-type</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">org.apache.struts2.json.JSONResult</span><span style="color: #2aa198;">"</span>/&gt;
-&lt;/<span style="color: #268bd2;">result-types</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #2075c7;">result-types</span>&gt;
+    &lt;<span style="color: #2075c7;">result-type</span> <span style="color: #a57705;">name</span>=<span style="color: #259185;">"</span><span style="color: #259185;">json</span><span style="color: #259185;">"</span> <span style="color: #a57705;">class</span>=<span style="color: #259185;">"</span><span style="color: #259185;">org.apache.struts2.json.JSONResult</span><span style="color: #259185;">"</span>/&gt;
+&lt;/<span style="color: #2075c7;">result-types</span>&gt;
 </pre>
 </div>
 </li>
@@ -102,16 +102,16 @@ json这个result type是在json-default(struts2-json-plugin-2.1.8.1.jar\struts-p
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #268bd2;">struts</span>&gt;
-    &lt;<span style="color: #268bd2;">package</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json-default</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">extends</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">struts-default</span><span style="color: #2aa198;">"</span>&gt;
-        &lt;<span style="color: #268bd2;">result-types</span>&gt;
-            &lt;<span style="color: #268bd2;">result-type</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">org.apache.struts2.json.JSONResult</span><span style="color: #2aa198;">"</span>/&gt;
-        &lt;/<span style="color: #268bd2;">result-types</span>&gt;
-        &lt;<span style="color: #268bd2;">interceptors</span>&gt;
-            &lt;<span style="color: #268bd2;">interceptor</span> <span style="color: #b58900;">name</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">json</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">class</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">org.apache.struts2.json.JSONInterceptor</span><span style="color: #2aa198;">"</span>/&gt;
-        &lt;/<span style="color: #268bd2;">interceptors</span>&gt;
-    &lt;/<span style="color: #268bd2;">package</span>&gt;
-&lt;/<span style="color: #268bd2;">struts</span>&gt;
+<pre class="src src-xml">&lt;<span style="color: #2075c7;">struts</span>&gt;
+    &lt;<span style="color: #2075c7;">package</span> <span style="color: #a57705;">name</span>=<span style="color: #259185;">"</span><span style="color: #259185;">json-default</span><span style="color: #259185;">"</span> <span style="color: #a57705;">extends</span>=<span style="color: #259185;">"</span><span style="color: #259185;">struts-default</span><span style="color: #259185;">"</span>&gt;
+        &lt;<span style="color: #2075c7;">result-types</span>&gt;
+            &lt;<span style="color: #2075c7;">result-type</span> <span style="color: #a57705;">name</span>=<span style="color: #259185;">"</span><span style="color: #259185;">json</span><span style="color: #259185;">"</span> <span style="color: #a57705;">class</span>=<span style="color: #259185;">"</span><span style="color: #259185;">org.apache.struts2.json.JSONResult</span><span style="color: #259185;">"</span>/&gt;
+        &lt;/<span style="color: #2075c7;">result-types</span>&gt;
+        &lt;<span style="color: #2075c7;">interceptors</span>&gt;
+            &lt;<span style="color: #2075c7;">interceptor</span> <span style="color: #a57705;">name</span>=<span style="color: #259185;">"</span><span style="color: #259185;">json</span><span style="color: #259185;">"</span> <span style="color: #a57705;">class</span>=<span style="color: #259185;">"</span><span style="color: #259185;">org.apache.struts2.json.JSONInterceptor</span><span style="color: #259185;">"</span>/&gt;
+        &lt;/<span style="color: #2075c7;">interceptors</span>&gt;
+    &lt;/<span style="color: #2075c7;">package</span>&gt;
+&lt;/<span style="color: #2075c7;">struts</span>&gt;
 </pre>
 </div>
 
@@ -163,7 +163,7 @@ json这个result type是在json-default(struts2-json-plugin-2.1.8.1.jar\struts-p
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

@@ -63,17 +63,17 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
 
 <pre class="src src-javascript">$.ajax({
     url: _this.get_detail_url,
-    type: <span style="color: #2aa198;">'POST'</span>,
-    data: $.param(_this.params, <span style="color: #6c71c4;">true</span>),    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">&#27880;&#24847;&#35201;&#20256;&#36882;&#31532;&#20108;&#20010;&#21442;&#25968;</span>
-    dataType: <span style="color: #2aa198;">'json'</span>,
+    type: <span style="color: #259185;">'POST'</span>,
+    data: $.param(_this.params, <span style="color: #5859b7;">true</span>),    <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">&#27880;&#24847;&#35201;&#20256;&#36882;&#31532;&#20108;&#20010;&#21442;&#25968;</span>
+    dataType: <span style="color: #259185;">'json'</span>,
     timeout: 30000,
 
-    <span style="color: #268bd2;">success</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">returnData</span>, <span style="color: #b58900;">textStatus</span>) {
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">do something here</span>
+    <span style="color: #2075c7;">success</span>: <span style="color: #728a05;">function</span>(<span style="color: #a57705;">returnData</span>, <span style="color: #a57705;">textStatus</span>) {
+        <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">do something here</span>
     },
 
-    <span style="color: #268bd2;">error</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">xhr</span>, <span style="color: #b58900;">textStatus</span>, <span style="color: #b58900;">errorThrown</span>) {
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">do something here</span>
+    <span style="color: #2075c7;">error</span>: <span style="color: #728a05;">function</span>(<span style="color: #a57705;">xhr</span>, <span style="color: #a57705;">textStatus</span>, <span style="color: #a57705;">errorThrown</span>) {
+        <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">do something here</span>
     }
 });
 </pre>
@@ -95,8 +95,8 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">Convert data if not already a string</span>
-<span style="color: #859900;">if</span> ( s.data &amp;&amp; s.processData &amp;&amp; <span style="color: #859900;">typeof</span> s.data !== <span style="color: #2aa198;">"string"</span> ) {
+<pre class="src src-javascript"><span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">Convert data if not already a string</span>
+<span style="color: #728a05;">if</span> ( s.data &amp;&amp; s.processData &amp;&amp; <span style="color: #728a05;">typeof</span> s.data !== <span style="color: #259185;">"string"</span> ) {
     s.data = jQuery.param(s.data, s.traditional);
 }
 </pre>
@@ -114,7 +114,7 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #859900;">var</span> <span style="color: #b58900;">myObject</span> = {
+<pre class="src src-javascript"><span style="color: #728a05;">var</span> <span style="color: #a57705;">myObject</span> = {
     a: {
         one: 1,
         two: 2,
@@ -122,8 +122,8 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
     },
     b: [1,2,3]
 };
-<span style="color: #859900;">var</span> <span style="color: #b58900;">recursiveEncoded</span> = $.param(myObject);
-<span style="color: #859900;">var</span> <span style="color: #b58900;">recursiveDecoded</span> = decodeURIComponent($.param(myObject));
+<span style="color: #728a05;">var</span> <span style="color: #a57705;">recursiveEncoded</span> = $.param(myObject);
+<span style="color: #728a05;">var</span> <span style="color: #a57705;">recursiveDecoded</span> = decodeURIComponent($.param(myObject));
 
 alert(recursiveEncoded);
 alert(recursiveDecoded);
@@ -147,7 +147,7 @@ a[one]=1&amp;a[two]=2&amp;a[three]=3&amp;b[]=1&amp;b[]=2&amp;b[]=3
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #859900;">var</span> <span style="color: #b58900;">myObject</span> = {
+<pre class="src src-javascript"><span style="color: #728a05;">var</span> <span style="color: #a57705;">myObject</span> = {
     a: {
         one: 1,
         two: 2,
@@ -155,8 +155,8 @@ a[one]=1&amp;a[two]=2&amp;a[three]=3&amp;b[]=1&amp;b[]=2&amp;b[]=3
     },
     b: [1,2,3]
 };
-<span style="color: #859900;">var</span> <span style="color: #b58900;">shallowEncoded</span> = $.param(myObject, <span style="color: #6c71c4;">true</span>);
-<span style="color: #859900;">var</span> <span style="color: #b58900;">shallowDecoded</span> = decodeURIComponent(shallowEncoded);
+<span style="color: #728a05;">var</span> <span style="color: #a57705;">shallowEncoded</span> = $.param(myObject, <span style="color: #5859b7;">true</span>);
+<span style="color: #728a05;">var</span> <span style="color: #a57705;">shallowDecoded</span> = decodeURIComponent(shallowEncoded);
 
 alert(shallowEncoded);
 alert(shallowDecoded);
@@ -224,7 +224,7 @@ jQuery.ajaxSettings.traditional = true
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

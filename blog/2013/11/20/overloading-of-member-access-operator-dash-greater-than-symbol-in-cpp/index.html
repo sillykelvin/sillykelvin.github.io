@@ -37,15 +37,15 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #859900;">template</span>&lt;<span style="color: #859900;">class</span> <span style="color: #b58900;">T</span>&gt;
-<span style="color: #859900;">class</span> <span style="color: #b58900;">auto_ptr</span> {
-<span style="color: #859900;">private</span>:
-    <span style="color: #b58900;">T</span>* <span style="color: #b58900;">ap</span>;
-<span style="color: #859900;">public</span>:
-    <span style="color: #b58900;">T</span>* <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> <span style="color: #859900;">throw</span>() {
-        <span style="color: #859900;">return</span> ap;
+<pre class="src src-C++"><span style="color: #728a05;">template</span>&lt;<span style="color: #728a05;">class</span> <span style="color: #a57705;">T</span>&gt;
+<span style="color: #728a05;">class</span> <span style="color: #a57705;">auto_ptr</span> {
+<span style="color: #728a05;">private</span>:
+    <span style="color: #a57705;">T</span>* <span style="color: #a57705;">ap</span>;
+<span style="color: #728a05;">public</span>:
+    <span style="color: #a57705;">T</span>* <span style="color: #728a05;">operator</span><span style="color: #2075c7;">-&gt;</span>() <span style="color: #728a05;">const</span> <span style="color: #728a05;">throw</span>() {
+        <span style="color: #728a05;">return</span> ap;
     }
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #657b83; font-style: italic;">...</span>
+    <span style="color: #465a61; font-style: italic;">// </span><span style="color: #52676f; font-style: italic;">...</span>
 };
 </pre>
 </div>
@@ -80,41 +80,41 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+<pre class="src src-C++"><span style="color: #c61b6e;">#include</span> <span style="color: #259185;">&lt;iostream&gt;</span>
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Origin</span> {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">a</span>;
+<span style="color: #728a05;">struct</span> <span style="color: #a57705;">Origin</span> {
+    <span style="color: #a57705;">int</span> <span style="color: #a57705;">a</span>;
 };
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Wrapper</span> {
-    <span style="color: #b58900;">Origin</span> *<span style="color: #b58900;">orig</span>;
-    <span style="color: #b58900;">Origin</span> *<span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> {
-        <span style="color: #859900;">return</span> orig;
+<span style="color: #728a05;">struct</span> <span style="color: #a57705;">Wrapper</span> {
+    <span style="color: #a57705;">Origin</span> *<span style="color: #a57705;">orig</span>;
+    <span style="color: #a57705;">Origin</span> *<span style="color: #728a05;">operator</span><span style="color: #2075c7;">-&gt;</span>() <span style="color: #728a05;">const</span> {
+        <span style="color: #728a05;">return</span> orig;
     }
 };
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Wrapper2</span> {
-    <span style="color: #b58900;">Wrapper</span> *<span style="color: #b58900;">wrap</span>;
-    <span style="color: #b58900;">Wrapper</span>&amp; <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> {
-        <span style="color: #859900;">return</span> *wrap;
+<span style="color: #728a05;">struct</span> <span style="color: #a57705;">Wrapper2</span> {
+    <span style="color: #a57705;">Wrapper</span> *<span style="color: #a57705;">wrap</span>;
+    <span style="color: #a57705;">Wrapper</span>&amp; <span style="color: #728a05;">operator</span><span style="color: #2075c7;">-&gt;</span>() <span style="color: #728a05;">const</span> {
+        <span style="color: #728a05;">return</span> *wrap;
     }
 };
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #b58900;">Origin</span> <span style="color: #b58900;">o</span>;
+<span style="color: #a57705;">int</span> <span style="color: #2075c7;">main</span>() {
+    <span style="color: #a57705;">Origin</span> <span style="color: #a57705;">o</span>;
     o.a = 7;
-    <span style="color: #b58900;">Wrapper</span> <span style="color: #b58900;">w</span>;
+    <span style="color: #a57705;">Wrapper</span> <span style="color: #a57705;">w</span>;
     w.orig = &amp;o;
-    <span style="color: #b58900;">Wrapper2</span> <span style="color: #b58900;">w2</span>;
+    <span style="color: #a57705;">Wrapper2</span> <span style="color: #a57705;">w2</span>;
     w2.wrap = &amp;w;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t\t"</span> &lt;&lt; w-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w.operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t"</span> &lt;&lt; w.<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; w.<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t\t"</span> &lt;&lt; w2-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"&amp;w2.operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; &amp;w2.<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;().operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;().<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;().operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;().<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w-&gt;a"</span> &lt;&lt; <span style="color: #259185;">"\t\t\t\t"</span> &lt;&lt; w-&gt;a &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w.operator-&gt;()"</span> &lt;&lt; <span style="color: #259185;">"\t\t\t"</span> &lt;&lt; w.<span style="color: #728a05;">operator</span>-&gt;() &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #259185;">"\t\t"</span> &lt;&lt; w.<span style="color: #728a05;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w2-&gt;a"</span> &lt;&lt; <span style="color: #259185;">"\t\t\t\t"</span> &lt;&lt; w2-&gt;a &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"&amp;w2.operator-&gt;()"</span> &lt;&lt; <span style="color: #259185;">"\t\t"</span> &lt;&lt; &amp;w2.<span style="color: #728a05;">operator</span>-&gt;() &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w2.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #259185;">"\t\t"</span> &lt;&lt; w2.<span style="color: #728a05;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w2.operator-&gt;().operator-&gt;()"</span> &lt;&lt; <span style="color: #259185;">"\t"</span> &lt;&lt; w2.<span style="color: #728a05;">operator</span>-&gt;().<span style="color: #728a05;">operator</span>-&gt;() &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; <span style="color: #259185;">"w2.operator-&gt;().operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #259185;">"\t"</span> &lt;&lt; w2.<span style="color: #728a05;">operator</span>-&gt;().<span style="color: #728a05;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #5859b7;">std</span>::endl;
 }
 </pre>
 </div>
@@ -147,18 +147,18 @@ w2.operator-&gt;().operator-&gt;()-&gt;a	7
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+<pre class="src src-C++"><span style="color: #c61b6e;">#include</span> <span style="color: #259185;">&lt;iostream&gt;</span>
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Joke</span> {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span>;
-    <span style="color: #b58900;">Joke</span>&amp; <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() {
-        <span style="color: #859900;">return</span> *<span style="color: #859900;">this</span>;
+<span style="color: #728a05;">struct</span> <span style="color: #a57705;">Joke</span> {
+    <span style="color: #a57705;">int</span> <span style="color: #a57705;">i</span>;
+    <span style="color: #a57705;">Joke</span>&amp; <span style="color: #728a05;">operator</span><span style="color: #2075c7;">-&gt;</span>() {
+        <span style="color: #728a05;">return</span> *<span style="color: #728a05;">this</span>;
     }
 };
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #b58900;">Joke</span> <span style="color: #b58900;">j</span>;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; j-&gt;i;
+<span style="color: #a57705;">int</span> <span style="color: #2075c7;">main</span>() {
+    <span style="color: #a57705;">Joke</span> <span style="color: #a57705;">j</span>;
+    <span style="color: #5859b7;">std</span>::cout &lt;&lt; j-&gt;i;
 }
 </pre>
 </div>
@@ -230,7 +230,7 @@ error: circular pointer delegation detected
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

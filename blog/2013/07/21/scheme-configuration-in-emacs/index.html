@@ -68,10 +68,10 @@
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp">(show-paren-mode t) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#21305;&#37197;&#25324;&#21495;&#39640;&#20142;</span>
+<pre class="src src-emacs-lisp">(show-paren-mode t) <span style="color: #465a61; font-style: italic;">;; </span><span style="color: #52676f; font-style: italic;">&#21305;&#37197;&#25324;&#21495;&#39640;&#20142;</span>
 
-(<span style="color: #859900;">require</span> '<span style="color: #6c71c4;">autopair</span>)
-(autopair-global-mode) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #657b83; font-style: italic;">&#33258;&#21160;&#34917;&#20840;&#25324;&#21495;</span>
+(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">autopair</span>)
+(autopair-global-mode) <span style="color: #465a61; font-style: italic;">;; </span><span style="color: #52676f; font-style: italic;">&#33258;&#21160;&#34917;&#20840;&#25324;&#21495;</span>
 </pre>
 </div>
 
@@ -111,29 +111,29 @@
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp">(<span style="color: #859900;">require</span> '<span style="color: #6c71c4;">cmuscheme</span>)
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">require</span> '<span style="color: #5859b7;">cmuscheme</span>)
 
-(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">kh/get-scheme-proc-create</span> ()
-  <span style="color: #d33682;">"Create one scheme process if no one is created."</span>
-  (<span style="color: #859900;">unless</span> (and scheme-buffer
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">kh/get-scheme-proc-create</span> ()
+  <span style="color: #c61b6e;">"Create one scheme process if no one is created."</span>
+  (<span style="color: #728a05;">unless</span> (and scheme-buffer
                (get-buffer scheme-buffer)
                (comint-check-proc scheme-buffer))
-    (<span style="color: #859900;">save-window-excursion</span>
+    (<span style="color: #728a05;">save-window-excursion</span>
       (run-scheme scheme-program-name))))
 
-(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">kh/scheme-send-last-sexp</span> ()
-  <span style="color: #d33682;">"A replacement of original `</span><span style="color: #6c71c4;">scheme-send-last-sexp</span><span style="color: #d33682;">':</span>
-<span style="color: #d33682;">1. check if scheme process exists, otherwise create one</span>
-<span style="color: #d33682;">2. make sure the frame is splitted into two windows, current one is the scheme</span>
-<span style="color: #d33682;">   source code window, the other one is the scheme process window</span>
-<span style="color: #d33682;">3. run `</span><span style="color: #6c71c4;">scheme-send-last-sexp</span><span style="color: #d33682;">'</span>
+(<span style="color: #728a05;">defun</span> <span style="color: #2075c7;">kh/scheme-send-last-sexp</span> ()
+  <span style="color: #c61b6e;">"A replacement of original `</span><span style="color: #5859b7;">scheme-send-last-sexp</span><span style="color: #c61b6e;">':</span>
+<span style="color: #c61b6e;">1. check if scheme process exists, otherwise create one</span>
+<span style="color: #c61b6e;">2. make sure the frame is splitted into two windows, current one is the scheme</span>
+<span style="color: #c61b6e;">   source code window, the other one is the scheme process window</span>
+<span style="color: #c61b6e;">3. run `</span><span style="color: #5859b7;">scheme-send-last-sexp</span><span style="color: #c61b6e;">'</span>
 
-<span style="color: #d33682;">PS: this function is inspired by Wang Yin."</span>
+<span style="color: #c61b6e;">PS: this function is inspired by Wang Yin."</span>
   (interactive)
   (kh/get-scheme-proc-create)
-  (<span style="color: #859900;">cond</span> ((= 2 (count-windows))
+  (<span style="color: #728a05;">cond</span> ((= 2 (count-windows))
          (other-window 1)
-         (<span style="color: #859900;">unless</span> (string= (buffer-name)
+         (<span style="color: #728a05;">unless</span> (string= (buffer-name)
                           scheme-buffer)
            (switch-to-buffer scheme-buffer))
          (other-window 1))
@@ -157,13 +157,13 @@
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp">(<span style="color: #859900;">if</span> is-os-windows
-    (setq scheme-program-name <span style="color: #2aa198;">"racket"</span>)
-  (setq scheme-program-name <span style="color: #2aa198;">"guile"</span>))
+<pre class="src src-emacs-lisp">(<span style="color: #728a05;">if</span> is-os-windows
+    (setq scheme-program-name <span style="color: #259185;">"racket"</span>)
+  (setq scheme-program-name <span style="color: #259185;">"guile"</span>))
 
 (kh/add-hook '(scheme-mode-hook)
-             '((<span style="color: #859900;">lambda</span> ()
-                 (local-set-key (kbd <span style="color: #2aa198;">"C-x C-e"</span>) 'kh/scheme-send-last-sexp))))
+             '((<span style="color: #728a05;">lambda</span> ()
+                 (local-set-key (kbd <span style="color: #259185;">"C-x C-e"</span>) 'kh/scheme-send-last-sexp))))
 </pre>
 </div>
 
@@ -217,7 +217,7 @@ PS：上面的代码中有涉及到一些我自己定义的变量及函数，想
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;
