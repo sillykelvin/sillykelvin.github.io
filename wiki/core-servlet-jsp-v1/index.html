@@ -40,96 +40,96 @@ This file recorded notes during learning <i>Core Servlet and JSP</i>.
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #728a05;">xml</span> <span style="color: #c61b6e;">version="1.0" encoding="utf-8"</span>?&gt;
+<pre class="src src-xml">&lt;?<span style="color: #859900;">xml</span> <span style="color: #b58900;">version</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">1.0</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">encoding</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">utf-8</span><span style="color: #2aa198;">"</span>?&gt;
 
-&lt;<span style="color: #2075c7;">web-app</span> <span style="color: #5859b7;">xmlns</span>=<span style="color: #259185;">"</span><span style="color: #259185;">http://java.sun.com/xml/ns/j2ee</span><span style="color: #259185;">"</span>
-         <span style="color: #5859b7;">xmlns</span>:<span style="color: #a57705;">xsi</span>=<span style="color: #259185;">"</span><span style="color: #259185;">http://www.w3.org/2001/XMLSchema-instance</span><span style="color: #259185;">"</span>
-         <span style="color: #5859b7;">xsi</span>:<span style="color: #a57705;">schemaLocation</span>=
-         <span style="color: #259185;">"</span><span style="color: #259185;">http://java.sun.com/xml/ns/j2ee</span>
-<span style="color: #259185;">          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd</span><span style="color: #259185;">"</span>&gt;
+&lt;<span style="color: #268bd2;">web-app</span> <span style="color: #6c71c4;">xmlns</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">http://java.sun.com/xml/ns/j2ee</span><span style="color: #2aa198;">"</span>
+         <span style="color: #6c71c4;">xmlns</span>:<span style="color: #b58900;">xsi</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">http://www.w3.org/2001/XMLSchema-instance</span><span style="color: #2aa198;">"</span>
+         <span style="color: #6c71c4;">xsi</span>:<span style="color: #b58900;">schemaLocation</span>=
+         <span style="color: #2aa198;">"</span><span style="color: #2aa198;">http://java.sun.com/xml/ns/j2ee</span>
+<span style="color: #2aa198;">          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd</span><span style="color: #2aa198;">"</span>&gt;
 
-  &lt;<span style="color: #2075c7;">display-name</span>&gt;Servlet Testing&lt;/<span style="color: #2075c7;">display-name</span>&gt;
-  &lt;<span style="color: #2075c7;">description</span>&gt;
+  &lt;<span style="color: #268bd2;">display-name</span>&gt;Servlet Testing&lt;/<span style="color: #268bd2;">display-name</span>&gt;
+  &lt;<span style="color: #268bd2;">description</span>&gt;
     This web application demonstrates the usage of Servlet/JSP (mainly Servlet).
     The contents are composed while reading Core Servlet and JSP Volume 2.
-  &lt;/<span style="color: #2075c7;">description</span>&gt;
+  &lt;/<span style="color: #268bd2;">description</span>&gt;
 
-  <span style="color: #465a61; font-style: italic;">&lt;!--</span><span style="color: #52676f; font-style: italic;"> the following definition seems no effect... </span><span style="color: #465a61; font-style: italic;">--&gt;</span>
-  &lt;<span style="color: #2075c7;">icon</span>&gt;
-    &lt;<span style="color: #2075c7;">small-icon</span>&gt;/small.png&lt;/<span style="color: #2075c7;">small-icon</span>&gt;
-    &lt;<span style="color: #2075c7;">large-icon</span>&gt;/large.gif&lt;/<span style="color: #2075c7;">large-icon</span>&gt;
-  &lt;/<span style="color: #2075c7;">icon</span>&gt;
+  <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> the following definition seems no effect... </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
+  &lt;<span style="color: #268bd2;">icon</span>&gt;
+    &lt;<span style="color: #268bd2;">small-icon</span>&gt;/small.png&lt;/<span style="color: #268bd2;">small-icon</span>&gt;
+    &lt;<span style="color: #268bd2;">large-icon</span>&gt;/large.gif&lt;/<span style="color: #268bd2;">large-icon</span>&gt;
+  &lt;/<span style="color: #268bd2;">icon</span>&gt;
 
-  <span style="color: #465a61; font-style: italic;">&lt;!--</span><span style="color: #52676f; font-style: italic;"> the following definition seems no effect... </span><span style="color: #465a61; font-style: italic;">--&gt;</span>
-  &lt;<span style="color: #2075c7;">mime-mapping</span>&gt;
-    &lt;<span style="color: #2075c7;">extension</span>&gt;png&lt;/<span style="color: #2075c7;">extension</span>&gt;
-    &lt;<span style="color: #2075c7;">mime-type</span>&gt;text/plain&lt;/<span style="color: #2075c7;">mime-type</span>&gt;
-  &lt;/<span style="color: #2075c7;">mime-mapping</span>&gt;
+  <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> the following definition seems no effect... </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
+  &lt;<span style="color: #268bd2;">mime-mapping</span>&gt;
+    &lt;<span style="color: #268bd2;">extension</span>&gt;png&lt;/<span style="color: #268bd2;">extension</span>&gt;
+    &lt;<span style="color: #268bd2;">mime-type</span>&gt;text/plain&lt;/<span style="color: #268bd2;">mime-type</span>&gt;
+  &lt;/<span style="color: #268bd2;">mime-mapping</span>&gt;
 
-  &lt;<span style="color: #2075c7;">context-param</span>&gt;
-    &lt;<span style="color: #2075c7;">param-name</span>&gt;host&lt;/<span style="color: #2075c7;">param-name</span>&gt;
-    &lt;<span style="color: #2075c7;">param-value</span>&gt;nj-kelvin-hu&lt;/<span style="color: #2075c7;">param-value</span>&gt;
-  &lt;/<span style="color: #2075c7;">context-param</span>&gt;
+  &lt;<span style="color: #268bd2;">context-param</span>&gt;
+    &lt;<span style="color: #268bd2;">param-name</span>&gt;host&lt;/<span style="color: #268bd2;">param-name</span>&gt;
+    &lt;<span style="color: #268bd2;">param-value</span>&gt;nj-kelvin-hu&lt;/<span style="color: #268bd2;">param-value</span>&gt;
+  &lt;/<span style="color: #268bd2;">context-param</span>&gt;
 
-  &lt;<span style="color: #2075c7;">error-page</span>&gt;
-    &lt;<span style="color: #2075c7;">error-code</span>&gt;404&lt;/<span style="color: #2075c7;">error-code</span>&gt;
-    &lt;<span style="color: #2075c7;">location</span>&gt;/404.jsp&lt;/<span style="color: #2075c7;">location</span>&gt;
-  &lt;/<span style="color: #2075c7;">error-page</span>&gt;
+  &lt;<span style="color: #268bd2;">error-page</span>&gt;
+    &lt;<span style="color: #268bd2;">error-code</span>&gt;404&lt;/<span style="color: #268bd2;">error-code</span>&gt;
+    &lt;<span style="color: #268bd2;">location</span>&gt;/404.jsp&lt;/<span style="color: #268bd2;">location</span>&gt;
+  &lt;/<span style="color: #268bd2;">error-page</span>&gt;
 
-  &lt;<span style="color: #2075c7;">error-page</span>&gt;
-    &lt;<span style="color: #2075c7;">exception-type</span>&gt;java.lang.Exception&lt;/<span style="color: #2075c7;">exception-type</span>&gt;
-    &lt;<span style="color: #2075c7;">location</span>&gt;/exception.jsp&lt;/<span style="color: #2075c7;">location</span>&gt;
-  &lt;/<span style="color: #2075c7;">error-page</span>&gt;
+  &lt;<span style="color: #268bd2;">error-page</span>&gt;
+    &lt;<span style="color: #268bd2;">exception-type</span>&gt;java.lang.Exception&lt;/<span style="color: #268bd2;">exception-type</span>&gt;
+    &lt;<span style="color: #268bd2;">location</span>&gt;/exception.jsp&lt;/<span style="color: #268bd2;">location</span>&gt;
+  &lt;/<span style="color: #268bd2;">error-page</span>&gt;
 
-  &lt;<span style="color: #2075c7;">listener</span>&gt;
-    &lt;<span style="color: #2075c7;">listener-class</span>&gt;ini.kelvin.servlet.ContextListener&lt;/<span style="color: #2075c7;">listener-class</span>&gt;
-  &lt;/<span style="color: #2075c7;">listener</span>&gt;
+  &lt;<span style="color: #268bd2;">listener</span>&gt;
+    &lt;<span style="color: #268bd2;">listener-class</span>&gt;ini.kelvin.servlet.ContextListener&lt;/<span style="color: #268bd2;">listener-class</span>&gt;
+  &lt;/<span style="color: #268bd2;">listener</span>&gt;
 
-  &lt;<span style="color: #2075c7;">listener</span>&gt;
-    &lt;<span style="color: #2075c7;">listener-class</span>&gt;ini.kelvin.servlet.SessionListener&lt;/<span style="color: #2075c7;">listener-class</span>&gt;
-  &lt;/<span style="color: #2075c7;">listener</span>&gt;
+  &lt;<span style="color: #268bd2;">listener</span>&gt;
+    &lt;<span style="color: #268bd2;">listener-class</span>&gt;ini.kelvin.servlet.SessionListener&lt;/<span style="color: #268bd2;">listener-class</span>&gt;
+  &lt;/<span style="color: #268bd2;">listener</span>&gt;
 
-  &lt;<span style="color: #2075c7;">filter</span>&gt;
-    &lt;<span style="color: #2075c7;">filter-name</span>&gt;print&lt;/<span style="color: #2075c7;">filter-name</span>&gt;
-    &lt;<span style="color: #2075c7;">filter-class</span>&gt;ini.kelvin.servlet.PrintFilter&lt;/<span style="color: #2075c7;">filter-class</span>&gt;
-    &lt;<span style="color: #2075c7;">init-param</span>&gt;
-      &lt;<span style="color: #2075c7;">param-name</span>&gt;admin&lt;/<span style="color: #2075c7;">param-name</span>&gt;
-      &lt;<span style="color: #2075c7;">param-value</span>&gt;Kelvin Hu&lt;/<span style="color: #2075c7;">param-value</span>&gt;
-    &lt;/<span style="color: #2075c7;">init-param</span>&gt;
-  &lt;/<span style="color: #2075c7;">filter</span>&gt;
-  &lt;<span style="color: #2075c7;">filter-mapping</span>&gt;
-    &lt;<span style="color: #2075c7;">filter-name</span>&gt;print&lt;/<span style="color: #2075c7;">filter-name</span>&gt;
-    &lt;<span style="color: #2075c7;">servlet-name</span>&gt;Hello&lt;/<span style="color: #2075c7;">servlet-name</span>&gt;
-  &lt;/<span style="color: #2075c7;">filter-mapping</span>&gt;
-  &lt;<span style="color: #2075c7;">filter-mapping</span>&gt;
-    &lt;<span style="color: #2075c7;">filter-name</span>&gt;print&lt;/<span style="color: #2075c7;">filter-name</span>&gt;
-    &lt;<span style="color: #2075c7;">url-pattern</span>&gt;/*&lt;/<span style="color: #2075c7;">url-pattern</span>&gt;
-  &lt;/<span style="color: #2075c7;">filter-mapping</span>&gt;
+  &lt;<span style="color: #268bd2;">filter</span>&gt;
+    &lt;<span style="color: #268bd2;">filter-name</span>&gt;print&lt;/<span style="color: #268bd2;">filter-name</span>&gt;
+    &lt;<span style="color: #268bd2;">filter-class</span>&gt;ini.kelvin.servlet.PrintFilter&lt;/<span style="color: #268bd2;">filter-class</span>&gt;
+    &lt;<span style="color: #268bd2;">init-param</span>&gt;
+      &lt;<span style="color: #268bd2;">param-name</span>&gt;admin&lt;/<span style="color: #268bd2;">param-name</span>&gt;
+      &lt;<span style="color: #268bd2;">param-value</span>&gt;Kelvin Hu&lt;/<span style="color: #268bd2;">param-value</span>&gt;
+    &lt;/<span style="color: #268bd2;">init-param</span>&gt;
+  &lt;/<span style="color: #268bd2;">filter</span>&gt;
+  &lt;<span style="color: #268bd2;">filter-mapping</span>&gt;
+    &lt;<span style="color: #268bd2;">filter-name</span>&gt;print&lt;/<span style="color: #268bd2;">filter-name</span>&gt;
+    &lt;<span style="color: #268bd2;">servlet-name</span>&gt;Hello&lt;/<span style="color: #268bd2;">servlet-name</span>&gt;
+  &lt;/<span style="color: #268bd2;">filter-mapping</span>&gt;
+  &lt;<span style="color: #268bd2;">filter-mapping</span>&gt;
+    &lt;<span style="color: #268bd2;">filter-name</span>&gt;print&lt;/<span style="color: #268bd2;">filter-name</span>&gt;
+    &lt;<span style="color: #268bd2;">url-pattern</span>&gt;/*&lt;/<span style="color: #268bd2;">url-pattern</span>&gt;
+  &lt;/<span style="color: #268bd2;">filter-mapping</span>&gt;
 
-  &lt;<span style="color: #2075c7;">servlet</span>&gt;
-    &lt;<span style="color: #2075c7;">servlet-name</span>&gt;Hello&lt;/<span style="color: #2075c7;">servlet-name</span>&gt;
-    &lt;<span style="color: #2075c7;">servlet-class</span>&gt;ini.kelvin.servlet.HelloWorldServlet&lt;/<span style="color: #2075c7;">servlet-class</span>&gt;
-    &lt;<span style="color: #2075c7;">init-param</span>&gt;
-      &lt;<span style="color: #2075c7;">param-name</span>&gt;name&lt;/<span style="color: #2075c7;">param-name</span>&gt;
-      &lt;<span style="color: #2075c7;">param-value</span>&gt;Kelvin Hu&lt;/<span style="color: #2075c7;">param-value</span>&gt;
-    &lt;/<span style="color: #2075c7;">init-param</span>&gt;
-  &lt;/<span style="color: #2075c7;">servlet</span>&gt;
-  &lt;<span style="color: #2075c7;">servlet-mapping</span>&gt;
-    &lt;<span style="color: #2075c7;">servlet-name</span>&gt;Hello&lt;/<span style="color: #2075c7;">servlet-name</span>&gt;
-    &lt;<span style="color: #2075c7;">url-pattern</span>&gt;/hello&lt;/<span style="color: #2075c7;">url-pattern</span>&gt;
-  &lt;/<span style="color: #2075c7;">servlet-mapping</span>&gt;
+  &lt;<span style="color: #268bd2;">servlet</span>&gt;
+    &lt;<span style="color: #268bd2;">servlet-name</span>&gt;Hello&lt;/<span style="color: #268bd2;">servlet-name</span>&gt;
+    &lt;<span style="color: #268bd2;">servlet-class</span>&gt;ini.kelvin.servlet.HelloWorldServlet&lt;/<span style="color: #268bd2;">servlet-class</span>&gt;
+    &lt;<span style="color: #268bd2;">init-param</span>&gt;
+      &lt;<span style="color: #268bd2;">param-name</span>&gt;name&lt;/<span style="color: #268bd2;">param-name</span>&gt;
+      &lt;<span style="color: #268bd2;">param-value</span>&gt;Kelvin Hu&lt;/<span style="color: #268bd2;">param-value</span>&gt;
+    &lt;/<span style="color: #268bd2;">init-param</span>&gt;
+  &lt;/<span style="color: #268bd2;">servlet</span>&gt;
+  &lt;<span style="color: #268bd2;">servlet-mapping</span>&gt;
+    &lt;<span style="color: #268bd2;">servlet-name</span>&gt;Hello&lt;/<span style="color: #268bd2;">servlet-name</span>&gt;
+    &lt;<span style="color: #268bd2;">url-pattern</span>&gt;/hello&lt;/<span style="color: #268bd2;">url-pattern</span>&gt;
+  &lt;/<span style="color: #268bd2;">servlet-mapping</span>&gt;
 
-  &lt;<span style="color: #2075c7;">welcome-file-list</span>&gt;
-    &lt;<span style="color: #2075c7;">welcome-file</span>&gt;index.jsp&lt;/<span style="color: #2075c7;">welcome-file</span>&gt;
-    &lt;<span style="color: #2075c7;">welcome-file</span>&gt;index.html&lt;/<span style="color: #2075c7;">welcome-file</span>&gt;
-    &lt;<span style="color: #2075c7;">welcome-file</span>&gt;default.jsp&lt;/<span style="color: #2075c7;">welcome-file</span>&gt;
-  &lt;/<span style="color: #2075c7;">welcome-file-list</span>&gt;
+  &lt;<span style="color: #268bd2;">welcome-file-list</span>&gt;
+    &lt;<span style="color: #268bd2;">welcome-file</span>&gt;index.jsp&lt;/<span style="color: #268bd2;">welcome-file</span>&gt;
+    &lt;<span style="color: #268bd2;">welcome-file</span>&gt;index.html&lt;/<span style="color: #268bd2;">welcome-file</span>&gt;
+    &lt;<span style="color: #268bd2;">welcome-file</span>&gt;default.jsp&lt;/<span style="color: #268bd2;">welcome-file</span>&gt;
+  &lt;/<span style="color: #268bd2;">welcome-file-list</span>&gt;
 
-  &lt;<span style="color: #2075c7;">session-config</span>&gt;
-    &lt;<span style="color: #2075c7;">session-timeout</span>&gt;1&lt;/<span style="color: #2075c7;">session-timeout</span>&gt;
-  &lt;/<span style="color: #2075c7;">session-config</span>&gt;
+  &lt;<span style="color: #268bd2;">session-config</span>&gt;
+    &lt;<span style="color: #268bd2;">session-timeout</span>&gt;1&lt;/<span style="color: #268bd2;">session-timeout</span>&gt;
+  &lt;/<span style="color: #268bd2;">session-config</span>&gt;
 
-&lt;/<span style="color: #2075c7;">web-app</span>&gt;
+&lt;/<span style="color: #268bd2;">web-app</span>&gt;
 </pre>
 </div>
 
@@ -315,7 +315,7 @@ Refresh: 5; URL=http://host/path
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

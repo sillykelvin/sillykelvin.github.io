@@ -54,37 +54,37 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #c61b6e;">#include</span> <span style="color: #259185;">&lt;stdio.h&gt;</span>
-<span style="color: #c61b6e;">#include</span> <span style="color: #259185;">&lt;string.h&gt;</span>
-<span style="color: #c61b6e;">#define</span> <span style="color: #a57705;">PASSWORD</span> <span style="color: #259185;">"1234567"</span>    <span style="color: #465a61; font-style: italic;">//</span><span style="color: #52676f; font-style: italic;">&#23450;&#20041;&#23494;&#30721;&#65292;&#20165;&#20026;&#27979;&#35797;&#65292;&#26080;&#23454;&#38469;&#24847;&#20041;</span>
+<pre class="src src-C"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;stdio.h&gt;</span>
+<span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;string.h&gt;</span>
+<span style="color: #d33682;">#define</span> <span style="color: #b58900;">PASSWORD</span> <span style="color: #2aa198;">"1234567"</span>    <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#23450;&#20041;&#23494;&#30721;&#65292;&#20165;&#20026;&#27979;&#35797;&#65292;&#26080;&#23454;&#38469;&#24847;&#20041;</span>
 
-<span style="color: #a57705;">int</span> <span style="color: #2075c7;">check_password</span>(<span style="color: #a57705;">char</span> *<span style="color: #a57705;">password</span>)  <span style="color: #465a61; font-style: italic;">//</span><span style="color: #52676f; font-style: italic;">&#29992;&#20110;&#21028;&#26029;&#23494;&#30721;&#26159;&#21542;&#27491;&#30830;</span>
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">check_password</span>(<span style="color: #b58900;">char</span> *<span style="color: #b58900;">password</span>)  <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#29992;&#20110;&#21028;&#26029;&#23494;&#30721;&#26159;&#21542;&#27491;&#30830;</span>
 {
-     <span style="color: #a57705;">int</span> <span style="color: #a57705;">result</span>;
-     <span style="color: #a57705;">char</span> <span style="color: #a57705;">offset</span>[8];                          <span style="color: #465a61; font-style: italic;">//</span><span style="color: #52676f; font-style: italic;">&#27809;&#20160;&#20040;&#29992;&#65292;&#20026;&#28322;&#20986;&#20316;&#20934;&#22791;</span>
+     <span style="color: #b58900;">int</span> <span style="color: #b58900;">result</span>;
+     <span style="color: #b58900;">char</span> <span style="color: #b58900;">offset</span>[8];                          <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#27809;&#20160;&#20040;&#29992;&#65292;&#20026;&#28322;&#20986;&#20316;&#20934;&#22791;</span>
      result = strcmp(password,PASSWORD);
-     strcpy(offset,password);          <span style="color: #465a61; font-style: italic;">//</span><span style="color: #52676f; font-style: italic;">&#21516;&#19978;</span>
-     <span style="color: #728a05;">return</span> result;
+     strcpy(offset,password);          <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#21516;&#19978;</span>
+     <span style="color: #859900;">return</span> result;
 }
 
-<span style="color: #a57705;">int</span> <span style="color: #2075c7;">main</span>()
+<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>()
 {
-     <span style="color: #a57705;">int</span> <span style="color: #a57705;">not_valid</span>;
-     <span style="color: #a57705;">char</span> <span style="color: #a57705;">temp</span>[128];
-     <span style="color: #728a05;">while</span>(1)
+     <span style="color: #b58900;">int</span> <span style="color: #b58900;">not_valid</span>;
+     <span style="color: #b58900;">char</span> <span style="color: #b58900;">temp</span>[128];
+     <span style="color: #859900;">while</span>(1)
      {
-          printf(<span style="color: #259185;">"Input the password :"</span>);
-          gets(temp);   <span style="color: #465a61; font-style: italic;">//</span><span style="color: #52676f; font-style: italic;">&#27492;&#22788;&#21516;&#26679;&#26377;&#28431;&#27934;&#65292;&#21482;&#35201;&#20320;&#26377;&#36275;&#22815;&#32784;&#24515;</span>
+          printf(<span style="color: #2aa198;">"Input the password :"</span>);
+          gets(temp);   <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#27492;&#22788;&#21516;&#26679;&#26377;&#28431;&#27934;&#65292;&#21482;&#35201;&#20320;&#26377;&#36275;&#22815;&#32784;&#24515;</span>
           not_valid = check_password(temp);
-          <span style="color: #728a05;">if</span>(<span style="color: #728a05;">!</span>not_valid)
+          <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>not_valid)
           {
-               printf(<span style="color: #259185;">"Congratulations!"</span>);
-               <span style="color: #728a05;">break</span>;
+               printf(<span style="color: #2aa198;">"Congratulations!"</span>);
+               <span style="color: #859900;">break</span>;
           }
-          <span style="color: #728a05;">else</span>
-               printf(<span style="color: #259185;">"Invalid password !\n"</span>);
+          <span style="color: #859900;">else</span>
+               printf(<span style="color: #2aa198;">"Invalid password !\n"</span>);
      }
-     <span style="color: #728a05;">return</span> 0;
+     <span style="color: #859900;">return</span> 0;
 }
 </pre>
 </div>
@@ -190,7 +190,7 @@ char offset[8];
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.50.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
         <p>
           Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;
