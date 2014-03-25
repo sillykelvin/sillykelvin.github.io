@@ -7,6 +7,7 @@
     <meta name="description" content="make session page available in high version firefox" />
     <meta name="keywords" content="firefox, session page" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -63,13 +64,13 @@
 
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">targetApplication</span>&gt;                                               <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> &#20195;&#34920;&#25554;&#20214;&#23433;&#35013;&#30340;&#30446;&#26631;&#31243;&#24207; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
-    &lt;<span style="color: #268bd2;">Description</span>&gt;
-        &lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">id</span>&gt;{ec8030f7-c20a-464f-9b0e-13a3a9e97384}&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">id</span>&gt;        <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> firefox&#30340;GUID&#65292;&#35828;&#26126;&#35813;&#25554;&#20214;&#26159;firefox&#25554;&#20214; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
-        &lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">minVersion</span>&gt;2.0&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">minVersion</span>&gt;                           <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> &#33021;&#23433;&#35013;&#30340;&#26368;&#20302;firefox&#29256;&#26412; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
-        &lt;<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">maxVersion</span>&gt;7.0.1&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">maxVersion</span>&gt;                         <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> &#33021;&#23433;&#35013;&#30340;&#26368;&#39640;firefox&#29256;&#26412;&#65292;&#24050;&#20462;&#25913; </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
-    &lt;/<span style="color: #268bd2;">Description</span>&gt;
-&lt;/<span style="color: #6c71c4;">em</span>:<span style="color: #268bd2;">targetApplication</span>&gt;
+<pre class="src src-xml">&lt;em:targetApplication&gt;                                               &lt;!-- 代表插件安装的目标程序 --&gt;
+    &lt;Description&gt;
+        &lt;em:id&gt;{ec8030f7-c20a-464f-9b0e-13a3a9e97384}&lt;/em:id&gt;        &lt;!-- firefox的GUID，说明该插件是firefox插件 --&gt;
+        &lt;em:minVersion&gt;2.0&lt;/em:minVersion&gt;                           &lt;!-- 能安装的最低firefox版本 --&gt;
+        &lt;em:maxVersion&gt;7.0.1&lt;/em:maxVersion&gt;                         &lt;!-- 能安装的最高firefox版本，已修改 --&gt;
+    &lt;/Description&gt;
+&lt;/em:targetApplication&gt;
 </pre>
 </div>
 
@@ -87,18 +88,18 @@
 
 <div class="org-src-container">
 
-<pre class="src src-html">&lt;<span style="color: #268bd2;">window</span>
-  <span style="color: #b58900;">id</span>=<span style="color: #2aa198;">"SessionPage"</span>
-  <span style="color: #b58900;">xmlns</span>=<span style="color: #2aa198;">"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"</span>
-  <span style="color: #b58900;">title</span>=<span style="color: #2aa198;">"&amp;SessionPage.Title;"</span>
-  <span style="color: #b58900;">orient</span>=<span style="color: #2aa198;">"vertical"</span>
-  <span style="color: #b58900;">onload</span>=<span style="color: #2aa198;">"SessionPageController.init();"</span>&gt;
+<pre class="src src-html">&lt;window
+  id="SessionPage"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  title="&amp;SessionPage.Title;"
+  orient="vertical"
+  onload="SessionPageController.init();"&gt;
 
-&lt;<span style="color: #268bd2;">script</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"application/x-javascript"</span> <span style="color: #b58900;">src</span>=<span style="color: #2aa198;">"chrome://sessionpage/content/SessionPage.js"</span> /&gt;
-&lt;<span style="color: #268bd2;">script</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"application/x-javascript"</span> <span style="color: #b58900;">src</span>=<span style="color: #2aa198;">"chrome://sessionpage/content/SessionManager.js"</span> /&gt;
-&lt;<span style="color: #268bd2;">script</span> <span style="color: #b58900;">type</span>=<span style="color: #2aa198;">"application/x-javascript"</span> <span style="color: #b58900;">src</span>=<span style="color: #2aa198;">"chrome://sessionpage/content/SessionPageUtils.js"</span> /&gt;
+&lt;script type="application/x-javascript" src="chrome://sessionpage/content/SessionPage.js" /&gt;
+&lt;script type="application/x-javascript" src="chrome://sessionpage/content/SessionManager.js" /&gt;
+&lt;script type="application/x-javascript" src="chrome://sessionpage/content/SessionPageUtils.js" /&gt;
 
-...&#20197;&#19979;&#20195;&#30721;&#30465;&#30053;...
+...以下代码省略...
 </pre>
 </div>
 
@@ -108,10 +109,10 @@
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #268bd2;">convertToObject</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">aStr</span>)
+<pre class="src src-javascript">convertToObject: function(aStr)
 {
-    <span style="color: #859900;">var</span> <span style="color: #b58900;">s</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">Components.utils.Sandbox</span>(<span style="color: #2aa198;">"about:blank"</span>);
-    <span style="color: #859900;">return</span> Components.utils.evalInSandbox(aStr, s);
+    var s = new Components.utils.Sandbox("about:blank");
+    return Components.utils.evalInSandbox(aStr, s);
 }
 </pre>
 </div>
@@ -142,9 +143,9 @@
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #268bd2;">convertToObject</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">aStr</span>)
+<pre class="src src-javascript">convertToObject: function(aStr)
 {
-    <span style="color: #859900;">return</span> JSON.parse(aStr);
+    return JSON.parse(aStr);
 }
 </pre>
 </div>
@@ -188,6 +189,9 @@
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -207,6 +211,5 @@
         </p>
       </div>
     </div>
-
   </body>
 </html>

@@ -7,6 +7,7 @@
     <meta name="description" content="the famous Monty Hall problem and use program to explain it" />
     <meta name="keywords" content="Monty Hall problem, math, probability theory" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -61,47 +62,47 @@ PS：我后来查了一下，这个问题叫做Monty Hall problem，也叫“三
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
-<span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;random&gt;</span>
+<pre class="src src-C++">#include &lt;iostream&gt;
+#include &lt;random&gt;
 
-<span style="color: #859900;">typedef</span> <span style="color: #6c71c4;">std</span>::<span style="color: #b58900;">mt19937</span> <span style="color: #b58900;">EngineType</span>;
-<span style="color: #859900;">typedef</span> <span style="color: #6c71c4;">std</span>::<span style="color: #b58900;">uniform_int_distribution</span>&lt;<span style="color: #6c71c4;">std</span>::<span style="color: #6c71c4;">mt19937</span>::result_type&gt; <span style="color: #b58900;">GeneratorType</span>;
+typedef std::mt19937 EngineType;
+typedef std::uniform_int_distribution&lt;std::mt19937::result_type&gt; GeneratorType;
 
-<span style="color: #b58900;">bool</span> <span style="color: #268bd2;">GetIt</span>(<span style="color: #b58900;">EngineType</span>&amp; <span style="color: #b58900;">engine</span>, <span style="color: #859900;">const</span> <span style="color: #b58900;">GeneratorType</span>&amp; <span style="color: #b58900;">generator3</span>, <span style="color: #b58900;">bool</span> <span style="color: #b58900;">change</span>) {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">correct_door</span> = generator3(engine);
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">first_choice</span> = generator3(engine);
+bool GetIt(EngineType&amp; engine, const GeneratorType&amp; generator3, bool change) {
+    int correct_door = generator3(engine);
+    int first_choice = generator3(engine);
 
-    <span style="color: #859900;">if</span>(change) {
-        <span style="color: #859900;">if</span>(first_choice != correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
-        <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
-    } <span style="color: #859900;">else</span> {
-        <span style="color: #859900;">if</span>(first_choice == correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
-        <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
+    if(change) {
+        if(first_choice != correct_door) return true;
+        else return false;
+    } else {
+        if(first_choice == correct_door) return true;
+        else return false;
     }
 }
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #b58900;">EngineType</span> <span style="color: #b58900;">eng</span>;
-    eng.seed(<span style="color: #6c71c4;">std</span>::random_device()());
-    <span style="color: #b58900;">GeneratorType</span> <span style="color: #b58900;">dist3</span>(1, 3);
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">change_sum</span> = 0, <span style="color: #b58900;">unchange_sum</span> = 0;
-    <span style="color: #b58900;">long</span> <span style="color: #b58900;">loop</span> = 100000000;
-    <span style="color: #859900;">for</span>(<span style="color: #b58900;">long</span> <span style="color: #b58900;">i</span> = 0; i &lt; loop; ++i) {
-        <span style="color: #859900;">if</span>(GetIt(eng, dist3, <span style="color: #6c71c4;">true</span>))
+int main() {
+    EngineType eng;
+    eng.seed(std::random_device()());
+    GeneratorType dist3(1, 3);
+    int change_sum = 0, unchange_sum = 0;
+    long loop = 100000000;
+    for(long i = 0; i &lt; loop; ++i) {
+        if(GetIt(eng, dist3, true))
             ++change_sum;
-        <span style="color: #859900;">if</span>(GetIt(eng, dist3, <span style="color: #6c71c4;">false</span>))
+        if(GetIt(eng, dist3, false))
             ++unchange_sum;
     }
 
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"Testing times: "</span> &lt;&lt; loop &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    std::cout &lt;&lt; "Testing times: " &lt;&lt; loop &lt;&lt; std::endl;
 
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"Always change choice, hit: "</span> &lt;&lt; change_sum
-              &lt;&lt; <span style="color: #2aa198;">", percentage: "</span> &lt;&lt; <span style="color: #859900;">static_cast</span>&lt;<span style="color: #b58900;">double</span>&gt;(change_sum) / loop
-              &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    std::cout &lt;&lt; "Always change choice, hit: " &lt;&lt; change_sum
+              &lt;&lt; ", percentage: " &lt;&lt; static_cast&lt;double&gt;(change_sum) / loop
+              &lt;&lt; std::endl;
 
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"Always unchange choice, hit: "</span> &lt;&lt; unchange_sum
-              &lt;&lt; <span style="color: #2aa198;">", percentage: "</span> &lt;&lt; <span style="color: #859900;">static_cast</span>&lt;<span style="color: #b58900;">double</span>&gt;(unchange_sum) / loop
-              &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    std::cout &lt;&lt; "Always unchange choice, hit: " &lt;&lt; unchange_sum
+              &lt;&lt; ", percentage: " &lt;&lt; static_cast&lt;double&gt;(unchange_sum) / loop
+              &lt;&lt; std::endl;
 }
 </pre>
 </div>
@@ -130,15 +131,15 @@ Always unchange choice, hit: 33338904, percentage: 0.333389
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #b58900;">int</span> <span style="color: #b58900;">correct_door</span> = generator3(engine);
-<span style="color: #b58900;">int</span> <span style="color: #b58900;">first_choice</span> = generator3(engine);
+<pre class="src src-C++">int correct_door = generator3(engine);
+int first_choice = generator3(engine);
 
-<span style="color: #859900;">if</span>(change) {
-    <span style="color: #859900;">if</span>(first_choice != correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
-    <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
-} <span style="color: #859900;">else</span> {
-    <span style="color: #859900;">if</span>(first_choice == correct_door) <span style="color: #859900;">return</span> <span style="color: #6c71c4;">true</span>;
-    <span style="color: #859900;">else</span> <span style="color: #859900;">return</span> <span style="color: #6c71c4;">false</span>;
+if(change) {
+    if(first_choice != correct_door) return true;
+    else return false;
+} else {
+    if(first_choice == correct_door) return true;
+    else return false;
 }
 </pre>
 </div>
@@ -198,6 +199,9 @@ Always unchange choice, hit: 33338904, percentage: 0.333389
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -217,6 +221,5 @@ Always unchange choice, hit: 33338904, percentage: 0.333389
         </p>
       </div>
     </div>
-
   </body>
 </html>

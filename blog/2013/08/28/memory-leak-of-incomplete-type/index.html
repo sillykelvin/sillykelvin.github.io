@@ -7,6 +7,7 @@
     <meta name="description" content="memory leak introduced by incomplete type, which is led by forward declaration and inline destructor" />
     <meta name="keywords" content="C++, memory leak, incomplete type, forward declaration, inline destructor, VC++ warning C4150" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -49,14 +50,14 @@
 
 <div class="org-src-container">
 
-<pre class="src src-c++"><span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">B.h</span>
-<span style="color: #859900;">class</span> <span style="color: #b58900;">A</span>;
+<pre class="src src-c++">// B.h
+class A;
 
-<span style="color: #859900;">class</span> <span style="color: #b58900;">B</span> {
-    <span style="color: #b58900;">A</span> *<span style="color: #b58900;">a</span>;
-<span style="color: #859900;">public</span>:
-    ~<span style="color: #268bd2;">B</span>() {
-        <span style="color: #859900;">if</span>(a) <span style="color: #859900;">delete</span> a;
+class B {
+    A *a;
+public:
+    ~B() {
+        if(a) delete a;
     }
 };
 </pre>
@@ -86,9 +87,9 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #859900;">class</span> <span style="color: #b58900;">A</span>;
+<pre class="src src-C++">class A;
 ...
-<span style="color: #6c71c4;">std</span>::<span style="color: #b58900;">auto_ptr</span>&lt;A&gt; a;
+std::auto_ptr&lt;A&gt; a;
 ...
 </pre>
 </div>
@@ -142,6 +143,9 @@ If the object being deleted has incomplete class type at the point of deletion a
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -161,6 +165,5 @@ If the object being deleted has incomplete class type at the point of deletion a
         </p>
       </div>
     </div>
-
   </body>
 </html>

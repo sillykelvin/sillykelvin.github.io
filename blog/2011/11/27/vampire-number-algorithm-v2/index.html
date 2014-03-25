@@ -7,6 +7,7 @@
     <meta name="description" content="how to calculate vampire numbers" />
     <meta name="keywords" content="vampire number, algorithm, java" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -101,108 +102,108 @@
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">List</span>;
-<span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">ArrayList</span>;
+<pre class="src src-java">import java.util.List;
+import java.util.ArrayList;
 
-<span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">VampireNumber</span> {
+public class VampireNumber {
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">find</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">start</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">end</span>) {
-        System.out.println(<span style="color: #2aa198;">"start: "</span> + start + <span style="color: #2aa198;">", end: "</span> + end);
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">slen</span> = VampireNumber.getIntegerLength(start);
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">elen</span> = VampireNumber.getIntegerLength(end);
+    public static void find(int start, int end) {
+        System.out.println("start: " + start + ", end: " + end);
+        int slen = VampireNumber.getIntegerLength(start);
+        int elen = VampireNumber.getIntegerLength(end);
 
-        <span style="color: #859900;">if</span>(slen &gt;= elen) {
-            System.out.println(<span style="color: #2aa198;">"No suitable number exists in this region."</span>);
-            <span style="color: #859900;">return</span>;
+        if(slen &gt;= elen) {
+            System.out.println("No suitable number exists in this region.");
+            return;
         }
 
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#35813;&#32447;&#24615;&#34920;&#29992;&#20316;&#20598;&#25968;&#20301;&#25968;&#23384;&#25918;&#21015;&#34920;</span>
-        List&lt;Integer&gt; lenList = <span style="color: #859900;">new</span> <span style="color: #b58900;">ArrayList</span>&lt;Integer&gt;((elen - slen + 1) / 2 + 1);
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">n</span> = slen; n &lt;= elen; n++) {
-            <span style="color: #859900;">if</span>(n % 2 == 0) {
+        // 该线性表用作偶数位数存放列表
+        List&lt;Integer&gt; lenList = new ArrayList&lt;Integer&gt;((elen - slen + 1) / 2 + 1);
+        for(int n = slen; n &lt;= elen; n++) {
+            if(n % 2 == 0) {
                 lenList.add(n);
             }
         }
 
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#24320;&#22987;&#23545;&#21015;&#34920;&#24490;&#29615;</span>
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> : lenList) {
-            <span style="color: #b58900;">int</span> <span style="color: #b58900;">begin</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, len / 2 - 1);&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#23545;&#24212;len&#20301;&#20598;&#25968;&#30340;&#12289;&#28385;&#36275;&#20301;&#25968;&#35201;&#27714;&#30340;&#26368;&#23567;&#20056;&#25968;</span>
-            <span style="color: #b58900;">int</span> finish = begin * 10;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#23545;&#24212;len&#20301;&#20598;&#25968;&#30340;&#12289;&#28385;&#36275;&#20301;&#25968;&#35201;&#27714;&#30340;&#26368;&#22823;&#20056;&#25968;</span>
-            <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = begin; i &lt; finish; i++) {
-                <span style="color: #b58900;">boolean</span> <span style="color: #b58900;">boundryReached</span> = <span style="color: #6c71c4;">false</span>;&#12288;&#12288;&#12288;&#12288; <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#9312;&#65288;&#35265;&#9313;&#21644;&#22788;&#9314;&#30340;&#35299;&#37322;&#65289;</span>
-                <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">j</span> = i; j &lt; finish; j++) {&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288; <span style="color: #586e75; font-style: italic;">//  </span><span style="color: #586e75; font-style: italic;">j&#20174;i&#24320;&#22987;&#35745;&#25968;&#65292;&#36991;&#20813;&#20986;&#29616;(i, j)&#20026;(17, 27)&#12289;(27, 17)&#36825;&#26679;&#30340;&#37325;&#22797;&#24773;&#20917;</span>
-                    <span style="color: #859900;">if</span>(i % 10 == 0 &amp;&amp; j % 10 == 0) {&#12288;&#12288;&#12288;  <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#20004;&#20010;&#20056;&#25968;&#26411;&#23614;&#37117;&#20026;0&#30340;&#24773;&#20917;&#19981;&#28385;&#36275;&#26465;&#20214;&#65292;&#36339;&#36807;</span>
-                        <span style="color: #859900;">continue</span>;
+        // 开始对列表循环
+        for(int len : lenList) {
+            int begin = (int)Math.pow(10, len / 2 - 1);　　// 对应len位偶数的、满足位数要求的最小乘数
+            int finish = begin * 10;　　　　　　　　　　　// 对应len位偶数的、满足位数要求的最大乘数
+            for(int i = begin; i &lt; finish; i++) {
+                boolean boundryReached = false;　　　　 // ①（见②和处③的解释）
+                for(int j = i; j &lt; finish; j++) {　　　　　　　 //  j从i开始计数，避免出现(i, j)为(17, 27)、(27, 17)这样的重复情况
+                    if(i % 10 == 0 &amp;&amp; j % 10 == 0) {　　　  // 两个乘数末尾都为0的情况不满足条件，跳过
+                        continue;
                     }
 
-                    <span style="color: #b58900;">int</span> <span style="color: #b58900;">value</span> = i * j;
-                    <span style="color: #859900;">if</span>(value &lt; 0 || value &gt; end) {&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#31215;&#24050;&#32463;&#28322;&#20986;&#25110;&#32773;&#36229;&#36807;&#26368;&#22823;&#20540;</span>
-                        <span style="color: #859900;">if</span>(j == i) {&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288; <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#9313; &#22914;&#26524;j&#31561;&#20110;i&#65292;&#35828;&#26126;&#20174;&#27492;&#20043;&#21518;&#65292;&#26080;&#35770;i&#30340;&#22686;&#38271;&#25110;&#32773;j&#30340;&#22686;&#38271;&#37117;&#19981;&#20250;&#20877;&#28385;&#36275;&#26465;&#20214;&#65292;&#25152;&#20197;&#38656;&#35201;&#36339;&#20986;&#20004;&#23618;&#24490;&#29615;&#65288;&#35265;&#9312;&#21644;&#9314;&#65289;</span>
-                            boundryReached = <span style="color: #6c71c4;">true</span>;
+                    int value = i * j;
+                    if(value &lt; 0 || value &gt; end) {　　　　　　// 如果积已经溢出或者超过最大值
+                        if(j == i) {　　　　　　　　　　　　　 // ② 如果j等于i，说明从此之后，无论i的增长或者j的增长都不会再满足条件，所以需要跳出两层循环（见①和③）
+                            boundryReached = true;
                         }
-                        <span style="color: #859900;">break</span>;
+                        break;
                     }
-                    <span style="color: #859900;">if</span>(value &lt; start) {&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#31215;&#23567;&#20110;&#26368;&#23567;&#20540;&#65292;&#21017;&#32487;&#32493;</span>
-                        <span style="color: #859900;">continue</span>;
-                    }
-
-                    <span style="color: #859900;">if</span>(VampireNumber.getIntegerLength(value) != len) {&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#31215;&#30340;&#20301;&#25968;&#19981;&#26159;&#26399;&#26395;&#20301;&#25968;</span>
-                        <span style="color: #859900;">continue</span>;
+                    if(value &lt; start) {　　　　　　　　　　　// 如果积小于最小值，则继续
+                        continue;
                     }
 
-                    <span style="color: #b58900;">int</span>[] <span style="color: #b58900;">numList</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">int</span>[10];&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#21313;&#20010;&#25968;&#23383;&#30340;&#35745;&#25968;&#25968;&#32452;&#65292;&#32034;&#24341;0~9&#20998;&#21035;&#20195;&#34920;&#25968;&#23383;0~9&#20986;&#29616;&#30340;&#27425;&#25968;</span>
-                    VampireNumber.getNumberCountList(numList, i, j);&#12288;&#12288; <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#19968;&#20010;&#25968;&#23383;&#20986;&#29616;&#20102;&#20960;&#27425;&#65292;&#23601;&#23558;&#35813;&#35745;&#25968;&#25968;&#32452;&#23545;&#24212;&#32034;&#24341;&#30340;&#20540;&#21152;1</span>
+                    if(VampireNumber.getIntegerLength(value) != len) {　　// 如果积的位数不是期望位数
+                        continue;
+                    }
 
-                    <span style="color: #859900;">while</span>(value != 0) {
-                        numList[value % 10]--;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#23558;&#31215;&#20013;&#20986;&#29616;&#30340;&#25968;&#23383;&#22312;&#25968;&#32452;&#20013;&#23545;&#24212;&#32034;&#24341;&#30340;&#20540;&#20943;1</span>
+                    int[] numList = new int[10];　　　　　　　　　　　　　　// 十个数字的计数数组，索引0~9分别代表数字0~9出现的次数
+                    VampireNumber.getNumberCountList(numList, i, j);　　 // 一个数字出现了几次，就将该计数数组对应索引的值加1
+
+                    while(value != 0) {
+                        numList[value % 10]--;　　　　　　   // 将积中出现的数字在数组中对应索引的值减1
                         value /= 10;
                     }
-                    <span style="color: #b58900;">boolean</span> <span style="color: #b58900;">isVampireNumber</span> = <span style="color: #6c71c4;">true</span>;
-                    <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">a</span> = 0; a &lt; numList.length / 2 + 1; a++) {&#12288;&#12288;&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#24490;&#29615;&#65292;&#29992;&#20110;&#21028;&#26029;&#35745;&#25968;&#25968;&#32452;&#30340;&#27599;&#19968;&#39033;&#26159;&#21542;&#37117;&#20026;0&#65292;&#22914;&#26524;&#37117;&#20026;0&#65292;&#35828;&#26126;&#31215;&#26159;&#21560;&#34880;&#39740;&#25968;</span>
-                        <span style="color: #859900;">if</span>(numList[a] != 0 || numList[numList.length - a - 1] != 0) {
-                            isVampireNumber = <span style="color: #6c71c4;">false</span>;
-                            <span style="color: #859900;">break</span>;
+                    boolean isVampireNumber = true;
+                    for(int a = 0; a &lt; numList.length / 2 + 1; a++) {　　　　// 循环，用于判断计数数组的每一项是否都为0，如果都为0，说明积是吸血鬼数
+                        if(numList[a] != 0 || numList[numList.length - a - 1] != 0) {
+                            isVampireNumber = false;
+                            break;
                         }
                     }
 
-                    <span style="color: #859900;">if</span>(isVampireNumber) {&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#26159;&#21560;&#34880;&#39740;&#25968;&#65292;&#21017;&#25171;&#21360;&#20986;&#26469;</span>
-                        System.out.println(<span style="color: #2aa198;">"A vampire number found: "</span> + i * j + <span style="color: #2aa198;">", ("</span> + i + <span style="color: #2aa198;">", "</span> + j + <span style="color: #2aa198;">")."</span>);
+                    if(isVampireNumber) {　　　　　　　　// 如果是吸血鬼数，则打印出来
+                        System.out.println("A vampire number found: " + i * j + ", (" + i + ", " + j + ").");
                     }
                 }
 
-                <span style="color: #859900;">if</span>(boundryReached) {&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;  <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#9314; &#22312;&#20986;&#29616;&#28322;&#20986;&#25110;&#32773;&#36229;&#36807;&#26368;&#22823;&#20540;&#12289;&#24182;&#19988;j&#31561;&#20110;i&#30340;&#24773;&#20917;&#19979;&#36339;&#20986;&#22806;&#23618;&#24490;&#29615;&#65292;&#22240;&#20026;&#20869;&#23618;&#24490;&#29615;&#30340;&#21021;&#22987;&#26465;&#20214;&#26159;j=i&#65292;&#25152;&#20197;&#27492;&#26102;i&#20877;&#22686;&#38271;&#30340;&#35805;&#32943;&#23450;&#20250;&#28322;&#20986;&#25110;&#32773;&#36229;&#36807;&#26368;&#22823;&#20540;&#65288;&#35265;&#9312;&#21644;&#9313;&#65289;</span>
-                    <span style="color: #859900;">break</span>;
+                if(boundryReached) {　　　　　　　　　  // ③ 在出现溢出或者超过最大值、并且j等于i的情况下跳出外层循环，因为内层循环的初始条件是j=i，所以此时i再增长的话肯定会溢出或者超过最大值（见①和②）
+                    break;
                 }
             }
         }
     }
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">int</span>[] <span style="color: #268bd2;">getNumberCountList</span>(<span style="color: #b58900;">int</span>[] <span style="color: #b58900;">list</span>, <span style="color: #b58900;">int</span>... <span style="color: #b58900;">nums</span>) {
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span> : nums) {
-            <span style="color: #859900;">do</span> {
+    public static int[] getNumberCountList(int[] list, int... nums) {
+        for(int num : nums) {
+            do {
                 list[num % 10]++;
                 num /= 10;
-            }<span style="color: #859900;">while</span>(num != 0);
+            }while(num != 0);
         }
-        <span style="color: #859900;">return</span> list;
+        return list;
     }
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">int</span> <span style="color: #268bd2;">getIntegerLength</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>) {
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = 0;
-        <span style="color: #859900;">do</span> {
+    public static int getIntegerLength(int num) {
+        int len = 0;
+        do {
             len++;
             num /= 10;
-        }<span style="color: #859900;">while</span>(num != 0);
-        <span style="color: #859900;">return</span> len;
+        }while(num != 0);
+        return len;
     }
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>) {
-        System.out.println(<span style="color: #2aa198;">"-------------- Now start computing... --------------"</span>);
-        <span style="color: #b58900;">long</span> <span style="color: #b58900;">s</span> = System.currentTimeMillis();
-        VampireNumber.find(0, <span style="color: #6c71c4;">Integer</span>.MAX_VALUE);&#12288;&#12288;<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#35843;&#29992;find()&#20989;&#25968;&#26469;&#27714;&#20174;0&#21040;Integer.MAX_VALUE&#20043;&#38388;&#30340;&#25152;&#26377;&#21560;&#34880;&#39740;&#25968;</span>
-        <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">VampireNumber.find(0, 900000);</span>
-        <span style="color: #b58900;">long</span> f = System.currentTimeMillis();
-        System.out.println(<span style="color: #2aa198;">"------- Computing finished, time used: "</span> + (f - s) + <span style="color: #2aa198;">" ms. -------"</span>);
+    public static void main(String[] args) {
+        System.out.println("-------------- Now start computing... --------------");
+        long s = System.currentTimeMillis();
+        VampireNumber.find(0, Integer.MAX_VALUE);　　// 调用find()函数来求从0到Integer.MAX_VALUE之间的所有吸血鬼数
+        //VampireNumber.find(0, 900000);
+        long f = System.currentTimeMillis();
+        System.out.println("------- Computing finished, time used: " + (f - s) + " ms. -------");
     }
 }
 </pre>
@@ -235,6 +236,9 @@
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -254,6 +258,5 @@
         </p>
       </div>
     </div>
-
   </body>
 </html>

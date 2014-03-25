@@ -7,6 +7,7 @@
     <meta name="description" content="slove jquery ajax request contains array" />
     <meta name="keywords" content="jQuery, javascript, java, struts2" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -63,17 +64,17 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
 
 <pre class="src src-javascript">$.ajax({
     url: _this.get_detail_url,
-    type: <span style="color: #2aa198;">'POST'</span>,
-    data: $.param(_this.params, <span style="color: #6c71c4;">true</span>),    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#27880;&#24847;&#35201;&#20256;&#36882;&#31532;&#20108;&#20010;&#21442;&#25968;</span>
-    dataType: <span style="color: #2aa198;">'json'</span>,
+    type: 'POST',
+    data: $.param(_this.params, true),    // 注意要传递第二个参数
+    dataType: 'json',
     timeout: 30000,
 
-    <span style="color: #268bd2;">success</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">returnData</span>, <span style="color: #b58900;">textStatus</span>) {
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">do something here</span>
+    success: function(returnData, textStatus) {
+        // do something here
     },
 
-    <span style="color: #268bd2;">error</span>: <span style="color: #859900;">function</span>(<span style="color: #b58900;">xhr</span>, <span style="color: #b58900;">textStatus</span>, <span style="color: #b58900;">errorThrown</span>) {
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">do something here</span>
+    error: function(xhr, textStatus, errorThrown) {
+        // do something here
     }
 });
 </pre>
@@ -95,8 +96,8 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">Convert data if not already a string</span>
-<span style="color: #859900;">if</span> ( s.data &amp;&amp; s.processData &amp;&amp; <span style="color: #859900;">typeof</span> s.data !== <span style="color: #2aa198;">"string"</span> ) {
+<pre class="src src-javascript">// Convert data if not already a string
+if ( s.data &amp;&amp; s.processData &amp;&amp; typeof s.data !== "string" ) {
     s.data = jQuery.param(s.data, s.traditional);
 }
 </pre>
@@ -114,7 +115,7 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #859900;">var</span> <span style="color: #b58900;">myObject</span> = {
+<pre class="src src-javascript">var myObject = {
     a: {
         one: 1,
         two: 2,
@@ -122,8 +123,8 @@ ognl.ExpressionSyntaxException: Malformed OGNL expression: arrayList[] [ognl.Par
     },
     b: [1,2,3]
 };
-<span style="color: #859900;">var</span> <span style="color: #b58900;">recursiveEncoded</span> = $.param(myObject);
-<span style="color: #859900;">var</span> <span style="color: #b58900;">recursiveDecoded</span> = decodeURIComponent($.param(myObject));
+var recursiveEncoded = $.param(myObject);
+var recursiveDecoded = decodeURIComponent($.param(myObject));
 
 alert(recursiveEncoded);
 alert(recursiveDecoded);
@@ -147,7 +148,7 @@ a[one]=1&amp;a[two]=2&amp;a[three]=3&amp;b[]=1&amp;b[]=2&amp;b[]=3
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #859900;">var</span> <span style="color: #b58900;">myObject</span> = {
+<pre class="src src-javascript">var myObject = {
     a: {
         one: 1,
         two: 2,
@@ -155,8 +156,8 @@ a[one]=1&amp;a[two]=2&amp;a[three]=3&amp;b[]=1&amp;b[]=2&amp;b[]=3
     },
     b: [1,2,3]
 };
-<span style="color: #859900;">var</span> <span style="color: #b58900;">shallowEncoded</span> = $.param(myObject, <span style="color: #6c71c4;">true</span>);
-<span style="color: #859900;">var</span> <span style="color: #b58900;">shallowDecoded</span> = decodeURIComponent(shallowEncoded);
+var shallowEncoded = $.param(myObject, true);
+var shallowDecoded = decodeURIComponent(shallowEncoded);
 
 alert(shallowEncoded);
 alert(shallowDecoded);
@@ -213,6 +214,9 @@ jQuery.ajaxSettings.traditional = true
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -232,6 +236,5 @@ jQuery.ajaxSettings.traditional = true
         </p>
       </div>
     </div>
-
   </body>
 </html>

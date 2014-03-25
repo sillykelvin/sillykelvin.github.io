@@ -7,6 +7,7 @@
     <meta name="description" content="how to calculate vampire numbers" />
     <meta name="keywords" content="vampire number, algorithm, java" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -61,117 +62,117 @@
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">List</span>;
-<span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">util</span>.<span style="color: #b58900;">LinkedList</span>;
+<pre class="src src-java">import java.util.List;
+import java.util.LinkedList;
 
-<span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">VampireNumber</span> {
+public class VampireNumber {
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">find</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">start</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">end</span>) {
-        System.out.println(<span style="color: #2aa198;">"start: "</span> + start + <span style="color: #2aa198;">", end: "</span> + end);
+    public static void find(int start, int end) {
+        System.out.println("start: " + start + ", end: " + end);
 
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">slen</span> = VampireNumber.getIntegerLength(start);
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">elen</span> = VampireNumber.getIntegerLength(end);
-        <span style="color: #859900;">if</span>(slen % 2 != 0) {
+        int slen = VampireNumber.getIntegerLength(start);
+        int elen = VampireNumber.getIntegerLength(end);
+        if(slen % 2 != 0) {
             slen++;
         }
-        <span style="color: #859900;">if</span>(elen % 2 == 0) {
+        if(elen % 2 == 0) {
             elen++;
         }
-        <span style="color: #859900;">if</span>(slen &gt;= elen) {
-            System.out.println(<span style="color: #2aa198;">"No suitable number exists in this section."</span>);
-            <span style="color: #859900;">return</span>;
+        if(slen &gt;= elen) {
+            System.out.println("No suitable number exists in this section.");
+            return;
         }
 
-        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#26681;&#25454;&#33539;&#22260;&#30830;&#23450;&#19979;&#38754;&#24490;&#29615;&#24320;&#22987;&#21644;&#32467;&#26463;&#30340;&#25968;&#23383;</span>
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">begin</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, slen / 2 - 1);
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">finish</span> = (<span style="color: #b58900;">int</span>)Math.pow(10, (elen - 1) / 2);
-        System.out.println(<span style="color: #2aa198;">"begin: "</span> + begin + <span style="color: #2aa198;">", finish: "</span> + finish);
+        // 根据范围确定下面循环开始和结束的数字
+        int begin = (int)Math.pow(10, slen / 2 - 1);
+        int finish = (int)Math.pow(10, (elen - 1) / 2);
+        System.out.println("begin: " + begin + ", finish: " + finish);
 
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = begin; i &lt; finish; i++) {
-            <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">j</span> = i; j &lt; finish; j++) {    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#20174;i&#24320;&#22987;&#65292;&#36991;&#20813;&#20986;&#29616;(17, 27)&#12289;(27, 17)&#36825;&#26679;&#30340;&#37325;&#22797;</span>
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#20004;&#20010;&#25968;&#32467;&#23614;&#37117;&#26159;0&#65292;&#21017;&#32487;&#32493;</span>
-                <span style="color: #859900;">if</span>(i % 10 == 0 &amp;&amp; j % 10 == 0) {
-                    <span style="color: #859900;">continue</span>;
+        for(int i = begin; i &lt; finish; i++) {
+            for(int j = i; j &lt; finish; j++) {    // 从i开始，避免出现(17, 27)、(27, 17)这样的重复
+                // 如果两个数结尾都是0，则继续
+                if(i % 10 == 0 &amp;&amp; j % 10 == 0) {
+                    continue;
                 }
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">first</span> = VampireNumber.getIntegerLength(i);
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">second</span> = VampireNumber.getIntegerLength(j);
-                <span style="color: #859900;">if</span>(second &gt; first) {
-                    <span style="color: #859900;">break</span>;
-                } <span style="color: #859900;">else</span> <span style="color: #859900;">if</span>(second &lt; first) {
-                    <span style="color: #859900;">continue</span>;
-                }
-
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">value</span> = i * j;
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#26816;&#27979;value&#26159;&#21542;&#24050;&#28322;&#20986;</span>
-                <span style="color: #859900;">if</span>(value &lt; 0) {
-                    <span style="color: #859900;">break</span>;
-                }
-                <span style="color: #859900;">if</span>(value &lt; start) {
-                    <span style="color: #859900;">continue</span>;
-                }
-                <span style="color: #859900;">if</span>(value &gt; end) {
-                    <span style="color: #859900;">break</span>;
+                int first = VampireNumber.getIntegerLength(i);
+                int second = VampireNumber.getIntegerLength(j);
+                if(second &gt; first) {
+                    break;
+                } else if(second &lt; first) {
+                    continue;
                 }
 
-                <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = VampireNumber.getIntegerLength(value);
-                <span style="color: #859900;">if</span>(len != first + second) {
-                    <span style="color: #859900;">continue</span>;
+                int value = i * j;
+                // 检测value是否已溢出
+                if(value &lt; 0) {
+                    break;
+                }
+                if(value &lt; start) {
+                    continue;
+                }
+                if(value &gt; end) {
+                    break;
                 }
 
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#23558;&#20004;&#20010;&#20056;&#25968;&#30340;&#25968;&#23383;&#25918;&#20837;List</span>
-                List&lt;Integer&gt; numList = <span style="color: #859900;">new</span> <span style="color: #b58900;">LinkedList</span>&lt;Integer&gt;();
+                int len = VampireNumber.getIntegerLength(value);
+                if(len != first + second) {
+                    continue;
+                }
+
+                // 将两个乘数的数字放入List
+                List&lt;Integer&gt; numList = new LinkedList&lt;Integer&gt;();
                 VampireNumber.getNumberList(i, first, numList);
                 VampireNumber.getNumberList(j, second, numList);
 
-                <span style="color: #b58900;">boolean</span> <span style="color: #b58900;">isVampireNumber</span> = <span style="color: #6c71c4;">true</span>;
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#23558;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#36827;&#34892;&#27604;&#36739;</span>
-                <span style="color: #859900;">while</span>(value != 0) {
-                    <span style="color: #b58900;">int</span> <span style="color: #b58900;">current</span> = value % 10;
+                boolean isVampireNumber = true;
+                // 将乘积的数字和List中存放的乘数的数字进行比较
+                while(value != 0) {
+                    int current = value % 10;
                     value /= 10;
 
-                    <span style="color: #859900;">if</span>(<span style="color: #859900;">!</span>numList.contains(current)) {
-                        isVampireNumber = <span style="color: #6c71c4;">false</span>;
-                        <span style="color: #859900;">break</span>;
+                    if(!numList.contains(current)) {
+                        isVampireNumber = false;
+                        break;
                     }
-                    numList.remove(<span style="color: #859900;">new</span> <span style="color: #b58900;">Integer</span>(current));
+                    numList.remove(new Integer(current));
                 }
-                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#20056;&#31215;&#30340;&#25968;&#23383;&#21644;List&#20013;&#23384;&#25918;&#30340;&#20056;&#25968;&#30340;&#25968;&#23383;&#21563;&#21512;&#65292;&#21017;&#26159;&#21560;&#34880;&#39740;&#25968;</span>
-                <span style="color: #859900;">if</span>(isVampireNumber) {
-                    System.out.println(<span style="color: #2aa198;">"A vampire number found: "</span> + i * j + <span style="color: #2aa198;">", ("</span> + i + <span style="color: #2aa198;">", "</span> + j + <span style="color: #2aa198;">")."</span>);
+                // 如果乘积的数字和List中存放的乘数的数字吻合，则是吸血鬼数
+                if(isVampireNumber) {
+                    System.out.println("A vampire number found: " + i * j + ", (" + i + ", " + j + ").");
                 }
             }
         }
     }
 
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#23558;num&#30340;&#21508;&#20010;&#20301;&#30340;&#25968;&#23383;&#25918;&#20837;list</span>
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">getNumberList</span>(<span style="color: #859900;">final</span> <span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">length</span>, List&lt;Integer&gt; list) {
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">copy</span> = num;
-        <span style="color: #859900;">for</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span> = 0; i &lt; length; i++) {
+    // 将num的各个位的数字放入list
+    public static void getNumberList(final int num, int length, List&lt;Integer&gt; list) {
+        int copy = num;
+        for(int i = 0; i &lt; length; i++) {
             list.add(copy % 10);
             copy /= 10;
         }
     }
 
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#21462;&#24471;num&#30340;&#20301;&#25968;</span>
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">int</span> <span style="color: #268bd2;">getIntegerLength</span>(<span style="color: #859900;">final</span> <span style="color: #b58900;">int</span> <span style="color: #b58900;">num</span>) {
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">len</span> = 0;
-        <span style="color: #b58900;">int</span> <span style="color: #b58900;">copy</span> = num;
-        <span style="color: #859900;">if</span>(copy == 0) {
-            <span style="color: #859900;">return</span> ++len;
+    // 取得num的位数
+    public static int getIntegerLength(final int num) {
+        int len = 0;
+        int copy = num;
+        if(copy == 0) {
+            return ++len;
         }
-        <span style="color: #859900;">while</span>(copy != 0) {
+        while(copy != 0) {
             copy /= 10;
             len++;
         }
-        <span style="color: #859900;">return</span> len;
+        return len;
     }
 
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>) {
-        System.out.println(<span style="color: #2aa198;">"----------- Now start computing... -----------"</span>);
-        <span style="color: #b58900;">long</span> <span style="color: #b58900;">s</span> = System.currentTimeMillis();
-        VampireNumber.find(0, <span style="color: #6c71c4;">Integer</span>.MAX_VALUE);
-        <span style="color: #b58900;">long</span> <span style="color: #b58900;">f</span> = System.currentTimeMillis();
-        System.out.println(<span style="color: #2aa198;">"----- Computing finished, time used: "</span> + (f - s) + <span style="color: #2aa198;">" ms. -----"</span>);
+    public static void main(String[] args) {
+        System.out.println("----------- Now start computing... -----------");
+        long s = System.currentTimeMillis();
+        VampireNumber.find(0, Integer.MAX_VALUE);
+        long f = System.currentTimeMillis();
+        System.out.println("----- Computing finished, time used: " + (f - s) + " ms. -----");
     }
 }
 </pre>
@@ -208,6 +209,9 @@
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -227,6 +231,5 @@
         </p>
       </div>
     </div>
-
   </body>
 </html>

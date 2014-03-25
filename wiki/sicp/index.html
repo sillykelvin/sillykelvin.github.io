@@ -7,6 +7,7 @@
     <meta name="description" content="learning notes of book Structure and Interpretation of Computer Programs" />
     <meta name="keywords" content="sicp, scheme" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -63,10 +64,10 @@
 <div class="outline-text-3" id="text-1-3">
 <div class="org-src-container">
 
-<pre class="src src-scheme"><span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">the answer below is wrong!!!</span>
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum-of-max-two</span> a b c)
-    (<span style="color: #859900;">cond</span> ((&lt; a b) (<span style="color: #859900;">if</span> (&lt; a c) (+ b c) (+ a b)))
-          (<span style="color: #859900;">else</span> (<span style="color: #859900;">if</span> (&lt; b c) (+ a c) (+ a b)))))
+<pre class="src src-scheme">;; the answer below is wrong!!!
+(define (sum-of-max-two a b c)
+    (cond ((&lt; a b) (if (&lt; a c) (+ b c) (+ a b)))
+          (else (if (&lt; b c) (+ a c) (+ a b)))))
 </pre>
 </div>
 </div>
@@ -114,7 +115,7 @@
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">good-enough?</span> guess x)
+<pre class="src src-scheme">(define (good-enough? guess x)
   (&lt; (/ (abs (- (improve guess x) guess)) guess) 0.00001))
 </pre>
 </div>
@@ -133,15 +134,15 @@
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">3sqrt</span> guess x)
-  (<span style="color: #859900;">if</span> (good-enough? guess x)
+<pre class="src src-scheme">(define (3sqrt guess x)
+  (if (good-enough? guess x)
       guess
       (3sqrt (improve guess x) x)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">improve</span> guess x)
+(define (improve guess x)
   (/ (+ (/ x (* guess guess)) (* 2 guess)) 3))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">good-enough?</span> guess x)
+(define (good-enough? guess x)
   (&lt; (/ (abs (- (improve guess x) guess)) guess) 0.00001))
 </pre>
 </div>
@@ -156,9 +157,9 @@
 
 <div class="org-src-container">
 
-<pre class="src src-scheme"><span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#31532;&#19968;&#31181;&#23450;&#20041;</span>
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factorial</span> n)
-  (<span style="color: #859900;">if</span> (= n 1)
+<pre class="src src-scheme">;; 第一种定义
+(define (factorial n)
+  (if (= n 1)
       1
       (* n (factorial (- n 1)))))
 </pre>
@@ -166,10 +167,10 @@
 
 <div class="org-src-container">
 
-<pre class="src src-scheme"><span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#31532;&#20108;&#31181;&#23450;&#20041;</span>
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factorial</span> n)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fact-iter</span> result counter)
-    (<span style="color: #859900;">if</span> (&gt; counter n)
+<pre class="src src-scheme">;; 第二种定义
+(define (factorial n)
+  (define (fact-iter result counter)
+    (if (&gt; counter n)
         result
         (fact-iter (* result counter) (+ counter 1))))
   (fact-iter 1 1))
@@ -246,9 +247,9 @@ n &lt; 3, f(n) = n; n &gt;= 3, f(n) = f(n-1) + 2f(n-2) + 3f(n-3)
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">f</span> n)
-  (<span style="color: #859900;">cond</span> ((&lt; n 3) n)
-        (<span style="color: #859900;">else</span> (+ (f (- n 1))
+<pre class="src src-scheme">(define (f n)
+  (cond ((&lt; n 3) n)
+        (else (+ (f (- n 1))
                  (* 2 (f (- n 2)))
                  (* 3 (f (- n 3)))))))
 </pre>
@@ -267,11 +268,11 @@ c &lt;= b
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">f2</span> n)
+<pre class="src src-scheme">(define (f2 n)
   (f2-iter 2 1 0 n))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">f2-iter</span> a b c count)
-  (<span style="color: #859900;">if</span> (= count 0)
+(define (f2-iter a b c count)
+  (if (= count 0)
       c
       (f2-iter (+ a (* 2 b) (* 3 c)) a b (- count 1))))
 </pre>
@@ -287,8 +288,8 @@ c &lt;= b
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">pascal-triangle</span> n m)
-  (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (= m 1) (= m n))
+<pre class="src src-scheme">(define (pascal-triangle n m)
+  (if (or (= m 1) (= m n))
       1
       (+ (pascal-triangle (- n 1) (- m 1))
          (pascal-triangle (- n 1) m))))
@@ -393,15 +394,15 @@ n &lt;= n - 1
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fast-expt</span> b n)
+<pre class="src src-scheme">(define (fast-expt b n)
   (fast-expt-iter 1 b n))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fast-expt-iter</span> a b n)
-  (<span style="color: #859900;">cond</span> ((= n 0) a)
+(define (fast-expt-iter a b n)
+  (cond ((= n 0) a)
         ((even? n) (fast-expt-iter a (* b b) (/ n 2)))
-        (<span style="color: #859900;">else</span> (fast-expt-iter (* a b) b (- n 1)))))
+        (else (fast-expt-iter (* a b) b (- n 1)))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">even?</span> n)
+(define (even? n)
   (= (remainder n 2) 0))
 </pre>
 </div>
@@ -416,15 +417,15 @@ n &lt;= n - 1
 <div class="outline-text-3" id="text-1-17">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">my*</span> a b)
-  (<span style="color: #859900;">cond</span> ((= b 0) 0)
+<pre class="src src-scheme">(define (my* a b)
+  (cond ((= b 0) 0)
         ((even? b) (my* (double a) (halve b)))
-        (<span style="color: #859900;">else</span> (+ a (my* a (- b 1))))))
+        (else (+ a (my* a (- b 1))))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">double</span> a)
+(define (double a)
   (+ a a))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">halve</span> a)
+(define (halve a)
   (/ a 2))
 </pre>
 </div>
@@ -450,13 +451,13 @@ n &lt;= n - 1
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">my*</span> a b)
+<pre class="src src-scheme">(define (my* a b)
   (my*-iter 0 a b))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">my*-iter</span> s a b)
-  (<span style="color: #859900;">cond</span> ((= b 0) s)
+(define (my*-iter s a b)
+  (cond ((= b 0) s)
         ((even? b) (my*-iter s (double a) (halve b)))
-        (<span style="color: #859900;">else</span> (my*-iter (+ s a) a (- b 1)))))
+        (else (my*-iter (+ s a) a (- b 1)))))
 </pre>
 </div>
 </div>
@@ -521,27 +522,27 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">timed-prime-test</span> n)
+<pre class="src src-scheme">(define (timed-prime-test n)
   (newline)
   (display n)
   (start-prime-test n (current-inexact-milliseconds)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-prime-test</span> n start-time)
-  (<span style="color: #859900;">if</span> (prime? n)
+(define (start-prime-test n start-time)
+  (if (prime? n)
       (report-time (- (current-inexact-milliseconds) start-time))
-      #f))  <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#36825;&#37324;&#22240;&#20026;Racket&#23454;&#29616;&#19981;&#20801;&#35768;if&#21482;&#26377;&#19968;&#20010;&#20998;&#25903;&#65292;&#25152;&#20197;&#29992;#f&#26469;&#34920;&#31034;&#21478;&#19968;&#20010;&#20998;&#25903;</span>
+      #f))  ;; 这里因为Racket实现不允许if只有一个分支，所以用#f来表示另一个分支
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">report-time</span> elapsed-time)
-  (display <span style="color: #2aa198;">" *** "</span>)
+(define (report-time elapsed-time)
+  (display " *** ")
   (display elapsed-time))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">search-for-primes</span> start count)
-  (<span style="color: #859900;">cond</span> ((= count 0) (newline))
+(define (search-for-primes start count)
+  (cond ((= count 0) (newline))
         ((timed-prime-test start) (search-for-primes (next-odd start) (- count 1)))
-        (<span style="color: #859900;">else</span> (search-for-primes (next-odd start) count))))
+        (else (search-for-primes (next-odd start) count))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">next-odd</span> n)
-  (<span style="color: #859900;">if</span> (= (remainder n 2) 0)
+(define (next-odd n)
+  (if (= (remainder n 2) 0)
       (+ 1 n)
       (+ 2 n)))
 </pre>
@@ -575,15 +576,15 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <div class="outline-text-3" id="text-1-23">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">next</span> n)
-  (<span style="color: #859900;">if</span> (= n 2)
+<pre class="src src-scheme">(define (next n)
+  (if (= n 2)
       3
       (+ n 2)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">find-divisor</span> n test)
-  (<span style="color: #859900;">cond</span> ((&gt; (* test test) n) n)
+(define (find-divisor n test)
+  (cond ((&gt; (* test test) n) n)
         ((divides? n test) test)
-        (<span style="color: #859900;">else</span> (find-divisor n (next test)))))
+        (else (find-divisor n (next test)))))
 </pre>
 </div>
 
@@ -615,13 +616,13 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">find-divisor</span> n test)
-  (<span style="color: #859900;">cond</span> ((&gt; (* test test) n) n)
+<pre class="src src-scheme">(define (find-divisor n test)
+  (cond ((&gt; (* test test) n) n)
         ((divides? n test) test)
-        (<span style="color: #859900;">else</span> (find-divisor n (+ test 2))))) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#30452;&#25509;&#21152;2&#65292;&#19981;&#20877;&#35843;&#29992;next&#36807;&#31243;</span>
+        (else (find-divisor n (+ test 2))))) ;; 直接加2，不再调用next过程
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">smallest-divisor</span> n)
-  (find-divisor n 3)) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#30452;&#25509;&#20174;3&#24320;&#22987;</span>
+(define (smallest-divisor n)
+  (find-divisor n 3)) ;; 直接从3开始
 </pre>
 </div>
 
@@ -657,8 +658,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-prime-test</span> n start-time)
-  (<span style="color: #859900;">if</span> (fast-prime? n 3)  <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#27979;&#35797;&#30340;&#27425;&#25968;&#21462;3</span>
+<pre class="src src-scheme">(define (start-prime-test n start-time)
+  (if (fast-prime? n 3)  ;; 测试的次数取3
       (report-time (- (current-inexact-milliseconds) start-time))
       #f))
 </pre>
@@ -802,12 +803,12 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">carmichael-check</span> n a)
-  (<span style="color: #859900;">cond</span> ((not (= (expmod a n n) a)) false)
+<pre class="src src-scheme">(define (carmichael-check n a)
+  (cond ((not (= (expmod a n n) a)) false)
         ((&gt; a 1) (carmichael-check n (- a 1)))
-        (<span style="color: #859900;">else</span> true)))
+        (else true)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">carmichael-test</span> n)
+(define (carmichael-test n)
   (carmichael-check n (- n 1)))
 </pre>
 </div>
@@ -826,27 +827,27 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">determine-result</span> a n)
-  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">and</span> (not (= a 1))
+<pre class="src src-scheme">(define (determine-result a n)
+  (cond ((and (not (= a 1))
               (not (= a (- n 1)))
               (= (remainder (square a) n) 1)) 0)
-        (<span style="color: #859900;">else</span> (remainder (square a) n))))
+        (else (remainder (square a) n))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">expmod</span> base exp m)
-  (<span style="color: #859900;">cond</span> ((= exp 0) 1)
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
         ((even? exp)
          (determine-result (expmod base (/ exp 2) m) m))
-        (<span style="color: #859900;">else</span> (remainder (* base (expmod base (- exp 1) m)) m))))
+        (else (remainder (* base (expmod base (- exp 1) m)) m))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">miller-rabin-test</span> n)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">try-it</span> a)
+(define (miller-rabin-test n)
+  (define (try-it a)
     (= (expmod a (- n 1) n) 1))
   (try-it (+ 1 (random (- n 1)))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">miller-rabin-prime?</span> n times)
-  (<span style="color: #859900;">cond</span> ((= times 0) true)
+(define (miller-rabin-prime? n times)
+  (cond ((= times 0) true)
         ((miller-rabin-test n) (miller-rabin-prime? n (- times 1)))
-        (<span style="color: #859900;">else</span> false)))
+        (else false)))
 </pre>
 </div>
 
@@ -864,18 +865,18 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum-simpson-rule</span> f k n a b)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factor</span>)
-    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (= k 0)
+<pre class="src src-scheme">(define (sum-simpson-rule f k n a b)
+  (define (factor)
+    (cond ((or (= k 0)
                (= k n)) 1)
           ((= (remainder k 2) 0) 2)
-          (<span style="color: #859900;">else</span> 4)))
-  (<span style="color: #859900;">if</span> (&gt; k n)
+          (else 4)))
+  (if (&gt; k n)
       0
       (+ (* (factor) (f (+ a (* k (/ (- b a) n)))))
          (sum-simpson-rule f (+ 1 k) n a b))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">simpson-rule</span> f n a b)
+(define (simpson-rule f n a b)
   (* (/ (/ (- b a) n) 3) (sum-simpson-rule f 0 n a b)))
 </pre>
 </div>
@@ -894,9 +895,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum</span> term a next b)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> a result)
-    (<span style="color: #859900;">if</span> (&gt; a b)
+<pre class="src src-scheme">(define (sum term a next b)
+  (define (iter a result)
+    (if (&gt; a b)
         result
         (iter (next a) (+ (term a) result))))
   (iter a 0))
@@ -913,8 +914,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product</span> term a next b)
-  (<span style="color: #859900;">if</span> (&gt; a b)
+<pre class="src src-scheme">(define (product term a next b)
+  (if (&gt; a b)
       1
       (* (term a)
          (product term (next a) next b))))
@@ -927,9 +928,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product</span> term a next b)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> a result)
-    (<span style="color: #859900;">if</span> (&gt; a b)
+<pre class="src src-scheme">(define (product term a next b)
+  (define (iter a result)
+    (if (&gt; a b)
         result
         (iter (next a) (* (term a) result))))
   (iter a 1))
@@ -942,8 +943,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">factorial</span> n)
-  (product (<span style="color: #859900;">lambda</span> (a) a) 1 (<span style="color: #859900;">lambda</span> (a) (+ 1 a)) n))
+<pre class="src src-scheme">(define (factorial n)
+  (product (lambda (a) a) 1 (lambda (a) (+ 1 a)) n))
 </pre>
 </div>
 
@@ -953,18 +954,18 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cal-pi</span> n)
-  (* 2.0           <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#20351;&#29992;2.0&#32780;&#19981;&#29992;2&#65292;&#26159;&#20026;&#20102;&#35753;&#32467;&#26524;&#23637;&#31034;&#20026;&#23567;&#25968;&#32780;&#19981;&#26159;&#20998;&#25968;</span>
-     (<span style="color: #859900;">if</span> (even? n) n (+ 1 n)) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#36825;&#20010;&#19981;&#21487;&#32570;&#23569;&#65292;&#19979;&#38754;&#26377;&#35299;&#37322;</span>
+<pre class="src src-scheme">(define (cal-pi n)
+  (* 2.0           ;; 使用2.0而不用2，是为了让结果展示为小数而不是分数
+     (if (even? n) n (+ 1 n)) ;; 这个不可缺少，下面有解释
      (/
-      (product (<span style="color: #859900;">lambda</span> (a) (square a))
+      (product (lambda (a) (square a))
                2
-               (<span style="color: #859900;">lambda</span> (a) (+ 2 a))
-               (<span style="color: #859900;">if</span> (even? n) n (+ 1 n)))
-      (product (<span style="color: #859900;">lambda</span> (a) (square a))
+               (lambda (a) (+ 2 a))
+               (if (even? n) n (+ 1 n)))
+      (product (lambda (a) (square a))
                3
-               (<span style="color: #859900;">lambda</span> (a) (+ 2 a))
-               (<span style="color: #859900;">if</span> (even? n) (+ 1 n) (+ 2 n))))))
+               (lambda (a) (+ 2 a))
+               (if (even? n) (+ 1 n) (+ 2 n))))))
 </pre>
 </div>
 
@@ -982,8 +983,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">accumulate</span> combiner null-value term a next b)
-  (<span style="color: #859900;">if</span> (&gt; a b)
+<pre class="src src-scheme">(define (accumulate combiner null-value term a next b)
+  (if (&gt; a b)
       null-value
       (combiner (term a)
                 (accumulate combiner null-value term (next a) next b))))
@@ -996,9 +997,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">accumulate</span> combiner null-value term a next b)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> a result)
-    (<span style="color: #859900;">if</span> (&gt; a b)
+<pre class="src src-scheme">(define (accumulate combiner null-value term a next b)
+  (define (iter a result)
+    (if (&gt; a b)
         result
         (iter (next a) (combiner (term a) result))))
   (iter a null-value))
@@ -1011,10 +1012,10 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum</span> term a next b)
+<pre class="src src-scheme">(define (sum term a next b)
   (accumulate + 0 term a next b))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product</span> term a next b)
+(define (product term a next b)
   (accumulate * 1 term a next b))
 </pre>
 </div>
@@ -1029,17 +1030,17 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">filtered-accumulate</span> combiner null-value term a next b filter)
-  (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (&gt; a b) (not (filter a b)))
+<pre class="src src-scheme">(define (filtered-accumulate combiner null-value term a next b filter)
+  (if (or (&gt; a b) (not (filter a b)))
       null-value
       (combiner (term a)
                 (filtered-accumulate combiner null-value term (next a) next b filter))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum-prime</span> a b)
-  (filtered-accumulate + 0 (<span style="color: #859900;">lambda</span> (a) a) a (<span style="color: #859900;">lambda</span> (a) (+ 1 a)) b prime?))
+(define (sum-prime a b)
+  (filtered-accumulate + 0 (lambda (a) a) a (lambda (a) (+ 1 a)) b prime?))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product-gcd-prime</span> n)
-  (filtered-accumulate * 1 (<span style="color: #859900;">lambda</span> (a) a) 1 (<span style="color: #859900;">lambda</span> (a) (+ 1 a)) n gcd-eq1?))
+(define (product-gcd-prime n)
+  (filtered-accumulate * 1 (lambda (a) a) 1 (lambda (a) (+ 1 a)) n gcd-eq1?))
 </pre>
 </div>
 </div>
@@ -1085,14 +1086,14 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fixed-point</span> f first-guess)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">close-enough?</span> v1 v2)
+<pre class="src src-scheme">(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
     (&lt; (abs (- v1 v2)) 0.0000001))
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">try</span> guess)
-    (<span style="color: #859900;">let</span> ((next (f guess)))
+  (define (try guess)
+    (let ((next (f guess)))
       (display next)
       (newline)
-      (<span style="color: #859900;">if</span> (close-enough? guess next)
+      (if (close-enough? guess next)
           next
           (try next))))
   (try first-guess))
@@ -1129,9 +1130,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cont-frac</span> n d k)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">frac</span> i)
-    (<span style="color: #859900;">if</span> (&gt; i k)
+<pre class="src src-scheme">(define (cont-frac n d k)
+  (define (frac i)
+    (if (&gt; i k)
         0
         (/ (n i)
            (+ (d i) (frac (+ 1 i))))))
@@ -1145,9 +1146,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cont-frac</span> n d k)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> i result)
-    (<span style="color: #859900;">if</span> (&lt; i 1)
+<pre class="src src-scheme">(define (cont-frac n d k)
+  (define (iter i result)
+    (if (&lt; i 1)
         result
         (iter (- i 1)
               (/ (n i)
@@ -1162,9 +1163,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">((<span style="color: #859900;">lambda</span> (k)
-   (&lt; (abs (- (/ 1 (cont-frac (<span style="color: #859900;">lambda</span> (i) 1.0)
-                              (<span style="color: #859900;">lambda</span> (i) 1.0)
+<pre class="src src-scheme">((lambda (k)
+   (&lt; (abs (- (/ 1 (cont-frac (lambda (i) 1.0)
+                              (lambda (i) 1.0)
                               k))
               1.61803401))
       0.0001))
@@ -1186,10 +1187,10 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">d</span> i)
-  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (= (remainder i 3) 0)
+<pre class="src src-scheme">(define (d i)
+  (cond ((or (= (remainder i 3) 0)
              (= (remainder i 3) 1)) 1)
-        (<span style="color: #859900;">else</span> (/ (* 2 (+ 1 i)) 3))))
+        (else (/ (* 2 (+ 1 i)) 3))))
 </pre>
 </div>
 
@@ -1212,13 +1213,13 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">tan-cf</span> x k)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">n</span> i)
-    (<span style="color: #859900;">if</span> (= i 1) x (square x)))
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">d</span> i)
+<pre class="src src-scheme">(define (tan-cf x k)
+  (define (n i)
+    (if (= i 1) x (square x)))
+  (define (d i)
     (- (* 2 i) 1))
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cf</span> i)
-    (<span style="color: #859900;">if</span> (&gt; i k)
+  (define (cf i)
+    (if (&gt; i k)
         0
         (/ (n i)
            (- (d i) (cf (+ 1 i))))))
@@ -1232,8 +1233,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <div class="outline-text-3" id="text-1-40">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cubic</span> a b c)
-  (<span style="color: #859900;">lambda</span> (x)
+<pre class="src src-scheme">(define (cubic a b c)
+  (lambda (x)
     (+ (cube x)
        (* a (square x))
        (* b x)
@@ -1251,8 +1252,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">double</span> f)
-  (<span style="color: #859900;">lambda</span> (x) (f (f x))))
+<pre class="src src-scheme">(define (double f)
+  (lambda (x) (f (f x))))
 </pre>
 </div>
 
@@ -1266,8 +1267,8 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <div class="outline-text-3" id="text-1-42">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">compose</span> f g)
-  (<span style="color: #859900;">lambda</span> (x) (f (g x))))
+<pre class="src src-scheme">(define (compose f g)
+  (lambda (x) (f (g x))))
 </pre>
 </div>
 </div>
@@ -1277,10 +1278,10 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 <div class="outline-text-3" id="text-1-43">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">repeated</span> f n)
-  (<span style="color: #859900;">if</span> (&lt;= n 1)
-      (<span style="color: #859900;">lambda</span> (x) (f x))
-      <span style="color: #586e75; font-style: italic;">;</span><span style="color: #586e75; font-style: italic;">(repeated (compose f f) (- n 1))</span>
+<pre class="src src-scheme">(define (repeated f n)
+  (if (&lt;= n 1)
+      (lambda (x) (f x))
+      ;(repeated (compose f f) (- n 1))
       (compose f (repeated f (- n 1)))))
 </pre>
 </div>
@@ -1299,10 +1300,10 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">dx</span> 0.0000000001)
+<pre class="src src-scheme">(define dx 0.0000000001)
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">smooth</span> f)
-  (<span style="color: #859900;">lambda</span> (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
+(define (smooth f)
+  (lambda (x) (/ (+ (f x) (f (- x dx)) (f (+ x dx))) 3)))
 </pre>
 </div>
 
@@ -1312,7 +1313,7 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">smooth-n</span> f n)
+<pre class="src src-scheme">(define (smooth-n f n)
   ((repeated smooth n) f))
 </pre>
 </div>
@@ -1343,11 +1344,11 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">nth-root</span> x n)
+<pre class="src src-scheme">(define (nth-root x n)
   (fixed-point
    ((repeated average-damp
               (floor (/ (log n) (log 2))))
-    (<span style="color: #859900;">lambda</span> (y) (/ x (expt y (- n 1))))) 1.0))
+    (lambda (y) (/ x (expt y (- n 1))))) 1.0))
 </pre>
 </div>
 
@@ -1373,10 +1374,10 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iterative-improve</span> good-enough? improve-guess)
-  (<span style="color: #859900;">lambda</span> (guess)
-    (<span style="color: #859900;">let</span> ((next (improve-guess guess)))
-      (<span style="color: #859900;">if</span> (good-enough? next guess)
+<pre class="src src-scheme">(define (iterative-improve good-enough? improve-guess)
+  (lambda (guess)
+    (let ((next (improve-guess guess)))
+      (if (good-enough? next guess)
           next
           ((iterative-improve good-enough? improve-guess)
            (improve-guess guess))))))
@@ -1389,14 +1390,14 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sqrt</span> x)
-  ((iterative-improve (<span style="color: #859900;">lambda</span> (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
-                      (<span style="color: #859900;">lambda</span> (y) (average y (/ x y))))
+<pre class="src src-scheme">(define (sqrt x)
+  ((iterative-improve (lambda (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
+                      (lambda (y) (average y (/ x y))))
    1.0))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fixed-point</span> f first-guess)
-  ((iterative-improve (<span style="color: #859900;">lambda</span> (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
-                      (<span style="color: #859900;">lambda</span> (y) (f y)))
+(define (fixed-point f first-guess)
+  ((iterative-improve (lambda (v1 v2) (&lt; (abs (- v1 v2)) 0.0001))
+                      (lambda (y) (f y)))
    first-guess))
 </pre>
 </div>
@@ -1411,11 +1412,11 @@ n次平滑过程 <code>smooth-n</code> ：
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-rat</span> n d)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-rat-inner</span> n d)
-    (<span style="color: #859900;">let</span> ((g (gcd n d)))
+<pre class="src src-scheme">(define (make-rat n d)
+  (define (make-rat-inner n d)
+    (let ((g (gcd n d)))
       (cons (/ n g) (/ d g))))
-  (<span style="color: #859900;">if</span> (&lt; (/ n d) 0)
+  (if (&lt; (/ n d) 0)
       (make-rat-inner (- (abs n))  (abs d))
       (make-rat-inner (abs n) (abs d))))
 </pre>
@@ -1427,25 +1428,25 @@ n次平滑过程 <code>smooth-n</code> ：
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-segment</span> point-x point-y)
+<pre class="src src-scheme">(define (make-segment point-x point-y)
   (cons point-x point-y))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-segment</span> segment)
+(define (start-segment segment)
   (car segment))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">end-segment</span> segment)
+(define (end-segment segment)
   (cdr segment))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-point</span> x y)
+(define (make-point x y)
   (cons x y))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">x-point</span> point)
+(define (x-point point)
   (car point))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">y-point</span> point)
+(define (y-point point)
   (cdr point))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">midpoint-segment</span> segment)
+(define (midpoint-segment segment)
   (make-point (average (x-point (start-segment segment))
                        (x-point (end-segment segment)))
               (average (y-point (start-segment segment))
@@ -1459,22 +1460,22 @@ n次平滑过程 <code>smooth-n</code> ：
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-rectangle</span> p-lu p-rd)
+<pre class="src src-scheme">(define (make-rectangle p-lu p-rd)
   (cons p-lu p-rd))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rect-left-up-point</span> rect)
+(define (rect-left-up-point rect)
   (car rect))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rect-right-down-point</span> rect)
+(define (rect-right-down-point rect)
   (cdr rect))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">perimeter</span> rect)
+(define (perimeter rect)
   (* 2 (+ (- (x-point (rect-right-down-point rect))
              (x-point (rect-left-up-point rect)))
           (- (y-point (rect-left-up-point rect))
              (y-point (rect-right-down-point rect))))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">area</span> rect)
+(define (area rect)
   (* (- (x-point (rect-right-down-point rect))
         (x-point (rect-left-up-point rect)))
      (- (y-point (rect-left-up-point rect))
@@ -1488,8 +1489,8 @@ n次平滑过程 <code>smooth-n</code> ：
 <div class="outline-text-3" id="text-2-4">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cdr</span> z)
-  (z (<span style="color: #859900;">lambda</span> (p q) q)))
+<pre class="src src-scheme">(define (cdr z)
+  (z (lambda (p q) q)))
 </pre>
 </div>
 
@@ -1507,25 +1508,25 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cons</span> a b)
+<pre class="src src-scheme">(define (cons a b)
   (* (expt 2 a) (expt 3 b)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">a</span> x n)
-  (<span style="color: #859900;">if</span> (= (remainder x n) 0)
+(define (a x n)
+  (if (= (remainder x n) 0)
       (a (/ x n) n)
       x))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">car</span> z)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">d</span> x n)
-    (<span style="color: #859900;">if</span> (= (remainder x n) 0)
+(define (car z)
+  (define (d x n)
+    (if (= (remainder x n) 0)
         (a (/ x n) n)
         x))
   (/ (log (d z 3))
      (log 2)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cdr</span> z)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">d</span> x n)
-    (<span style="color: #859900;">if</span> (= (remainder x n) 0)
+(define (cdr z)
+  (define (d x n)
+    (if (= (remainder x n) 0)
         (a (/ x n) n)
         x))
   (/ (log (d z 2))
@@ -1551,7 +1552,7 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">one</span> (<span style="color: #859900;">lambda</span> (f) (<span style="color: #859900;">lambda</span> (x) (f x))))
+<pre class="src src-scheme">(define one (lambda (f) (lambda (x) (f x))))
 </pre>
 </div>
 
@@ -1561,7 +1562,7 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">two</span> (<span style="color: #859900;">lambda</span> (f) (<span style="color: #859900;">lambda</span> (x) (f (f x)))))
+<pre class="src src-scheme">(define two (lambda (f) (lambda (x) (f (f x)))))
 </pre>
 </div>
 
@@ -1571,8 +1572,8 @@ n次平滑过程 <code>smooth-n</code> ：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">+</span> a b)
-  (<span style="color: #859900;">lambda</span> (f) (<span style="color: #859900;">lambda</span> (x) ((b f) ((a f) x)))))
+<pre class="src src-scheme">(define (+ a b)
+  (lambda (f) (lambda (x) ((b f) ((a f) x)))))
 </pre>
 </div>
 
@@ -1602,10 +1603,10 @@ n次平滑过程 <code>smooth-n</code> ：
 <div class="outline-text-3" id="text-2-7">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">upper-bound</span> z)
+<pre class="src src-scheme">(define (upper-bound z)
   (cdr z))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">lower-bound</span> z)
+(define (lower-bound z)
   (car z))
 </pre>
 </div>
@@ -1636,7 +1637,7 @@ b1 - b2 &gt; a1 - b2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sub-interval</span> x y)
+<pre class="src src-scheme">(define (sub-interval x y)
   (make-interval (- (lower-bound x) (upper-bound y))
                  (- (upper-bound x) (lower-bound y))))
 </pre>
@@ -1656,10 +1657,10 @@ b1 - b2 &gt; a1 - b2
 <div class="outline-text-3" id="text-2-10">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">div-interval</span> x y)
-  (<span style="color: #859900;">if</span> (<span style="color: #859900;">and</span> (&lt;= (lower-bound y) 0)
+<pre class="src src-scheme">(define (div-interval x y)
+  (if (and (&lt;= (lower-bound y) 0)
            (&gt;= (upper-bound y) 0))
-      (error <span style="color: #2aa198;">"cannot divide an interval contains zero."</span>)
+      (error "cannot divide an interval contains zero.")
       (mul-interval
        x
        (make-interval (/ 1.0 (upper-bound y))
@@ -1705,10 +1706,10 @@ aR, bR
 <div class="outline-text-3" id="text-2-12">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-center-percent</span> c p)
+<pre class="src src-scheme">(define (make-center-percent c p)
   (make-interval (- c (* c p)) (+ c (* c p))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">percent</span> i)
+(define (percent i)
   (/ (width i) (center i)))
 </pre>
 </div>
@@ -1830,8 +1831,8 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 <div class="outline-text-3" id="text-2-17">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">last-pair</span> items)
-  (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (null? items) (null? (cdr items)))
+<pre class="src src-scheme">(define (last-pair items)
+  (if (or (null? items) (null? (cdr items)))
       items
       (last-pair (cdr items))))
 </pre>
@@ -1843,8 +1844,8 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 <div class="outline-text-3" id="text-2-18">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">reverse</span> items)
-  (<span style="color: #859900;">if</span> (null? items)
+<pre class="src src-scheme">(define (reverse items)
+  (if (null? items)
       items
       (append (reverse (cdr items)) (list (car items)))))
 </pre>
@@ -1856,13 +1857,13 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 <div class="outline-text-3" id="text-2-19">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">first-denomination</span> coin-values)
+<pre class="src src-scheme">(define (first-denomination coin-values)
   (car coin-values))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">except-first-denomination</span> coin-values)
+(define (except-first-denomination coin-values)
   (cdr coin-values))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">no-more?</span> coin-values)
+(define (no-more? coin-values)
   (null? coin-values))
 </pre>
 </div>
@@ -1881,17 +1882,17 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">same-parity</span> . items)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sp?</span> a b)
-    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">and</span> (odd? a) (odd? b)) true)
-          ((<span style="color: #859900;">and</span> (even? a) (even? b)) true)
-          (<span style="color: #859900;">else</span> false)))
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sp</span> a others)
-    (<span style="color: #859900;">cond</span> ((null? others) (list a))
+<pre class="src src-scheme">(define (same-parity . items)
+  (define (sp? a b)
+    (cond ((and (odd? a) (odd? b)) true)
+          ((and (even? a) (even? b)) true)
+          (else false)))
+  (define (sp a others)
+    (cond ((null? others) (list a))
           ((sp? a (car others)) (append (list a)
                                         (sp (car others) (cdr others))))
-          (<span style="color: #859900;">else</span> (sp a (cdr others)))))
-  (<span style="color: #859900;">if</span> (null? items)
+          (else (sp a (cdr others)))))
+  (if (null? items)
       items
       (sp (car items) (cdr items))))
 </pre>
@@ -1903,13 +1904,13 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 <div class="outline-text-3" id="text-2-21">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-list</span> items)
-  (<span style="color: #859900;">if</span> (null? items)
+<pre class="src src-scheme">(define (square-list items)
+  (if (null? items)
       '()
       (cons (expt (car items) 2) (square-list (cdr items)))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-list</span> items)
-  (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (x) (expt x 2))
+(define (square-list items)
+  (map (lambda (x) (expt x 2))
        items))
 </pre>
 </div>
@@ -1956,11 +1957,11 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 <div class="outline-text-3" id="text-2-23">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">for-each</span> proc items)
-  (<span style="color: #859900;">if</span> (null? items)
+<pre class="src src-scheme">(define (for-each proc items)
+  (if (null? items)
       '()
-      (<span style="color: #859900;">begin</span> (proc (car items))
-             (<span style="color: #859900;">for-each</span> proc (cdr items)))))
+      (begin (proc (car items))
+             (for-each proc (cdr items)))))
 </pre>
 </div>
 </div>
@@ -2006,10 +2007,10 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">deep-reverse</span> items)
-  (<span style="color: #859900;">cond</span> ((not (pair? items)) items)
+<pre class="src src-scheme">(define (deep-reverse items)
+  (cond ((not (pair? items)) items)
         ((null? (cdr items)) (list (deep-reverse (car items))))
-        (<span style="color: #859900;">else</span> (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
+        (else (append (deep-reverse (cdr items)) (list (deep-reverse (car items)))))))
 </pre>
 </div>
 
@@ -2027,11 +2028,11 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">fringe</span> items)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> items result)
-    (<span style="color: #859900;">cond</span> ((null? items) result)
+<pre class="src src-scheme">(define (fringe items)
+  (define (iter items result)
+    (cond ((null? items) result)
           ((not (pair? items)) (append result (list items)))
-          (<span style="color: #859900;">else</span> (iter (cdr items) (iter (car items) result)))))
+          (else (iter (cdr items) (iter (car items) result)))))
   (iter items '()))
 </pre>
 </div>
@@ -2046,16 +2047,16 @@ a) 这几个过程还是相对比较简单的，取对应元素即可，需要�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">left-branch</span> mobile)
+<pre class="src src-scheme">(define (left-branch mobile)
   (car mobile))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">right-branch</span> mobile)
+(define (right-branch mobile)
   (cadr mobile))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">branch-length</span> branch)
+(define (branch-length branch)
   (car branch))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">branch-structure</span> branch)
+(define (branch-structure branch)
   (cadr branch))
 </pre>
 </div>
@@ -2066,10 +2067,10 @@ b) <code>total-weight</code> 过程如下：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">total-weight</span> mobile)
-  (<span style="color: #859900;">cond</span> ((null? mobile) 0)
+<pre class="src src-scheme">(define (total-weight mobile)
+  (cond ((null? mobile) 0)
         ((not (pair? mobile)) mobile)
-        (<span style="color: #859900;">else</span> (+ (total-weight (branch-structure (left-branch mobile)))
+        (else (+ (total-weight (branch-structure (left-branch mobile)))
                  (total-weight (branch-structure (right-branch mobile)))))))
 </pre>
 </div>
@@ -2080,15 +2081,15 @@ c) 用于检查平衡的 <code>check-balance</code> 过程如下：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">check-balance</span> mobile)
-  (<span style="color: #859900;">cond</span> ((null? mobile) #f)
+<pre class="src src-scheme">(define (check-balance mobile)
+  (cond ((null? mobile) #f)
         ((not (pair? mobile)) #t)
         ((not (= (* (branch-length (left-branch mobile))
                     (total-weight (branch-structure (left-branch mobile))))
                  (* (branch-length (right-branch mobile))
                     (total-weight (branch-structure (right-branch mobile))))))
          #f)
-        (<span style="color: #859900;">else</span> (<span style="color: #859900;">and</span> (check-balance (branch-structure (left-branch mobile)))
+        (else (and (check-balance (branch-structure (left-branch mobile)))
                    (check-balance (branch-structure (right-branch mobile)))))))
 </pre>
 </div>
@@ -2103,17 +2104,17 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-30">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-tree</span> tree)
-  (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (sub-tree)
-         (<span style="color: #859900;">if</span> (pair? sub-tree)
+<pre class="src src-scheme">(define (square-tree tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
              (square-tree sub-tree)
              (expt sub-tree 2)))
        tree))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-tree</span> tree)
-  (<span style="color: #859900;">cond</span> ((null? tree) #nil)
+(define (square-tree tree)
+  (cond ((null? tree) #nil)
         ((not (pair? tree)) (expt tree 2))
-        (<span style="color: #859900;">else</span> (cons (square-tree (car tree))
+        (else (cons (square-tree (car tree))
                     (square-tree (cdr tree))))))
 </pre>
 </div>
@@ -2124,9 +2125,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-31">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">tree-map</span> proc tree)
-  (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (sub-tree)
-         (<span style="color: #859900;">if</span> (pair? sub-tree)
+<pre class="src src-scheme">(define (tree-map proc tree)
+  (map (lambda (sub-tree)
+         (if (pair? sub-tree)
              (tree-map proc sub-tree)
              (proc sub-tree)))
        tree))
@@ -2162,12 +2163,12 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">subsets</span> s)
-  (<span style="color: #859900;">if</span> (null? s)
+<pre class="src src-scheme">(define (subsets s)
+  (if (null? s)
       (list #nil)
-      (<span style="color: #859900;">let</span> ((rest (subsets (cdr s))))
+      (let ((rest (subsets (cdr s))))
         (append rest
-                (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (set)
+                (map (lambda (set)
                        (append set (list (car s))))
                      rest)))))
 </pre>
@@ -2179,14 +2180,14 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-33">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">map</span> p sequence)
-  (accumulate (<span style="color: #859900;">lambda</span> (x y) (cons (p x) y)) #nil sequence))
+<pre class="src src-scheme">(define (map p sequence)
+  (accumulate (lambda (x y) (cons (p x) y)) #nil sequence))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">append</span> seq1 seq2)
+(define (append seq1 seq2)
   (accumulate cons seq2 seq1))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">length</span> sequence)
-  (accumulate (<span style="color: #859900;">lambda</span> (x y) (+ y 1)) 0 sequence))
+(define (length sequence)
+  (accumulate (lambda (x y) (+ y 1)) 0 sequence))
 </pre>
 </div>
 </div>
@@ -2196,8 +2197,8 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-34">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">hornor-eval</span> x coefficient-sequence)
-  (accumulate (<span style="color: #859900;">lambda</span> (this-coeff higher-terms)
+<pre class="src src-scheme">(define (hornor-eval x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms)
                 (+ this-coeff (* x higher-terms)))
               0
               coefficient-sequence))
@@ -2210,10 +2211,10 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-35">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">count-leaves</span> tree)
-  (accumulate (<span style="color: #859900;">lambda</span> (x y) (+ x y))
+<pre class="src src-scheme">(define (count-leaves tree)
+  (accumulate (lambda (x y) (+ x y))
               0
-              (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (x) (length (enumerate-tree x)))
+              (map (lambda (x) (length (enumerate-tree x)))
                    tree)))
 </pre>
 </div>
@@ -2224,11 +2225,11 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-36">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">accumulate-n</span> op init seqs)
-  (<span style="color: #859900;">if</span> (null? (car seqs))
+<pre class="src src-scheme">(define (accumulate-n op init seqs)
+  (if (null? (car seqs))
       #nil
-      (cons (accumulate op init (<span style="color: #859900;">map</span> car seqs))
-            (accumulate-n op init (<span style="color: #859900;">map</span> cdr seqs)))))
+      (cons (accumulate op init (map car seqs))
+            (accumulate-n op init (map cdr seqs)))))
 </pre>
 </div>
 </div>
@@ -2242,19 +2243,19 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">dot-product</span> v w)
-  (accumulate + 0 (<span style="color: #859900;">map</span> * v w)))
+<pre class="src src-scheme">(define (dot-product v w)
+  (accumulate + 0 (map * v w)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">matrix-*-vector</span> m v)
-  (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (row)
+(define (matrix-*-vector m v)
+  (map (lambda (row)
          (dot-product v row)) m))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">transpose</span> mat)
+(define (transpose mat)
   (accumulate-n cons #nil mat))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">matrix-*-matrix</span> m n)
-  (<span style="color: #859900;">let</span> ((cols (transpose n)))
-    (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (row)
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map (lambda (row)
            (matrix-*-vector n row)) m)))
 </pre>
 </div>
@@ -2286,11 +2287,11 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-39">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">reverse1</span> sequence)
-  (fold-right (<span style="color: #859900;">lambda</span> (x y) (append y (list x))) #nil sequence))
+<pre class="src src-scheme">(define (reverse1 sequence)
+  (fold-right (lambda (x y) (append y (list x))) #nil sequence))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">reverse2</span> sequence)
-  (fold-left (<span style="color: #859900;">lambda</span> (x y) (cons y x)) #nil sequence))
+(define (reverse2 sequence)
+  (fold-left (lambda (x y) (cons y x)) #nil sequence))
 </pre>
 </div>
 </div>
@@ -2300,9 +2301,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-40">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">unique-pairs</span> n)
-  (flatmap (<span style="color: #859900;">lambda</span> (i)
-             (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (j) (list i j))
+<pre class="src src-scheme">(define (unique-pairs n)
+  (flatmap (lambda (i)
+             (map (lambda (j) (list i j))
                   (enumerate-interval 1 (- i 1))))
            (enumerate-interval 1 n)))
 </pre>
@@ -2318,18 +2319,18 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">unique-triples</span> n)
+<pre class="src src-scheme">(define (unique-triples n)
   (accumulate append
               #nil
-              (flatmap (<span style="color: #859900;">lambda</span> (i)
-                         (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (j)
-                                (<span style="color: #859900;">map</span> (<span style="color: #859900;">lambda</span> (k) (list i j k))
+              (flatmap (lambda (i)
+                         (map (lambda (j)
+                                (map (lambda (k) (list i j k))
                                      (enumerate-interval 1 (- j 1))))
                               (enumerate-interval 1 (- i 1))))
                        (enumerate-interval 1 n))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">const-sum-triples</span> n s)
-  (filter (<span style="color: #859900;">lambda</span> (item)
+(define (const-sum-triples n s)
+  (filter (lambda (item)
             (= s (+ (car item) (cadr item) (caddr item))))
           (unique-triples n)))
 </pre>
@@ -2357,18 +2358,18 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">empty-board</span> #nil)
+<pre class="src src-scheme">(define empty-board #nil)
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">adjoin-position</span> new-row k rest-of-queens)
+(define (adjoin-position new-row k rest-of-queens)
   (append (list new-row) rest-of-queens))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">safe?</span> k positions)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> k row c pos)
-    (<span style="color: #859900;">cond</span> ((null? pos) #t)
-          ((<span style="color: #859900;">or</span> (= row (car pos))
+(define (safe? k positions)
+  (define (iter k row c pos)
+    (cond ((null? pos) #t)
+          ((or (= row (car pos))
                (= (abs (- row (car pos)))
                   (abs (- k c)))) #f)
-          (<span style="color: #859900;">else</span> (iter k row (- c 1) (cdr pos)))))
+          (else (iter k row (- c 1) (cdr pos)))))
   (iter k (car positions) (- k 1) (cdr positions)))
 </pre>
 </div>
@@ -2395,10 +2396,10 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-44">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">up-split</span> painter n)
-  (<span style="color: #859900;">if</span> (= n 0)
+<pre class="src src-scheme">(define (up-split painter n)
+  (if (= n 0)
       painter
-      (<span style="color: #859900;">let</span> ((smaller (up-split painter (- n 1))))
+      (let ((smaller (up-split painter (- n 1))))
         (below painter (beside smaller smaller)))))
 </pre>
 </div>
@@ -2409,11 +2410,11 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-45">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">split</span> proc1 proc2)
-  (<span style="color: #859900;">lambda</span> (painter n)
-    (<span style="color: #859900;">if</span> (= n 0)
+<pre class="src src-scheme">(define (split proc1 proc2)
+  (lambda (painter n)
+    (if (= n 0)
         painter
-        (<span style="color: #859900;">let</span> ((smaller ((split proc1 proc2) painter (- n 1))))
+        (let ((smaller ((split proc1 proc2) painter (- n 1))))
           (proc1 painter (proc2 smaller smaller))))))
 </pre>
 </div>
@@ -2424,28 +2425,28 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-46">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-vect</span> x y)
+<pre class="src src-scheme">(define (make-vect x y)
   (cons x y))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">xcor-vect</span> vect)
+(define (xcor-vect vect)
   (car vect))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">ycor-vect</span> vect)
+(define (ycor-vect vect)
   (cdr vect))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">add-vect</span> vect1 vect2)
+(define (add-vect vect1 vect2)
   (make-vect (+ (xcor-vect vect1)
                 (xcor-vect vect2))
              (+ (ycor-vect vect1)
                 (ycor-vect vect2))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sub-vect</span> vect1 vect2)
+(define (sub-vect vect1 vect2)
   (make-vect (- (xcor-vect vect1)
                 (xcor-vect vect2))
              (- (ycor-vect vect1)
                 (ycor-vect vect2))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">scale-vect</span> s vect)
+(define (scale-vect s vect)
   (make-vect (* s (xcor-vect vect))
              (* s (ycor-vect vect))))
 </pre>
@@ -2461,13 +2462,13 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">origin-frame</span> frame)
+<pre class="src src-scheme">(define (origin-frame frame)
   (car frame))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">edge1-frame</span> frame)
+(define (edge1-frame frame)
   (cadr frame))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">edge2-frame</span> frame)
+(define (edge2-frame frame)
   (caddr frame))
 </pre>
 </div>
@@ -2478,13 +2479,13 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">origin-frame</span> frame)
+<pre class="src src-scheme">(define (origin-frame frame)
   (car frame))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">edge1-frame</span> frame)
+(define (edge1-frame frame)
   (cadr frame))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">edge2-frame</span> frame)
+(define (edge2-frame frame)
   (cddr frame))
 </pre>
 </div>
@@ -2495,13 +2496,13 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 <div class="outline-text-3" id="text-2-48">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-segment</span> start-vect end-vect)
+<pre class="src src-scheme">(define (make-segment start-vect end-vect)
   (cons start-vect end-vect))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">start-segment</span> segment)
+(define (start-segment segment)
   (car segment))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">end-segment</span> segment)
+(define (end-segment segment)
   (cdr segment))
 </pre>
 </div>
@@ -2542,8 +2543,8 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">border-painter</span> frame)
-  (<span style="color: #859900;">let</span> ((point1 (origin-frame frame))
+<pre class="src src-scheme">(define (border-painter frame)
+  (let ((point1 (origin-frame frame))
         (point2 (add-vect (origin-frame frame)
                           (edge1-frame frame)))
         (point3 (add-vect (origin-frame frame)
@@ -2561,8 +2562,8 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">cross-painter</span> frame)
-  (<span style="color: #859900;">let</span> ((point1 (origin-frame frame))
+<pre class="src src-scheme">(define (cross-painter frame)
+  (let ((point1 (origin-frame frame))
         (point2 (add-vect (origin-frame frame)
                           (edge1-frame frame)))
         (point3 (add-vect (origin-frame frame)
@@ -2578,8 +2579,8 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">middle-point-painter</span> frame)
-  (<span style="color: #859900;">let</span> ((middle-point1 (add-vect (origin-frame frame)
+<pre class="src src-scheme">(define (middle-point-painter frame)
+  (let ((middle-point1 (add-vect (origin-frame frame)
                                  (scale-vect 0.5 (edge1-frame frame))))
         (middle-point2 (add-vect (origin-frame frame)
                                  (scale-vect 0.5 (edge2-frame frame))))
@@ -2615,7 +2616,7 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">flip-horiz</span> painter)
+<pre class="src src-scheme">(define (flip-horiz painter)
   (transform-painter painter
                      (make-vect 1.0 0.0)
                      (make-vect 0.0 0.0)
@@ -2637,7 +2638,7 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rotate180</span> painter)
+<pre class="src src-scheme">(define (rotate180 painter)
   (transform-painter painter
                      (make-vect 1.0 1.0)
                      (make-vect 0.0 1.0)
@@ -2651,7 +2652,7 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">rotate270</span> painter)
+<pre class="src src-scheme">(define (rotate270 painter)
   (transform-painter painter
                      (make-vect 0.0 1.0)
                      (make-vect 0.0 0.0)
@@ -2669,8 +2670,8 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">below</span> painter1 painter2)
-  (<span style="color: #859900;">let</span> ((paint-bottom
+<pre class="src src-scheme">(define (below painter1 painter2)
+  (let ((paint-bottom
          (transform-painter painter1
                             (make-vect 0.0 0.0)
                             (make-vect 1.0 0.0)
@@ -2680,7 +2681,7 @@ origin + edeg1 + 0.5 * edge2
                             (make-vect 0.0 0.5)
                             (make-vect 1.0 0.5)
                             (make-vect 0.0 1.0))))
-    (<span style="color: #859900;">lambda</span> (frame)
+    (lambda (frame)
       (paint-top frame)
       (paint-bottom frame))))
 </pre>
@@ -2692,7 +2693,7 @@ origin + edeg1 + 0.5 * edge2
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">below</span> painter1 painter2)
+<pre class="src src-scheme">(define (below painter1 painter2)
   (rotate90 (beside (rotate270 painter1) (rotate270 painter2))))
 </pre>
 </div>
@@ -2711,10 +2712,10 @@ b) 其实这个题目我不大会，实在想不出如何只用 <code>up-split</
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">corner-split</span> painter n)
-  (<span style="color: #859900;">if</span> (= n 0)
+<pre class="src src-scheme">(define (corner-split painter n)
+  (if (= n 0)
       painter
-      (<span style="color: #859900;">let</span> ((up (up-split painter (- n 1)))
+      (let ((up (up-split painter (- n 1)))
             (right (right-split painter (- n 1)))
             (corner (corner-split painter (- n 1))))
         (beside (below painter up)
@@ -2728,8 +2729,8 @@ c) 这个就不多说了，代码如下：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">square-limit</span> painter n)
-  (<span style="color: #859900;">let</span> ((combine4 (square-of-four identity flip-horiz
+<pre class="src src-scheme">(define (square-limit painter n)
+  (let ((combine4 (square-of-four identity flip-horiz
                                   flip-vert rotate180)))
     (combine4 (corner-split painter n))))
 </pre>
@@ -2755,10 +2756,10 @@ c) 这个就不多说了，代码如下：
 <div class="outline-text-3" id="text-2-54">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">equal?</span> seq1 seq2)
-  (<span style="color: #859900;">if</span> (<span style="color: #859900;">and</span> (pair? seq1)
+<pre class="src src-scheme">(define (equal? seq1 seq2)
+  (if (and (pair? seq1)
            (pair? seq2))
-      (<span style="color: #859900;">and</span> (equal? (car seq1) (car seq2))
+      (and (equal? (car seq1) (car seq2))
            (equal? (cdr seq1) (cdr seq2)))
       (eq? seq1 seq2)))
 </pre>
@@ -2782,17 +2783,17 @@ c) 这个就不多说了，代码如下：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">exponentiation?</span> x)
-  (<span style="color: #859900;">and</span> (pair? x) (eq? (car x) '**)))
+<pre class="src src-scheme">(define (exponentiation? x)
+  (and (pair? x) (eq? (car x) '**)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">base</span> e) (cadr e))
+(define (base e) (cadr e))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">exponent</span> e) (caddr e))
+(define (exponent e) (caddr e))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-exponentiation</span> b e)
-  (<span style="color: #859900;">cond</span> ((=number? e 0) 1)
+(define (make-exponentiation b e)
+  (cond ((=number? e 0) 1)
         ((=number? e 1) b)
-        (<span style="color: #859900;">else</span> (list '** b e))))
+        (else (list '** b e))))
 </pre>
 </div>
 
@@ -2802,10 +2803,10 @@ c) 这个就不多说了，代码如下：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">deriv</span> exp var)
-  (<span style="color: #859900;">cond</span> ((number? exp) 0)
+<pre class="src src-scheme">(define (deriv exp var)
+  (cond ((number? exp) 0)
         ((variable? exp)
-         (<span style="color: #859900;">if</span> (same-variable? exp var) 1 0))
+         (if (same-variable? exp var) 1 0))
         ((sum? exp)
          (make-sum (deriv (addend exp) var)
                    (deriv (augend exp) var)))
@@ -2820,8 +2821,8 @@ c) 这个就不多说了，代码如下：
                                      (make-exponentiation (base exp)
                                                           (- (exponent exp) 1)))
                        (deriv (base exp) var)))
-        (<span style="color: #859900;">else</span>
-         (error <span style="color: #2aa198;">"unknown expression type -- DERIV"</span> exp))))
+        (else
+         (error "unknown expression type -- DERIV" exp))))
 </pre>
 </div>
 </div>
@@ -2835,15 +2836,15 @@ c) 这个就不多说了，代码如下：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">augend</span> s)
-  (<span style="color: #859900;">let</span> ((a (cdr (cdr s))))
-    (<span style="color: #859900;">cond</span> ((&lt; (length a) 2) (car a))
-          (<span style="color: #859900;">else</span> (cons '+ a)))))
+<pre class="src src-scheme">(define (augend s)
+  (let ((a (cdr (cdr s))))
+    (cond ((&lt; (length a) 2) (car a))
+          (else (cons '+ a)))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">multiplicand</span> p)
-  (<span style="color: #859900;">let</span> ((m (cdr (cdr p))))
-    (<span style="color: #859900;">cond</span> ((&lt; (length m) 2) (car m))
-          (<span style="color: #859900;">else</span> (cons '* m)))))
+(define (multiplicand p)
+  (let ((m (cdr (cdr p))))
+    (cond ((&lt; (length m) 2) (car m))
+          (else (cons '* m)))))
 </pre>
 </div>
 
@@ -2861,28 +2862,28 @@ a) 这个小题比较简单，之前所使用的是前缀表达式，现在要�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-sum</span> a1 a2)
-  (<span style="color: #859900;">cond</span> ((=number? a1 0) a2)
+<pre class="src src-scheme">(define (make-sum a1 a2)
+  (cond ((=number? a1 0) a2)
         ((=number? a2 0) a1)
-        ((<span style="color: #859900;">and</span> (number? a1) (number? a2) (+ a1 a2)))
-        (<span style="color: #859900;">else</span> (list a1 '+ a2))))
+        ((and (number? a1) (number? a2) (+ a1 a2)))
+        (else (list a1 '+ a2))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-product</span> m1 m2)
-  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (=number? m1 0) (=number? m2 0)) 0)
+(define (make-product m1 m2)
+  (cond ((or (=number? m1 0) (=number? m2 0)) 0)
         ((=number? m1 1) m2)
         ((=number? m2 1) m1)
-        ((<span style="color: #859900;">and</span> (number? m1) (number? m2)) (* m1 m2))
-        (<span style="color: #859900;">else</span> (list m1 '* m2))))
+        ((and (number? m1) (number? m2)) (* m1 m2))
+        (else (list m1 '* m2))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum?</span> x)
-  (<span style="color: #859900;">and</span> (pair? x) (eq? (cadr x) '+)))
+(define (sum? x)
+  (and (pair? x) (eq? (cadr x) '+)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">addend</span> s) (car s))
+(define (addend s) (car s))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product?</span> x)
-  (<span style="color: #859900;">and</span> (pair? x) (eq? (cadr x) '*)))
+(define (product? x)
+  (and (pair? x) (eq? (cadr x) '*)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">multiplier</span> p) (car p))
+(define (multiplier p) (car p))
 </pre>
 </div>
 
@@ -2907,63 +2908,63 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">prefix-sub-exp</span> exp sep)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">iter</span> exp sub)
-    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (null? exp)
+<pre class="src src-scheme">(define (prefix-sub-exp exp sep)
+  (define (iter exp sub)
+    (cond ((or (null? exp)
                (eq? (car exp) sep))
            sub)
-          (<span style="color: #859900;">else</span> (iter (cdr exp) (append sub (list (car exp)))))))
+          (else (iter (cdr exp) (append sub (list (car exp)))))))
   (iter exp '()))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">suffix-sub-exp</span> exp sep)
-  (<span style="color: #859900;">cond</span> ((null? exp) '())
+(define (suffix-sub-exp exp sep)
+  (cond ((null? exp) '())
         ((eq? (car exp) sep) (cdr exp))
-        (<span style="color: #859900;">else</span> (suffix-sub-exp (cdr exp) sep))))
+        (else (suffix-sub-exp (cdr exp) sep))))
 
-<span style="color: #586e75; font-style: italic;">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-sum</span> a1 a2)
-  (<span style="color: #859900;">cond</span> ((=number? a1 0) a2)
+(define (make-sum a1 a2)
+  (cond ((=number? a1 0) a2)
         ((=number? a2 0) a1)
-        ((<span style="color: #859900;">and</span> (number? a1) (number? a2) (+ a1 a2)))
-        (<span style="color: #859900;">else</span> (<span style="color: #859900;">let</span> ((s1 (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (variable? a1)
+        ((and (number? a1) (number? a2) (+ a1 a2)))
+        (else (let ((s1 (if (or (variable? a1)
                                 (number? a1))
                             (list a1 '+)
                             (append a1 '(+))))
-                    (s2 (<span style="color: #859900;">if</span> (<span style="color: #859900;">or</span> (variable? a2)
+                    (s2 (if (or (variable? a2)
                                 (number? a2))
                             (list a2)
                             a2)))
                 (append s1 s2)))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-product</span> m1 m2)
-  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (=number? m1 0) (=number? m2 0)) 0)
+(define (make-product m1 m2)
+  (cond ((or (=number? m1 0) (=number? m2 0)) 0)
         ((=number? m1 1) m2)
         ((=number? m2 1) m1)
-        ((<span style="color: #859900;">and</span> (number? m1) (number? m2)) (* m1 m2))
-        (<span style="color: #859900;">else</span> (list m1 '* m2))))
+        ((and (number? m1) (number? m2)) (* m1 m2))
+        (else (list m1 '* m2))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">sum?</span> x)
-  (<span style="color: #859900;">and</span> (pair? x)
-       (not (null? (filter (<span style="color: #859900;">lambda</span> (e) (eq? e '+)) x)))))
+(define (sum? x)
+  (and (pair? x)
+       (not (null? (filter (lambda (e) (eq? e '+)) x)))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">addend</span> s)
-  (<span style="color: #859900;">let</span> ((r (prefix-sub-exp s '+)))
-    (<span style="color: #859900;">if</span> (&lt; (length r) 2) (car r) r)))
+(define (addend s)
+  (let ((r (prefix-sub-exp s '+)))
+    (if (&lt; (length r) 2) (car r) r)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">augend</span> s)
-  (<span style="color: #859900;">let</span> ((r (suffix-sub-exp s '+)))
-    (<span style="color: #859900;">if</span> (&lt; (length r) 2) (car r) r)))
+(define (augend s)
+  (let ((r (suffix-sub-exp s '+)))
+    (if (&lt; (length r) 2) (car r) r)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">product?</span> x)
-  (<span style="color: #859900;">and</span> (pair? x) (eq? (cadr x) '*)))
+(define (product? x)
+  (and (pair? x) (eq? (cadr x) '*)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">multiplier</span> p) (car p))
+(define (multiplier p) (car p))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">multiplicand</span> p)
-  (<span style="color: #859900;">let</span> ((r (cdr (cdr p))))
-    (<span style="color: #859900;">cond</span> ((&lt; (length r) 2) (car r))
-          (<span style="color: #859900;">else</span> r))))
+(define (multiplicand p)
+  (let ((r (cdr (cdr p))))
+    (cond ((&lt; (length r) 2) (car r))
+          (else r))))
 </pre>
 </div>
 
@@ -2989,19 +2990,19 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">make-product</span> m1 m2)
-  (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (=number? m1 0) (=number? m2 0)) 0)
+<pre class="src src-scheme">(define (make-product m1 m2)
+  (cond ((or (=number? m1 0) (=number? m2 0)) 0)
         ((=number? m1 1) m2)
         ((=number? m2 1) m1)
-        ((<span style="color: #859900;">and</span> (number? m1) (number? m2)) (* m1 m2))
-        (<span style="color: #859900;">else</span> (<span style="color: #859900;">let</span> ((p1 (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (variable? m1) (number? m1))
+        ((and (number? m1) (number? m2)) (* m1 m2))
+        (else (let ((p1 (cond ((or (variable? m1) (number? m1))
                                (list m1 '*))
                               ((sum? m1) (list m1 '*))
-                              (<span style="color: #859900;">else</span> (append m1 '(*)))))
-                    (p2 (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (variable? m2) (number? m2))
+                              (else (append m1 '(*)))))
+                    (p2 (cond ((or (variable? m2) (number? m2))
                                (list m2))
                               ((sum? m2) (list m2))
-                              (<span style="color: #859900;">else</span> m2))))
+                              (else m2))))
                 (append p1 p2)))))
 </pre>
 </div>
@@ -3012,13 +3013,13 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 <div class="outline-text-3" id="text-2-59">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">union-set</span> set1 set2)
-  (<span style="color: #859900;">cond</span> ((null? set1) set2)
+<pre class="src src-scheme">(define (union-set set1 set2)
+  (cond ((null? set1) set2)
         ((null? set2) set1)
         ((not (element-of-set? (car set1) set2))
          (cons (car set1)
                (union-set (cdr set1) set2)))
-        (<span style="color: #859900;">else</span> (union-set (cdr set1) set2))))
+        (else (union-set (cdr set1) set2))))
 </pre>
 </div>
 </div>
@@ -3032,10 +3033,10 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">adjoin-set</span> x set)
+<pre class="src src-scheme">(define (adjoin-set x set)
   (cons x set))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">union-set</span> set1 set2)
+(define (union-set set1 set2)
   (append set1 set2))
 </pre>
 </div>
@@ -3050,16 +3051,16 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 <div class="outline-text-3" id="text-2-61">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">adjoin-set</span> x set)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">insert</span> x head tail)
-    (<span style="color: #859900;">cond</span> ((null? tail) (append head (list x)))
+<pre class="src src-scheme">(define (adjoin-set x set)
+  (define (insert x head tail)
+    (cond ((null? tail) (append head (list x)))
           ((&lt; x (car tail)) (append head (list x) tail))
-          (<span style="color: #859900;">else</span> (insert x (append head (list (car tail))) (cdr tail)))))
-  (<span style="color: #859900;">if</span> (element-of-set? x set)
+          (else (insert x (append head (list (car tail))) (cdr tail)))))
+  (if (element-of-set? x set)
       set
-      (<span style="color: #859900;">cond</span> ((null? set) (list x))
+      (cond ((null? set) (list x))
             ((&lt; x (car set)) (cons x set))
-            (<span style="color: #859900;">else</span> (insert x (list (car set)) (cdr set))))))
+            (else (insert x (list (car set)) (cdr set))))))
 </pre>
 </div>
 </div>
@@ -3069,13 +3070,13 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 <div class="outline-text-3" id="text-2-62">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">union-set</span> set1 set2)
-  (<span style="color: #859900;">cond</span> ((null? set1) set2)
+<pre class="src src-scheme">(define (union-set set1 set2)
+  (cond ((null? set1) set2)
         ((null? set2) set1)
-        (<span style="color: #859900;">else</span>
-         (<span style="color: #859900;">let</span> ((x1 (car set1))
+        (else
+         (let ((x1 (car set1))
                (x2 (car set2)))
-           (<span style="color: #859900;">cond</span> ((= x1 x2) (cons x1
+           (cond ((= x1 x2) (cons x1
                                   (union-set (cdr set1)
                                              (cdr set2))))
                  ((&lt; x1 x2) (cons x1
@@ -3125,14 +3126,14 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">union-set</span> set1 set2)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">list-union-set</span> set1 set2)
-    (<span style="color: #859900;">cond</span> ((null? set1) set2)
+<pre class="src src-scheme">(define (union-set set1 set2)
+  (define (list-union-set set1 set2)
+    (cond ((null? set1) set2)
           ((null? set2) set1)
-          (<span style="color: #859900;">else</span>
-           (<span style="color: #859900;">let</span> ((x1 (car set1))
+          (else
+           (let ((x1 (car set1))
                  (x2 (car set2)))
-             (<span style="color: #859900;">cond</span> ((= x1 x2) (cons x1
+             (cond ((= x1 x2) (cons x1
                                     (list-union-set (cdr set1)
                                                     (cdr set2))))
                    ((&lt; x1 x2) (cons x1
@@ -3144,13 +3145,13 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
   (list-&gt;tree (list-union-set (tree-&gt;list set1)
                               (tree-&gt;list set2))))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">intersection-set</span> set1 set2)
-  (<span style="color: #859900;">define</span> (<span style="color: #268bd2;">list-intersection-set</span> set1 set2)
-    (<span style="color: #859900;">cond</span> ((<span style="color: #859900;">or</span> (null? set1) (null? set2)) '())
-          (<span style="color: #859900;">else</span>
-           (<span style="color: #859900;">let</span> ((x1 (car set1))
+(define (intersection-set set1 set2)
+  (define (list-intersection-set set1 set2)
+    (cond ((or (null? set1) (null? set2)) '())
+          (else
+           (let ((x1 (car set1))
                  (x2 (car set2)))
-             (<span style="color: #859900;">cond</span> ((= x1 x2) (cons x1
+             (cond ((= x1 x2) (cons x1
                                     (list-intersection-set (cdr set1)
                                                            (cdr set2))))
                    ((&lt; x1 x2) (list-intersection-set (cdr set1) set2))
@@ -3167,11 +3168,11 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 <div class="outline-text-3" id="text-2-66">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">lookup</span> given-key tree-of-records)
-  (<span style="color: #859900;">cond</span> ((null? tree-of-records) #f)
+<pre class="src src-scheme">(define (lookup given-key tree-of-records)
+  (cond ((null? tree-of-records) #f)
         ((= (key (entry tree-of-records)) given-key) (entry tree-of-records))
         ((&gt; (key (entry tree-of-records)) given-key) (lookup (left-branch tree-of-records)))
-        (<span style="color: #859900;">else</span> (lookup (right-branch tree-of-records)))))
+        (else (lookup (right-branch tree-of-records)))))
 </pre>
 </div>
 </div>
@@ -3193,16 +3194,16 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 <div class="outline-text-3" id="text-2-68">
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">symbol-on-tree?</span> symbol tree)
+<pre class="src src-scheme">(define (symbol-on-tree? symbol tree)
   (memq symbol (symbols tree)))
 
-(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">encode-symbol</span> symbol tree)
-  (<span style="color: #859900;">cond</span> ((not (symbol-on-tree? symbol tree))
-         (error <span style="color: #2aa198;">"symbol is not on this tree"</span>))
+(define (encode-symbol symbol tree)
+  (cond ((not (symbol-on-tree? symbol tree))
+         (error "symbol is not on this tree"))
         ((leaf? tree) '())
-        (<span style="color: #859900;">else</span> (<span style="color: #859900;">let</span> ((left (left-branch tree))
+        (else (let ((left (left-branch tree))
                     (right (right-branch tree)))
-                (<span style="color: #859900;">if</span> (symbol-on-tree? symbol left)
+                (if (symbol-on-tree? symbol left)
                     (cons 0 (encode-symbol symbol left))
                     (cons 1 (encode-symbol symbol right)))))))
 </pre>
@@ -3218,8 +3219,8 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> (<span style="color: #268bd2;">successive-merge</span> leaf-set)
-  (<span style="color: #859900;">if</span> (= (length leaf-set) 1)
+<pre class="src src-scheme">(define (successive-merge leaf-set)
+  (if (= (length leaf-set) 1)
       (car leaf-set)
       (successive-merge (adjoin-set (make-code-tree (cadr leaf-set)
                                                     (car leaf-set))
@@ -3237,13 +3238,13 @@ encode消息的相关变量定义及调用：
 
 <div class="org-src-container">
 
-<pre class="src src-scheme">(<span style="color: #859900;">define</span> <span style="color: #268bd2;">symbol-frequency-pairs</span>
+<pre class="src src-scheme">(define symbol-frequency-pairs
   '((A 2) (NA 16)
     (BOOM 1) (SHA 3)
     (GET 2) (YIP 9)
     (JOB 2) (WAH 1)))
 
-(<span style="color: #859900;">define</span> <span style="color: #268bd2;">huffman-tree</span> (generate-huffman-tree symbol-frequency-pairs))
+(define huffman-tree (generate-huffman-tree symbol-frequency-pairs))
 
 (encode '(GET A JOB
           SHA NA NA NA NA NA NA NA NA
@@ -3302,6 +3303,9 @@ n = 5对应的Huffman树如下图所示：
         <span title="tags" class="post-info"><a href="/tags/sicp/">SICP</a>, <a href="/tags/scheme/">Scheme</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -3321,6 +3325,5 @@ n = 5对应的Huffman树如下图所示：
         </p>
       </div>
     </div>
-
   </body>
 </html>

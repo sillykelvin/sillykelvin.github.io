@@ -7,6 +7,7 @@
     <meta name="description" content="learning notes of GNU Emacs Lisp Reference Manual" />
     <meta name="keywords" content="emacs, elisp" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -257,9 +258,9 @@ a cons cell has two slots, the first is called CAR and the second is called CDR,
 
 <div class="org-src-container">
 
-<pre class="src src-c"><span style="color: #859900;">struct</span> <span style="color: #b58900;">cons_cell</span> {
-    <span style="color: #b58900;">void</span> * <span style="color: #b58900;">CAR</span>;
-    <span style="color: #b58900;">void</span> * <span style="color: #b58900;">CDR</span>;
+<pre class="src src-c">struct cons_cell {
+    void * CAR;
+    void * CDR;
 };
 </pre>
 </div>
@@ -660,6 +661,9 @@ function types:
         <span title="tags" class="post-info"><a href="/tags/emacs/">Emacs</a>, <a href="/tags/elisp/">Elisp</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -679,6 +683,5 @@ function types:
         </p>
       </div>
     </div>
-
   </body>
 </html>

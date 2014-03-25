@@ -7,6 +7,7 @@
     <meta name="description" content="learning notes of book Core Servlet and JSP Volume 1/2(2nd Edition)" />
     <meta name="keywords" content="java, servlet, jsp" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -40,96 +41,96 @@ This file recorded notes during learning <i>Core Servlet and JSP</i>.
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 
-<pre class="src src-xml">&lt;?<span style="color: #859900;">xml</span> <span style="color: #b58900;">version</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">1.0</span><span style="color: #2aa198;">"</span> <span style="color: #b58900;">encoding</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">utf-8</span><span style="color: #2aa198;">"</span>?&gt;
+<pre class="src src-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 
-&lt;<span style="color: #268bd2;">web-app</span> <span style="color: #6c71c4;">xmlns</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">http://java.sun.com/xml/ns/j2ee</span><span style="color: #2aa198;">"</span>
-         <span style="color: #6c71c4;">xmlns</span>:<span style="color: #b58900;">xsi</span>=<span style="color: #2aa198;">"</span><span style="color: #2aa198;">http://www.w3.org/2001/XMLSchema-instance</span><span style="color: #2aa198;">"</span>
-         <span style="color: #6c71c4;">xsi</span>:<span style="color: #b58900;">schemaLocation</span>=
-         <span style="color: #2aa198;">"</span><span style="color: #2aa198;">http://java.sun.com/xml/ns/j2ee</span>
-<span style="color: #2aa198;">          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd</span><span style="color: #2aa198;">"</span>&gt;
+&lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation=
+         "http://java.sun.com/xml/ns/j2ee
+          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
 
-  &lt;<span style="color: #268bd2;">display-name</span>&gt;Servlet Testing&lt;/<span style="color: #268bd2;">display-name</span>&gt;
-  &lt;<span style="color: #268bd2;">description</span>&gt;
+  &lt;display-name&gt;Servlet Testing&lt;/display-name&gt;
+  &lt;description&gt;
     This web application demonstrates the usage of Servlet/JSP (mainly Servlet).
     The contents are composed while reading Core Servlet and JSP Volume 2.
-  &lt;/<span style="color: #268bd2;">description</span>&gt;
+  &lt;/description&gt;
 
-  <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> the following definition seems no effect... </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
-  &lt;<span style="color: #268bd2;">icon</span>&gt;
-    &lt;<span style="color: #268bd2;">small-icon</span>&gt;/small.png&lt;/<span style="color: #268bd2;">small-icon</span>&gt;
-    &lt;<span style="color: #268bd2;">large-icon</span>&gt;/large.gif&lt;/<span style="color: #268bd2;">large-icon</span>&gt;
-  &lt;/<span style="color: #268bd2;">icon</span>&gt;
+  &lt;!-- the following definition seems no effect... --&gt;
+  &lt;icon&gt;
+    &lt;small-icon&gt;/small.png&lt;/small-icon&gt;
+    &lt;large-icon&gt;/large.gif&lt;/large-icon&gt;
+  &lt;/icon&gt;
 
-  <span style="color: #586e75; font-style: italic;">&lt;!--</span><span style="color: #586e75; font-style: italic;"> the following definition seems no effect... </span><span style="color: #586e75; font-style: italic;">--&gt;</span>
-  &lt;<span style="color: #268bd2;">mime-mapping</span>&gt;
-    &lt;<span style="color: #268bd2;">extension</span>&gt;png&lt;/<span style="color: #268bd2;">extension</span>&gt;
-    &lt;<span style="color: #268bd2;">mime-type</span>&gt;text/plain&lt;/<span style="color: #268bd2;">mime-type</span>&gt;
-  &lt;/<span style="color: #268bd2;">mime-mapping</span>&gt;
+  &lt;!-- the following definition seems no effect... --&gt;
+  &lt;mime-mapping&gt;
+    &lt;extension&gt;png&lt;/extension&gt;
+    &lt;mime-type&gt;text/plain&lt;/mime-type&gt;
+  &lt;/mime-mapping&gt;
 
-  &lt;<span style="color: #268bd2;">context-param</span>&gt;
-    &lt;<span style="color: #268bd2;">param-name</span>&gt;host&lt;/<span style="color: #268bd2;">param-name</span>&gt;
-    &lt;<span style="color: #268bd2;">param-value</span>&gt;nj-kelvin-hu&lt;/<span style="color: #268bd2;">param-value</span>&gt;
-  &lt;/<span style="color: #268bd2;">context-param</span>&gt;
+  &lt;context-param&gt;
+    &lt;param-name&gt;host&lt;/param-name&gt;
+    &lt;param-value&gt;nj-kelvin-hu&lt;/param-value&gt;
+  &lt;/context-param&gt;
 
-  &lt;<span style="color: #268bd2;">error-page</span>&gt;
-    &lt;<span style="color: #268bd2;">error-code</span>&gt;404&lt;/<span style="color: #268bd2;">error-code</span>&gt;
-    &lt;<span style="color: #268bd2;">location</span>&gt;/404.jsp&lt;/<span style="color: #268bd2;">location</span>&gt;
-  &lt;/<span style="color: #268bd2;">error-page</span>&gt;
+  &lt;error-page&gt;
+    &lt;error-code&gt;404&lt;/error-code&gt;
+    &lt;location&gt;/404.jsp&lt;/location&gt;
+  &lt;/error-page&gt;
 
-  &lt;<span style="color: #268bd2;">error-page</span>&gt;
-    &lt;<span style="color: #268bd2;">exception-type</span>&gt;java.lang.Exception&lt;/<span style="color: #268bd2;">exception-type</span>&gt;
-    &lt;<span style="color: #268bd2;">location</span>&gt;/exception.jsp&lt;/<span style="color: #268bd2;">location</span>&gt;
-  &lt;/<span style="color: #268bd2;">error-page</span>&gt;
+  &lt;error-page&gt;
+    &lt;exception-type&gt;java.lang.Exception&lt;/exception-type&gt;
+    &lt;location&gt;/exception.jsp&lt;/location&gt;
+  &lt;/error-page&gt;
 
-  &lt;<span style="color: #268bd2;">listener</span>&gt;
-    &lt;<span style="color: #268bd2;">listener-class</span>&gt;ini.kelvin.servlet.ContextListener&lt;/<span style="color: #268bd2;">listener-class</span>&gt;
-  &lt;/<span style="color: #268bd2;">listener</span>&gt;
+  &lt;listener&gt;
+    &lt;listener-class&gt;ini.kelvin.servlet.ContextListener&lt;/listener-class&gt;
+  &lt;/listener&gt;
 
-  &lt;<span style="color: #268bd2;">listener</span>&gt;
-    &lt;<span style="color: #268bd2;">listener-class</span>&gt;ini.kelvin.servlet.SessionListener&lt;/<span style="color: #268bd2;">listener-class</span>&gt;
-  &lt;/<span style="color: #268bd2;">listener</span>&gt;
+  &lt;listener&gt;
+    &lt;listener-class&gt;ini.kelvin.servlet.SessionListener&lt;/listener-class&gt;
+  &lt;/listener&gt;
 
-  &lt;<span style="color: #268bd2;">filter</span>&gt;
-    &lt;<span style="color: #268bd2;">filter-name</span>&gt;print&lt;/<span style="color: #268bd2;">filter-name</span>&gt;
-    &lt;<span style="color: #268bd2;">filter-class</span>&gt;ini.kelvin.servlet.PrintFilter&lt;/<span style="color: #268bd2;">filter-class</span>&gt;
-    &lt;<span style="color: #268bd2;">init-param</span>&gt;
-      &lt;<span style="color: #268bd2;">param-name</span>&gt;admin&lt;/<span style="color: #268bd2;">param-name</span>&gt;
-      &lt;<span style="color: #268bd2;">param-value</span>&gt;Kelvin Hu&lt;/<span style="color: #268bd2;">param-value</span>&gt;
-    &lt;/<span style="color: #268bd2;">init-param</span>&gt;
-  &lt;/<span style="color: #268bd2;">filter</span>&gt;
-  &lt;<span style="color: #268bd2;">filter-mapping</span>&gt;
-    &lt;<span style="color: #268bd2;">filter-name</span>&gt;print&lt;/<span style="color: #268bd2;">filter-name</span>&gt;
-    &lt;<span style="color: #268bd2;">servlet-name</span>&gt;Hello&lt;/<span style="color: #268bd2;">servlet-name</span>&gt;
-  &lt;/<span style="color: #268bd2;">filter-mapping</span>&gt;
-  &lt;<span style="color: #268bd2;">filter-mapping</span>&gt;
-    &lt;<span style="color: #268bd2;">filter-name</span>&gt;print&lt;/<span style="color: #268bd2;">filter-name</span>&gt;
-    &lt;<span style="color: #268bd2;">url-pattern</span>&gt;/*&lt;/<span style="color: #268bd2;">url-pattern</span>&gt;
-  &lt;/<span style="color: #268bd2;">filter-mapping</span>&gt;
+  &lt;filter&gt;
+    &lt;filter-name&gt;print&lt;/filter-name&gt;
+    &lt;filter-class&gt;ini.kelvin.servlet.PrintFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;admin&lt;/param-name&gt;
+      &lt;param-value&gt;Kelvin Hu&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/filter&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;print&lt;/filter-name&gt;
+    &lt;servlet-name&gt;Hello&lt;/servlet-name&gt;
+  &lt;/filter-mapping&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;print&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
 
-  &lt;<span style="color: #268bd2;">servlet</span>&gt;
-    &lt;<span style="color: #268bd2;">servlet-name</span>&gt;Hello&lt;/<span style="color: #268bd2;">servlet-name</span>&gt;
-    &lt;<span style="color: #268bd2;">servlet-class</span>&gt;ini.kelvin.servlet.HelloWorldServlet&lt;/<span style="color: #268bd2;">servlet-class</span>&gt;
-    &lt;<span style="color: #268bd2;">init-param</span>&gt;
-      &lt;<span style="color: #268bd2;">param-name</span>&gt;name&lt;/<span style="color: #268bd2;">param-name</span>&gt;
-      &lt;<span style="color: #268bd2;">param-value</span>&gt;Kelvin Hu&lt;/<span style="color: #268bd2;">param-value</span>&gt;
-    &lt;/<span style="color: #268bd2;">init-param</span>&gt;
-  &lt;/<span style="color: #268bd2;">servlet</span>&gt;
-  &lt;<span style="color: #268bd2;">servlet-mapping</span>&gt;
-    &lt;<span style="color: #268bd2;">servlet-name</span>&gt;Hello&lt;/<span style="color: #268bd2;">servlet-name</span>&gt;
-    &lt;<span style="color: #268bd2;">url-pattern</span>&gt;/hello&lt;/<span style="color: #268bd2;">url-pattern</span>&gt;
-  &lt;/<span style="color: #268bd2;">servlet-mapping</span>&gt;
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;Hello&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;ini.kelvin.servlet.HelloWorldServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;name&lt;/param-name&gt;
+      &lt;param-value&gt;Kelvin Hu&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;Hello&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/hello&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
 
-  &lt;<span style="color: #268bd2;">welcome-file-list</span>&gt;
-    &lt;<span style="color: #268bd2;">welcome-file</span>&gt;index.jsp&lt;/<span style="color: #268bd2;">welcome-file</span>&gt;
-    &lt;<span style="color: #268bd2;">welcome-file</span>&gt;index.html&lt;/<span style="color: #268bd2;">welcome-file</span>&gt;
-    &lt;<span style="color: #268bd2;">welcome-file</span>&gt;default.jsp&lt;/<span style="color: #268bd2;">welcome-file</span>&gt;
-  &lt;/<span style="color: #268bd2;">welcome-file-list</span>&gt;
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;
+    &lt;welcome-file&gt;default.jsp&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
 
-  &lt;<span style="color: #268bd2;">session-config</span>&gt;
-    &lt;<span style="color: #268bd2;">session-timeout</span>&gt;1&lt;/<span style="color: #268bd2;">session-timeout</span>&gt;
-  &lt;/<span style="color: #268bd2;">session-config</span>&gt;
+  &lt;session-config&gt;
+    &lt;session-timeout&gt;1&lt;/session-timeout&gt;
+  &lt;/session-config&gt;
 
-&lt;/<span style="color: #268bd2;">web-app</span>&gt;
+&lt;/web-app&gt;
 </pre>
 </div>
 
@@ -304,6 +305,9 @@ Refresh: 5; URL=http://host/path
         <span title="tags" class="post-info"><a href="/tags/java/">Java</a>, <a href="/tags/http/">HTTP</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -323,6 +327,5 @@ Refresh: 5; URL=http://host/path
         </p>
       </div>
     </div>
-
   </body>
 </html>

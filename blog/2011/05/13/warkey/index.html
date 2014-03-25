@@ -7,6 +7,7 @@
     <meta name="description" content="windows keyboard hook" />
     <meta name="keywords" content="warcraft, MFC, C++, windows" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -63,24 +64,24 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C">LRESULT <span style="color: #b58900;">CALLBACK</span> <span style="color: #268bd2;">LowLevelKeyboardProc</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">nCode</span>, <span style="color: #b58900;">WPARAM</span> <span style="color: #b58900;">wParam</span>, <span style="color: #b58900;">LPARAM</span> <span style="color: #b58900;">lParam</span>)
+<pre class="src src-C">LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-    <span style="color: #b58900;">CWarKeyDlg</span>* <span style="color: #b58900;">pDlg</span> = (<span style="color: #b58900;">CWarKeyDlg</span>*)AfxGetApp()-&gt;m_pMainWnd;
-    <span style="color: #859900;">if</span>(nCode == HC_ACTION &amp;&amp; wParam == WM_KEYDOWN)
+    CWarKeyDlg* pDlg = (CWarKeyDlg*)AfxGetApp()-&gt;m_pMainWnd;
+    if(nCode == HC_ACTION &amp;&amp; wParam == WM_KEYDOWN)
     {
-        <span style="color: #b58900;">LPKBDLLHOOKSTRUCT</span> <span style="color: #b58900;">pKB</span> = (<span style="color: #b58900;">LPKBDLLHOOKSTRUCT</span>)lParam;
-        <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#36825;&#37324;&#30465;&#30053;&#20102;&#20854;&#23427;&#19968;&#20123;&#22788;&#29702;&#36807;&#31243;</span>
-         <span style="color: #b58900;">DWORD</span> <span style="color: #b58900;">srcKey</span> = pDlg-&gt;GetSrcKey(pKB-&gt;vkCode);
-        <span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">&#22914;&#26524;&#23384;&#22312;&#25913;&#38190;&#65292;&#23601;&#29992;SendMessage()&#20989;&#25968;&#26469;&#25913;&#38190;</span>
-         <span style="color: #859900;">if</span>(srcKey != <span style="color: #6c71c4;">NULL</span>)
+        LPKBDLLHOOKSTRUCT pKB = (LPKBDLLHOOKSTRUCT)lParam;
+        //这里省略了其它一些处理过程
+         DWORD srcKey = pDlg-&gt;GetSrcKey(pKB-&gt;vkCode);
+        //如果存在改键，就用SendMessage()函数来改键
+         if(srcKey != NULL)
         {
             ::SendMessage(pDlg-&gt;GetWarCraftWnd(), WM_KEYDOWN, srcKey, 0);
             ::SendMessage(pDlg-&gt;GetWarCraftWnd(), WM_KEYUP, srcKey, 0);
-            <span style="color: #859900;">return</span> 0;
+            return 0;
         }
-        <span style="color: #859900;">return</span> CallNextHookEx(pDlg-&gt;GetHook(), nCode, wParam, lParam);
+        return CallNextHookEx(pDlg-&gt;GetHook(), nCode, wParam, lParam);
     }
-    <span style="color: #859900;">return</span> CallNextHookEx(pDlg-&gt;GetHook(), nCode, wParam, lParam);
+    return CallNextHookEx(pDlg-&gt;GetHook(), nCode, wParam, lParam);
 }
 </pre>
 </div>
@@ -142,6 +143,9 @@ If <i>nCode</i> is greater than or equal to zero, and the hook procedure did not
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -161,6 +165,5 @@ If <i>nCode</i> is greater than or equal to zero, and the hook procedure did not
         </p>
       </div>
     </div>
-
   </body>
 </html>

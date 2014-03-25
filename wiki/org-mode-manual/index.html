@@ -7,6 +7,7 @@
     <meta name="description" content="learning notes of org mode manual" />
     <meta name="keywords" content="org mode" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -202,7 +203,7 @@ The line below will be considered as the title of this document:
 
 <div class="org-src-container">
 
-<pre class="src src-org"><span style="color: #859900;">#+title:</span> <span style="color: #b58900; font-size: 144%; font-weight: bold;">the line will be used as the title of current document</span>
+<pre class="src src-org">#+title: the line will be used as the title of current document
 
 note that the case is not sensitive, so #+title: will have the same effect as #+TITLE:
 and also do not forget the colon ":"
@@ -293,16 +294,16 @@ e.g. as below:
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">hello-world</span>()
-<span class="linenr">2: </span>  (print <span style="color: #2aa198;">"hello world"</span>))
+<pre class="src src-emacs-lisp"><span class="linenr">1: </span>(defun hello-world()
+<span class="linenr">2: </span>  (print "hello world"))
 </pre>
 </div>
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">Test</span> {
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>) {
-        System.out.println(<span style="color: #2aa198;">"hello world"</span>);
+<pre class="src src-java">public class Test {
+    public static void main(String[] args) {
+        System.out.println("hello world");
     }
 }
 </pre>
@@ -348,6 +349,9 @@ for example: <b>#+include: "~/.emacs.d/init.el" src emacs-lisp</b> will insert t
         <span title="tags" class="post-info"><a href="/tags/emacs/">Emacs</a>, <a href="/tags/org-mode/">Org Mode</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -367,6 +371,5 @@ for example: <b>#+include: "~/.emacs.d/init.el" src emacs-lisp</b> will insert t
         </p>
       </div>
     </div>
-
   </body>
 </html>

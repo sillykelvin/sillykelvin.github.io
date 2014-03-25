@@ -7,6 +7,7 @@
     <meta name="description" content="how to make a better programming environment in emacs for scheme" />
     <meta name="keywords" content="scheme, emacs" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -68,10 +69,10 @@
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp">(show-paren-mode t) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#21305;&#37197;&#25324;&#21495;&#39640;&#20142;</span>
+<pre class="src src-emacs-lisp">(show-paren-mode t) ;; 匹配括号高亮
 
-(<span style="color: #859900;">require</span> '<span style="color: #6c71c4;">autopair</span>)
-(autopair-global-mode) <span style="color: #586e75; font-style: italic;">;; </span><span style="color: #586e75; font-style: italic;">&#33258;&#21160;&#34917;&#20840;&#25324;&#21495;</span>
+(require 'autopair)
+(autopair-global-mode) ;; 自动补全括号
 </pre>
 </div>
 
@@ -111,29 +112,29 @@
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp">(<span style="color: #859900;">require</span> '<span style="color: #6c71c4;">cmuscheme</span>)
+<pre class="src src-emacs-lisp">(require 'cmuscheme)
 
-(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">kh/get-scheme-proc-create</span> ()
-  <span style="color: #d33682;">"Create one scheme process if no one is created."</span>
-  (<span style="color: #859900;">unless</span> (and scheme-buffer
+(defun kh/get-scheme-proc-create ()
+  "Create one scheme process if no one is created."
+  (unless (and scheme-buffer
                (get-buffer scheme-buffer)
                (comint-check-proc scheme-buffer))
-    (<span style="color: #859900;">save-window-excursion</span>
+    (save-window-excursion
       (run-scheme scheme-program-name))))
 
-(<span style="color: #859900;">defun</span> <span style="color: #268bd2;">kh/scheme-send-last-sexp</span> ()
-  <span style="color: #d33682;">"A replacement of original `</span><span style="color: #6c71c4;">scheme-send-last-sexp</span><span style="color: #d33682;">':</span>
-<span style="color: #d33682;">1. check if scheme process exists, otherwise create one</span>
-<span style="color: #d33682;">2. make sure the frame is splitted into two windows, current one is the scheme</span>
-<span style="color: #d33682;">   source code window, the other one is the scheme process window</span>
-<span style="color: #d33682;">3. run `</span><span style="color: #6c71c4;">scheme-send-last-sexp</span><span style="color: #d33682;">'</span>
+(defun kh/scheme-send-last-sexp ()
+  "A replacement of original `scheme-send-last-sexp':
+1. check if scheme process exists, otherwise create one
+2. make sure the frame is splitted into two windows, current one is the scheme
+   source code window, the other one is the scheme process window
+3. run `scheme-send-last-sexp'
 
-<span style="color: #d33682;">PS: this function is inspired by Wang Yin."</span>
+PS: this function is inspired by Wang Yin."
   (interactive)
   (kh/get-scheme-proc-create)
-  (<span style="color: #859900;">cond</span> ((= 2 (count-windows))
+  (cond ((= 2 (count-windows))
          (other-window 1)
-         (<span style="color: #859900;">unless</span> (string= (buffer-name)
+         (unless (string= (buffer-name)
                           scheme-buffer)
            (switch-to-buffer scheme-buffer))
          (other-window 1))
@@ -157,13 +158,13 @@
 
 <div class="org-src-container">
 
-<pre class="src src-emacs-lisp">(<span style="color: #859900;">if</span> is-os-windows
-    (setq scheme-program-name <span style="color: #2aa198;">"racket"</span>)
-  (setq scheme-program-name <span style="color: #2aa198;">"guile"</span>))
+<pre class="src src-emacs-lisp">(if is-os-windows
+    (setq scheme-program-name "racket")
+  (setq scheme-program-name "guile"))
 
 (kh/add-hook '(scheme-mode-hook)
-             '((<span style="color: #859900;">lambda</span> ()
-                 (local-set-key (kbd <span style="color: #2aa198;">"C-x C-e"</span>) 'kh/scheme-send-last-sexp))))
+             '((lambda ()
+                 (local-set-key (kbd "C-x C-e") 'kh/scheme-send-last-sexp))))
 </pre>
 </div>
 
@@ -206,6 +207,9 @@ PS：上面的代码中有涉及到一些我自己定义的变量及函数，想
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -225,6 +229,5 @@ PS：上面的代码中有涉及到一些我自己定义的变量及函数，想
         </p>
       </div>
     </div>
-
   </body>
 </html>

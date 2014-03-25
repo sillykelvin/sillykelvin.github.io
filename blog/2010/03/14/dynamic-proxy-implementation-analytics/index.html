@@ -7,6 +7,7 @@
     <meta name="description" content="java dynamic proxy source code analytics" />
     <meta name="keywords" content="java, dynamic proxy" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -71,10 +72,10 @@ public static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] inter
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #b58900;">Class</span> <span style="color: #b58900;">cl</span> = getProxyClass(loader, interfaces);
-<span style="color: #b58900;">Constructor</span> <span style="color: #b58900;">cons</span> = cl.getConstructor(constructorParams);
-<span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">constructorParams&#30340;&#23450;&#20041;&#20026;&#65306;private final static Class[] constructorParams = {InvocationHandler.class};</span>
-<span style="color: #859900;">return</span> (<span style="color: #b58900;">Object</span>)cons.newInstance(<span style="color: #859900;">new</span> <span style="color: #b58900;">Object</span>[]{h});
+<pre class="src src-java">Class cl = getProxyClass(loader, interfaces);
+Constructor cons = cl.getConstructor(constructorParams);
+// constructorParams的定义为：private final static Class[] constructorParams = {InvocationHandler.class};
+return (Object)cons.newInstance(new Object[]{h});
 </pre>
 </div>
 
@@ -92,56 +93,56 @@ public static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] inter
 
 <div class="org-src-container">
 
-<pre class="src src-java"><span style="color: #859900;">package</span> <span style="color: #6c71c4;">ini</span>.<span style="color: #6c71c4;">always</span>.<span style="color: #b58900;">DynamicProxy</span>;
+<pre class="src src-java">package ini.always.DynamicProxy;
 
-<span style="color: #859900;">import</span> <span style="color: #6c71c4;">java</span>.<span style="color: #6c71c4;">lang</span>.<span style="color: #6c71c4;">reflect</span>.*;
+import java.lang.reflect.*;
 
-<span style="color: #859900;">interface</span> <span style="color: #b58900;">Logic</span>
+interface Logic
 {
-    <span style="color: #859900;">public</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">doSomeBusinessLogic</span>();
+    public void doSomeBusinessLogic();
 }
 
-<span style="color: #859900;">class</span> <span style="color: #b58900;">BusinessLogic</span> <span style="color: #859900;">implements</span> <span style="color: #b58900;">Logic</span>
+class BusinessLogic implements Logic
 {
-    <span style="color: #859900;">public</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">doSomeBusinessLogic</span>()
+    public void doSomeBusinessLogic()
     {
-        System.out.println(<span style="color: #2aa198;">"in method doSomeBusinessLogic()"</span>);
+        System.out.println("in method doSomeBusinessLogic()");
     }
 }
 
-<span style="color: #859900;">class</span> <span style="color: #b58900;">ProxyHandler</span> <span style="color: #859900;">implements</span> <span style="color: #b58900;">InvocationHandler</span>
+class ProxyHandler implements InvocationHandler
 {
-    <span style="color: #859900;">private</span> <span style="color: #b58900;">Object</span> <span style="color: #b58900;">target</span>;
+    private Object target;
 
-    <span style="color: #859900;">public</span> ProxyHandler(<span style="color: #b58900;">Object</span> <span style="color: #b58900;">target</span>)
+    public ProxyHandler(Object target)
     {
-        <span style="color: #859900;">this</span>.target = target;
+        this.target = target;
     }
-    <span style="color: #859900;">public</span> <span style="color: #b58900;">Object</span> <span style="color: #268bd2;">invoke</span>(<span style="color: #b58900;">Object</span> <span style="color: #b58900;">proxy</span>, <span style="color: #b58900;">Method</span> <span style="color: #b58900;">method</span>, <span style="color: #b58900;">Object</span>[] <span style="color: #b58900;">args</span>) <span style="color: #859900;">throws</span> <span style="color: #b58900;">Exception</span>
+    public Object invoke(Object proxy, Method method, Object[] args) throws Exception
     {
-        <span style="color: #b58900;">Object</span> <span style="color: #b58900;">result</span>;
+        Object result;
         before();
         result = method.invoke(target, args);
         after();
-        <span style="color: #859900;">return</span> result;
+        return result;
     }
-    <span style="color: #859900;">private</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">before</span>()
+    private void before()
     {
-        System.out.println(<span style="color: #2aa198;">"before method doSomeBusinessLogic()"</span>);
+        System.out.println("before method doSomeBusinessLogic()");
     }
-    <span style="color: #859900;">private</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">after</span>()
+    private void after()
     {
-        System.out.println(<span style="color: #2aa198;">"after method doSomeBusinessLogic()"</span>);
+        System.out.println("after method doSomeBusinessLogic()");
     }
 }
 
-<span style="color: #859900;">public</span> <span style="color: #859900;">class</span> <span style="color: #b58900;">TestProxy</span>
+public class TestProxy
 {
-    <span style="color: #859900;">public</span> <span style="color: #859900;">static</span> <span style="color: #b58900;">void</span> <span style="color: #268bd2;">main</span>(<span style="color: #b58900;">String</span>[] <span style="color: #b58900;">args</span>)
+    public static void main(String[] args)
     {
-        <span style="color: #b58900;">Logic</span> <span style="color: #b58900;">logic</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">BusinessLogic</span>();
-        <span style="color: #b58900;">InvocationHandler</span> <span style="color: #b58900;">h</span> = <span style="color: #859900;">new</span> <span style="color: #b58900;">ProxyHandler</span>(logic);
-        <span style="color: #b58900;">Logic</span> <span style="color: #b58900;">proxy</span> = (<span style="color: #b58900;">Logic</span>) Proxy.newProxyInstance(Logic.<span style="color: #859900;">class</span>.getClassLoader(),logic.getClass().getInterfaces(), h);
+        Logic logic = new BusinessLogic();
+        InvocationHandler h = new ProxyHandler(logic);
+        Logic proxy = (Logic) Proxy.newProxyInstance(Logic.class.getClassLoader(),logic.getClass().getInterfaces(), h);
         proxy.doSomeBusinessLogic();
     }
 }
@@ -189,6 +190,9 @@ after method doSomeBusinessLogic()
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -208,6 +212,5 @@ after method doSomeBusinessLogic()
         </p>
       </div>
     </div>
-
   </body>
 </html>

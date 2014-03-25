@@ -7,6 +7,7 @@
     <meta name="description" content="basic knowledge of C++ template meta-programming" />
     <meta name="keywords" content="C++, template meta programming" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -41,17 +42,17 @@
 
 <div class="org-src-container">
 
-<pre class="src src-c++"><span style="color: #859900;">template</span>&lt;<span style="color: #b58900;">unsigned</span> <span style="color: #b58900;">n</span>&gt;
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Factorial</span> {
-    <span style="color: #859900;">enum</span> {
-        <span style="color: #b58900;">value</span> = n * Factorial&lt;n-1&gt;::value
+<pre class="src src-c++">template&lt;unsigned n&gt;
+struct Factorial {
+    enum {
+        value = n * Factorial&lt;n-1&gt;::value
     };
 };
 
-<span style="color: #859900;">template</span>&lt;&gt;
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Factorial</span>&lt;0&gt; {
-    <span style="color: #859900;">enum</span> {
-        <span style="color: #b58900;">value</span> = 1
+template&lt;&gt;
+struct Factorial&lt;0&gt; {
+    enum {
+        value = 1
     };
 };
 </pre>
@@ -59,9 +60,9 @@
 
 <div class="org-src-container">
 
-<pre class="src src-c++"><span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #6c71c4;">Factorial</span>&lt;5&gt;::value;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #6c71c4;">Factorial</span>&lt;10&gt;::value;
+<pre class="src src-c++">int main() {
+    std::cout &lt;&lt; Factorial&lt;5&gt;::value;
+    std::cout &lt;&lt; Factorial&lt;10&gt;::value;
 }
 </pre>
 </div>
@@ -125,6 +126,9 @@
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -144,6 +148,5 @@
         </p>
       </div>
     </div>
-
   </body>
 </html>

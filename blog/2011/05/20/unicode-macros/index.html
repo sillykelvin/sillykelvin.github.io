@@ -7,6 +7,7 @@
     <meta name="description" content="an simple introduction to UNICODE, _UNICODE, __TEXT, __T, _T, _TEXT, TEXT" />
     <meta name="keywords" content="windows, unicode, macros" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -59,12 +60,12 @@ M$永远不会缺乏牛人，所以他们自然为VC++想好了解决办法，�
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d33682;">#ifdef</span>  UNICODE                     <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">r_winnt</span>
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__TEXT</span>(<span style="color: #b58900;">quote</span>) L##quote      <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">r_winnt</span>
-<span style="color: #d33682;">#else</span>   <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #586e75; font-style: italic;">UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>               <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">r_winnt</span>
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__TEXT</span>(<span style="color: #b58900;">quote</span>) quote         <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">r_winnt</span>
-<span style="color: #d33682;">#endif</span> <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #586e75; font-style: italic;">UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>                <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">r_winnt</span>
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">TEXT</span>(<span style="color: #b58900;">quote</span>) __TEXT(quote)   <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">r_winnt</span>
+<pre class="src src-C">#ifdef  UNICODE                     // r_winnt
+#define __TEXT(quote) L##quote      // r_winnt
+#else   /* UNICODE */               // r_winnt
+#define __TEXT(quote) quote         // r_winnt
+#endif /* UNICODE */                // r_winnt
+#define TEXT(quote) __TEXT(quote)   // r_winnt
 </pre>
 </div>
 
@@ -78,13 +79,13 @@ M$永远不会缺乏牛人，所以他们自然为VC++想好了解决办法，�
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d33682;">#ifdef</span>  _UNICODE
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__T</span>(<span style="color: #b58900;">x</span>)      L ## x
-<span style="color: #d33682;">#else</span>   <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #586e75; font-style: italic;">ndef _UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">__T</span>(<span style="color: #b58900;">x</span>)      x
-<span style="color: #d33682;">#endif</span>  <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #586e75; font-style: italic;">_UNICODE </span><span style="color: #586e75; font-style: italic;">*/</span>
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">_T</span>(<span style="color: #b58900;">x</span>)       __T(x)
-<span style="color: #d33682;">#define</span> <span style="color: #268bd2;">_TEXT</span>(<span style="color: #b58900;">x</span>)    __T(x)
+<pre class="src src-C">#ifdef  _UNICODE
+#define __T(x)      L ## x
+#else   /* ndef _UNICODE */
+#define __T(x)      x
+#endif  /* _UNICODE */
+#define _T(x)       __T(x)
+#define _TEXT(x)    __T(x)
 </pre>
 </div>
 
@@ -98,17 +99,17 @@ M$永远不会缺乏牛人，所以他们自然为VC++想好了解决办法，�
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #d33682;">#ifdef</span> _UNICODE
-<span style="color: #d33682;">#if</span><span style="color: #d33682;">n</span><span style="color: #d33682;">def</span> UNICODE
-<span style="color: #d33682;">#define</span> <span style="color: #b58900;">UNICODE</span>         <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">UNICODE is used by Windows headers</span>
-<span style="color: #d33682;">#endif</span>
-<span style="color: #d33682;">#endif</span>
+<pre class="src src-C">#ifdef _UNICODE
+#ifndef UNICODE
+#define UNICODE         // UNICODE is used by Windows headers
+#endif
+#endif
 
-<span style="color: #d33682;">#ifdef</span> UNICODE
-<span style="color: #d33682;">#if</span><span style="color: #d33682;">n</span><span style="color: #d33682;">def</span> _UNICODE
-<span style="color: #d33682;">#define</span> <span style="color: #b58900;">_UNICODE</span>        <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">_UNICODE is used by C-runtime/MFC headers</span>
-<span style="color: #d33682;">#endif</span>
-<span style="color: #d33682;">#endif</span>
+#ifdef UNICODE
+#ifndef _UNICODE
+#define _UNICODE        // _UNICODE is used by C-runtime/MFC headers
+#endif
+#endif
 </pre>
 </div>
 
@@ -178,6 +179,9 @@ M$永远不会缺乏牛人，所以他们自然为VC++想好了解决办法，�
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -197,6 +201,5 @@ M$永远不会缺乏牛人，所以他们自然为VC++想好了解决办法，�
         </p>
       </div>
     </div>
-
   </body>
 </html>

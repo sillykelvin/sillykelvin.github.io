@@ -7,6 +7,7 @@
     <meta name="description" content="Introduction to overloading of -&gt; operator in C++" />
     <meta name="keywords" content="C++, operator overloading, member access operator" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -37,15 +38,15 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #859900;">template</span>&lt;<span style="color: #859900;">class</span> <span style="color: #b58900;">T</span>&gt;
-<span style="color: #859900;">class</span> <span style="color: #b58900;">auto_ptr</span> {
-<span style="color: #859900;">private</span>:
-    <span style="color: #b58900;">T</span>* <span style="color: #b58900;">ap</span>;
-<span style="color: #859900;">public</span>:
-    <span style="color: #b58900;">T</span>* <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> <span style="color: #859900;">throw</span>() {
-        <span style="color: #859900;">return</span> ap;
+<pre class="src src-C++">template&lt;class T&gt;
+class auto_ptr {
+private:
+    T* ap;
+public:
+    T* operator-&gt;() const throw() {
+        return ap;
     }
-    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">...</span>
+    // ...
 };
 </pre>
 </div>
@@ -80,41 +81,41 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+<pre class="src src-C++">#include &lt;iostream&gt;
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Origin</span> {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">a</span>;
+struct Origin {
+    int a;
 };
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Wrapper</span> {
-    <span style="color: #b58900;">Origin</span> *<span style="color: #b58900;">orig</span>;
-    <span style="color: #b58900;">Origin</span> *<span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> {
-        <span style="color: #859900;">return</span> orig;
+struct Wrapper {
+    Origin *orig;
+    Origin *operator-&gt;() const {
+        return orig;
     }
 };
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Wrapper2</span> {
-    <span style="color: #b58900;">Wrapper</span> *<span style="color: #b58900;">wrap</span>;
-    <span style="color: #b58900;">Wrapper</span>&amp; <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() <span style="color: #859900;">const</span> {
-        <span style="color: #859900;">return</span> *wrap;
+struct Wrapper2 {
+    Wrapper *wrap;
+    Wrapper&amp; operator-&gt;() const {
+        return *wrap;
     }
 };
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #b58900;">Origin</span> <span style="color: #b58900;">o</span>;
+int main() {
+    Origin o;
     o.a = 7;
-    <span style="color: #b58900;">Wrapper</span> <span style="color: #b58900;">w</span>;
+    Wrapper w;
     w.orig = &amp;o;
-    <span style="color: #b58900;">Wrapper2</span> <span style="color: #b58900;">w2</span>;
+    Wrapper2 w2;
     w2.wrap = &amp;w;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t\t"</span> &lt;&lt; w-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w.operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t"</span> &lt;&lt; w.<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; w.<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t\t\t"</span> &lt;&lt; w2-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"&amp;w2.operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; &amp;w2.<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;().operator-&gt;()"</span> &lt;&lt; <span style="color: #2aa198;">"\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;().<span style="color: #859900;">operator</span>-&gt;() &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; <span style="color: #2aa198;">"w2.operator-&gt;().operator-&gt;()-&gt;a"</span> &lt;&lt; <span style="color: #2aa198;">"\t"</span> &lt;&lt; w2.<span style="color: #859900;">operator</span>-&gt;().<span style="color: #859900;">operator</span>-&gt;()-&gt;a &lt;&lt; <span style="color: #6c71c4;">std</span>::endl;
+    std::cout &lt;&lt; "w-&gt;a" &lt;&lt; "\t\t\t\t" &lt;&lt; w-&gt;a &lt;&lt; std::endl;
+    std::cout &lt;&lt; "w.operator-&gt;()" &lt;&lt; "\t\t\t" &lt;&lt; w.operator-&gt;() &lt;&lt; std::endl;
+    std::cout &lt;&lt; "w.operator-&gt;()-&gt;a" &lt;&lt; "\t\t" &lt;&lt; w.operator-&gt;()-&gt;a &lt;&lt; std::endl;
+    std::cout &lt;&lt; "w2-&gt;a" &lt;&lt; "\t\t\t\t" &lt;&lt; w2-&gt;a &lt;&lt; std::endl;
+    std::cout &lt;&lt; "&amp;w2.operator-&gt;()" &lt;&lt; "\t\t" &lt;&lt; &amp;w2.operator-&gt;() &lt;&lt; std::endl;
+    std::cout &lt;&lt; "w2.operator-&gt;()-&gt;a" &lt;&lt; "\t\t" &lt;&lt; w2.operator-&gt;()-&gt;a &lt;&lt; std::endl;
+    std::cout &lt;&lt; "w2.operator-&gt;().operator-&gt;()" &lt;&lt; "\t" &lt;&lt; w2.operator-&gt;().operator-&gt;() &lt;&lt; std::endl;
+    std::cout &lt;&lt; "w2.operator-&gt;().operator-&gt;()-&gt;a" &lt;&lt; "\t" &lt;&lt; w2.operator-&gt;().operator-&gt;()-&gt;a &lt;&lt; std::endl;
 }
 </pre>
 </div>
@@ -147,18 +148,18 @@ w2.operator-&gt;().operator-&gt;()-&gt;a	7
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+<pre class="src src-C++">#include &lt;iostream&gt;
 
-<span style="color: #859900;">struct</span> <span style="color: #b58900;">Joke</span> {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span>;
-    <span style="color: #b58900;">Joke</span>&amp; <span style="color: #859900;">operator</span><span style="color: #268bd2;">-&gt;</span>() {
-        <span style="color: #859900;">return</span> *<span style="color: #859900;">this</span>;
+struct Joke {
+    int i;
+    Joke&amp; operator-&gt;() {
+        return *this;
     }
 };
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #b58900;">Joke</span> <span style="color: #b58900;">j</span>;
-    <span style="color: #6c71c4;">std</span>::cout &lt;&lt; j-&gt;i;
+int main() {
+    Joke j;
+    std::cout &lt;&lt; j-&gt;i;
 }
 </pre>
 </div>
@@ -219,6 +220,9 @@ error: circular pointer delegation detected
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -238,6 +242,5 @@ error: circular pointer delegation detected
         </p>
       </div>
     </div>
-
   </body>
 </html>

@@ -7,6 +7,7 @@
     <meta name="description" content="the calling convention of x64 platform" />
     <meta name="keywords" content="windows, assembly, x64 calling conventions" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -62,12 +63,12 @@ int add(int a, int b, int c, int d, int e, int f)
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #859900;">typedef</span> <span style="color: #b58900;">int</span> (*<span style="color: #b58900;">FunctionPtr</span>)(<span style="color: #b58900;">int</span> <span style="color: #b58900;">a</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">b</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">c</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">d</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">e</span>);
+<pre class="src src-C++">typedef int (*FunctionPtr)(int a, int b, int c, int d, int e);
 
-<span style="color: #b58900;">HMODULE</span> <span style="color: #b58900;">h</span> = ::LoadLibraryEx(L<span style="color: #2aa198;">"CommonModule.dll"</span>, ...);
-<span style="color: #b58900;">FunctionPtr</span> <span style="color: #b58900;">pf</span> = <span style="color: #859900;">reinterpret_cast</span>&lt;FunctionPtr&gt;(::GetProcAddress(h, <span style="color: #2aa198;">"add"</span>));
-<span style="color: #b58900;">int</span> <span style="color: #b58900;">ret</span> = pf(1, 2, 3, 4, 5);
-<span style="color: #586e75; font-style: italic;">//</span><span style="color: #586e75; font-style: italic;">...</span>
+HMODULE h = ::LoadLibraryEx(L"CommonModule.dll", ...);
+FunctionPtr pf = reinterpret_cast&lt;FunctionPtr&gt;(::GetProcAddress(h, "add"));
+int ret = pf(1, 2, 3, 4, 5);
+//...
 </pre>
 </div>
 
@@ -97,15 +98,15 @@ int add(int a, int b, int c, int d, int e, int f)
 
 <div class="org-src-container">
 
-<pre class="src src-C++"><span style="color: #d33682;">#include</span> <span style="color: #2aa198;">&lt;iostream&gt;</span>
+<pre class="src src-C++">#include &lt;iostream&gt;
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">add</span>(<span style="color: #b58900;">int</span> <span style="color: #b58900;">a</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">b</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">c</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">d</span>, <span style="color: #b58900;">int</span> <span style="color: #b58900;">e</span>) {
-    <span style="color: #859900;">return</span> a + b + c + d + e;
+int add(int a, int b, int c, int d, int e) {
+    return a + b + c + d + e;
 }
 
-<span style="color: #b58900;">int</span> <span style="color: #268bd2;">main</span>() {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">r</span> = add(1, 2, 3, 4, 5);
-    <span style="color: #6c71c4;">std</span>::cin.get();
+int main() {
+    int r = add(1, 2, 3, 4, 5);
+    std::cin.get();
 }
 </pre>
 </div>
@@ -382,6 +383,9 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -401,6 +405,5 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
         </p>
       </div>
     </div>
-
   </body>
 </html>

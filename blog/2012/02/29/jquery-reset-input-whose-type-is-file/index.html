@@ -7,6 +7,7 @@
     <meta name="description" content="how to reset input content whose type is file using jquery" />
     <meta name="keywords" content="jquery, javascript" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -67,10 +68,10 @@ $('#upload').val('');
 
 <div class="org-src-container">
 
-<pre class="src src-javascript"><span style="color: #859900;">if</span>(ie) {    <span style="color: #586e75; font-style: italic;">// </span><span style="color: #586e75; font-style: italic;">&#27492;&#22788;&#21028;&#26029;&#26159;&#21542;&#26159;IE</span>
-    $(<span style="color: #2aa198;">'#upload'</span>).replaceWith($(<span style="color: #2aa198;">'#upload'</span>).clone(<span style="color: #6c71c4;">true</span>));
-} <span style="color: #859900;">else</span> {
-    $(<span style="color: #2aa198;">'#upload'</span>).val(<span style="color: #2aa198;">''</span>);
+<pre class="src src-javascript">if(ie) {    // 此处判断是否是IE
+    $('#upload').replaceWith($('#upload').clone(true));
+} else {
+    $('#upload').val('');
 }
 </pre>
 </div>
@@ -110,6 +111,9 @@ $('#upload').val('');
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -129,6 +133,5 @@ $('#upload').val('');
         </p>
       </div>
     </div>
-
   </body>
 </html>

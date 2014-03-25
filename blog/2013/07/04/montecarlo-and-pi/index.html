@@ -7,6 +7,7 @@
     <meta name="description" content="how to calculate pi using monte carlo method" />
     <meta name="keywords" content="monte carlo method" />
     <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
   </head>
   <body class="container">
     <div>
@@ -41,32 +42,32 @@
 
 <div class="org-src-container">
 
-<pre class="src src-C"><span style="color: #586e75; font-style: italic;">/*</span>
-<span style="color: #586e75; font-style: italic;"> * Cute little busy work routine that computes the value</span>
-<span style="color: #586e75; font-style: italic;"> * of PI using probability. Highly dependent on having</span>
-<span style="color: #586e75; font-style: italic;"> * a good random number generator (rand is iffy)</span>
-<span style="color: #586e75; font-style: italic;"> </span><span style="color: #586e75; font-style: italic;">*/</span>
-DWORD <span style="color: #b58900;">WINAPI</span> <span style="color: #268bd2;">ThreadFunc</span>(<span style="color: #b58900;">LPVOID</span> <span style="color: #b58900;">n</span>)
+<pre class="src src-C">/*
+ * Cute little busy work routine that computes the value
+ * of PI using probability. Highly dependent on having
+ * a good random number generator (rand is iffy)
+ */
+DWORD WINAPI ThreadFunc(LPVOID n)
 {
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">i</span>;
-    <span style="color: #b58900;">int</span> <span style="color: #b58900;">inside</span> = 0;
-    <span style="color: #b58900;">double</span> <span style="color: #b58900;">val</span>;
+    int i;
+    int inside = 0;
+    double val;
 
     UNREFERENCED_PARAMETER(n);
 
-    <span style="color: #586e75; font-style: italic;">/* </span><span style="color: #586e75; font-style: italic;">Seed the random-number generator </span><span style="color: #586e75; font-style: italic;">*/</span>
-    srand( (<span style="color: #b58900;">unsigned</span>)time( <span style="color: #6c71c4;">NULL</span> ) );
+    /* Seed the random-number generator */
+    srand( (unsigned)time( NULL ) );
 
-    <span style="color: #859900;">for</span> (i=0; i&lt;1000000; i++)
+    for (i=0; i&lt;1000000; i++)
     {
-        <span style="color: #b58900;">double</span> <span style="color: #b58900;">x</span> = (<span style="color: #b58900;">double</span>)(rand())/RAND_MAX;
-        <span style="color: #b58900;">double</span> <span style="color: #b58900;">y</span> = (<span style="color: #b58900;">double</span>)(rand())/RAND_MAX;
-        <span style="color: #859900;">if</span> ( (x*x + y*y) &lt;= 1.0 )
+        double x = (double)(rand())/RAND_MAX;
+        double y = (double)(rand())/RAND_MAX;
+        if ( (x*x + y*y) &lt;= 1.0 )
             inside++;
     }
-    val = (<span style="color: #b58900;">double</span>)inside / i;
-    printf(<span style="color: #2aa198;">"PI = %.4g\n"</span>, val*4);
-    <span style="color: #859900;">return</span> 0;
+    val = (double)inside / i;
+    printf("PI = %.4g\n", val*4);
+    return 0;
 }
 </pre>
 </div>
@@ -122,6 +123,9 @@ x和y可以看成是二维解析平面上的点坐标(x, y)，由于二者的取
         <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
       </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
       <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-41088132-1']);
@@ -141,6 +145,5 @@ x和y可以看成是二维解析平面上的点坐标(x, y)，由于二者的取
         </p>
       </div>
     </div>
-
   </body>
 </html>
