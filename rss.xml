@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Tue, 25 Mar 2014 19:46:10 China Standard Time</pubDate>
-    <lastBuildDate>Tue, 25 Mar 2014 19:46:10 China Standard Time</lastBuildDate>
+    <pubDate>Thu, 27 Mar 2014 22:30:56 China Standard Time</pubDate>
+    <lastBuildDate>Thu, 27 Mar 2014 22:30:56 China Standard Time</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>[翻译]C++教程：指向成员函数的指针</title>
+      <link>http://kelvinh.github.io/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/</link>
+      <description>translation of a good article: C++ Tutorial: Pointer-to-Member Function at http://www.codeguru.com/cpp/cpp/article.php/c17401/C-Tutorial-PointertoMember-Function.htm</description>
+      <pubDate>2014-03-27</pubDate>
+      <guid>http://kelvinh.github.io/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/</guid>
+    </item>
     <item>
       <title>那些年我眼中的神</title>
       <link>http://kelvinh.github.io/blog/2014/01/07/things-i-admired-these-years/</link>
@@ -70,13 +77,6 @@
       <description>memory leak introduced by incomplete type, which is led by forward declaration and inline destructor</description>
       <pubDate>2013-11-27</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/08/28/memory-leak-of-incomplete-type/</guid>
-    </item>
-    <item>
-      <title>C++中对成员访问操作符-&gt;的重载</title>
-      <link>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</link>
-      <description>Introduction to overloading of -&gt; operator in C++</description>
-      <pubDate>2013-11-24</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</guid>
     </item>
   </channel>
 </rss>

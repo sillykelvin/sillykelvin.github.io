@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>[翻译]C++教程：指向成员函数的指针 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="translation of a good article: C++ Tutorial: Pointer-to-Member Function at http://www.codeguru.com/cpp/cpp/article.php/c17401/C-Tutorial-PointertoMember-Function.htm" />
+    <meta name="keywords" content="C++, point to member function, non-virtual function, virtual function, static function" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>[翻译]C++教程：指向成员函数的指针</h1>
+<p>
+这是一篇翻译的文章，原文详细解释了C++中指向成员函数的指针，因为带有“教程”一词，所以比较通俗易懂。为了使文章读起来通俗有趣，翻译君并未一字一句一板一眼地翻译，并大量使用了诙谐的词汇（如“码农”）。另外，原文的某些地方分段不太合适（小学语文可能是体育老师教的。。），有些地方也稍嫌啰嗦，所以翻译君自己作了一些调整。如果对翻译君的翻译质量有意见，建议前往 <a href="http://www.codeguru.com/cpp/cpp/article.php/c17401/C-Tutorial-PointertoMember-Function.htm">原地址</a> 围观。
+</p>
+
+<p>
+咦？还不走？那废话少说，我们开始了啊。
+</p>
+
+<hr  />
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">关于成员函数指针</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+成员函数指针是C++最少用到的语法之一，甚至有经验的C++码农有时候也会被它搞晕。这是一篇针对于初学者的教程，同时也给有经验的码农分享了一些我个人对底层机制的挖掘。在开始之前，让我们先看一段在第一次看时一定会高呼“我++”的代码（说明，这些代码都是翻译君重新手敲的，改正了原文代码中的一些不太好的空格、缩进，下同）：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">//mem_fun1.cpp
+#include &lt;iostream&gt;
+
+class Foo {
+public:
+    Foo(int i = 0) { _i = i; }
+    void f() {
+        std::cout &lt;&lt; "Foo::f()" &lt;&lt; std::endl;
+    }
+private:
+    int _i;
+};
+
+int main() {
+    Foo *p = 0;
+    p-&gt;f();
+}
+
+// Output:
+// Foo::f()
+</pre>
+</div>
+
+<p>
+为什么我们能通过一个空指针调用成员函数？看起来好像编译器根本不鸟p的值是什么，只介意p的类型。别着急，咱先吊吊胃口，把答案留到后面的章节。现在，我们所能知道的是，编译器准确地知道要调用哪个函数。这就是所谓的”静态绑定“。因为成员函数可以静态绑定（并不是总能静态绑定，待会儿讨论），所以它们的地址是在编译阶段决定的（同样并不是永远如此）。直观地讲，应该有一种方法可以保存成员函数的地址。而且，真有这么一种方法，那就是——成员函数指针。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">C++语法</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+下面的语法展示了如何声明一个成员函数指针：
+</p>
+
+<pre class="example">
+Return_Type (Class_Name::* pointer_name) (Argument_List);
+
+Return_Type:   member function return type.
+Class_name:    name of the class in which the member function is declared.
+Argument_List: member function argument list.
+pointer_name:  a name we'd like to call the pointer variable.
+</pre>
+
+<p>
+例如，我们定义一个类 <code>Foo</code> 和一个成员函数 <code>f</code> ：
+</p>
+
+<pre class="example">
+int Foo::f(string);
+</pre>
+
+<p>
+我们可以给这个成员函数指针起一个”高大上“的名字 <code>fptr</code> ，所以我们就有了下面的内容：
+</p>
+
+<pre class="example">
+Return_Type:   int
+Class_Name:    Foo
+Argument_List: string
+
+declaration of a  pointer-to-member function named "fptr":
+  int (Foo::*fptr) (string);
+</pre>
+
+<p>
+现在，指定一个成员函数给我们”高大上“的 <code>fptr</code> ：
+</p>
+
+<pre class="example">
+fptr = &amp;Foo::f;
+</pre>
+
+<p>
+当然，就连脑残都知道可以将声明和初始化结合起来：
+</p>
+
+<pre class="example">
+int (Foo::*fptr) (string) = &amp;Foo::f;
+</pre>
+
+<p>
+为了通过函数指针来调用成员函数，我们使用成员指针选择操作符（翻译君表示也不知道该怎么翻译，原文是pointer-to-member selection operators）， <code>.*</code> 或者 <code>-&gt;*</code> 。下面的代码演示了基本用法：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class Foo {
+public:
+    int f(string str) {
+        cout &lt;&lt; "Foo::f()" &lt;&lt; endl;
+        return 1;
+    }
+};
+
+int main(int argc, char *argv[]) {
+    int (Foo::*fptr) (string) = &amp;Foo::f;
+    Foo obj;
+    (obj.*fptr)("str"); // 通过对象来调用 Foo::f()
+    Foo *p = &amp;obj;
+    (p-&gt;*fptr)("str"); // 通过指针来调用 Foo::f()
+}
+</pre>
+</div>
+
+<p>
+注意： <code>.*fptr</code> 绑定fptr到对象obj，而 <code>-&gt;*fptr</code> 则绑定fptr到指针p所指向的对象。（还有一个 <b>重要的区别</b> 是：我们可以重载后者，却不能重载前者）。在 <code>(obj.*fptr)</code> 和 <code>(p-&gt;*fptr)</code> 两边的括号是语法所强制要求的。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">成员函数指针不是常规指针</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+成员函数指针不像常规指针那样保存某个”准确“的地址。我们可以把它想像成保存的是成员函数在类布局中的”相对“地址。让我们来展示一下二者的不同。我们只对类 <code>Foo</code> 做一个小手术：将成员函数 <code>f</code> 变成 <code>static</code> ：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class Foo {
+public:
+    static int f(string str) {
+        cout &lt;&lt; "Foo::f()" &lt;&lt; endl;
+        return 1;
+    }
+};
+
+int main(int argc, char *argv[]) {
+    // int (Foo::*fptr) (string) = &amp;Foo::f; // 错误
+    int (*fptr) (string) = &amp;Foo::f; // 正确
+    (*fptr)("str"); // 调用 Foo::f()
+}
+</pre>
+</div>
+
+<p>
+一个静态成员函数没有 <code>this</code> 指针。除了它和其它的类成员共享命名空间Foo（在我们的例子中命名空间是 <code>Foo::</code> ）之外，它和常规全局函数是一样的。所以，静态成员函数不是类的一部分，成员函数指针的语法对常规函数指针并不成立，例如上面例子中的静态成员函数指针。
+</p>
+
+<pre class="example">
+int (Foo::*fptr) (string) = &amp;Foo::f;
+</pre>
+
+<p>
+上面这行代码在g++ 4.2.4中编译的错误信息为：“不能将 <code>int (*)(std::string)</code> 转化成 <code>int (Foo::*)(std::string)</code> ”。这个例子证明了成员函数指针不是常规指针。另外，为什么C++如此费心地去发明这样的语法？很简单，因为它和常规指针是不同的东西，而且这样的类型转换也是违反直觉的。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">C++类型转换规则</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">非虚函数情形</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+我们在前面一节看到，成员函数指针并不是常规指针，所以，成员函数指针（非静态）不能被转换成常规指针（当然，如果哪个脑残真想这么做的话，可以使用汇编技术来暴力解决），因为成员函数指针代表了 <b>偏移量</b> 而不是 <b>绝对地址</b> 。但是，如果是成员函数指针之间相互转换呢？
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">//memfunc4.cpp
+#include &lt;iostream&gt;
+
+class Foo {
+public:
+    int f(char *c = 0) {
+        std::cout &lt;&lt; "Foo::f()" &lt;&lt; std::endl;
+        return 1;
+    }
+};
+
+class Bar {
+public:
+    void b(int i = 0) {
+        std::cout &lt;&lt; "Bar::b()" &lt;&lt; std::endl;
+    }
+};
+
+class FooDerived : public Foo {
+public:
+    int f(char *c = 0) {
+        std::cout &lt;&lt; "FooDerived::f()" &lt;&lt; std::endl;
+        return 1;
+    }
+};
+
+int main(int argc, char *argv[]) {
+    typedef int (Foo::*FPTR) (char*);
+    typedef void (Bar::*BPTR) (int);
+    typedef int (FooDerived::*FDPTR) (char*);
+
+    FPTR fptr = &amp;Foo::f;
+    BPTR bptr = &amp;Bar::b;
+    FDPTR fdptr = &amp;FooDerived::f;
+
+    // bptr = static_cast&lt;void(Bar::*)(int)&gt;(fptr); // 错误
+    fdptr = static_cast&lt;int(Foo::*)(char*)&gt;(fptr); // 正确，逆变性规则
+
+    Bar obj;
+    ( obj.*(BPTR) fptr )(1); // 调用 Foo::f()
+}
+
+// Output:
+// Foo::f()
+</pre>
+</div>
+
+<p>
+在上面的代码中，我们首先使用了我们的老朋友 <code>typedef</code> 。它让这些繁琐的定义变得清晰起来。关键是，fptr是什么类型？它的类型是：
+</p>
+
+<pre class="example">
+int (Foo::*) (char*);
+</pre>
+
+<p>
+或者等价地说——FPTR。如果我们仔细看上面的代码：
+</p>
+
+<pre class="example">
+bptr = static_cast&lt;void(Bar::*)(int)&gt;(fptr);
+</pre>
+
+<p>
+这一行会出错，因为 <b>不同的非静态非虚成员函数具有强类型因此不能相互转化</b> ，但是：
+</p>
+
+<pre class="example">
+fdptr = static_cast&lt;int(Foo::*)(char*)&gt;(fptr);
+</pre>
+
+<p>
+这一行却是正确的！我们可以将一个指向派生类的指针赋值给一个指向其基类的指针（即"is-a"关系），而所谓的”逆变性规则“（翻译君：不知道是啥，原文是contravariance rule）正是这种规则的反面。这个规则提供了将 <code>FooDerived::*</code> 应用到任何 <code>Foo::*</code> 能被应用的地方的基本保证。在代码最后两行：
+</p>
+
+<pre class="example">
+Bar obj;
+( obj.*(BPTR) fptr)(1);
+</pre>
+
+<p>
+尽管我们想要调用的是 <code>Bar::b()</code> ，但是 <code>Foo::f()</code> 却被调用了，因为fptr是静态绑定（翻译君注：这里的静态绑定，即指在编译阶段，fptr的值已经确定了，所以即使进行强制转换，依然调用的是Foo类的f()函数）。（请围观<a href="#sec-6">成员函数调用和 <code>this</code> 指针</a>）
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2">虚函数情形</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+我们只将前例中的所有成员函数变成虚函数，其它都不动：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+class Foo {
+public:
+    virtual int f(char *c = 0) {
+        std::cout &lt;&lt; "Foo::f()" &lt;&lt; std::endl;
+        return 1;
+    }
+};
+
+class Bar {
+public:
+    virtual void b(int i = 0) {
+        std::cout &lt;&lt; "Bar::b()" &lt;&lt; std::endl;
+    }
+};
+
+class FooDerived : public Foo {
+public:
+    int f(char *c = 0) {
+        std::cout &lt;&lt; "FooDerived::f()" &lt;&lt; std::endl;
+        return 1;
+    }
+};
+
+int main(int argc, char *argv[]) {
+    typedef int (Foo::*FPTR) (char*);
+    typedef void (Bar::*BPTR) (int);
+
+    FPTR fptr = &amp;Foo::f;
+    BPTR bptr = &amp;Bar::b;
+
+    FooDerived objDer;
+    (objDer.*fptr)(0); // 调用 FooDerived::f()，而不是 Foo::f()
+
+    Bar obj;
+    ( obj.*(BPTR) fptr )(1);// 调用 Bar::b()，而不是 Foo::f()
+}
+
+// Output:
+// FooDerived::f()
+// Bar::b()
+</pre>
+</div>
+
+<p>
+如我们所看到的，当成员函数是虚函数的时候，成员函数能够具有多态性并且现在调用的是 <code>FooDerived::f()</code> ，而且 <code>Bar::b()</code> 也能被正确调用了。因为 <b>”一个指向虚成员的指针能在不同地址空间之间传递，只要二者使用的对象布局一样“</b> （此话来自C++老爸 <a href="http://www2.research.att.com/~bs/C++.html">Bjarne Stroustrup</a> 的 <a href="http://www2.research.att.com/~bs/C++.html">《C++程序设计语言》</a> ）。当函数是虚函数的时候，编译器会生成虚函数表，来保存虚函数的地址。这是和非虚函数之间的最大不同，因此，运行时的行为也是不同的。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">成员函数指针数组及其应用</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+成员函数指针的一个重要应用就是根据输入来生成响应事件，下面的 <code>Printer</code> 类和指针数组 <code>pfm</code> 展示了这一点：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;stdio.h&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+
+class Printer { // 一台虚拟的打印机
+public:
+    void Copy(char *buff, const char *source) { // 复制文件
+        strcpy(buff, source);
+    }
+
+    void Append(char *buff, const char *source) { // 追加文件
+        strcat(buff, source);
+    }
+};
+
+enum OPTIONS { COPY, APPEND }; // 菜单中两个可供选择的命令
+
+typedef void(Printer::*PTR) (char*, const char*); // 成员函数指针
+
+void working(OPTIONS option, Printer *machine,
+             char *buff, const char *infostr) {
+    PTR pmf[2] = { &amp;Printer::Copy, &amp;Printer::Append }; // 指针数组
+
+    switch (option) {
+    case COPY:
+        (machine-&gt;*pmf[COPY])(buff, infostr);
+        break;
+    case APPEND:
+        (machine-&gt;*pmf[APPEND])(buff, infostr);
+        break;
+    }
+}
+
+int main() {
+    OPTIONS option;
+    Printer machine;
+    char buff[40];
+
+    working(COPY, &amp;machine, buff, "Strings ");
+    working(APPEND, &amp;machine, buff, "are concatenated!");
+
+    std::cout &lt;&lt; buff &lt;&lt; std::endl;
+}
+
+// Output:
+// Strings are concatenated!
+</pre>
+</div>
+
+<p>
+在上述代码中， <code>working</code> 是一个用来执行打印工作的函数，它需要几个参数：1. 菜单选项；2. 可用的打印机；3. 字符串目的地；4. 字符串来源。上述代码中字符串来源是两个字符串常量"Strings "和"concatenated!"，而成员函数指针数组被用来根据菜单选项执行相应的打印动作。
+</p>
+
+<p>
+成员函数指针另外一个重要的应用可以在STL的 <code>mem_fun()</code> 中找到。（翻译君去看了一下 <code>mem_fun()</code> 的源代码，原来是用成员函数来构造仿函数functor的。）
+</p>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">成员函数调用和 <code>this</code> 指针</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+现在我们回到文章最开始的地方。为什么一个空指针也能调用成员函数？对于一个非虚函数调用，例如： <code>p-&gt;f()</code> ，编译器会生成类似如下代码：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">Foo *const this = p;
+void Foo::f(Foo *const this) {
+    std::cout &lt;&lt; "Foo::f()" &lt;&lt; std::endl;
+}
+</pre>
+</div>
+
+<p>
+所以，不管p的值是神马，函数 <code>Foo::f</code> 都可以被调用，就像一个全局函数一样！p被作为 <code>this</code> 指针并当作参数传递给了函数。而在我们的例子中 <code>this</code> 指针并没有被解引用，所以，编译器放了我们一马（翻译君表示，这其实跟编译器没有关系，即使我们在成员函数中使用this指针，编译照样能通过，只不过在运行时会crash）。假如我们想知道成员变量 <code>_i</code> 的值呢？那么编译器就需要解引用 <code>this</code> 指针，这只有一个结果，那就是我们的好兄弟——未定义行为（undefined behavior）。对于一个虚函数调用，我们需要虚函数表来查找正确的函数，然后， <code>this</code> 指针被传递给这个函数。
+</p>
+
+<p>
+这就是非虚函数、虚函数、静态函数的成员函数指针使用不用实现方式的根本原因。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">结论</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+简单总结一下，通过上述文章，我们学到了：
+</p>
+
+<ol class="org-ol">
+<li>成员函数指针声明和定义的语法
+</li>
+
+<li>使用成员指针选择操作符来调用成员函数的语法
+</li>
+
+<li>使用 <code>typedef</code> 写出更加清晰的代码
+</li>
+
+<li>非虚成员函数、虚函数、静态成员函数之间的区别
+</li>
+
+<li>成员函数指针和常规指针的对比
+</li>
+
+<li>不同情形下的成员函数指针转换规则
+</li>
+
+<li>如何使用成员函数指针数组来解决特定的设计问题
+</li>
+
+<li>编译器是如何解释成员函数调用的
+</li>
+</ol>
+
+<p>
+我衷心希望这篇教程能打开通往上述要点的相关高级技巧的大门，例如多重继承、虚继承下的成员函数指针，以及编译器的相关实现，例如“巨硬”家的Thunk技术（原文这里有链接，但翻译君去看了一下，不仅又老又旧（还在讲Windows 98和16位程序），而且只是巨硬的support性质的文章，所以就不贴链接了，免得浪费各位看官宝贵的青春:-p）。
+</p>
+
+<p>
+那么，就到这里了，谢谢各位的围观，希望能对各位有所帮助。（翻译君表示，这哥们怎么这么啰嗦，和天朝棺猿有得一拼:-p）
+</p>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2014-03-27</span>
+        <span title="last modification date" class="post-info">2014-03-27</span>
+        <span title="tags" class="post-info"><a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/";
+          var disqus_url = "http://kelvinh.github.io/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>
+          Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
