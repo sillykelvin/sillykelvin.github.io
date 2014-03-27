@@ -293,7 +293,7 @@ fdptr = static_cast&lt;int(Foo::*)(char*)&gt;(fptr);
 </pre>
 
 <p>
-这一行却是正确的！我们可以将一个指向派生类的指针赋值给一个指向其基类的指针（即"is-a"关系），而所谓的”逆变性规则“（翻译君：不知道是啥，原文是contravariance rule）正是这种规则的反面。这个规则提供了将 <code>FooDerived::*</code> 应用到任何 <code>Foo::*</code> 能被应用的地方的基本保证。在代码最后两行：
+这一行却是正确的！我们可以将一个指向派生类的指针赋值给一个指向其基类的指针（即"is-a"关系），而所谓的“逆变性规则”（翻译君：不知道是啥，原文是contravariance rule）正是这种规则的反面。这个规则提供了将 <code>FooDerived::*</code> 应用到任何 <code>Foo::*</code> 能被应用的地方的基本保证。在代码最后两行：
 </p>
 
 <pre class="example">
