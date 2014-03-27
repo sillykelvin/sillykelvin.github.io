@@ -1,0 +1,358 @@
+#+TITLE:       [翻译]C++教程：指向成员函数的指针
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2014-03-27 Thu
+#+URI:         /blog/%y/%m/%d/cpp-tutorial-pointer-to-member-function/
+#+KEYWORDS:    C++, point to member function, non-virtual function, virtual function, static function
+#+TAGS:        C++
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: translation of a good article: C++ Tutorial: Pointer-to-Member Function at http://www.codeguru.com/cpp/cpp/article.php/c17401/C-Tutorial-PointertoMember-Function.htm
+
+这是一篇翻译的文章，原文详细解释了C++中指向成员函数的指针，因为带有“教程”一词，所以比较通俗易懂。为了使文章读起来通俗有趣，翻译君并未一字一句一板一眼地翻译，并大量使用了诙谐的词汇（如“码农”）。另外，原文的某些地方分段不太合适（小学语文可能是体育老师教的。。），有些地方也稍嫌啰嗦，所以翻译君自己作了一些调整。如果对翻译君的翻译质量有意见，建议前往 [[http://www.codeguru.com/cpp/cpp/article.php/c17401/C-Tutorial-PointertoMember-Function.htm][原地址]] 围观。
+
+咦？还不走？那废话少说，我们开始了啊。
+
+--------------------------------------------------------------------------------
+
+* 关于成员函数指针
+
+  成员函数指针是C++最少用到的语法之一，甚至有经验的C++码农有时候也会被它搞晕。这是一篇针对于初学者的教程，同时也给有经验的码农分享了一些我个人对底层机制的挖掘。在开始之前，让我们先看一段在第一次看时一定会高呼“我++”的代码（说明，这些代码都是翻译君重新手敲的，改正了原文代码中的一些不太好的空格、缩进，下同）：
+
+  #+BEGIN_SRC C++
+  //mem_fun1.cpp
+  #include <iostream>
+
+  class Foo {
+  public:
+      Foo(int i = 0) { _i = i; }
+      void f() {
+          std::cout << "Foo::f()" << std::endl;
+      }
+  private:
+      int _i;
+  };
+
+  int main() {
+      Foo *p = 0;
+      p->f();
+  }
+
+  // Output:
+  // Foo::f()
+  #+END_SRC
+
+  为什么我们能通过一个空指针调用成员函数？看起来好像编译器根本不鸟p的值是什么，只介意p的类型。别着急，咱先吊吊胃口，把答案留到后面的章节。现在，我们所能知道的是，编译器准确地知道要调用哪个函数。这就是所谓的”静态绑定“。因为成员函数可以静态绑定（并不是总能静态绑定，待会儿讨论），所以它们的地址是在编译阶段决定的（同样并不是永远如此）。直观地讲，应该有一种方法可以保存成员函数的地址。而且，真有这么一种方法，那就是——成员函数指针。
+
+* C++语法
+
+  下面的语法展示了如何声明一个成员函数指针：
+
+  #+BEGIN_EXAMPLE
+  Return_Type (Class_Name::* pointer_name) (Argument_List);
+
+  Return_Type:   member function return type.
+  Class_name:    name of the class in which the member function is declared.
+  Argument_List: member function argument list.
+  pointer_name:  a name we'd like to call the pointer variable.
+  #+END_EXAMPLE
+
+  例如，我们定义一个类 =Foo= 和一个成员函数 =f= ：
+
+  : int Foo::f(string);
+
+  我们可以给这个成员函数指针起一个”高大上“的名字 =fptr= ，所以我们就有了下面的内容：
+
+  #+BEGIN_EXAMPLE
+  Return_Type:   int
+  Class_Name:    Foo
+  Argument_List: string
+
+  declaration of a  pointer-to-member function named "fptr":
+    int (Foo::*fptr) (string);
+  #+END_EXAMPLE
+
+  现在，指定一个成员函数给我们”高大上“的 =fptr= ：
+
+  : fptr = &Foo::f;
+
+  当然，就连脑残都知道可以将声明和初始化结合起来：
+
+  : int (Foo::*fptr) (string) = &Foo::f;
+
+  为了通过函数指针来调用成员函数，我们使用成员指针选择操作符（翻译君表示也不知道该怎么翻译，原文是pointer-to-member selection operators）， =.*= 或者 =->*= 。下面的代码演示了基本用法：
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+  #include <string>
+
+  using namespace std;
+
+  class Foo {
+  public:
+      int f(string str) {
+          cout << "Foo::f()" << endl;
+          return 1;
+      }
+  };
+
+  int main(int argc, char *argv[]) {
+      int (Foo::*fptr) (string) = &Foo::f;
+      Foo obj;
+      (obj.*fptr)("str"); // 通过对象来调用 Foo::f()
+      Foo *p = &obj;
+      (p->*fptr)("str"); // 通过指针来调用 Foo::f()
+  }
+  #+END_SRC
+
+  注意： =.*fptr= 绑定fptr到对象obj，而 =->*fptr= 则绑定fptr到指针p所指向的对象。（还有一个 *重要的区别* 是：我们可以重载后者，却不能重载前者）。在 =(obj.*fptr)= 和 =(p->*fptr)= 两边的括号是语法所强制要求的。
+
+* 成员函数指针不是常规指针
+
+  成员函数指针不像常规指针那样保存某个”准确“的地址。我们可以把它想像成保存的是成员函数在类布局中的”相对“地址。让我们来展示一下二者的不同。我们只对类 =Foo= 做一个小手术：将成员函数 =f= 变成 =static= ：
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+  #include <string>
+
+  using namespace std;
+
+  class Foo {
+  public:
+      static int f(string str) {
+          cout << "Foo::f()" << endl;
+          return 1;
+      }
+  };
+
+  int main(int argc, char *argv[]) {
+      // int (Foo::*fptr) (string) = &Foo::f; // 错误
+      int (*fptr) (string) = &Foo::f; // 正确
+      (*fptr)("str"); // 调用 Foo::f()
+  }
+  #+END_SRC
+
+  一个静态成员函数没有 =this= 指针。除了它和其它的类成员共享命名空间Foo（在我们的例子中命名空间是 =Foo::= ）之外，它和常规全局函数是一样的。所以，静态成员函数不是类的一部分，成员函数指针的语法对常规函数指针并不成立，例如上面例子中的静态成员函数指针。
+
+  : int (Foo::*fptr) (string) = &Foo::f;
+
+  上面这行代码在g++ 4.2.4中编译的错误信息为：“不能将 =int (*)(std::string)= 转化成 =int (Foo::*)(std::string)= ”。这个例子证明了成员函数指针不是常规指针。另外，为什么C++如此费心地去发明这样的语法？很简单，因为它和常规指针是不同的东西，而且这样的类型转换也是违反直觉的。
+
+* C++类型转换规则
+
+** 非虚函数情形
+
+   我们在前面一节看到，成员函数指针并不是常规指针，所以，成员函数指针（非静态）不能被转换成常规指针（当然，如果哪个脑残真想这么做的话，可以使用汇编技术来暴力解决），因为成员函数指针代表了 *偏移量* 而不是 *绝对地址* 。但是，如果是成员函数指针之间相互转换呢？
+
+   #+BEGIN_SRC C++
+   //memfunc4.cpp
+   #include <iostream>
+
+   class Foo {
+   public:
+       int f(char *c = 0) {
+           std::cout << "Foo::f()" << std::endl;
+           return 1;
+       }
+   };
+
+   class Bar {
+   public:
+       void b(int i = 0) {
+           std::cout << "Bar::b()" << std::endl;
+       }
+   };
+
+   class FooDerived : public Foo {
+   public:
+       int f(char *c = 0) {
+           std::cout << "FooDerived::f()" << std::endl;
+           return 1;
+       }
+   };
+
+   int main(int argc, char *argv[]) {
+       typedef int (Foo::*FPTR) (char*);
+       typedef void (Bar::*BPTR) (int);
+       typedef int (FooDerived::*FDPTR) (char*);
+
+       FPTR fptr = &Foo::f;
+       BPTR bptr = &Bar::b;
+       FDPTR fdptr = &FooDerived::f;
+
+       // bptr = static_cast<void(Bar::*)(int)>(fptr); // 错误
+       fdptr = static_cast<int(Foo::*)(char*)>(fptr); // 正确，逆变性规则
+
+       Bar obj;
+       ( obj.*(BPTR) fptr )(1); // 调用 Foo::f()
+   }
+
+   // Output:
+   // Foo::f()
+   #+END_SRC
+
+   在上面的代码中，我们首先使用了我们的老朋友 =typedef= 。它让这些繁琐的定义变得清晰起来。关键是，fptr是什么类型？它的类型是：
+
+   : int (Foo::*) (char*);
+
+   或者等价地说——FPTR。如果我们仔细看上面的代码：
+
+   : bptr = static_cast<void(Bar::*)(int)>(fptr);
+
+   这一行会出错，因为 *不同的非静态非虚成员函数具有强类型因此不能相互转化* ，但是：
+
+   : fdptr = static_cast<int(Foo::*)(char*)>(fptr);
+
+   这一行却是正确的！我们可以将一个指向派生类的指针赋值给一个指向其基类的指针（即"is-a"关系），而所谓的”逆变性规则“（翻译君：不知道是啥，原文是contravariance rule）正是这种规则的反面。这个规则提供了将 =FooDerived::*= 应用到任何 =Foo::*= 能被应用的地方的基本保证。在代码最后两行：
+
+   : Bar obj;
+   : ( obj.*(BPTR) fptr)(1);
+
+   尽管我们想要调用的是 =Bar::b()= ，但是 =Foo::f()= 却被调用了，因为fptr是静态绑定（翻译君注：这里的静态绑定，即指在编译阶段，fptr的值已经确定了，所以即使进行强制转换，依然调用的是Foo类的f()函数）。（请围观[[成员函数调用和 =this= 指针]]）
+
+** 虚函数情形
+
+   我们只将前例中的所有成员函数变成虚函数，其它都不动：
+
+   #+BEGIN_SRC C++
+   #include <iostream>
+
+   class Foo {
+   public:
+       virtual int f(char *c = 0) {
+           std::cout << "Foo::f()" << std::endl;
+           return 1;
+       }
+   };
+
+   class Bar {
+   public:
+       virtual void b(int i = 0) {
+           std::cout << "Bar::b()" << std::endl;
+       }
+   };
+
+   class FooDerived : public Foo {
+   public:
+       int f(char *c = 0) {
+           std::cout << "FooDerived::f()" << std::endl;
+           return 1;
+       }
+   };
+
+   int main(int argc, char *argv[]) {
+       typedef int (Foo::*FPTR) (char*);
+       typedef void (Bar::*BPTR) (int);
+
+       FPTR fptr = &Foo::f;
+       BPTR bptr = &Bar::b;
+
+       FooDerived objDer;
+       (objDer.*fptr)(0); // 调用 FooDerived::f()，而不是 Foo::f()
+
+       Bar obj;
+       ( obj.*(BPTR) fptr )(1);// 调用 Bar::b()，而不是 Foo::f()
+   }
+
+   // Output:
+   // FooDerived::f()
+   // Bar::b()
+   #+END_SRC
+
+   如我们所看到的，当成员函数是虚函数的时候，成员函数能够具有多态性并且现在调用的是 =FooDerived::f()= ，而且 =Bar::b()= 也能被正确调用了。因为 *”一个指向虚成员的指针能在不同地址空间之间传递，只要二者使用的对象布局一样“* （此话来自C++老爸 [[http://www2.research.att.com/~bs/C++.html][Bjarne Stroustrup]] 的 [[http://www2.research.att.com/~bs/C++.html][《C++程序设计语言》]] ）。当函数是虚函数的时候，编译器会生成虚函数表，来保存虚函数的地址。这是和非虚函数之间的最大不同，因此，运行时的行为也是不同的。
+
+* 成员函数指针数组及其应用
+
+  成员函数指针的一个重要应用就是根据输入来生成响应事件，下面的 =Printer= 类和指针数组 =pfm= 展示了这一点：
+
+  #+BEGIN_SRC C++
+  #include <stdio.h>
+  #include <string>
+  #include <iostream>
+
+  class Printer { // 一台虚拟的打印机
+  public:
+      void Copy(char *buff, const char *source) { // 复制文件
+          strcpy(buff, source);
+      }
+
+      void Append(char *buff, const char *source) { // 追加文件
+          strcat(buff, source);
+      }
+  };
+
+  enum OPTIONS { COPY, APPEND }; // 菜单中两个可供选择的命令
+
+  typedef void(Printer::*PTR) (char*, const char*); // 成员函数指针
+
+  void working(OPTIONS option, Printer *machine,
+               char *buff, const char *infostr) {
+      PTR pmf[2] = { &Printer::Copy, &Printer::Append }; // 指针数组
+
+      switch (option) {
+      case COPY:
+          (machine->*pmf[COPY])(buff, infostr);
+          break;
+      case APPEND:
+          (machine->*pmf[APPEND])(buff, infostr);
+          break;
+      }
+  }
+
+  int main() {
+      OPTIONS option;
+      Printer machine;
+      char buff[40];
+
+      working(COPY, &machine, buff, "Strings ");
+      working(APPEND, &machine, buff, "are concatenated!");
+
+      std::cout << buff << std::endl;
+  }
+
+  // Output:
+  // Strings are concatenated!
+  #+END_SRC
+
+  在上述代码中， =working= 是一个用来执行打印工作的函数，它需要几个参数：1. 菜单选项；2. 可用的打印机；3. 字符串目的地；4. 字符串来源。上述代码中字符串来源是两个字符串常量"Strings "和"concatenated!"，而成员函数指针数组被用来根据菜单选项执行相应的打印动作。
+
+  成员函数指针另外一个重要的应用可以在STL的 =mem_fun()= 中找到。（翻译君去看了一下 =mem_fun()= 的源代码，原来是用成员函数来构造仿函数functor的。）
+
+* 成员函数调用和 =this= 指针
+
+  现在我们回到文章最开始的地方。为什么一个空指针也能调用成员函数？对于一个非虚函数调用，例如： =p->f()= ，编译器会生成类似如下代码：
+
+  #+BEGIN_SRC C++
+  Foo *const this = p;
+  void Foo::f(Foo *const this) {
+      std::cout << "Foo::f()" << std::endl;
+  }
+  #+END_SRC
+
+  所以，不管p的值是神马，函数 =Foo::f= 都可以被调用，就像一个全局函数一样！p被作为 =this= 指针并当作参数传递给了函数。而在我们的例子中 =this= 指针并没有被解引用，所以，编译器放了我们一马（翻译君表示，这其实跟编译器没有关系，即使我们在成员函数中使用this指针，编译照样能通过，只不过在运行时会crash）。假如我们想知道成员变量 =_i= 的值呢？那么编译器就需要解引用 =this= 指针，这只有一个结果，那就是我们的好兄弟——未定义行为（undefined behavior）。对于一个虚函数调用，我们需要虚函数表来查找正确的函数，然后， =this= 指针被传递给这个函数。
+
+  这就是非虚函数、虚函数、静态函数的成员函数指针使用不用实现方式的根本原因。
+
+* 结论
+
+  简单总结一下，通过上述文章，我们学到了：
+
+  1. 成员函数指针声明和定义的语法
+
+  2. 使用成员指针选择操作符来调用成员函数的语法
+
+  3. 使用 =typedef= 写出更加清晰的代码
+
+  4. 非虚成员函数、虚函数、静态成员函数之间的区别
+
+  5. 成员函数指针和常规指针的对比
+
+  6. 不同情形下的成员函数指针转换规则
+
+  7. 如何使用成员函数指针数组来解决特定的设计问题
+
+  8. 编译器是如何解释成员函数调用的
+
+  我衷心希望这篇教程能打开通往上述要点的相关高级技巧的大门，例如多重继承、虚继承下的成员函数指针，以及编译器的相关实现，例如“巨硬”家的Thunk技术（原文这里有链接，但翻译君去看了一下，不仅又老又旧（还在讲Windows 98和16位程序），而且只是巨硬的support性质的文章，所以就不贴链接了，免得浪费各位看官宝贵的青春:-p）。
+
+  那么，就到这里了，谢谢各位的围观，希望能对各位有所帮助。（翻译君表示，这哥们怎么这么啰嗦，和天朝棺猿有得一拼:-p）
