@@ -1,0 +1,201 @@
+#+TITLE:       [翻译]看老夫如何调戏C++编译器
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2014-03-30 Sun
+#+URI:         /blog/%y/%m/%d/how-to-abuse-a-cpp-compiler/
+#+KEYWORDS:    C++, C++ template
+#+TAGS:        C++
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 翻译的一篇讲C++模板的文章
+
+
+这依旧是一篇翻译的文章，当初在reddit上面看到的，写得比较有趣，而且也确实介绍了C++模板中比较tricky的地方，[[http://mysticalprogramming.wordpress.com/2014/03/19/how-to-abuse-a-cpp-compiler/][原文]]在这里，但是需要梯子。所以我翻译在这里，方便那些没有条件搭梯子的童鞋。
+
+咳咳，废话少说，咱们开始了啊。
+
+--------------------------------------------------------------------------------
+
+最初的时候，将模板引入C++是为了支持泛型编程，例如，实现针对任意类型都可以使用的算法。但偶然间C++的码农们却发现这货是图灵完全的！也就是说，任何理论上可以进行的计算都可以通过C++模板来完成，而且，是在编译阶段！
+
+因为图灵完全允许无终结型计算（non-terminating computation，即永远不会结束的计算）的定义，由此可以得出一个重要推论：我们是可以写出永远不会编译结束的代码来的！这也暗示了编译器在处理这种情况时既不能报错，也没办法生成目标代码（尼玛，当个编译器我容易吗！）。实际上，编译器都会有一个模板实例化最大深度的限制，以防止有脑残写出编译永远不会结束的代码。（翻译君表示有遇到过模板实例化深度超限的情况，clang默认的最大深度为128，但是，boost的某个库会超过这个限制，导致编译直接报错。你们现在知道boost是有多丧心病狂了吧！解决办法是加大这个限制，设置参数 =-ftemplate-depth=256= 为256或者更高）
+
+下面，我就来演示一些包含无终结计算的代码片段，以及GCC(g++ 4.8.2)和Clang(clang++ 3.3)是如何来处理这些好玩但很脑残的代码的。（翻译君表示，原作者只测试了gcc和clang两种编译器，把巨硬家的MSVC给忽略了，而翻译君翻译的时候正好手边没有Windows环境，没法测试。不过，有热心人把在MSVC2013上的测试结果贴原文评论里了，翻译君看了一下，全部报错，而且错误信息莫名其妙，才知道作者不测试MSVC是有深刻原因的好吗！）
+
+* 递归展开
+
+  在这个例子中，为了计算 =InfRec<T>::value= ，我们需要知道 =InfRec< InfRec<T> >::value= ，因此又需要知道 =InfRec< InfRec< InfRec<T> > >::value= ，由此无限循环下去……
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  template<typename T>
+  struct InfRec {
+      static const int value = InfRec< InfRec<T> >::value;
+  };
+
+  int main() {
+      std::cout << InfRec<int>::value << std::endl;
+      return 0;
+  }
+  #+END_SRC
+
+  在这个例子中，clang和GCC都因为达到最大模板实例化深度的错误而结束。
+
+* 自我递归
+
+  在这个例子中，为了计算 =SelfRec<T>::value= ，我们需要知道 =SelfRec<T>::value= ，也就是说，它的定义就是其本身。
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  template<typename T>
+  struct SelfRec {
+      static const int value = SelfRec<T>::value;
+  };
+
+  int main() {
+      std::cout << SelfRec<int>::value << std::endl;
+      return 0;
+  }
+  #+END_SRC
+
+  在这个例子中，虽然GCC报错了，但是没有能够终止编译…… :-)
+
+  : selfrec.cpp:5:22: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘SelfRec<int>::value’
+  :      static const int value = SelfRec<T>::value;
+  :                       ^
+  : selfrec.cpp:5:22:   recursively required from ‘const int SelfRec<int>::value’
+  : selfrec.cpp:5:22:   required from ‘const int SelfRec<int>::value’
+  : selfrec.cpp:9:32:   required from here
+  :
+  : selfrec.cpp:5:22: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘SelfRec<int>::value’
+  : selfrec.cpp:5:22:   recursively required from ‘const int SelfRec<int>::value’
+  : selfrec.cpp:5:22:   required from ‘const int SelfRec<int>::value’
+  : selfrec.cpp:9:32:   required from here
+  :
+  : selfrec.cpp:5:22: error: initializer invalid for static member with constructor
+  : selfrec.cpp:5:22: error: (an out of class initialization is required)
+  : selfrec.cpp:5:22: error: ‘SelfRec<int>::value’ cannot be initialized by a non-constant expression when being declared
+
+  而clang则编译通过，没出任何问题，程序最终输出了0。我对clang的做法深表怀疑，因为，上面的代码其实和下面的代码是等价的：
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  const int var = var;
+
+  int main() {
+      std::cout << var << std::endl;
+      return 0;
+  }
+  #+END_SRC
+
+* 互相递归
+
+  这个例子中，为了计算 =<MutualRec<A, B>::value= ，我们需要知道 =MutualRec<B, A>::value= ，然后，就没有然后了……
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  template<typename A, typename B>
+  struct MutualRec {
+      static const bool value = MutualRec<B, A>::value;
+  };
+
+  int main() {
+      std::cout << MutualRec<float,int>::value << std::endl;
+      return 0;
+  }
+  #+END_SRC
+
+  和上一个例子一样，GCC报了相同的错误，而且又没能终止编译。 :-)
+
+  而clang则认为上述初始化的不是常量表达式，所以报错了。但实际上，至少在我看来， =value= 绝对是常量，因为它前面有那么大两个关键字 =static const= ！
+
+  : utualrec.cpp:5:44: error: in-class initializer for static data member is not a constant expression
+  :         static const bool value = MutualRec<B,A>::value;
+  :                                   ~~~~~~~~~~~~~~~~^~~~~
+  : mutualrec.cpp:5:28: note: in instantiation of template class 'MutualRec<int, float>' requested here
+  :         static const bool value = MutualRec<B,A>::value;
+  :                                   ^
+  : mutualrec.cpp:9:15: note: in instantiation of template class 'MutualRec<float, int>' requested here
+  :         std::cout << MutualRec<float,int>::value << std::endl;
+  :                      ^
+  : 1 error generated.
+
+* 自相矛盾
+
+  从广义上来讲，这个例子中的定义并不是自相矛盾的，除了两个模板参数相同的情况。即 =Contra<T, T>::value= 被定义为 =Contra<T, T>::value= 的取反操作结果。
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  template<typename U, typename V>
+  struct Contra {
+      static const bool value = not Contra<V,U>::value;
+  };
+
+  int main() {
+      std::cout << Contra<int,int>::value << std::endl;
+      return 0;
+  }
+  #+END_SRC
+
+  这次GCC又报错了，不过换了点花样：它认为初始化的是非常量表达式，但随后它自己都被搞糊涂了，然后它要求提一个bug，就退出了。
+
+  : contradict.cpp:5:28: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘Contra<int, int>::value’
+  :   static const bool value = not Contra<V,U>::value;
+  :                             ^
+  : contradict.cpp:5:28:   recursively required from ‘const bool Contra<int, int>::value’
+  : contradict.cpp:5:28:   required from ‘const bool Contra<int, int>::value’
+  : contradict.cpp:9:32:   required from here
+  :
+  : contradict.cpp:5:28: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘Contra<int, int>::value’
+  : contradict.cpp:5:28:   recursively required from ‘const bool Contra<int, int>::value’
+  : contradict.cpp:5:28:   required from ‘const bool Contra<int, int>::value’
+  : contradict.cpp:9:32:   required from here
+  :
+  : contradict.cpp:5:20: error: initializer invalid for static member with constructor
+  :   static const bool value = not Contra<V,U>::value;
+  :                     ^
+  : contradict.cpp:5:20: error: (an out of class initialization is required)
+  : contradict.cpp:5:20: error: ‘Contra<int, int>::value’ cannot be initialized by a non-constant expression when being declared
+  : contradict.cpp:11: confused by earlier errors, bailing out
+  : Preprocessed source stored into /tmp/ccAf1N1I.out file, please attach this to your bugreport.
+
+  而clang则通过了编译，并且程序输出了1。
+
+* 罗素悖论（天哪，罗素悖论都出来了，翻译君压力山大……）
+
+  M是所有集合的集合，这些集合都不会包含自身为其元素。那么……请问，M包不包含它自己呢？
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  template<typename U, typename V>
+  struct HasElement {
+      static const bool value = false;
+  };
+
+  class M {};
+
+  template<typename T>
+  struct HasElement<M,T> {
+      static const bool value = not HasElement<T,T>::value;
+  };
+
+  int main() {
+      std::cout << HasElement<M,M>::value << std::endl;
+      return 0;
+  }
+  #+END_SRC
+
+  GCC这次表现又和上次一样：报错，自己被绕晕，要求提bug。
+
+  而clang的答案是毫无疑问的YES。 :-D
+
+--------------------------------------------------------------------------------
+
+翻译到此结束。插个花絮：看评论时，有一哥们儿说了句大实话：你们所说的这些问题，对我大VB6来说都不是问题！:-D
+
