@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>[翻译]看老夫如何调戏C++编译器 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="翻译的一篇讲C++模板的文章" />
+    <meta name="keywords" content="C++, C++ template" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>[翻译]看老夫如何调戏C++编译器</h1>
+<p>
+这依旧是一篇翻译的文章，当初在reddit上面看到的，写得比较有趣，而且也确实介绍了C++模板中比较tricky的地方，<a href="http://mysticalprogramming.wordpress.com/2014/03/19/how-to-abuse-a-cpp-compiler/">原文</a>在这里，但是需要梯子。所以我翻译在这里，方便那些没有条件搭梯子的童鞋。
+</p>
+
+<p>
+咳咳，废话少说，咱们开始了啊。
+</p>
+
+<hr  />
+
+<p>
+最初的时候，将模板引入C++是为了支持泛型编程，例如，实现针对任意类型都可以使用的算法。但偶然间C++的码农们却发现这货是图灵完全的！也就是说，任何理论上可以进行的计算都可以通过C++模板来完成，而且，是在编译阶段！
+</p>
+
+<p>
+因为图灵完全允许无终结型计算（non-terminating computation，即永远不会结束的计算）的定义，由此可以得出一个重要推论：我们是可以写出永远不会编译结束的代码来的！这也暗示了编译器在处理这种情况时既不能报错，也没办法生成目标代码（尼玛，当个编译器我容易吗！）。实际上，编译器都会有一个模板实例化最大深度的限制，以防止有脑残写出编译永远不会结束的代码。（翻译君表示有遇到过模板实例化深度超限的情况，clang默认的最大深度为128，但是，boost的某个库会超过这个限制，导致编译直接报错。你们现在知道boost是有多丧心病狂了吧！解决办法是加大这个限制，设置参数 <code>-ftemplate-depth=256</code> 为256或者更高）
+</p>
+
+<p>
+下面，我就来演示一些包含无终结计算的代码片段，以及GCC(g++ 4.8.2)和Clang(clang++ 3.3)是如何来处理这些好玩但很脑残的代码的。（翻译君表示，原作者只测试了gcc和clang两种编译器，把巨硬家的MSVC给忽略了，而翻译君翻译的时候正好手边没有Windows环境，没法测试。不过，有热心人把在MSVC2013上的测试结果贴原文评论里了，翻译君看了一下，全部报错，而且错误信息莫名其妙，才知道作者不测试MSVC是有深刻原因的好吗！）
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">递归展开</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+在这个例子中，为了计算 <code>InfRec&lt;T&gt;::value</code> ，我们需要知道 <code>InfRec&lt; InfRec&lt;T&gt; &gt;::value</code> ，因此又需要知道 <code>InfRec&lt; InfRec&lt; InfRec&lt;T&gt; &gt; &gt;::value</code> ，由此无限循环下去……
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+template&lt;typename T&gt;
+struct InfRec {
+    static const int value = InfRec&lt; InfRec&lt;T&gt; &gt;::value;
+};
+
+int main() {
+    std::cout &lt;&lt; InfRec&lt;int&gt;::value &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+
+<p>
+在这个例子中，clang和GCC都因为达到最大模板实例化深度的错误而结束。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">自我递归</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+在这个例子中，为了计算 <code>SelfRec&lt;T&gt;::value</code> ，我们需要知道 <code>SelfRec&lt;T&gt;::value</code> ，也就是说，它的定义就是其本身。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+template&lt;typename T&gt;
+struct SelfRec {
+    static const int value = SelfRec&lt;T&gt;::value;
+};
+
+int main() {
+    std::cout &lt;&lt; SelfRec&lt;int&gt;::value &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+
+<p>
+在这个例子中，虽然GCC报错了，但是没有能够终止编译…… :-)
+</p>
+
+<pre class="example">
+selfrec.cpp:5:22: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘SelfRec&lt;int&gt;::value’
+     static const int value = SelfRec&lt;T&gt;::value;
+                      ^
+selfrec.cpp:5:22:   recursively required from ‘const int SelfRec&lt;int&gt;::value’
+selfrec.cpp:5:22:   required from ‘const int SelfRec&lt;int&gt;::value’
+selfrec.cpp:9:32:   required from here
+
+selfrec.cpp:5:22: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘SelfRec&lt;int&gt;::value’
+selfrec.cpp:5:22:   recursively required from ‘const int SelfRec&lt;int&gt;::value’
+selfrec.cpp:5:22:   required from ‘const int SelfRec&lt;int&gt;::value’
+selfrec.cpp:9:32:   required from here
+
+selfrec.cpp:5:22: error: initializer invalid for static member with constructor
+selfrec.cpp:5:22: error: (an out of class initialization is required)
+selfrec.cpp:5:22: error: ‘SelfRec&lt;int&gt;::value’ cannot be initialized by a non-constant expression when being declared
+</pre>
+
+<p>
+而clang则编译通过，没出任何问题，程序最终输出了0。我对clang的做法深表怀疑，因为，上面的代码其实和下面的代码是等价的：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+const int var = var;
+
+int main() {
+    std::cout &lt;&lt; var &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">互相递归</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+这个例子中，为了计算 <code>&lt;MutualRec&lt;A, B&gt;::value</code> ，我们需要知道 <code>MutualRec&lt;B, A&gt;::value</code> ，然后，就没有然后了……
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+template&lt;typename A, typename B&gt;
+struct MutualRec {
+    static const bool value = MutualRec&lt;B, A&gt;::value;
+};
+
+int main() {
+    std::cout &lt;&lt; MutualRec&lt;float,int&gt;::value &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+
+<p>
+和上一个例子一样，GCC报了相同的错误，而且又没能终止编译。 :-)
+</p>
+
+<p>
+而clang则认为上述初始化的不是常量表达式，所以报错了。但实际上，至少在我看来， <code>value</code> 绝对是常量，因为它前面有那么大两个关键字 <code>static const</code> ！
+</p>
+
+<pre class="example">
+utualrec.cpp:5:44: error: in-class initializer for static data member is not a constant expression
+        static const bool value = MutualRec&lt;B,A&gt;::value;
+                                  ~~~~~~~~~~~~~~~~^~~~~
+mutualrec.cpp:5:28: note: in instantiation of template class 'MutualRec&lt;int, float&gt;' requested here
+        static const bool value = MutualRec&lt;B,A&gt;::value;
+                                  ^
+mutualrec.cpp:9:15: note: in instantiation of template class 'MutualRec&lt;float, int&gt;' requested here
+        std::cout &lt;&lt; MutualRec&lt;float,int&gt;::value &lt;&lt; std::endl;
+                     ^
+1 error generated.
+</pre>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">自相矛盾</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+从广义上来讲，这个例子中的定义并不是自相矛盾的，除了两个模板参数相同的情况。即 <code>Contra&lt;T, T&gt;::value</code> 被定义为 <code>Contra&lt;T, T&gt;::value</code> 的取反操作结果。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+template&lt;typename U, typename V&gt;
+struct Contra {
+    static const bool value = not Contra&lt;V,U&gt;::value;
+};
+
+int main() {
+    std::cout &lt;&lt; Contra&lt;int,int&gt;::value &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+
+<p>
+这次GCC又报错了，不过换了点花样：它认为初始化的是非常量表达式，但随后它自己都被搞糊涂了，然后它要求提一个bug，就退出了。
+</p>
+
+<pre class="example">
+contradict.cpp:5:28: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘Contra&lt;int, int&gt;::value’
+  static const bool value = not Contra&lt;V,U&gt;::value;
+                            ^
+contradict.cpp:5:28:   recursively required from ‘const bool Contra&lt;int, int&gt;::value’
+contradict.cpp:5:28:   required from ‘const bool Contra&lt;int, int&gt;::value’
+contradict.cpp:9:32:   required from here
+
+contradict.cpp:5:28: error: template instantiation depth exceeds maximum of 900 (use -ftemplate-depth= to increase the maximum) instantiating ‘Contra&lt;int, int&gt;::value’
+contradict.cpp:5:28:   recursively required from ‘const bool Contra&lt;int, int&gt;::value’
+contradict.cpp:5:28:   required from ‘const bool Contra&lt;int, int&gt;::value’
+contradict.cpp:9:32:   required from here
+
+contradict.cpp:5:20: error: initializer invalid for static member with constructor
+  static const bool value = not Contra&lt;V,U&gt;::value;
+                    ^
+contradict.cpp:5:20: error: (an out of class initialization is required)
+contradict.cpp:5:20: error: ‘Contra&lt;int, int&gt;::value’ cannot be initialized by a non-constant expression when being declared
+contradict.cpp:11: confused by earlier errors, bailing out
+Preprocessed source stored into /tmp/ccAf1N1I.out file, please attach this to your bugreport.
+</pre>
+
+<p>
+而clang则通过了编译，并且程序输出了1。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">罗素悖论（天哪，罗素悖论都出来了，翻译君压力山大……）</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+M是所有集合的集合，这些集合都不会包含自身为其元素。那么……请问，M包不包含它自己呢？
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+template&lt;typename U, typename V&gt;
+struct HasElement {
+    static const bool value = false;
+};
+
+class M {};
+
+template&lt;typename T&gt;
+struct HasElement&lt;M,T&gt; {
+    static const bool value = not HasElement&lt;T,T&gt;::value;
+};
+
+int main() {
+    std::cout &lt;&lt; HasElement&lt;M,M&gt;::value &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+
+<p>
+GCC这次表现又和上次一样：报错，自己被绕晕，要求提bug。
+</p>
+
+<p>
+而clang的答案是毫无疑问的YES。 :-D
+</p>
+
+<hr  />
+
+<p>
+翻译到此结束。插个花絮：看评论时，有一哥们儿说了句大实话：你们所说的这些问题，对我大VB6来说都不是问题！:-D
+</p>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2014-03-30</span>
+        <span title="last modification date" class="post-info">2014-03-30</span>
+        <span title="tags" class="post-info"><a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2014/03/30/how-to-abuse-a-cpp-compiler/";
+          var disqus_url = "http://kelvinh.github.io/blog/2014/03/30/how-to-abuse-a-cpp-compiler/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>
+          Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
