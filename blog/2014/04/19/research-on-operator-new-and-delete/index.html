@@ -289,11 +289,11 @@ We should do nothing in operator delete.
 
 <pre class="example">
 (gdb) b main
-Breakpoint 1 at 0x100001082: file new2.cpp, line 41.
+Breakpoint 1 at 0x100001082: file new.cpp, line 41.
 (gdb) r
 Starting program: /Users/kelvin/new
 
-Breakpoint 1, main () at new2.cpp:41
+Breakpoint 1, main () at new.cpp:41
 41      int a = 0x01020304;
 </pre>
 
@@ -377,9 +377,9 @@ pc被正常构造，但需要注意的是，从地址0x7fff5fbffa4f到0x7fff5fbf
 
 <pre class="example">
 (gdb) p a
-$5 = 33479866
+$4 = 33479866
 (gdb) p/x a
-$4 = 0x1fedcba
+$5 = 0x1fedcba
 </pre>
 
 <p>
@@ -399,7 +399,7 @@ $4 = 0x1fedcba
 </p>
 
 <ol class="org-ol">
-<li>实现自己的内存管理：有些程序需要高效的内存管理，比方说使用内存池，就可以用这个来实现
+<li>实现自己的内存管理：有些程序需要高效的内存管理，比方说使用内存池，就可以用这个来实现，在new的时候直接从内存池取，delete的时候放回内存池
 </li>
 <li>用来判断对象是否在堆上分配：这个是在《More Effective C++》中介绍的一个用法，在执行new操作时，将在堆上分配的地址保存起来，后面在判断一个对象是否在堆上分配时，就可以到这些保存的地址中查找这个对象的地址，如果找到，就说明是在堆上分配的
 </li>
