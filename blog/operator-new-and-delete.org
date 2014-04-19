@@ -189,11 +189,11 @@
   使用 =g++ -g -O0 new.cpp -o new= 来编译以输出symbol方便调试，同时防止编译器优化掉我们的边界变量。然后，在GDB中开始调试，在main函数处打一个断点，开始运行：
 
   : (gdb) b main
-  : Breakpoint 1 at 0x100001082: file new2.cpp, line 41.
+  : Breakpoint 1 at 0x100001082: file new.cpp, line 41.
   : (gdb) r
   : Starting program: /Users/kelvin/new
   :
-  : Breakpoint 1, main () at new2.cpp:41
+  : Breakpoint 1, main () at new.cpp:41
   : 41	    int a = 0x01020304;
 
   先来看看几个变量的地址，以及内存：
@@ -251,9 +251,9 @@
   现在，再打印一下变量a：
 
   : (gdb) p a
-  : $5 = 33479866
+  : $4 = 33479866
   : (gdb) p/x a
-  : $4 = 0x1fedcba
+  : $5 = 0x1fedcba
 
   果然，a已经被覆盖了。
 
@@ -263,7 +263,7 @@
 
   废话了这么多，那 =operator new/delete, placement new/delete= 到底有什么用呢？
 
-  1. 实现自己的内存管理：有些程序需要高效的内存管理，比方说使用内存池，就可以用这个来实现
+  1. 实现自己的内存管理：有些程序需要高效的内存管理，比方说使用内存池，就可以用这个来实现，在new的时候直接从内存池取，delete的时候放回内存池
   2. 用来判断对象是否在堆上分配：这个是在《More Effective C++》中介绍的一个用法，在执行new操作时，将在堆上分配的地址保存起来，后面在判断一个对象是否在堆上分配时，就可以到这些保存的地址中查找这个对象的地址，如果找到，就说明是在堆上分配的
   3. 像我这样装逼地实现在栈上new对象
   4. 其它尚待挖掘的用法
