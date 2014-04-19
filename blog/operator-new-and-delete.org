@@ -1,0 +1,280 @@
+#+TITLE:       深入探究C++的new/delete操作符
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2014-04-19 Sat
+#+URI:         /blog/%y/%m/%d/research-on-operator-new-and-delete/
+#+KEYWORDS:    c++, gdb
+#+TAGS:        C++, GDB
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 关于C++的new和delete的比较深入的探究
+
+
+* 前戏，啊不，其实我是说前言
+
+  今天在重温《More Effective C++》的时候，又看到讲 =operator new= 和 =operator delete= 的那条规则，虽然大概明白其原理，但是实际中却从来没用过，所以，就想写个小程序来试一试。如果你还不知道它们，或者听说过但不知道具体意义，那我就正好吓吓你：
+
+  : new/delete/new[]/delete[] operator
+  : operator new/delete/new[]/delete[]
+  : placement new/new[]  // 注意，没有 placement delete/delete[]
+
+  这些都是些什么呢？吓傻了？其实，这些都是那些学院派死扣字眼吓唬人的，真实理解起来很容易。就像博士写论文《关于一对自然数1的代数和与自然数2在绝对数学意义上相等的可能性》，其实，就是《论1 + 1 = 2》。。
+
+  嗯，我总喜欢扯蛋，对，是扯蛋，不是扯淡。好了，看下面的代码：
+
+  #+BEGIN_SRC C++
+  Class *pc = new Class;
+  // ...
+  delete pc;
+  #+END_SRC
+
+  上面代码的第一行即为 =new operator= ，而第三行即为 =delete operator= ，代码很简单，但对编译器来说，它需要做额外的工作，将上述代码翻译为近似于下面的代码：
+
+  #+BEGIN_SRC C++
+  void *p = operator new(sizeof(Class));
+  // 对p指向的内存调用Class的构造函数，此处无法用直观的代码展现
+  Class *pc = static_cast<Class*>(p);
+  // ...
+  pc->~Class();
+  operator delete(pc);
+  #+END_SRC
+
+  上面代码中，第一行即为 =operator new= ，而最后一行即为 =operator delete= ，很简单明了吧。所以， =new operator= 实际上做了两件事情：
+
+  1. 调用 =operator new= 分配内存
+  2. 在分配好的内存上初始化对象，并返回指向该对象的指针
+
+  而 =delete operator= 类似，调用析构函数，再调用 =operator delete= 释放内存。
+
+  让我们来看看C++标准库的实现之一——Clang的libcxx是如何实现全局的 =operator new/delete= 的（头文件声明在[[http://llvm.org/svn/llvm-project/libcxx/trunk/include/new][这里]]，实现在[[http://llvm.org/svn/llvm-project/libcxx/trunk/src/new.cpp][这里]]，我去掉了一些控制编译选项的看着很乱的宏定义，只留下了核心代码）：
+
+  #+BEGIN_SRC C++
+  void * operator new(std::size_t size) throw(std::bad_alloc) {
+      if (size == 0)
+          size = 1;
+      void* p;
+      while ((p = ::malloc(size)) == 0) {
+          std::new_handler nh = std::get_new_handler();
+          if (nh)
+              nh();
+          else
+              throw std::bad_alloc();
+      }
+      return p;
+  }
+
+  void operator delete(void* ptr) {
+      if (ptr)
+          ::free(ptr);
+  }
+  #+END_SRC
+
+  这段代码再简单不过，原来，神秘的 =operator new/delete= 在背后也不过是在偷偷地调用C函数库的 =malloc/free= 嘛！当然，这跟实现有关，libcxx这样实现，不代表其它实现也是如此。
+
+  需要意识到的是， =operator new= 和 =operator+()= 一样，只不过是普通的函数，是可以重载的，所谓的 =placement new= ，即是一个全局 =operator new= 的重载版本，在libcxx中定义如下：
+
+  : inline _LIBCPP_INLINE_VISIBILITY void* operator new  (std::size_t, void* __p) _NOEXCEPT {return __p;}
+
+  可以看到， =placement new= 除了正常的size参数外，还多了一个空指针参数，而且，它也没干什么内存分配的活，而是直接返回了这个指针。那么，该如何使用它呢？
+
+  : void *buf = // 在这里为buf分配内存
+  : Class *pc = new (buf) Class();
+
+  没错，就是这么简单，我们自己构建出一个缓冲区buf，再调用 =placement new= 在这个缓冲区上初始化Class的实例。甚至，我们可以传空指针给它：
+
+  : Class *pc = new (nullptr) Class(); // nullptr是C++11中的空指针定义
+
+  当然，这样的代码毫无意义，虽然编译可以通过，但在运行时必然会crash。
+
+  关于这几个operator的区别基本已经讲清楚了，它们的兄弟——带[]的版本原理基本是一样的，这里就不细说了。需要注意的是，C++并没有 =placement delete/delete[]= 一说，因为它们没有存在的意义。
+
+* 实例
+
+  码农？找不到对象？没事儿，不拼爹妈，更不靠干爹干妈，我们自己new一个出来。不过，别人都从堆上new，太没挑战了，我们从栈上new！
+
+  #+BEGIN_SRC C++
+  #include <iostream>
+
+  using namespace std;
+
+  class C {
+  public:
+      C(int i) : i(i) {
+          cout << "C constructor." << endl;
+      }
+
+      ~C() {
+          cout << "C destructor." << endl;
+      }
+
+      // 此处声明为static或non-static均可，下同
+      /* static */ void *operator new(size_t size, void *p, const string& str) {
+          cout << "In our own operator new." << endl;
+          cout << str << endl;
+          if (!p) {
+              cout << "Hey man, are you aware what you are doing?" << endl;
+              return ::operator new(size);
+          }
+          return p;
+      }
+
+      /* static */ void operator delete(void *p) {
+          cout << "We should do nothing in operator delete." << endl;
+          // 如果取消下一行的注释，程序会在执行时crash
+          // ::operator delete(p);
+      }
+
+      void f() {
+          cout << "hello object, i: " << i << endl;
+      }
+
+  private:
+      int i;
+  };
+
+  int main() {
+      char buf[sizeof(C)];
+      C *pc = new (buf, "Yeah, I'm crazy!") C(1024);
+      pc->f();
+      // 此处原本不应该调用delete，而应该只显式调用析构函数，但因为我们重载的operator delete并不做什么操作，所以是安全的
+      delete pc;
+      return 0;
+  }
+  #+END_SRC
+
+  这个代码还是挺简单的，我们在类 =C= 中重载了 =operator new= 和 =operator delete= ，前者接受三个参数，第一个是必须要带的size，第二个是指针，第三个是用于测试的字符串，如果指针不为空，我们直接返回，如果为空，我们就分配一片内存出来并返回。当然，这段代码是有问题的，恶作剧地传递null指针给 =operator new= 会导致memory leak，不过，这不是我们要关注的。我们要关注的是，将栈上的buf指针传给 =operator new= 后，我们就真的在栈上new了一个对象出来了有没有！！上述代码的输出如下：
+
+  : In our own operator new.
+  : Yeah, I'm crazy!
+  : C constructor.
+  : hello object, i: 1024
+  : C destructor.
+  : We should do nothing in operator delete.
+
+* 演变
+
+  我突然想到了一个坏主意：我们对上面的例子做一个小小的改动，将main函数中buf的长度变短，其它不变：
+
+  #+BEGIN_SRC C++
+  int main() {
+      char buf[sizeof(C) - 3]; // 注意此处
+      C *pc = new (buf, "Yeah, I'm crazy!") C(1024);
+      pc->f();
+      delete pc;
+      return 0;
+  }
+  #+END_SRC
+
+  在我的机器上， =int= 类型的大小是4，所以 =sizeof(C)= 大小也是4，因此 =buf= 的大小就是1。
+
+  等等：在只有一个字节的内存中分配一个占4字节的对象？看来是真的Crazy了，坐等程序crash吧！
+
+  事实上，我也是这么想的。只是，程序 *不但没有crash，而且一切输出正常！*
+
+* 更进一步
+
+  怎么回事？难不成编译器智能地探测到buf的内存不足以装下C的实例，所以自动扩充了3个字节？于是，我们再稍作修改，在buf的两边都加上指示性的变量，以方便探测其边界：
+
+  #+BEGIN_SRC C++
+  int main() {
+      int a = 0x01020304; // 定义成这样是为了在GDB中调试时方便查看内存，下同
+      char buf[sizeof(C) - 3];
+      int b = 0x04030201;
+      C *pc = new(buf, "Yeah, I'm crazy!") C(0xFEDCBA98);
+      pc->f();
+      delete pc;
+  }
+  #+END_SRC
+
+  使用 =g++ -g -O0 new.cpp -o new= 来编译以输出symbol方便调试，同时防止编译器优化掉我们的边界变量。然后，在GDB中开始调试，在main函数处打一个断点，开始运行：
+
+  : (gdb) b main
+  : Breakpoint 1 at 0x100001082: file new2.cpp, line 41.
+  : (gdb) r
+  : Starting program: /Users/kelvin/new
+  :
+  : Breakpoint 1, main () at new2.cpp:41
+  : 41	    int a = 0x01020304;
+
+  先来看看几个变量的地址，以及内存：
+
+  : (gdb) p &a
+  : $1 = (int *) 0x7fff5fbffa50
+  : (gdb) p &buf
+  : $2 = (char (*)[1]) 0x7fff5fbffa4f
+  : (gdb) p &b
+  : $3 = (int *) 0x7fff5fbffa48
+  : (gdb) x/24b &b
+  : 0x7fff5fbffa48:	-56	-6	-65	95	-1	127	0	0
+  : 0x7fff5fbffa50:	0	0	0	0	0	0	0	0
+  : 0x7fff5fbffa58:	0	0	0	0	0	0	0	0
+
+  a在栈的最下面，所以a的地址最高。从打印出的内存来看，此时内存还是随机的。执行一步对a的赋值看看：
+
+  : (gdb) n
+  : 43	    int b = 0x04030201;
+  : (gdb) x/24b &b
+  : 0x7fff5fbffa48:	-56	-6	-65	95	-1	127	0	0
+  : 0x7fff5fbffa50:	4	3	2	1	0	0	0	0
+  : 0x7fff5fbffa58:	0	0	0	0	0	0	0	0
+
+  很明显，a的地址0x7fff5fbffa50处的内存被赋值为0x01020304，其它没变。再执行一步看看：
+
+  : (gdb) n
+  : 44	    C *pc = new(buf, "Yeah, I'm crazy!") C(0xFEDCBA98);
+  : (gdb) x/24b &b
+  : 0x7fff5fbffa48:	1	2	3	4	-1	127	0	0
+  : 0x7fff5fbffa50:	4	3	2	1	0	0	0	0
+  : 0x7fff5fbffa58:	-128	46	0	0	1	0	0	0
+
+  GDB机智地跳过了声明buf的语句，直接执行了对b的赋值语句，于是b的地址0x7fff5fbffa48所指向的内存被赋值为0x04030201，但是，位于0x7fff5fbffa58处的两字节内存也发生了变化，我们尚不明确此处内存所代表的意义，不管它，继续单步执行：
+
+  : (gdb) n
+  : In our own operator new.
+  : Yeah, I'm crazy!
+  : C constructor.
+  : 45	    pc->f();
+  : (gdb) x/24b &b
+  : 0x7fff5fbffa48:	1	2	3	4	-1	127	0	-104
+  : 0x7fff5fbffa50:	-70	-36	-2	1	0	0	0	0
+  : 0x7fff5fbffa58:	-128	46	0	0	1	0	0	0
+
+  pc被正常构造，但需要注意的是，从地址0x7fff5fbffa4f到0x7fff5fbffa52都发生了变化！0x7fff5fbffa4f是buf的地址，但是，0x7fff5fbffa50是a的地址！上面的内存不太直观，我们用十六进制再看看：
+
+  : (gdb) x/24x &b
+  : 0x7fff5fbffa48:	0x01	0x02	0x03	0x04	0xff	0x7f	0x00	0x98
+  : 0x7fff5fbffa50:	0xba	0xdc	0xfe	0x01	0x00	0x00	0x00	0x00
+  : 0x7fff5fbffa58:	0x80	0x2e	0x00	0x00	0x01	0x00	0x00	0x00
+
+  这下就很清楚了，buf的一个字节被写为0x98，而因为buf的长度不够装下C的实例，于是位于buf后面的a变量就倒了霉，被覆盖了三个字节！于是，我们可以得出结论，编译器还没有这么智能。长度不够，该覆盖的还是会覆盖，之前的代码是因为幸运，位于buf后面的3个字节的内存刚好是可读写的，所以没有crash。
+
+  现在，再打印一下变量a：
+
+  : (gdb) p a
+  : $5 = 33479866
+  : (gdb) p/x a
+  : $4 = 0x1fedcba
+
+  果然，a已经被覆盖了。
+
+  需要说明的是，上面的输出中，在变量b和buf之间还有三个字节，地址是0x7fff5fbffa4c到0x7fff5fbffa4e。我最初真的以为这是编译器智能预留的三个字节！后面发现它们的值始终没有变化，才意识到，这三个字节应该是为了内存对齐而产生的无效字节。照此说来，C的实例内存没有对齐，所以，在访问其成员变量i的时候，需要访问两次内存。
+
+* 总结
+
+  废话了这么多，那 =operator new/delete, placement new/delete= 到底有什么用呢？
+
+  1. 实现自己的内存管理：有些程序需要高效的内存管理，比方说使用内存池，就可以用这个来实现
+  2. 用来判断对象是否在堆上分配：这个是在《More Effective C++》中介绍的一个用法，在执行new操作时，将在堆上分配的地址保存起来，后面在判断一个对象是否在堆上分配时，就可以到这些保存的地址中查找这个对象的地址，如果找到，就说明是在堆上分配的
+  3. 像我这样装逼地实现在栈上new对象
+  4. 其它尚待挖掘的用法
+
+  实际上到目前为止，我还没看到有项目使用此类技术，一是很生僻，二是很容易出错。所以，在确实有这样的需求的情况下，再使用这类技术吧。
+
+* 参考资料
+
+  1. More Effective C++, Item 8
+  2. http://llvm.org/svn/llvm-project/libcxx/trunk/include/new
+  3. http://llvm.org/svn/llvm-project/libcxx/trunk/src/new.cpp
+  4. http://en.wikipedia.org/wiki/Placement_new_(C%2B%2B)
+  5. http://www.parashift.com/c++-faq/placement-new.html
+  6. http://blogs.msdn.com/b/jaredpar/archive/2007/10/16/c-new-operator-and-placement-new.aspx
