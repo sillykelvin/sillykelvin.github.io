@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Sun, 30 Mar 2014 14:50:26 CST</pubDate>
-    <lastBuildDate>Sun, 30 Mar 2014 14:50:26 CST</lastBuildDate>
+    <pubDate>Sun, 20 Apr 2014 03:23:49 CST</pubDate>
+    <lastBuildDate>Sun, 20 Apr 2014 03:23:49 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>深入探究C++的new/delete操作符</title>
+      <link>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</link>
+      <description>关于C++的new和delete的比较深入的探究</description>
+      <pubDate>2014-04-20</pubDate>
+      <guid>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</guid>
+    </item>
     <item>
       <title>[翻译]看老夫如何调戏C++编译器</title>
       <link>http://kelvinh.github.io/blog/2014/03/30/how-to-abuse-a-cpp-compiler/</link>
@@ -70,13 +77,6 @@
       <description>translation of &lt;Bind illustrated&gt; from http://blog.think-async.com/2010/04/bind-illustrated.html</description>
       <pubDate>2013-12-03</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/12/03/boost-bind-illustrated/</guid>
-    </item>
-    <item>
-      <title>三门问题的程序解与解释</title>
-      <link>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</link>
-      <description>the famous Monty Hall problem and use program to explain it</description>
-      <pubDate>2013-11-28</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</guid>
     </item>
   </channel>
 </rss>
