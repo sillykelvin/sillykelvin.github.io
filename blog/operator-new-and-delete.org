@@ -3,7 +3,7 @@
 #+EMAIL:       ini.kelvin@gmail.com
 #+DATE:        2014-04-19 Sat
 #+URI:         /blog/%y/%m/%d/research-on-operator-new-and-delete/
-#+KEYWORDS:    c++, gdb
+#+KEYWORDS:    c++, gdb, new/delete operator, operator new/delete, placement new/delete
 #+TAGS:        C++, GDB
 #+LANGUAGE:    en
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
