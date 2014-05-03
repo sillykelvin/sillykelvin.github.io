@@ -1,0 +1,106 @@
+#+TITLE:       最受欢迎的C++代码段
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2014-05-03 Sat
+#+URI:         /blog/%y/%m/%d/the-favourite-cpp-snippets-on-reddit/
+#+KEYWORDS:    C++, reddit, r/cpp
+#+TAGS:        C++
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: 在reddit上投票出来的最受欢迎的C++代码段
+
+
+好吧，我承认我标题党了。最受欢迎的C++代码段？这实际上是个伪命题，每个码农的口味都不一样，就像小红喜欢香蕉而小花喜欢茄子一样（咦，香蕉和茄子一个水果一个蔬菜，为什么我在比喻中把它们放到了一起呢？），如何定义 *最受欢迎* 的呢？实际上这是reddit上的一个讨论，楼主问大家自己最喜欢的代码段是什么，于是就有不少人贴了出来，然后像我这样的路人们可以点“赞”，评出最受欢迎的。原文地址[[http://www.reddit.com/r/cpp/comments/21pxx2/what_is_your_favorite_little_c_snippet_of_code/][在这里]]。
+
+* 字符串拼接
+
+  现在的大多数高级语言，对于字符串操作都有强力的支持，C++也不错，不过在遇到UTF-8等编码问题时，就要抓瞎了。。好吧，扯远了，看看评出来的排名最高的代码段：
+
+  #+BEGIN_SRC C++
+  inline void build_string(std::ostream& o) {}
+
+  template<class First, class... Rest>
+  inline void build_string(std::ostream& o, const First& value, const Rest&... rest) {
+      o << value;
+      build_string(o, rest...);
+  }
+
+  template<class... T>
+  std::string concat_string(const T&... value) {
+      std::ostringstream o;
+      build_string(o, value...);
+      return o.str();
+  }
+  #+END_SRC
+
+  用法如下：
+
+  : std::string date_string = concat_string(year, '-', month, '-', day);
+  : unlink(concat_string("/var/tmp/user-", getuid(), ".lock").c_str());
+  : throw Error(concat_string("Unable to open ", path, ": ", errno));
+
+  这个代码段比较简单， =build_string= 函数用到了C++11的变参模板的特性，同时提供一个特化的无模板参数版本防止在编译展开时出错。而函数 =concat_string= 则负责定义一个 =std::ostringstream= 来接收要拼接的字符串，然后将不定个数的模板参数传递给 =build_string= ，最后再负责返回已经拼接好的字符串。
+
+  有人说，直接用 =std::string= 的 =operator+= 不是也可以吗？但它可接受的参数类型没有这个广，所有可以直接传递给 =std::ostringstream= 的类型都可以使用，而且，可以重载 =operator<<= 来使 =build_string= 接受自定义类型。甚至，还可以直接使用io流的操作符当参数，例如 =std::fixed= 。
+
+  在后面的追加评论中，有人实现了一个 =concat_string= 类，并定义了该类的 =operator<<= 来让其支持链式操作，如 =concat_string() << 1 << '2' << "3";= ，这实际上只是形式不同，所用的思想是一样的。
+
+* 对象缓存
+
+  排名第二位的，是别人帮Herb Sutter贴出的他在Going Native 2013上的演讲的示例代码（你如果是C++码农而不知道Herb Sutter，那你可以转行了:-D）：
+
+  #+BEGIN_SRC C++
+  std::shared_ptr<widget> get_widget(int id) {
+      static std::map<int, std::weak_ptr<widget>> cache;
+      static std::mutex m;
+
+      std::lock_guard<std::mutex> hold(m);
+      auto sp = cache[id].lock();
+      if (!sp)
+          cache[id] = sp = load_widget(id);
+
+      return sp;
+  }
+  #+END_SRC
+
+  这段代码是相当的巧妙，通过短短十行左右的代码就实现了一个带有引用计数、线程安全的对象缓存。
+
+  但这段代码并不是完美的，在后面追加的评论中，第一条评论就非常犀利：因为cache是一个map而不是vector，所以 =cache[id]= 查找操作的时间复杂度是 =O(logN)= ，而代码中有两次重复的 =cache[id]= 操作。所以，应该先用 =auto& wp = cache[id];= 取出智能指针的引用，后续的操作使用这个引用即可。
+
+  当然，并不是这样这段代码就完美了，还有一个隐藏的问题：内存泄露。虽然缓存中的值是通过 =std::weak_ptr= 而不是 =std::shared_ptr= 保存，保证了在没有别的地方使用widget的时候，这个widget不会因为在cache中有一个强引用而迟迟不会被销毁，但是， =std::weak_ptr= 智能指针对象本身还是会越存越多，导致cache越来越大。虽然内存是被容器占用而不是彻底不能访问，但实际上这也算是一种内存泄露，毕竟一些个智能指针不会再被使用了，但是还存在于内存中。
+
+  解决办法：
+
+  1. 定时地扫描 =cache= ，清除失效的widget。这种办法最容易想到，但每次需要遍历整个cache，而且间隔的扫描时间不好控制；
+  2. 给 =std::shared_ptr<widget>= 定义一个deleter。 =std::shared_ptr= 的默认deleter只是简单地delete掉它所保存的对象。通过自定义一个deleter，在 =std::shared_ptr= 析构，删除其保存对象的同时，将存在于 =cache= 中的无效智能指针给 =erase= 掉。这样描述可能太过抽象，但是讨论这个解决办法并不是本篇的主题，所以，有兴趣的朋友可以参看陈硕先生的[[http://www.cnblogs.com/Solstice/archive/2010/02/10/dtor_meets_threads.html][《当析构函数遇到多线程》]]，这篇文章写得相当好而且通俗易懂，有关这个问题解决办法的讨论在“对象池”一节。
+
+* 位计数
+
+  排在第三位的，是一段很tricky的代码：
+
+  #+BEGIN_SRC C++
+  unsigned int v;
+  unsigned int c;
+  for (c = 0; v; c++)
+      v &= v - 1;
+  #+END_SRC
+
+  如果只给代码不给提示，很多人可能很长时间都不会明白这段代码在干什么。实际上，这代码代码在计算 =v= 中值为1的位的个数，统计结果保存于 =c= 中。我没有办法对这段代码正确性作出简洁的证明，只能通过归纳法大致推导出它是正确的。这段代码的好处在于，和常规的移位相与再判断相比，它的效率非常高，因为一次就可以跳过很多的0位，而移位操作一个循环只能判断一位。但正如在后面的评论中所指出的，如果不是对性能的要求特别高，不要用这段代码，因为它的可读性非常差。当然，在面试中也可以使用它，记得网上流传的微软面试题中，有一道就是计算二进制的9999中有多少个值为1的位，那这段代码就可以派上用场了。
+
+* lambda函数
+
+  排在第四位的代码只有一行：
+
+  : [&](){}();
+
+  和前面的代码段相比，这一行代码仅仅只是为了展示C++的黑魔法。当然，去掉其中的 =&= 也是合法的。不了解C++11的码农，脑海中浮现的第一句话肯定是：“我++，这是C++代码？”是的，这在C++11中确实有效：定义了一个lambda函数并立即调用。如果你熟悉javascript，上面的代码和下面的javascript代码有异曲同工之妙：
+
+  : (function() {})();
+
+--------------------------------------------------------------------------------
+
+以上就是所有点“赞”超过个位数的代码段。虽然后面还有一些代码段，但相比之下，不管是实用性或者趣味性，都差了很多，而获得的“赞”也只有个位数，所以就不一一列举了。
+
+还有好心人贴出了C++委员会成员列表的链接：http://isocpp.org/wiki/faq/wg21，其中有不少成员也给出了自己最喜欢的代码段。
+
+好了，这篇讨论就到这里了。作为码农，你最喜欢的代码段，是什么样的呢？
