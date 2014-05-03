@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>最受欢迎的C++代码段 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="在reddit上投票出来的最受欢迎的C++代码段" />
+    <meta name="keywords" content="C++, reddit, r/cpp" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>最受欢迎的C++代码段</h1>
+<p>
+好吧，我承认我标题党了。最受欢迎的C++代码段？这实际上是个伪命题，每个码农的口味都不一样，就像小红喜欢香蕉而小花喜欢茄子一样（咦，香蕉和茄子一个水果一个蔬菜，为什么我在比喻中把它们放到了一起呢？），如何定义 <b>最受欢迎</b> 的呢？实际上这是reddit上的一个讨论，楼主问大家自己最喜欢的代码段是什么，于是就有不少人贴了出来，然后像我这样的路人们可以点“赞”，评出最受欢迎的。原文地址<a href="http://www.reddit.com/r/cpp/comments/21pxx2/what_is_your_favorite_little_c_snippet_of_code/">在这里</a>。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">字符串拼接</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+现在的大多数高级语言，对于字符串操作都有强力的支持，C++也不错，不过在遇到UTF-8等编码问题时，就要抓瞎了。。好吧，扯远了，看看评出来的排名最高的代码段：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">inline void build_string(std::ostream&amp; o) {}
+
+template&lt;class First, class... Rest&gt;
+inline void build_string(std::ostream&amp; o, const First&amp; value, const Rest&amp;... rest) {
+    o &lt;&lt; value;
+    build_string(o, rest...);
+}
+
+template&lt;class... T&gt;
+std::string concat_string(const T&amp;... value) {
+    std::ostringstream o;
+    build_string(o, value...);
+    return o.str();
+}
+</pre>
+</div>
+
+<p>
+用法如下：
+</p>
+
+<pre class="example">
+std::string date_string = concat_string(year, '-', month, '-', day);
+unlink(concat_string("/var/tmp/user-", getuid(), ".lock").c_str());
+throw Error(concat_string("Unable to open ", path, ": ", errno));
+</pre>
+
+<p>
+这个代码段比较简单， <code>build_string</code> 函数用到了C++11的变参模板的特性，同时提供一个特化的无模板参数版本防止在编译展开时出错。而函数 <code>concat_string</code> 则负责定义一个 <code>std::ostringstream</code> 来接收要拼接的字符串，然后将不定个数的模板参数传递给 <code>build_string</code> ，最后再负责返回已经拼接好的字符串。
+</p>
+
+<p>
+有人说，直接用 <code>std::string</code> 的 <code>operator+</code> 不是也可以吗？但它可接受的参数类型没有这个广，所有可以直接传递给 <code>std::ostringstream</code> 的类型都可以使用，而且，可以重载 <code>operator&lt;&lt;</code> 来使 <code>build_string</code> 接受自定义类型。甚至，还可以直接使用io流的操作符当参数，例如 <code>std::fixed</code> 。
+</p>
+
+<p>
+在后面的追加评论中，有人实现了一个 <code>concat_string</code> 类，并定义了该类的 <code>operator&lt;&lt;</code> 来让其支持链式操作，如 <code>concat_string() &lt;&lt; 1 &lt;&lt; '2' &lt;&lt; "3";</code> ，这实际上只是形式不同，所用的思想是一样的。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">对象缓存</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+排名第二位的，是别人帮Herb Sutter贴出的他在Going Native 2013上的演讲的示例代码（你如果是C++码农而不知道Herb Sutter，那你可以转行了:-D）：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">std::shared_ptr&lt;widget&gt; get_widget(int id) {
+    static std::map&lt;int, std::weak_ptr&lt;widget&gt;&gt; cache;
+    static std::mutex m;
+
+    std::lock_guard&lt;std::mutex&gt; hold(m);
+    auto sp = cache[id].lock();
+    if (!sp)
+        cache[id] = sp = load_widget(id);
+
+    return sp;
+}
+</pre>
+</div>
+
+<p>
+这段代码是相当的巧妙，通过短短十行左右的代码就实现了一个带有引用计数、线程安全的对象缓存。
+</p>
+
+<p>
+但这段代码并不是完美的，在后面追加的评论中，第一条评论就非常犀利：因为cache是一个map而不是vector，所以 <code>cache[id]</code> 查找操作的时间复杂度是 <code>O(logN)</code> ，而代码中有两次重复的 <code>cache[id]</code> 操作。所以，应该先用 <code>auto&amp; wp = cache[id];</code> 取出智能指针的引用，后续的操作使用这个引用即可。
+</p>
+
+<p>
+当然，并不是这样这段代码就完美了，还有一个隐藏的问题：内存泄露。虽然缓存中的值是通过 <code>std::weak_ptr</code> 而不是 <code>std::shared_ptr</code> 保存，保证了在没有别的地方使用widget的时候，这个widget不会因为在cache中有一个强引用而迟迟不会被销毁，但是， <code>std::weak_ptr</code> 智能指针对象本身还是会越存越多，导致cache越来越大。虽然内存是被容器占用而不是彻底不能访问，但实际上这也算是一种内存泄露，毕竟一些个智能指针不会再被使用了，但是还存在于内存中。
+</p>
+
+<p>
+解决办法：
+</p>
+
+<ol class="org-ol">
+<li>定时地扫描 <code>cache</code> ，清除失效的widget。这种办法最容易想到，但每次需要遍历整个cache，而且间隔的扫描时间不好控制；
+</li>
+<li>给 <code>std::shared_ptr&lt;widget&gt;</code> 定义一个deleter。 <code>std::shared_ptr</code> 的默认deleter只是简单地delete掉它所保存的对象。通过自定义一个deleter，在 <code>std::shared_ptr</code> 析构，删除其保存对象的同时，将存在于 <code>cache</code> 中的无效智能指针给 <code>erase</code> 掉。这样描述可能太过抽象，但是讨论这个解决办法并不是本篇的主题，所以，有兴趣的朋友可以参看陈硕先生的<a href="http://www.cnblogs.com/Solstice/archive/2010/02/10/dtor_meets_threads.html">《当析构函数遇到多线程》</a>，这篇文章写得相当好而且通俗易懂，有关这个问题解决办法的讨论在“对象池”一节。
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">位计数</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+排在第三位的，是一段很tricky的代码：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">unsigned int v;
+unsigned int c;
+for (c = 0; v; c++)
+    v &amp;= v - 1;
+</pre>
+</div>
+
+<p>
+如果只给代码不给提示，很多人可能很长时间都不会明白这段代码在干什么。实际上，这代码代码在计算 <code>v</code> 中值为1的位的个数，统计结果保存于 <code>c</code> 中。我没有办法对这段代码正确性作出简洁的证明，只能通过归纳法大致推导出它是正确的。这段代码的好处在于，和常规的移位相与再判断相比，它的效率非常高，因为一次就可以跳过很多的0位，而移位操作一个循环只能判断一位。但正如在后面的评论中所指出的，如果不是对性能的要求特别高，不要用这段代码，因为它的可读性非常差。当然，在面试中也可以使用它，记得网上流传的微软面试题中，有一道就是计算二进制的9999中有多少个值为1的位，那这段代码就可以派上用场了。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">lambda函数</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+排在第四位的代码只有一行：
+</p>
+
+<pre class="example">
+[&amp;](){}();
+</pre>
+
+<p>
+和前面的代码段相比，这一行代码仅仅只是为了展示C++的黑魔法。当然，去掉其中的 <code>&amp;</code> 也是合法的。不了解C++11的码农，脑海中浮现的第一句话肯定是：“我++，这是C++代码？”是的，这在C++11中确实有效：定义了一个lambda函数并立即调用。如果你熟悉javascript，上面的代码和下面的javascript代码有异曲同工之妙：
+</p>
+
+<pre class="example">
+(function() {})();
+</pre>
+
+<hr  />
+
+<p>
+以上就是所有点“赞”超过个位数的代码段。虽然后面还有一些代码段，但相比之下，不管是实用性或者趣味性，都差了很多，而获得的“赞”也只有个位数，所以就不一一列举了。
+</p>
+
+<p>
+还有好心人贴出了C++委员会成员列表的链接：<a href="http://isocpp.org/wiki/faq/wg21%EF%BC%8C%E5%85%B6%E4%B8%AD%E6%9C%89%E4%B8%8D%E5%B0%91%E6%88%90%E5%91%98%E4%B9%9F%E7%BB%99%E5%87%BA%E4%BA%86%E8%87%AA%E5%B7%B1%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E6%AE%B5">http://isocpp.org/wiki/faq/wg21%EF%BC%8C%E5%85%B6%E4%B8%AD%E6%9C%89%E4%B8%8D%E5%B0%91%E6%88%90%E5%91%98%E4%B9%9F%E7%BB%99%E5%87%BA%E4%BA%86%E8%87%AA%E5%B7%B1%E6%9C%80%E5%96%9C%E6%AC%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E6%AE%B5</a>。
+</p>
+
+<p>
+好了，这篇讨论就到这里了。作为码农，你最喜欢的代码段，是什么样的呢？
+</p>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2014-05-03</span>
+        <span title="last modification date" class="post-info">2014-05-03</span>
+        <span title="tags" class="post-info"><a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/";
+          var disqus_url = "http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>
+          Copyright &copy; 2012 - 2014 <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

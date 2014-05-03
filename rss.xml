@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Sun, 20 Apr 2014 22:26:50 CST</pubDate>
-    <lastBuildDate>Sun, 20 Apr 2014 22:26:50 CST</lastBuildDate>
+    <pubDate>Sat, 03 May 2014 17:08:13 CST</pubDate>
+    <lastBuildDate>Sat, 03 May 2014 17:08:13 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>最受欢迎的C++代码段</title>
+      <link>http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/</link>
+      <description>在reddit上投票出来的最受欢迎的C++代码段</description>
+      <pubDate>2014-05-03</pubDate>
+      <guid>http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/</guid>
+    </item>
     <item>
       <title>深入探究C++的new/delete操作符</title>
       <link>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</link>
@@ -70,13 +77,6 @@
       <description>basic knowledge of C++ template meta-programming</description>
       <pubDate>2013-12-03</pubDate>
       <guid>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</guid>
-    </item>
-    <item>
-      <title>[翻译]图解boost::bind</title>
-      <link>http://kelvinh.github.io/blog/2013/12/03/boost-bind-illustrated/</link>
-      <description>translation of &lt;Bind illustrated&gt; from http://blog.think-async.com/2010/04/bind-illustrated.html</description>
-      <pubDate>2013-12-03</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/12/03/boost-bind-illustrated/</guid>
     </item>
   </channel>
 </rss>
