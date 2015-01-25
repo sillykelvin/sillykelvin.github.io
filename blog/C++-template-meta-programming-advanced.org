@@ -1,0 +1,134 @@
+﻿#+TITLE:       C++模板元编程进阶实例
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2014-03-21 Fri
+#+URI:         /blog/%y/%m/%d/cpp-template-meta-programming-advanced/
+#+KEYWORDS:    C++, template meta programming
+#+TAGS:        :C++:
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: an example of advanced C++ template meta-programming
+
+
+从这篇博客的创建日期和最后修改日期可以看出，这是一个挖了很久的坑，现在终于埋上了。。
+
+我之前写了一篇@@html:<a href="/blog/2013/08/09/cpp-template-meta-programming/">博客</a>@@，初步介绍了C++的模板元编程。这次，来看一个解决问题的实际例子。
+
+一些Online Judge的题目，为了测试你算法的时间复杂度和空间复杂度是否符合标准，总是会限定占用内存和执行时间。如果算法在执行时占用内存超过规定值或者执行时间超过规定时间，即使能得出正确结果也会被判失败。前两天突发奇想，C++模板元编程的计算结果是在编译阶段就能得出的。。编译阶段就能得出。。编译阶段。。我眼前一亮：如果这些限定内存和时间的题目不限定编译时间和编译时占用的内存的话，那用C++模板元编程来实现，在编译阶段就计算完成，执行阶段只需要输出结果，不就完全没有额外的时间占用和空间占用了吗？
+
+于是我就到LeetCode的OJ上随便找了几个题目，打算试一下我的新想法。结果。。发现这些题目基本都是在运行时输入数据的，编译的时候根本就拿不到数据，那编译时计算结果就无从谈起了。。
+
+我没有灰心，突然想到了好久都没有继续做的[[https://projecteuler.net][Project Euler]]：这个上面的题目的输入都是固定的，一般都是让你提交一个惟一的结果给它。那这些题目用模板元编程来实现是有戏的。于是就拿[[https://projecteuler.net/problem%3D1][第一题]]来试试看：
+
+#+BEGIN_QUOTE
+If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+
+Find the sum of all the multiples of 3 or 5 below 1000.
+#+END_QUOTE
+
+这一题比较简单，就是找出比1000小的所有能被3或者5整除的数的总和。但这一题有一个坑：像15这样的数字，既能被3整除，又能被5整除。如果是把3和5的倍数分别全部加一遍，再加总和的话，会把15这样的数字算两遍，所以需要减去15的倍数的和。好了，这个是完全可以用C++模板元编程来实现的，代码如下：
+
+#+BEGIN_SRC C++
+#include <iostream>
+
+template<bool cond, int T, int F>
+struct if_;
+
+template<int T, int F>
+struct if_<true, T, F> {
+    const static int value = T;
+};
+
+template<int T, int F>
+struct if_<false, T, F> {
+    const static int value = F;
+};
+
+template<int X, int Y>
+struct sum {
+    const static int value = X + Y;
+};
+
+template<int X, int Y>
+struct sub {
+    const static int value = X - Y;
+};
+
+template<int X, int Y>
+struct mul {
+    const static int value = X * Y;
+};
+
+template<int N, int M, int L>
+struct total {
+    const static int value = if_<mul<N, M>::value >= L, total<N - 1, M, L>::value, mul<N, M>::value + total<N - 1, M, L>::value>::value;
+};
+
+template<int M, int L>
+struct total<1, M, L> {
+    const static int value = if_<M >= L, 0, M>::value;
+};
+
+int main() {
+    int value = sub<sum<total<400, 3, 1000>::value, total<300, 5, 1000>::value>::value, total<100, 15, 1000>::value>::value;
+    std::cout << value << std::endl;
+    return 0;
+}
+#+END_SRC
+
+不过，我必须得承认，虽然这段代码我暂时还能掌控自如，但是三个月后再看时，我的第一反应肯定是：what the fuck？所以趁现在还能认识它，先解释一下：
+
+1. 首先，定义一个叫 =if_= 的模板类来模拟正常的 =if= 语句，第一个带有三个模板参数的类因为没有作用，所以没有实现。我们主要是需要后续的两个偏特化的版本。例如，下面的C++代码：
+
+   #+BEGIN_SRC C++
+     int a;
+     if (5 > 3)
+         a = 1;
+     else
+         a = 0;
+   #+END_SRC
+
+   和下面的代码是等价的：
+
+   #+BEGIN_SRC C++
+   int a = if_<5 > 3, 1, 0>::value;
+   int a = if_<5 < 3, 0, 1>::value;
+   #+END_SRC
+
+   但两者的区别是，前者是在运行时计算的（当然，智能的编译器应该会在编译时优化掉这段无用代码而直接计算出 =a= 的值），而后者是在编译时计算的。
+
+2. 紧接着定义的三个类 =sum=, =sub=, =mul= 是纯粹用于计算加、减、乘法的类，这三个类应该比较容易理解。
+
+3. 接下来的 =total= 类是为了计算所有小于 =L= 且能被 =M= 整除的数的总和，模板参数 =N= 是用于在递归时进行计数。同时，还有一个偏特化的版本用于定义递归的终止条件。
+
+4. 所有需要的计算方式都定义好后，就只需要在 =main= 函数里按题目要求实例化模板类就可以了，解析如下：
+
+   : total<400, 3, 1000>::value, total<300, 5, 1000>::value // 这两个用来分别计算1000以内能被3和5整除的数的总和
+   : sum<total<400, 3, 1000>::value, total<300, 5, 1000>::value>::value // 把上面计算的两个和加起来
+   : total<100, 15, 1000>::value // 计算1000以内能被15整除的数的总和
+   : int value = sub<sum<total<400, 3, 1000>::value, total<300, 5, 1000>::value>::value, total<100, 15, 1000>::value>::value; // 用第二行的和减去第三行中被多加的部分，就得到正确结果
+
+为了验证这个值是编译时计算出来的（其实根本都用不着验证。。），我们把 =main= 函数简化一下：
+
+#+BEGIN_SRC C++
+int main() {
+    int value = ...
+    return value;
+}
+#+END_SRC
+
+然后用 =g++ -g -O3 euler1.cpp= 来让编译器执行最大程度的编译优化，再用GDB打开可执行文件 =gdb a.out= ：
+
+: (gdb) set disassembly-flavor intel
+: (gdb) disassemble main
+: Dump of assembler code for function main:
+: 0x0000000000400690 <main+0>:    mov    eax,0x38ed0
+: 0x0000000000400695 <main+5>:    ret
+: End of assembler dump.
+: (gdb)
+
+可以看到， =main= 函数在把 =0x38ed0= 这个常数值移动到 =eax= 寄存器就退出了，而这个十六进制值，正是这个题目的结果：233168。
+
+* 附
+
+  如果你觉得上面的例子还不过瘾的话，[[https://github.com/Lexdysic/MetaRaytrace][这里]] 还有一个更加强大的例子，程序运行后会生成一个小图片。但如果你对你机器的性能不够自信的话，劝你还是不要去编译了。。
