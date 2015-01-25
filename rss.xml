@@ -4,10 +4,17 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Thu, 01 Jan 2015 23:48:31 CST</pubDate>
-    <lastBuildDate>Thu, 01 Jan 2015 23:48:31 CST</lastBuildDate>
+    <pubDate>周一, 26 1月 2015 00:38:07 China Standard Time</pubDate>
+    <lastBuildDate>周一, 26 1月 2015 00:38:07 China Standard Time</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
+    <item>
+      <title>C++模板元编程进阶实例</title>
+      <link>http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/</link>
+      <description>an example of advanced C++ template meta-programming</description>
+      <pubDate>2015-01-26</pubDate>
+      <guid>http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/</guid>
+    </item>
     <item>
       <title>好久不见</title>
       <link>http://kelvinh.github.io/blog/2014/10/08/aaabbbbbbb/</link>
@@ -70,13 +77,6 @@
       <description>how to decrypt ssl traffic using fiddler and wireshark</description>
       <pubDate>2014-01-15</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/</guid>
-    </item>
-    <item>
-      <title>Linux通过shell实现递归列目录及对文件的处理</title>
-      <link>http://kelvinh.github.io/blog/2012/03/23/recursively-list-directories-and-process-files-in-shell/</link>
-      <description>how to recursively list directories through shell</description>
-      <pubDate>2013-12-05</pubDate>
-      <guid>http://kelvinh.github.io/blog/2012/03/23/recursively-list-directories-and-process-files-in-shell/</guid>
     </item>
   </channel>
 </rss>

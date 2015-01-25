@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>C++模板元编程进阶实例 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="an example of advanced C++ template meta-programming" />
+    <meta name="keywords" content="C++, template meta programming" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="q" value="site:kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>C++模板元编程进阶实例</h1>
+<p>
+从这篇博客的创建日期和最后修改日期可以看出，这是一个挖了很久的坑，现在终于埋上了。。
+</p>
+
+<p>
+我之前写了一篇<a href="/blog/2013/08/09/cpp-template-meta-programming/">博客</a>，初步介绍了C++的模板元编程。这次，来看一个解决问题的实际例子。
+</p>
+
+<p>
+一些Online Judge的题目，为了测试你算法的时间复杂度和空间复杂度是否符合标准，总是会限定占用内存和执行时间。如果算法在执行时占用内存超过规定值或者执行时间超过规定时间，即使能得出正确结果也会被判失败。前两天突发奇想，C++模板元编程的计算结果是在编译阶段就能得出的。。编译阶段就能得出。。编译阶段。。我眼前一亮：如果这些限定内存和时间的题目不限定编译时间和编译时占用的内存的话，那用C++模板元编程来实现，在编译阶段就计算完成，执行阶段只需要输出结果，不就完全没有额外的时间占用和空间占用了吗？
+</p>
+
+<p>
+于是我就到LeetCode的OJ上随便找了几个题目，打算试一下我的新想法。结果。。发现这些题目基本都是在运行时输入数据的，编译的时候根本就拿不到数据，那编译时计算结果就无从谈起了。。
+</p>
+
+<p>
+我没有灰心，突然想到了好久都没有继续做的<a href="https://projecteuler.net">Project Euler</a>：这个上面的题目的输入都是固定的，一般都是让你提交一个惟一的结果给它。那这些题目用模板元编程来实现是有戏的。于是就拿<a href="https://projecteuler.net/problem=1">第一题</a>来试试看：
+</p>
+
+<blockquote>
+<p>
+If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23.
+</p>
+
+<p>
+Find the sum of all the multiples of 3 or 5 below 1000.
+</p>
+</blockquote>
+
+<p>
+这一题比较简单，就是找出比1000小的所有能被3或者5整除的数的总和。但这一题有一个坑：像15这样的数字，既能被3整除，又能被5整除。如果是把3和5的倍数分别全部加一遍，再加总和的话，会把15这样的数字算两遍，所以需要减去15的倍数的和。好了，这个是完全可以用C++模板元编程来实现的，代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">#include &lt;iostream&gt;
+
+template&lt;bool cond, int T, int F&gt;
+struct if_;
+
+template&lt;int T, int F&gt;
+struct if_&lt;true, T, F&gt; {
+    const static int value = T;
+};
+
+template&lt;int T, int F&gt;
+struct if_&lt;false, T, F&gt; {
+    const static int value = F;
+};
+
+template&lt;int X, int Y&gt;
+struct sum {
+    const static int value = X + Y;
+};
+
+template&lt;int X, int Y&gt;
+struct sub {
+    const static int value = X - Y;
+};
+
+template&lt;int X, int Y&gt;
+struct mul {
+    const static int value = X * Y;
+};
+
+template&lt;int N, int M, int L&gt;
+struct total {
+    const static int value = if_&lt;mul&lt;N, M&gt;::value &gt;= L, total&lt;N - 1, M, L&gt;::value, mul&lt;N, M&gt;::value + total&lt;N - 1, M, L&gt;::value&gt;::value;
+};
+
+template&lt;int M, int L&gt;
+struct total&lt;1, M, L&gt; {
+    const static int value = if_&lt;M &gt;= L, 0, M&gt;::value;
+};
+
+int main() {
+    int value = sub&lt;sum&lt;total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value&gt;::value, total&lt;100, 15, 1000&gt;::value&gt;::value;
+    std::cout &lt;&lt; value &lt;&lt; std::endl;
+    return 0;
+}
+</pre>
+</div>
+
+<p>
+不过，我必须得承认，虽然这段代码我暂时还能掌控自如，但是三个月后再看时，我的第一反应肯定是：what the fuck？所以趁现在还能认识它，先解释一下：
+</p>
+
+<ol class="org-ol">
+<li>首先，定义一个叫 <code>if_</code> 的模板类来模拟正常的 <code>if</code> 语句，第一个带有三个模板参数的类因为没有作用，所以没有实现。我们主要是需要后续的两个偏特化的版本。例如，下面的C++代码：
+
+<div class="org-src-container">
+
+<pre class="src src-C++">int a;
+if (5 &gt; 3)
+    a = 1;
+else
+    a = 0;
+</pre>
+</div>
+
+<p>
+和下面的代码是等价的：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">int a = if_&lt;5 &gt; 3, 1, 0&gt;::value;
+int a = if_&lt;5 &lt; 3, 0, 1&gt;::value;
+</pre>
+</div>
+
+<p>
+但两者的区别是，前者是在运行时计算的（当然，智能的编译器应该会在编译时优化掉这段无用代码而直接计算出 <code>a</code> 的值），而后者是在编译时计算的。
+</p>
+</li>
+
+<li>紧接着定义的三个类 <code>sum</code>, <code>sub</code>, <code>mul</code> 是纯粹用于计算加、减、乘法的类，这三个类应该比较容易理解。
+</li>
+
+<li>接下来的 <code>total</code> 类是为了计算所有小于 <code>L</code> 且能被 <code>M</code> 整除的数的总和，模板参数 <code>N</code> 是用于在递归时进行计数。同时，还有一个偏特化的版本用于定义递归的终止条件。
+</li>
+
+<li>所有需要的计算方式都定义好后，就只需要在 <code>main</code> 函数里按题目要求实例化模板类就可以了，解析如下：
+
+<pre class="example">
+total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value // 这两个用来分别计算1000以内能被3和5整除的数的总和
+sum&lt;total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value&gt;::value // 把上面计算的两个和加起来
+total&lt;100, 15, 1000&gt;::value // 计算1000以内能被15整除的数的总和
+int value = sub&lt;sum&lt;total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value&gt;::value, total&lt;100, 15, 1000&gt;::value&gt;::value; // 用第二行的和减去第三行中被多加的部分，就得到正确结果
+</pre>
+</li>
+</ol>
+
+<p>
+为了验证这个值是编译时计算出来的（其实根本都用不着验证。。），我们把 <code>main</code> 函数简化一下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">int main() {
+    int value = ...
+    return value;
+}
+</pre>
+</div>
+
+<p>
+然后用 <code>g++ -g -O3 euler1.cpp</code> 来让编译器执行最大程度的编译优化，再用GDB打开可执行文件 <code>gdb a.out</code> ：
+</p>
+
+<pre class="example">
+(gdb) set disassembly-flavor intel
+(gdb) disassemble main
+Dump of assembler code for function main:
+0x0000000000400690 &lt;main+0&gt;:    mov    eax,0x38ed0
+0x0000000000400695 &lt;main+5&gt;:    ret
+End of assembler dump.
+(gdb)
+</pre>
+
+<p>
+可以看到， <code>main</code> 函数在把 <code>0x38ed0</code> 这个常数值移动到 <code>eax</code> 寄存器就退出了，而这个十六进制值，正是这个题目的结果：233168。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">附</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+如果你觉得上面的例子还不过瘾的话，<a href="https://github.com/Lexdysic/MetaRaytrace">这里</a> 还有一个更加强大的例子，程序运行后会生成一个小图片。但如果你对你机器的性能不够自信的话，劝你还是不要去编译了。。
+</p>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2014-03-21</span>
+        <span title="last modification date" class="post-info">2015-01-26</span>
+        <span title="tags" class="post-info"><a href="/tags/c++/">C++</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          //var disqus_developer = 1;
+          var disqus_identifier = "/blog/2014/03/21/cpp-template-meta-programming-advanced/";
+          var disqus_url = "http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/";
+          var disqus_shortname = 'kelvinh';
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      </section>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+      <script src="/media/js/main.js"></script>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>
+          Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+          <script type="text/javascript">document.getElementById("footerYear").innerHTML = (new Date()).getFullYear();</script>
+        </p>
+      </div>
+    </div>
+
+  </body>
+</html>
