@@ -1,0 +1,95 @@
+#+TITLE:       LeetCode题解
+#+AUTHOR:      Kelvin Hu
+#+EMAIL:       ini.kelvin@gmail.com
+#+DATE:        2016-01-20 Wed
+#+URI:         /wiki/leetcode-answers/
+#+KEYWORDS:    algorithm, C++, leetcode
+#+TAGS:        Algorithm, C++, LeetCode
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:t \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+DESCRIPTION: 我个人的LeetCode OJ题解
+
+
+之前无数的事实证明，我是一个挖坑的好手。。。这又是一个无比大的坑，不求其它，只求能填上。。。挖坑不填是SB。。。
+
+* Two Sum
+
+#+BEGIN_QUOTE
+ where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+
+You may assume that each input would have exactly one solution.
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+#+END_QUOTE
+
+最简单的想法，自然是两层for循环数组，一个个去加了试：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      vector<int> twoSum(vector<int>& nums, int target) {
+          vector<int> vec;
+          for (int i = 0; i < nums.size(); ++i) {
+              for (int j = i + 1; j < nums.size(); ++j) {
+                  if (nums[i] + nums[j] == target) {
+                      vec.push_back(i + 1);
+                      vec.push_back(j + 1);
+                      return vec;
+                  }
+              }
+          }
+
+          return vec;
+      }
+  };
+#+END_SRC
+
+但结果可想而知，时间超时了。。。这个复杂度是平方级别，看来是不满足要求。经过思考，觉得先给数组排个序会比较好，再查找的话，可以用二分搜索：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      struct entity {
+          int num;
+          int index;
+
+          entity(int n, int i) : num(n), index(i) {}
+
+          bool operator<(const entity& that) const {
+              return this->num < that.num;
+          }
+      };
+
+      vector<int> twoSum(vector<int>& nums, int target) {
+          vector<int> ret;
+
+          vector<entity> sorted_num;
+          for (int i = 0; i < nums.size(); ++i)
+              sorted_num.push_back(entity(nums[i], i + 1));
+          sort(sorted_num.begin(), sorted_num.end());
+
+          vector<entity>::iterator it, end;
+          for (it = sorted_num.begin(), end = sorted_num.end(); it != end;) {
+              int op = target - it->num;
+              vector<entity>::iterator op_it = lower_bound(++it, end, entity(op, 0));
+              if (op_it->num == op) {
+                  --it;
+
+                  int idx1 = it->index;
+                  int idx2 = op_it->index;
+                  if (idx1 > idx2)
+                      swap(idx1, idx2);
+
+                  ret.push_back(idx1);
+                  ret.push_back(idx2);
+                  return ret;
+              }
+          }
+
+          return ret;
+      }
+  };
+#+END_SRC
+
+经过改造之后，时间复杂度降到了O(nlogn)级别，所以通过了，这个理论上应该不会有更低的复杂度了，毕竟要遍历一遍。。。
