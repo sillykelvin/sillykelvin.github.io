@@ -79,7 +79,7 @@ int main() {
 
 运行结果为：
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 w->a				7
 w.operator->()			0x7fff6b46d6a0
 w.operator->()->a		7
@@ -88,7 +88,7 @@ w2->a				7
 w2.operator->()->a		7
 w2.operator->().operator->()	0x7fff6b46d6a0
 w2.operator->().operator->()->a	7
-#+END_SRC
+#+END_EXAMPLE
 
 其中最为诡异的就是 =w2->a= 输出的是7，按照上面总结的结论，这个调用其实会被编译器转换成 =w2.operator->().operator->()->a= 的形式，所以输出是7。
 
