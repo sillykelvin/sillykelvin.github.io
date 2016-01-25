@@ -49,7 +49,7 @@
 </p>
 
 <p>
-我没有灰心，突然想到了好久都没有继续做的<a href="https://projecteuler.net">Project Euler</a>：这个上面的题目的输入都是固定的，一般都是让你提交一个惟一的结果给它。那这些题目用模板元编程来实现是有戏的。于是就拿<a href="https://projecteuler.net/problem=1">第一题</a>来试试看：
+我没有灰心，突然想到了好久都没有继续做的<a href="https://projecteuler.net/">Project Euler</a>：这个上面的题目的输入都是固定的，一般都是让你提交一个惟一的结果给它。那这些题目用模板元编程来实现是有戏的。于是就拿<a href="https://projecteuler.net/problem=1">第一题</a>来试试看：
 </p>
 
 <blockquote>
@@ -121,7 +121,9 @@ int main() {
 </p>
 
 <ol class="org-ol">
-<li>首先，定义一个叫 <code>if_</code> 的模板类来模拟正常的 <code>if</code> 语句，第一个带有三个模板参数的类因为没有作用，所以没有实现。我们主要是需要后续的两个偏特化的版本。例如，下面的C++代码：
+<li><p>
+首先，定义一个叫 <code>if_</code> 的模板类来模拟正常的 <code>if</code> 语句，第一个带有三个模板参数的类因为没有作用，所以没有实现。我们主要是需要后续的两个偏特化的版本。例如，下面的C++代码：
+</p>
 
 <div class="org-src-container">
 
@@ -146,24 +148,22 @@ int a = if_&lt;5 &lt; 3, 0, 1&gt;::value;
 
 <p>
 但两者的区别是，前者是在运行时计算的（当然，智能的编译器应该会在编译时优化掉这段无用代码而直接计算出 <code>a</code> 的值），而后者是在编译时计算的。
+</p></li>
+
+<li>紧接着定义的三个类 <code>sum</code>, <code>sub</code>, <code>mul</code> 是纯粹用于计算加、减、乘法的类，这三个类应该比较容易理解。</li>
+
+<li>接下来的 <code>total</code> 类是为了计算所有小于 <code>L</code> 且能被 <code>M</code> 整除的数的总和，模板参数 <code>N</code> 是用于在递归时进行计数。同时，还有一个偏特化的版本用于定义递归的终止条件。</li>
+
+<li><p>
+所有需要的计算方式都定义好后，就只需要在 <code>main</code> 函数里按题目要求实例化模板类就可以了，解析如下：
 </p>
-</li>
-
-<li>紧接着定义的三个类 <code>sum</code>, <code>sub</code>, <code>mul</code> 是纯粹用于计算加、减、乘法的类，这三个类应该比较容易理解。
-</li>
-
-<li>接下来的 <code>total</code> 类是为了计算所有小于 <code>L</code> 且能被 <code>M</code> 整除的数的总和，模板参数 <code>N</code> 是用于在递归时进行计数。同时，还有一个偏特化的版本用于定义递归的终止条件。
-</li>
-
-<li>所有需要的计算方式都定义好后，就只需要在 <code>main</code> 函数里按题目要求实例化模板类就可以了，解析如下：
 
 <pre class="example">
 total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value // 这两个用来分别计算1000以内能被3和5整除的数的总和
 sum&lt;total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value&gt;::value // 把上面计算的两个和加起来
 total&lt;100, 15, 1000&gt;::value // 计算1000以内能被15整除的数的总和
 int value = sub&lt;sum&lt;total&lt;400, 3, 1000&gt;::value, total&lt;300, 5, 1000&gt;::value&gt;::value, total&lt;100, 15, 1000&gt;::value&gt;::value; // 用第二行的和减去第三行中被多加的部分，就得到正确结果
-</pre>
-</li>
+</pre></li>
 </ol>
 
 <p>
@@ -197,9 +197,9 @@ End of assembler dump.
 可以看到， <code>main</code> 函数在把 <code>0x38ed0</code> 这个常数值移动到 <code>eax</code> 寄存器就退出了，而这个十六进制值，正是这个题目的结果：233168。
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">附</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">附</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 如果你觉得上面的例子还不过瘾的话，<a href="https://github.com/Lexdysic/MetaRaytrace">这里</a> 还有一个更加强大的例子，程序运行后会生成一个小图片。但如果你对你机器的性能不够自信的话，劝你还是不要去编译了。。
 </p>

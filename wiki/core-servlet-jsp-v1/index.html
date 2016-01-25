@@ -36,9 +36,9 @@
 This file recorded notes during learning <i>Core Servlet and JSP</i>.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">A sample <code>web.xml</code>:</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">A sample <code>web.xml</code>:</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <div class="org-src-container">
 
 <pre class="src src-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
@@ -143,14 +143,11 @@ Matching Overlapping Patterns:
 </p>
 
 <ol class="org-ol">
-<li>Exact matches handled first: <a href="http://.../foo/bar">http://.../foo/bar</a> will be handled by <code>/foo/bar</code>, not <code>/foo/*</code>, also, <code>/foo/bar.html</code> will win over <code>*.html</code>, if the URL is <a href="http://.../foo/bar.html">http://.../foo/bar.html</a>.
-</li>
+<li>Exact matches handled first: <a href="http://.../foo/bar">http://.../foo/bar</a> will be handled by <code>/foo/bar</code>, not <code>/foo/*</code>, also, <code>/foo/bar.html</code> will win over <code>*.html</code>, if the URL is <a href="http://.../foo/bar.html">http://.../foo/bar.html</a>.</li>
 
-<li>Directory mapping are preferred over extension mappings: the URL <a href="http://.../foo/bar.html">http://.../foo/bar.html</a> will be handled by <code>/foo/*</code>, not the pattern <code>*.html</code>.
-</li>
+<li>Directory mapping are preferred over extension mappings: the URL <a href="http://.../foo/bar.html">http://.../foo/bar.html</a> will be handled by <code>/foo/*</code>, not the pattern <code>*.html</code>.</li>
 
-<li>For overlapping directory mappings, the longest path is preferred: <a href="http://.../foo/bar/baz.html">http://.../foo/bar/baz.html</a> will be handled by <code>/foo/bar/*</code>, not <code>/foo/*</code>.
-</li>
+<li>For overlapping directory mappings, the longest path is preferred: <a href="http://.../foo/bar/baz.html">http://.../foo/bar/baz.html</a> will be handled by <code>/foo/bar/*</code>, not <code>/foo/*</code>.</li>
 </ol>
 
 <p>
@@ -167,133 +164,102 @@ When defining the <code>&lt;location&gt;</code> of <code>&lt;error-page&gt;</cod
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">HTTP/1.1 common request headers</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">HTTP/1.1 common request headers</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <ol class="org-ol">
-<li><code>Accept</code>: specify the MIME types that the browser can handle
-</li>
+<li><code>Accept</code>: specify the MIME types that the browser can handle</li>
 
-<li><code>Accept-Charset</code>: the character charset
-</li>
+<li><code>Accept-Charset</code>: the character charset</li>
 
-<li><code>Accept-Encoding</code>: the encoding type, the most commonly used is "gzip, deflate"
-</li>
+<li><code>Accept-Encoding</code>: the encoding type, the most commonly used is "gzip, deflate"</li>
 
-<li><code>Accept-Language</code>: the language the browser excepted
-</li>
+<li><code>Accept-Language</code>: the language the browser excepted</li>
 
-<li><code>Authorization</code>: used to identify the browser when visiting some pages with password protection
-</li>
+<li><code>Authorization</code>: used to identify the browser when visiting some pages with password protection</li>
 
-<li><code>Connection</code>: to indicate if the browser can handle continuous HTTP connection, continuous connection can transfer several files(html, images, etc) in one socket, saved the cost of establishing multiple connections
-</li>
+<li><code>Connection</code>: to indicate if the browser can handle continuous HTTP connection, continuous connection can transfer several files(html, images, etc) in one socket, saved the cost of establishing multiple connections</li>
 
-<li><code>Content-Length</code>: only used for <code>POST</code>, specify the length of <code>POST</code> request
-</li>
+<li><code>Content-Length</code>: only used for <code>POST</code>, specify the length of <code>POST</code> request</li>
 
-<li><code>Cookie</code>: return cookies back to http server, these cookies are formerly sent to browser by http server
-</li>
+<li><code>Cookie</code>: return cookies back to http server, these cookies are formerly sent to browser by http server</li>
 
-<li><code>Host</code>: the host name and port number in the requested URL
-</li>
+<li><code>Host</code>: the host name and port number in the requested URL</li>
 
-<li><code>If-Modified-Since</code>: indicate the requested page is wanted only if the page has been modified after the specified date, otherwise the http server will send 304(Not Modified) instead, servlet should not handle this header directly, but implement <code>getLastModified()</code> method, let the server to handle the date comparison
-</li>
+<li><code>If-Modified-Since</code>: indicate the requested page is wanted only if the page has been modified after the specified date, otherwise the http server will send 304(Not Modified) instead, servlet should not handle this header directly, but implement <code>getLastModified()</code> method, let the server to handle the date comparison</li>
 
-<li><code>If-Unmodified-Since</code>: the opposite one of <code>If-Modified-Since</code>
-</li>
+<li><code>If-Unmodified-Since</code>: the opposite one of <code>If-Modified-Since</code></li>
 
-<li><code>Referer</code>: the URL which referenced current page
-</li>
+<li><code>Referer</code>: the URL which referenced current page</li>
 
-<li><code>User-Agent</code>: to identify the client browser which sent the request
-</li>
+<li><code>User-Agent</code>: to identify the client browser which sent the request</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">HTTP/1.1 common response headers</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">HTTP/1.1 common response headers</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <ol class="org-ol">
-<li><code>Allow</code>: specify request methods the server supported
-</li>
+<li><code>Allow</code>: specify request methods the server supported</li>
 
 <li><code>Cache-Control</code>: tell client how to cache the document, can be set with the following values:
 <ul class="org-ul">
-<li><code>public</code>: the document can be cached
-</li>
-<li><code>private</code>: the document can only be cached in private cache for single user
-</li>
-<li><code>no-cache</code>: do not cache the document (old browsers use <code>Pragma</code>, so this header should also be set to <code>no-cache</code> for old browsers)
-</li>
-<li><code>no-store</code>: do not cache, even do not store in temp folder on local disk
-</li>
-<li><code>must-revalidate</code>: client must communicate with server to validate the document everytime when using it
-</li>
-<li><code>proxy-revalidate</code>: similar to previous one, only adapted to shared cache
-</li>
-<li><code>max-age=XXX</code>: the document will be invalid after <i>XXX</i> seconds, it is the replacement of header <code>Expires</code>, and it has higher priority when both of them exist
-</li>
-<li><code>s-max-age=XXX</code>: the shared cache should make the document invalid after <i>XXX</i> seconds
-</li>
-</ul>
-</li>
+<li><code>public</code>: the document can be cached</li>
+<li><code>private</code>: the document can only be cached in private cache for single user</li>
+<li><code>no-cache</code>: do not cache the document (old browsers use <code>Pragma</code>, so this header should also be set to <code>no-cache</code> for old browsers)</li>
+<li><code>no-store</code>: do not cache, even do not store in temp folder on local disk</li>
+<li><code>must-revalidate</code>: client must communicate with server to validate the document everytime when using it</li>
+<li><code>proxy-revalidate</code>: similar to previous one, only adapted to shared cache</li>
+<li><code>max-age=XXX</code>: the document will be invalid after <i>XXX</i> seconds, it is the replacement of header <code>Expires</code>, and it has higher priority when both of them exist</li>
+<li><code>s-max-age=XXX</code>: the shared cache should make the document invalid after <i>XXX</i> seconds</li>
+</ul></li>
 
-<li><code>Connection</code>: used for continuouse connection, the value "close" tells the browser not to use continuous connection, default is continuous connection
-</li>
+<li><code>Connection</code>: used for continuouse connection, the value "close" tells the browser not to use continuous connection, default is continuous connection</li>
 
-<li><code>Content-Disposition</code>: make the browser to ask user to store the response with the specified name on disk, as below:
+<li><p>
+<code>Content-Disposition</code>: make the browser to ask user to store the response with the specified name on disk, as below:
+</p>
 
 <pre class="example">
 Content-Disposition: attachment; filename=some-file-name
-</pre>
-</li>
+</pre></li>
 
-<li><code>Content-Encoding</code>: the encoding used during response transmission
-</li>
+<li><code>Content-Encoding</code>: the encoding used during response transmission</li>
 
-<li><code>Content-Language</code>: the language response used
-</li>
+<li><code>Content-Language</code>: the language response used</li>
 
-<li><code>Content-Length</code>: the byte count of response, only used for continuous connection
-</li>
+<li><code>Content-Length</code>: the byte count of response, only used for continuous connection</li>
 
-<li><code>Content-Type</code>: the MIME of response, example:
+<li><p>
+<code>Content-Type</code>: the MIME of response, example:
+</p>
 
 <pre class="example">
 Content-Type: text/html; charset=utf-8
-</pre>
-</li>
+</pre></li>
 
-<li><code>Expires</code>: see <code>Cache-Control</code> and <code>Pragma</code>
-</li>
+<li><code>Expires</code>: see <code>Cache-Control</code> and <code>Pragma</code></li>
 
-<li><code>Last-Modified</code>: the last modified time of the document
-</li>
+<li><code>Last-Modified</code>: the last modified time of the document</li>
 
-<li><code>Location</code>: required when status code is between 300 and 399, used to notify the browser where the document is stored, the browser will automatically connect to the new address and get the new document
-</li>
+<li><code>Location</code>: required when status code is between 300 and 399, used to notify the browser where the document is stored, the browser will automatically connect to the new address and get the new document</li>
 
-<li><code>Pragma</code>: see <code>Cache-Control</code> and <code>Expires</code>
-</li>
+<li><code>Pragma</code>: see <code>Cache-Control</code> and <code>Expires</code></li>
 
-<li><code>Refresh</code>: tell browser to send request for the newest page after the interval, example use:
+<li><p>
+<code>Refresh</code>: tell browser to send request for the newest page after the interval, example use:
+</p>
 
 <pre class="example">
 Refresh: 5; URL=http://host/path
-</pre>
-</li>
+</pre></li>
 
-<li><code>Retry-After</code>: used with status code 503, tell the client to retry after the interval
-</li>
+<li><code>Retry-After</code>: used with status code 503, tell the client to retry after the interval</li>
 
-<li><code>Set-Cookie</code>: specify a cookie, every cookie needs a stand alone header
-</li>
+<li><code>Set-Cookie</code>: specify a cookie, every cookie needs a stand alone header</li>
 
-<li><code>WWW-Authenticate</code>: used with 401, tell browser the authentication type and domain needed in request header <code>Authorization</code>
-</li>
+<li><code>WWW-Authenticate</code>: used with 401, tell browser the authentication type and domain needed in request header <code>Authorization</code></li>
 </ol>
 </div>
 </div>

@@ -4,79 +4,79 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>周一, 17 八月 2015 20:38:27 China Standard Time</pubDate>
-    <lastBuildDate>周一, 17 八月 2015 20:38:27 China Standard Time</lastBuildDate>
+    <pubDate>Mon, 25 Jan 2016 22:38:13 CST</pubDate>
+    <lastBuildDate>Mon, 25 Jan 2016 22:38:13 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
     <item>
+      <title>C++中对成员访问操作符-&gt;的重载</title>
+      <link>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</link>
+      <description><![CDATA[Introduction to overloading of -> operator in C++]]></description>
+      <pubDate>2016-01-25</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</guid>
+    </item>
+    <item>
+      <title>三门问题的程序解与解释</title>
+      <link>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</link>
+      <description><![CDATA[the famous Monty Hall problem and use program to explain it]]></description>
+      <pubDate>2016-01-25</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</guid>
+    </item>
+    <item>
+      <title>岁月如歌——甘十九妹</title>
+      <link>http://kelvinh.github.io/blog/2016/01/24/time-is-like-a-song/</link>
+      <description><![CDATA[回忆往事，岁月如歌]]></description>
+      <pubDate>2016-01-25</pubDate>
+      <guid>http://kelvinh.github.io/blog/2016/01/24/time-is-like-a-song/</guid>
+    </item>
+    <item>
+      <title>Project Euler的解题笔记</title>
+      <link>http://kelvinh.github.io/wiki/project-euler/</link>
+      <description><![CDATA[notes about solving problems on projecteuler.net]]></description>
+      <pubDate>2016-01-25</pubDate>
+      <guid>http://kelvinh.github.io/wiki/project-euler/</guid>
+    </item>
+    <item>
+      <title>LeetCode题解</title>
+      <link>http://kelvinh.github.io/wiki/leetcode-answers/</link>
+      <description><![CDATA[我个人的LeetCode OJ题解]]></description>
+      <pubDate>2016-01-22</pubDate>
+      <guid>http://kelvinh.github.io/wiki/leetcode-answers/</guid>
+    </item>
+    <item>
       <title>C++模板元编程进阶实例</title>
       <link>http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/</link>
-      <description>an example of advanced C++ template meta-programming</description>
+      <description><![CDATA[an example of advanced C++ template meta-programming]]></description>
       <pubDate>2015-01-26</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/</guid>
     </item>
     <item>
       <title>好久不见</title>
       <link>http://kelvinh.github.io/blog/2014/10/08/aaabbbbbbb/</link>
-      <description>好久都没有更新博客了，各位新年快乐</description>
+      <description><![CDATA[好久都没有更新博客了，各位新年快乐]]></description>
       <pubDate>2015-01-01</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/10/08/aaabbbbbbb/</guid>
     </item>
     <item>
       <title>最受欢迎的C++代码段</title>
       <link>http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/</link>
-      <description>在reddit上投票出来的最受欢迎的C++代码段</description>
+      <description><![CDATA[在reddit上投票出来的最受欢迎的C++代码段]]></description>
       <pubDate>2014-05-03</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/</guid>
     </item>
     <item>
       <title>深入探究C++的new/delete操作符</title>
       <link>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</link>
-      <description>关于C++的new和delete的比较深入的探究</description>
+      <description><![CDATA[关于C++的new和delete的比较深入的探究]]></description>
       <pubDate>2014-04-20</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</guid>
     </item>
     <item>
       <title>[翻译]看老夫如何调戏C++编译器</title>
       <link>http://kelvinh.github.io/blog/2014/03/30/how-to-abuse-a-cpp-compiler/</link>
-      <description>翻译的一篇讲C++模板的文章</description>
+      <description><![CDATA[翻译的一篇讲C++模板的文章]]></description>
       <pubDate>2014-03-30</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/03/30/how-to-abuse-a-cpp-compiler/</guid>
-    </item>
-    <item>
-      <title>[翻译]C++教程：指向成员函数的指针</title>
-      <link>http://kelvinh.github.io/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/</link>
-      <description>translation of a good article: C++ Tutorial: Pointer-to-Member Function at http://www.codeguru.com/cpp/cpp/article.php/c17401/C-Tutorial-PointertoMember-Function.htm</description>
-      <pubDate>2014-03-27</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/03/27/cpp-tutorial-pointer-to-member-function/</guid>
-    </item>
-    <item>
-      <title>那些年我眼中的神</title>
-      <link>http://kelvinh.github.io/blog/2014/01/07/things-i-admired-these-years/</link>
-      <description>things I admired &amp; respected these years, including tools, books, and programming languages</description>
-      <pubDate>2014-03-22</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/01/07/things-i-admired-these-years/</guid>
-    </item>
-    <item>
-      <title>jQuery发送含有数组参数的ajax请求以及后台Struts2的OGNL解析错误</title>
-      <link>http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/</link>
-      <description>slove jquery ajax request contains array</description>
-      <pubDate>2014-02-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/</guid>
-    </item>
-    <item>
-      <title>愿你们的国降临</title>
-      <link>http://kelvinh.github.io/blog/2013/12/07/may-you-rest-in-peace/</link>
-      <description>谨以此文，献给我那已远在天国的亲爱的外公，三姨</description>
-      <pubDate>2014-02-23</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/12/07/may-you-rest-in-peace/</guid>
-    </item>
-    <item>
-      <title>利用Fiddler和Wireshark解密SSL加密流量</title>
-      <link>http://kelvinh.github.io/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/</link>
-      <description>how to decrypt ssl traffic using fiddler and wireshark</description>
-      <pubDate>2014-01-15</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/</guid>
     </item>
   </channel>
 </rss>

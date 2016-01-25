@@ -36,9 +36,9 @@
 This file recorded all the notes during learning <i>Spring in Action 3rd Edition</i>, I did not complete the book, and may continue to finish reading it later.
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">Chapter 2 Wiring beans</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Chapter 2 Wiring beans</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 All namespaces could be contained in spring xml configuration file:
 </p>
@@ -47,73 +47,73 @@ All namespaces could be contained in spring xml configuration file:
 
 
 <colgroup>
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="left">namespace</th>
-<th scope="col" class="left">purpose</th>
+<th scope="col" class="org-left">namespace</th>
+<th scope="col" class="org-left">purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="left">aop</td>
-<td class="left">for AOP</td>
+<td class="org-left">aop</td>
+<td class="org-left">for AOP</td>
 </tr>
 
 <tr>
-<td class="left">beans</td>
-<td class="left">declaration of beans and how they should be wired</td>
+<td class="org-left">beans</td>
+<td class="org-left">declaration of beans and how they should be wired</td>
 </tr>
 
 <tr>
-<td class="left">context</td>
-<td class="left">&#x2026;</td>
+<td class="org-left">context</td>
+<td class="org-left">&#x2026;</td>
 </tr>
 
 <tr>
-<td class="left">jee</td>
-<td class="left">integration with Java EE APIs (JNDI, EJB, etc.)</td>
+<td class="org-left">jee</td>
+<td class="org-left">integration with Java EE APIs (JNDI, EJB, etc.)</td>
 </tr>
 
 <tr>
-<td class="left">jms</td>
-<td class="left">&#x2026;</td>
+<td class="org-left">jms</td>
+<td class="org-left">&#x2026;</td>
 </tr>
 
 <tr>
-<td class="left">lang</td>
-<td class="left">&#x2026;</td>
+<td class="org-left">lang</td>
+<td class="org-left">&#x2026;</td>
 </tr>
 
 <tr>
-<td class="left">mvc</td>
-<td class="left">spring MVC</td>
+<td class="org-left">mvc</td>
+<td class="org-left">spring MVC</td>
 </tr>
 
 <tr>
-<td class="left">oxm</td>
-<td class="left">spring object-to-xml mapping</td>
+<td class="org-left">oxm</td>
+<td class="org-left">spring object-to-xml mapping</td>
 </tr>
 
 <tr>
-<td class="left">tx</td>
-<td class="left">transaction configuration</td>
+<td class="org-left">tx</td>
+<td class="org-left">transaction configuration</td>
 </tr>
 
 <tr>
-<td class="left">util</td>
-<td class="left">&#x2026;</td>
+<td class="org-left">util</td>
+<td class="org-left">&#x2026;</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-<div id="outline-container-sec-1-1" class="outline-3">
-<h3 id="sec-1-1">Wiring beans through constructor</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2">Wiring beans through constructor</h3>
+<div class="outline-text-3" id="text-orgheadline2">
 <p>
 The bean below will be wired by its default constructor:
 </p>
@@ -139,9 +139,9 @@ The example above will use the constructor which has two args, 1st one is basic 
 </div>
 </div>
 
-<div id="outline-container-sec-1-2" class="outline-3">
-<h3 id="sec-1-2">Wiring beans through factory method</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3">Wiring beans through factory method</h3>
+<div class="outline-text-3" id="text-orgheadline3">
 <p>
 Some definition of classes may not have a visible constructor, an example is the singleton bean definition, as below:
 </p>
@@ -174,9 +174,9 @@ Under this condition, we can use following to construct the bean:
 </div>
 </div>
 
-<div id="outline-container-sec-1-3" class="outline-3">
-<h3 id="sec-1-3">Bean scoping</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4">Bean scoping</h3>
+<div class="outline-text-3" id="text-orgheadline4">
 <p>
 The definition of bean scope is as following:
 </p>
@@ -185,73 +185,73 @@ The definition of bean scope is as following:
 
 
 <colgroup>
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="left">Scope</th>
-<th scope="col" class="left">Description</th>
+<th scope="col" class="org-left">Scope</th>
+<th scope="col" class="org-left">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="left">singleton</td>
-<td class="left">only one bean <b>per spring container</b> (*default</td>
+<td class="org-left">singleton</td>
+<td class="org-left">only one bean <b>per spring container</b> (*default</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">scoping*)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">scoping*)</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">prototype</td>
-<td class="left">once per use</td>
+<td class="org-left">prototype</td>
+<td class="org-left">once per use</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">request</td>
-<td class="left">scopes a bean to an HTTP request, only valid</td>
+<td class="org-left">request</td>
+<td class="org-left">scopes a bean to an HTTP request, only valid</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">when used in a web-capable spring context</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">when used in a web-capable spring context</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">(such as with SpringMVC)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(such as with SpringMVC)</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">session</td>
-<td class="left">to an HTTP session, similar to <code>request</code></td>
+<td class="org-left">session</td>
+<td class="org-left">to an HTTP session, similar to <code>request</code></td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">global-session</td>
-<td class="left">to a global HTTP session, valid in a portlet</td>
+<td class="org-left">global-session</td>
+<td class="org-left">to a global HTTP session, valid in a portlet</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">context</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">context</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 
-<div id="outline-container-sec-1-4" class="outline-3">
-<h3 id="sec-1-4">Initializing and destroying</h3>
-<div class="outline-text-3" id="text-1-4">
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5">Initializing and destroying</h3>
+<div class="outline-text-3" id="text-orgheadline5">
 <p>
 Specify attributes <code>init-method</code> and <code>destroy-method</code> in a bean definition, the method specified by <code>init-method</code> will be invoked after the bean is constructed, and the method specified by <code>destroy-method</code> will be invoked before the bean is removed from the container.
 </p>
@@ -269,9 +269,9 @@ As the example shows, the required resources will be allocated after constructed
 </div>
 </div>
 
-<div id="outline-container-sec-1-5" class="outline-3">
-<h3 id="sec-1-5">Wiring beans through property setting methods</h3>
-<div class="outline-text-3" id="text-1-5">
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6">Wiring beans through property setting methods</h3>
+<div class="outline-text-3" id="text-orgheadline6">
 <p>
 <code>&lt;property&gt;</code> is like <code>&lt;constructor-arg&gt;</code>, example:
 </p>
@@ -306,9 +306,9 @@ In the example above, if there are several <code>property</code>, and all of the
 </div>
 </div>
 
-<div id="outline-container-sec-1-6" class="outline-3">
-<h3 id="sec-1-6">Wiring collections</h3>
-<div class="outline-text-3" id="text-1-6">
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7">Wiring collections</h3>
+<div class="outline-text-3" id="text-orgheadline7">
 <p>
 Elements for collection wiring:
 </p>
@@ -317,48 +317,48 @@ Elements for collection wiring:
 
 
 <colgroup>
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="left">Collection element</th>
-<th scope="col" class="left">Description</th>
+<th scope="col" class="org-left">Collection element</th>
+<th scope="col" class="org-left">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="left">&lt;list&gt;</td>
-<td class="left">Wiring a list of values, allowing duplicates</td>
+<td class="org-left">&lt;list&gt;</td>
+<td class="org-left">Wiring a list of values, allowing duplicates</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;set&gt;</td>
-<td class="left">Wiring a set of values, ensuring no duplicates</td>
+<td class="org-left">&lt;set&gt;</td>
+<td class="org-left">Wiring a set of values, ensuring no duplicates</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;map&gt;</td>
-<td class="left">Wiring name-value pairs, key and value could</td>
+<td class="org-left">&lt;map&gt;</td>
+<td class="org-left">Wiring name-value pairs, key and value could</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">be of any type</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">be of any type</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;props&gt;</td>
-<td class="left">Wiring name-value pairs, key and value should</td>
+<td class="org-left">&lt;props&gt;</td>
+<td class="org-left">Wiring name-value pairs, key and value should</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">be both <code>String</code></td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">be both <code>String</code></td>
 </tr>
 </tbody>
 </table>
@@ -417,9 +417,9 @@ An example of <code>&lt;props&gt;</code>:
 </div>
 </div>
 
-<div id="outline-container-sec-1-7" class="outline-3">
-<h3 id="sec-1-7">Wiring nothing(null)</h3>
-<div class="outline-text-3" id="text-1-7">
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8">Wiring nothing(null)</h3>
+<div class="outline-text-3" id="text-orgheadline8">
 <p>
 Example:
 </p>
@@ -432,9 +432,9 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-sec-1-8" class="outline-3">
-<h3 id="sec-1-8">Spring expression language (SpEL):</h3>
-<div class="outline-text-3" id="text-1-8">
+<div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9">Spring expression language (SpEL):</h3>
+<div class="outline-text-3" id="text-orgheadline9">
 <p>
 <b>This section is omitted.</b>
 </p>
@@ -442,39 +442,33 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">Chapter 3 Minimizing XML configuration in Spring</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline10" class="outline-2">
+<h2 id="orgheadline10">Chapter 3 Minimizing XML configuration in Spring</h2>
+<div class="outline-text-2" id="text-orgheadline10">
 <ul class="org-ul">
-<li>Autowiring helps reduce <code>&lt;property&gt;</code> and <code>&lt;constructor-arg&gt;</code>.
-</li>
-<li>Autodiscovery helps reduce <code>&lt;bean&gt;</code>.
-</li>
+<li>Autowiring helps reduce <code>&lt;property&gt;</code> and <code>&lt;constructor-arg&gt;</code>.</li>
+<li>Autodiscovery helps reduce <code>&lt;bean&gt;</code>.</li>
 </ul>
 </div>
 
-<div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1">Automatically wiring</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgheadline11" class="outline-3">
+<h3 id="orgheadline11">Automatically wiring</h3>
+<div class="outline-text-3" id="text-orgheadline11">
 <ul class="org-ul">
-<li><code>byName</code> : search beans, if a bean's id matches the property name, then it will be wired into this property
-</li>
+<li><code>byName</code> : search beans, if a bean's id matches the property name, then it will be wired into this property</li>
 
-<li><code>byType</code> : search beans, search criteria is class type
-</li>
+<li><code>byType</code> : search beans, search criteria is class type</li>
 
-<li><code>constructor</code> : search beans, the beans which can satisfy the bean's constructor wil be used to construct the bean
-</li>
+<li><code>constructor</code> : search beans, the beans which can satisfy the bean's constructor wil be used to construct the bean</li>
 
-<li><code>autodetect</code> : try autowiring by <code>constructor</code> first, if no suitable constructor or bean is found, then try autowiring by type.
-</li>
+<li><code>autodetect</code> : try autowiring by <code>constructor</code> first, if no suitable constructor or bean is found, then try autowiring by type.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2">Wiring with annotations</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgheadline12" class="outline-3">
+<h3 id="orgheadline12">Wiring with annotations</h3>
+<div class="outline-text-3" id="text-orgheadline12">
 <p>
 By default annotation wiring is turned off, use the following line to turn it on:
 </p>
@@ -488,24 +482,20 @@ Autowiring annotations:
 </p>
 
 <ol class="org-ol">
-<li><code>@Autowired</code> / <code>@Qualifier</code>
-</li>
+<li><code>@Autowired</code> / <code>@Qualifier</code></li>
 
-<li><code>@Inject</code> / <code>@Named</code> / <code>@Qualifier</code>
-</li>
+<li><code>@Inject</code> / <code>@Named</code> / <code>@Qualifier</code></li>
 
-<li><code>@Value</code> (for primitive types, useful while using with SpEL)
-</li>
+<li><code>@Value</code> (for primitive types, useful while using with SpEL)</li>
 
-<li><code>@Resource</code>
-</li>
+<li><code>@Resource</code></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-sec-2-3" class="outline-3">
-<h3 id="sec-2-3">Automatically discovering</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgheadline13" class="outline-3">
+<h3 id="orgheadline13">Automatically discovering</h3>
+<div class="outline-text-3" id="text-orgheadline13">
 <p>
 <code>&lt;context:annotation-config&gt;</code> is only used for automatically wiring, but <code>&lt;context:component-scan&gt;</code> will used for both autowiring, but also autodiscovery, as below:
 </p>
@@ -522,20 +512,15 @@ Annotations can be used:
 </p>
 
 <ol class="org-ol">
-<li><code>@Component</code> : general-purpose annotation, indicating that the class is a Spring component
-</li>
+<li><code>@Component</code> : general-purpose annotation, indicating that the class is a Spring component</li>
 
-<li><code>@Controller</code> : defines a Spring MVC controller
-</li>
+<li><code>@Controller</code> : defines a Spring MVC controller</li>
 
-<li><code>@Repository</code> : defines a data repository
-</li>
+<li><code>@Repository</code> : defines a data repository</li>
 
-<li><code>@Service</code> : defines a service
-</li>
+<li><code>@Service</code> : defines a service</li>
 
-<li>any customized annotation annotated with <code>@Component</code>
-</li>
+<li>any customized annotation annotated with <code>@Component</code></li>
 </ol>
 
 <p>
@@ -544,9 +529,9 @@ Annotations can be used:
 </div>
 </div>
 
-<div id="outline-container-sec-2-4" class="outline-3">
-<h3 id="sec-2-4">Java-based configuration</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-orgheadline14" class="outline-3">
+<h3 id="orgheadline14">Java-based configuration</h3>
+<div class="outline-text-3" id="text-orgheadline14">
 <p>
 <b>not used so often, omitted</b>
 </p>
@@ -554,15 +539,17 @@ Annotations can be used:
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">Chapter 4 Aspect-oriented Spring</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline15" class="outline-2">
+<h2 id="orgheadline15">Chapter 4 Aspect-oriented Spring</h2>
+<div class="outline-text-2" id="text-orgheadline15">
 <p>
 AOP terminology
 </p>
 
 <ul class="org-ul">
-<li><b>ADVICE</b>
+<li><p>
+<b>ADVICE</b>
+</p>
 
 <p>
 The job that aspects are meant to do, is called <i>advice</i>, advice defines both the <i>what</i> and the <i>when</i> of an aspect.
@@ -573,147 +560,146 @@ Spring aspects can work with five kinds of advice:
 </p>
 
 <ul class="org-ul">
-<li><i>Before</i>: the advice functionality takes place before the advised method is invoked
-</li>
-<li><i>After</i>: after advised method completes, no matter success or failure
-</li>
-<li><i>After-returning</i>: after succeeded completion
-</li>
-<li><i>After-throwing</i>: after exception-thrown completion
-</li>
-<li><i>Around</i>: both before and after
-</li>
-</ul>
-</li>
+<li><i>Before</i>: the advice functionality takes place before the advised method is invoked</li>
+<li><i>After</i>: after advised method completes, no matter success or failure</li>
+<li><i>After-returning</i>: after succeeded completion</li>
+<li><i>After-throwing</i>: after exception-thrown completion</li>
+<li><i>Around</i>: both before and after</li>
+</ul></li>
 
-<li><b>JOIN POINTS</b>
+<li><p>
+<b>JOIN POINTS</b>
+</p>
 
 <p>
 A <i>join point</i> is a point in the execution of the application where an aspect can be plugged in. This point could be a method being called, an exception being thrown, or a field being modified.
-</p>
-</li>
+</p></li>
 
-<li><b>POINTCUTS</b>
+<li><p>
+<b>POINTCUTS</b>
+</p>
 
 <p>
 Advice defines the <i>what</i> and the <i>when</i> of aspects, then <i>pointcuts</i> define the <i>where</i>. A pointcut defines a set of join points at which the advice should be woven.
-</p>
-</li>
+</p></li>
 
-<li><b>ASPECTS</b>
+<li><p>
+<b>ASPECTS</b>
+</p>
 
 <p>
 An <i>aspect</i> is the merger of advice and pointcuts, advice and pointcuts define an aspect: what is does, and, where and when it does it.
-</p>
-</li>
+</p></li>
 
-<li><b>INTRODUCTIONS</b>
+<li><p>
+<b>INTRODUCTIONS</b>
+</p>
 
 <p>
 An <i>introduction</i> allows to add new methods or attributes to existing classes.
-</p>
-</li>
+</p></li>
 
-<li><b>WEAVING</b>
+<li><p>
+<b>WEAVING</b>
+</p>
 
 <p>
 <i>Weaving</i> is the process of applying aspects to a target object to create a new proxied object. There are three points that weaving can take place: <i>Compile time</i>, <i>Classload time</i>, and <i>Runtime</i>.
-</p>
-</li>
+</p></li>
 </ul>
 </div>
 
-<div id="outline-container-sec-3-1" class="outline-3">
-<h3 id="sec-3-1">Declaring aspects in XML</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-orgheadline16" class="outline-3">
+<h3 id="orgheadline16">Declaring aspects in XML</h3>
+<div class="outline-text-3" id="text-orgheadline16">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="left">AOP configuration element</th>
-<th scope="col" class="left">Purpose</th>
+<th scope="col" class="org-left">AOP configuration element</th>
+<th scope="col" class="org-left">Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="left">&lt;aop:config&gt;</td>
-<td class="left">The top-level AOP element.</td>
+<td class="org-left">&lt;aop:config&gt;</td>
+<td class="org-left">The top-level AOP element.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:advisor&gt;</td>
-<td class="left">an AOP advisor</td>
+<td class="org-left">&lt;aop:advisor&gt;</td>
+<td class="org-left">an AOP advisor</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:after&gt;</td>
-<td class="left">an AOP after advice</td>
+<td class="org-left">&lt;aop:after&gt;</td>
+<td class="org-left">an AOP after advice</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:after-returning&gt;</td>
-<td class="left">an AOP after-returning advice</td>
+<td class="org-left">&lt;aop:after-returning&gt;</td>
+<td class="org-left">an AOP after-returning advice</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:after-throwing&gt;</td>
-<td class="left">an AOP after-throwing advice</td>
+<td class="org-left">&lt;aop:after-throwing&gt;</td>
+<td class="org-left">an AOP after-throwing advice</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:around&gt;</td>
-<td class="left">an AOP around advice</td>
+<td class="org-left">&lt;aop:around&gt;</td>
+<td class="org-left">an AOP around advice</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:aspect&gt;</td>
-<td class="left">an aspect</td>
+<td class="org-left">&lt;aop:aspect&gt;</td>
+<td class="org-left">an aspect</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:aspectj-autoproxy&gt;</td>
-<td class="left">enables annotation-driven aspects using</td>
+<td class="org-left">&lt;aop:aspectj-autoproxy&gt;</td>
+<td class="org-left">enables annotation-driven aspects using</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">@AspectJ</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">@AspectJ</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:before&gt;</td>
-<td class="left">an AOP before advice</td>
+<td class="org-left">&lt;aop:before&gt;</td>
+<td class="org-left">an AOP before advice</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:declare-parents&gt;</td>
-<td class="left">introduces additional interfaces to advised</td>
+<td class="org-left">&lt;aop:declare-parents&gt;</td>
+<td class="org-left">introduces additional interfaces to advised</td>
 </tr>
 
 <tr>
-<td class="left">&#xa0;</td>
-<td class="left">objects that are transparently implemented</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">objects that are transparently implemented</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">&lt;aop:pointcut&gt;</td>
-<td class="left">a pointcut</td>
+<td class="org-left">&lt;aop:pointcut&gt;</td>
+<td class="org-left">a pointcut</td>
 </tr>
 </tbody>
 </table>
@@ -752,9 +738,9 @@ and the invocation of <code>joinPoint.proceed()</code> will invoke the advised m
 </div>
 </div>
 
-<div id="outline-container-sec-3-2" class="outline-3">
-<h3 id="sec-3-2">Annotating aspects</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-orgheadline17" class="outline-3">
+<h3 id="orgheadline17">Annotating aspects</h3>
+<div class="outline-text-3" id="text-orgheadline17">
 <p>
 <b>omitted</b>
 </p>
@@ -762,20 +748,17 @@ and the invocation of <code>joinPoint.proceed()</code> will invoke the advised m
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">Chapter 5 Hitting the database</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline18" class="outline-2">
+<h2 id="orgheadline18">Chapter 5 Hitting the database</h2>
+<div class="outline-text-2" id="text-orgheadline18">
 <p>
 Several options to configure a data source:
 </p>
 
 <ul class="org-ul">
-<li>Data source defined by a JDBC driver
-</li>
-<li>Data source looked up by JNDI
-</li>
-<li>Data source pool connections(C3P0, DBCP, etc.)
-</li>
+<li>Data source defined by a JDBC driver</li>
+<li>Data source looked up by JNDI</li>
+<li>Data source pool connections(C3P0, DBCP, etc.)</li>
 </ul>
 
 <p>
@@ -784,9 +767,9 @@ PS: This chapter seems quite simple, no more to note.
 </div>
 </div>
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">Chapter 6 Managing transactions</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orgheadline19" class="outline-2">
+<h2 id="orgheadline19">Chapter 6 Managing transactions</h2>
+<div class="outline-text-2" id="text-orgheadline19">
 <p>
 A transaction manager should be chosen first: <code>DataSourceTransactionManager</code>, <code>HibernateTransactionManager</code>, etc.
 </p>

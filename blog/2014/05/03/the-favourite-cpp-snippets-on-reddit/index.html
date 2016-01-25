@@ -36,9 +36,9 @@
 好吧，我承认我标题党了。最受欢迎的C++代码段？这实际上是个伪命题，每个码农的口味都不一样，就像小红喜欢香蕉而小花喜欢茄子一样（咦，香蕉和茄子一个水果一个蔬菜，为什么我在比喻中把它们放到了一起呢？），如何定义 <b>最受欢迎</b> 的呢？实际上这是reddit上的一个讨论，楼主问大家自己最喜欢的代码段是什么，于是就有不少人贴了出来，然后像我这样的路人们可以点“赞”，评出最受欢迎的。原文地址在<a href="http://www.reddit.com/r/cpp/comments/21pxx2/what_is_your_favorite_little_c_snippet_of_code/">这里</a>。
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">字符串拼接</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">字符串拼接</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 现在的大多数高级语言，对于字符串操作都有强力的支持，C++也不错，不过在遇到UTF-8等编码问题时，就要抓瞎了。。好吧，扯远了，看看评出来的排名最高的代码段：
 </p>
@@ -86,9 +86,9 @@ throw Error(concat_string("Unable to open ", path, ": ", errno));
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">对象缓存</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">对象缓存</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 排名第二位的，是别人帮Herb Sutter贴出的他在Going Native 2013上的演讲的示例代码（你如果是C++码农而不知道Herb Sutter，那你可以转行了:-D）：
 </p>
@@ -126,17 +126,15 @@ throw Error(concat_string("Unable to open ", path, ": ", errno));
 </p>
 
 <ol class="org-ol">
-<li>定时地扫描 <code>cache</code> ，清除失效的widget。这种办法最容易想到，但每次需要遍历整个cache，而且间隔的扫描时间不好控制；
-</li>
-<li>给 <code>std::shared_ptr&lt;widget&gt;</code> 定义一个deleter。 <code>std::shared_ptr</code> 的默认deleter只是简单地delete掉它所保存的对象。通过自定义一个deleter，在 <code>std::shared_ptr</code> 析构，删除其保存对象的同时，将存在于 <code>cache</code> 中的无效智能指针给 <code>erase</code> 掉。这样描述可能太过抽象，但是讨论这个解决办法并不是本篇的主题，所以，有兴趣的朋友可以参看陈硕先生的<a href="http://www.cnblogs.com/Solstice/archive/2010/02/10/dtor_meets_threads.html">《当析构函数遇到多线程》</a>，这篇文章写得相当好而且通俗易懂，有关这个问题解决办法的讨论在“对象池”一节。
-</li>
+<li>定时地扫描 <code>cache</code> ，清除失效的widget。这种办法最容易想到，但每次需要遍历整个cache，而且间隔的扫描时间不好控制；</li>
+<li>给 <code>std::shared_ptr&lt;widget&gt;</code> 定义一个deleter。 <code>std::shared_ptr</code> 的默认deleter只是简单地delete掉它所保存的对象。通过自定义一个deleter，在 <code>std::shared_ptr</code> 析构，删除其保存对象的同时，将存在于 <code>cache</code> 中的无效智能指针给 <code>erase</code> 掉。这样描述可能太过抽象，但是讨论这个解决办法并不是本篇的主题，所以，有兴趣的朋友可以参看陈硕先生的<a href="http://www.cnblogs.com/Solstice/archive/2010/02/10/dtor_meets_threads.html">《当析构函数遇到多线程》</a>，这篇文章写得相当好而且通俗易懂，有关这个问题解决办法的讨论在“对象池”一节。</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">位计数</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">位计数</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 排在第三位的，是一段很tricky的代码：
 </p>
@@ -156,9 +154,9 @@ for (c = 0; v; c++)
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">lambda函数</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">lambda函数</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <p>
 排在第四位的代码只有一行：
 </p>

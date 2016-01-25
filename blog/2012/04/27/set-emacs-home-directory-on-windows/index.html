@@ -56,16 +56,11 @@ All the files mentioned above should go in your <code>HOME</code> directory. The
 </p>
 
 <ol class="org-ol">
-<li>If the environment variableHOME is set, use the directory it indicates.
-</li>
-<li>If the registry entry <code>HKCU\SOFTWARE\GNU\Emacs\HOME</code> is set, use the directory it indicates.
-</li>
-<li>If the registry entry <code>HKLM\SOFTWARE\GNU\Emacs\HOME</code> is set, use the directory it indicates. Not recommended, as it results in users sharing the same HOME directory.
-</li>
-<li>If <code>C:\.emacs</code> exists, then use <code>C:/</code>. This is for backward compatibility, as previous versions defaulted to <code>C:/</code> if <code>HOME</code> was not set.
-</li>
-<li>Use the user's AppData directory, usually a directory called <code>Application Data</code> under the user's profile directory, the location of which varies according to Windows version and whether the computer is part of a domain.
-</li>
+<li>If the environment variableHOME is set, use the directory it indicates.</li>
+<li>If the registry entry <code>HKCU\SOFTWARE\GNU\Emacs\HOME</code> is set, use the directory it indicates.</li>
+<li>If the registry entry <code>HKLM\SOFTWARE\GNU\Emacs\HOME</code> is set, use the directory it indicates. Not recommended, as it results in users sharing the same HOME directory.</li>
+<li>If <code>C:\.emacs</code> exists, then use <code>C:/</code>. This is for backward compatibility, as previous versions defaulted to <code>C:/</code> if <code>HOME</code> was not set.</li>
+<li>Use the user's AppData directory, usually a directory called <code>Application Data</code> under the user's profile directory, the location of which varies according to Windows version and whether the computer is part of a domain.</li>
 </ol>
 </blockquote>
 
@@ -78,16 +73,11 @@ All the files mentioned above should go in your <code>HOME</code> directory. The
 </p>
 
 <ol class="org-ol">
-<li>如果设置了HOME环境变量，那么就用它的值作为home目录~
-</li>
-<li>如果存在注册表键值HKCU\SOFTWARE\GNU\Emacs\HOME，就用它的值作为home目录~
-</li>
-<li>如果存在注册表键值HKLM\SOFTWARE\GNU\Emacs\HOME，就用它的值作为home目录~（和2的区别是，2只是针对当前用户的注册表路径，3则是针对所有用户）
-</li>
-<li>如果存在C:\.emacs，就用C:\作为home目录~
-</li>
-<li>如果以上都不存在的话，就使用&lt;system root&gt;\Users\&lt;user name&gt;\AppData\Roaming作为home目录~（对于XP和较早windows用户，需要到Documents and Settings目录下去找）
-</li>
+<li>如果设置了HOME环境变量，那么就用它的值作为home目录~</li>
+<li>如果存在注册表键值HKCU\SOFTWARE\GNU\Emacs\HOME，就用它的值作为home目录~</li>
+<li>如果存在注册表键值HKLM\SOFTWARE\GNU\Emacs\HOME，就用它的值作为home目录~（和2的区别是，2只是针对当前用户的注册表路径，3则是针对所有用户）</li>
+<li>如果存在C:\.emacs，就用C:\作为home目录~</li>
+<li>如果以上都不存在的话，就使用&lt;system root&gt;\Users\&lt;user name&gt;\AppData\Roaming作为home目录~（对于XP和较早windows用户，需要到Documents and Settings目录下去找）</li>
 </ol>
 
 <p>
@@ -99,12 +89,9 @@ All the files mentioned above should go in your <code>HOME</code> directory. The
 </p>
 
 <ol class="org-ol">
-<li>VIM，VIM会把_viminfo文件放在这个目录；
-</li>
-<li>VIM的neocomplcache插件，它会放置一个.neocon目录进去；
-</li>
-<li>firefox的pentadactyl插件，它会放一个pentadactyl目录进去。
-</li>
+<li>VIM，VIM会把_viminfo文件放在这个目录；</li>
+<li>VIM的neocomplcache插件，它会放置一个.neocon目录进去；</li>
+<li>firefox的pentadactyl插件，它会放一个pentadactyl目录进去。</li>
 </ol>
 
 <p>
@@ -112,10 +99,8 @@ All the files mentioned above should go in your <code>HOME</code> directory. The
 </p>
 
 <ol class="org-ol">
-<li><b>如果你希望有一个公共的目录存放这些配置，就像Linux下的~目录一样，那么设置HOME这个环境变量最适合不过；</b>
-</li>
-<li><b>如果你希望这个目录只存放Emacs的配置，那么，还是不要用HOME环境变量了，去注册表里面添加一个HOME键值吧。（至少我个人比较偏向于这个方式）</b>
-</li>
+<li><b>如果你希望有一个公共的目录存放这些配置，就像Linux下的~目录一样，那么设置HOME这个环境变量最适合不过；</b></li>
+<li><b>如果你希望这个目录只存放Emacs的配置，那么，还是不要用HOME环境变量了，去注册表里面添加一个HOME键值吧。（至少我个人比较偏向于这个方式）</b></li>
 </ol>
 
 </div>

@@ -40,11 +40,11 @@
 于是，把这事托付于万能的Google，还真有人为这个折腾过，于是，我就把前人折腾的过程来做个总结。
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">测试图片类型是否被支持</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">测试图片类型是否被支持</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
-Emacs有内建函数用于测试特定类型的图片是否被支持，于是，测试几种常见类型的代码<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>如下：
+Emacs有内建函数用于测试特定类型的图片是否被支持，于是，测试几种常见类型的代码<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>如下：
 </p>
 
 <pre class="example">
@@ -62,11 +62,11 @@ Emacs有内建函数用于测试特定类型的图片是否被支持，于是，
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">添加支持</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">添加支持</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
-下面是来自Emacs的官方文档<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>：
+下面是来自Emacs的官方文档<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>：
 </p>
 
 <blockquote>
@@ -144,9 +144,9 @@ because they do not depend on external libraries and are always available.
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">小插曲</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">小插曲</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 到此似乎结束了，于是，重启Emacs打开一个图片试试，什么？？还是二进制内容？？于是把第一节中的那几句测试代码再跑一遍，发现其它都返回 <code>t</code> 只有png那一行返回 <code>nil</code> ，而我打开的图片刚好是png的。。于是再找张jpg打开，没有问题。
 </p>
@@ -164,13 +164,13 @@ because they do not depend on external libraries and are always available.
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 这段代码来自于这里：<a href="http://blog.csdn.net/atskyline/article/details/7569621">http://blog.csdn.net/atskyline/article/details/7569621</a> ，但是可能是由于时间过久的缘故，这篇文章后面的内容有误。
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 看<a href="http://www.gnu.org/software/emacs/windows/Installing-Emacs.html">这里</a>的第3.3节
-</p></div>
+</p></div></div>
 
 
 </div>

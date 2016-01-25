@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>LeetCode题解 - Kelvin的胡言乱语</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Kelvin Hu" />
+    <meta name="description" content="我个人的LeetCode OJ题解" />
+    <meta name="keywords" content="algorithm, C++, leetcode" />
+    <link rel="stylesheet" href="/media/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/media/css/prettify.css" type="text/css">
+  </head>
+  <body class="container">
+    <div>
+      <header class="masthead">
+        <h1 class="masthead-title"><a href="/">Kelvin的胡言乱语</a></h1>
+        <p>==============&gt; 重剑无锋，大巧不工。</p>
+        <ul>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/wiki/">Wiki</a></li>
+          <li><a href="/tags/">Tags</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="https://github.com/kelvinh">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+        <form method="get" id="searchform" action="http://www.google.com/search">
+          <input type="text" class="field" name="q" id="s" placeholder="Search">
+          <input type="hidden" name="as_sitesearch" value="kelvinh.github.io">
+        </form>
+      </header>
+    </div>
+
+<div>
+<div class="post">
+<h1>LeetCode题解</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgheadline1">Two Sum</a></li>
+</ul>
+</div>
+</div>
+<p>
+之前无数的事实证明，我是一个挖坑的好手。。。这又是一个无比大的坑，不求其它，只求能填上。。。挖坑不填是SB。。。
+</p>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Two Sum</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<blockquote>
+<p>
+where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+</p>
+
+<p>
+You may assume that each input would have exactly one solution.
+</p>
+
+<p>
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+</p>
+</blockquote>
+
+<p>
+最简单的想法，自然是两层for循环数组，一个个去加了试：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+        vector&lt;int&gt; vec;
+        for (int i = 0; i &lt; nums.size(); ++i) {
+            for (int j = i + 1; j &lt; nums.size(); ++j) {
+                if (nums[i] + nums[j] == target) {
+                    vec.push_back(i + 1);
+                    vec.push_back(j + 1);
+                    return vec;
+                }
+            }
+        }
+
+        return vec;
+    }
+};
+</pre>
+</div>
+
+<p>
+但结果可想而知，时间超时了。。。这个复杂度是平方级别，看来是不满足要求。经过思考，觉得先给数组排个序会比较好，再查找的话，可以用二分搜索：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    struct entity {
+        int num;
+        int index;
+
+        entity(int n, int i) : num(n), index(i) {}
+
+        bool operator&lt;(const entity&amp; that) const {
+            return this-&gt;num &lt; that.num;
+        }
+    };
+
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
+        vector&lt;int&gt; ret;
+
+        vector&lt;entity&gt; sorted_num;
+        for (int i = 0; i &lt; nums.size(); ++i)
+            sorted_num.push_back(entity(nums[i], i + 1));
+        sort(sorted_num.begin(), sorted_num.end());
+
+        vector&lt;entity&gt;::iterator it, end;
+        for (it = sorted_num.begin(), end = sorted_num.end(); it != end;) {
+            int op = target - it-&gt;num;
+            vector&lt;entity&gt;::iterator op_it = lower_bound(++it, end, entity(op, 0));
+            if (op_it-&gt;num == op) {
+                --it;
+
+                int idx1 = it-&gt;index;
+                int idx2 = op_it-&gt;index;
+                if (idx1 &gt; idx2)
+                    swap(idx1, idx2);
+
+                ret.push_back(idx1);
+                ret.push_back(idx2);
+                return ret;
+            }
+        }
+
+        return ret;
+    }
+};
+</pre>
+</div>
+
+<p>
+经过改造之后，时间复杂度降到了O(nlogn)级别，所以通过了，这个理论上应该不会有更低的复杂度了，毕竟要遍历一遍。。。
+</p>
+</div>
+</div>
+
+</div>
+</div>
+    <div>
+      <div class="post-meta">
+        <span title="post date" class="post-info">2016-01-20</span>
+        <span title="last modification date" class="post-info">2016-01-22</span>
+        <span title="tags" class="post-info"><a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/leetcode/">LeetCode</a></span>
+        <span title="author" class="post-info">Kelvin Hu</span>
+      </div>
+      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="/media/js/main.js"></script>
+      <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41088132-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+      </script>
+      <div class="footer">
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>
+          Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
+          &nbsp;&nbsp;-&nbsp;&nbsp;
+          Powered by <a href="https://github.com/kelvinh/org-page" target="_blank">org-page</a>
+          <script type="text/javascript">document.getElementById("footerYear").innerHTML = (new Date()).getFullYear();</script>
+        </p>
+      </div>
+    </div>
+
+  </body>
+</html>

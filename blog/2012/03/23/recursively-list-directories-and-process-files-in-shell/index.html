@@ -95,9 +95,9 @@ GR的M$，非要搞另类。
 
 <hr  />
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">更新：</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">更新：</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 经过评论中 @Alf 童鞋的提醒，上面的实现在文件或者文件夹有空格时会产生bug，而且上面的功能可以直接通过 <code>find</code> 命令加上 <code>-exec</code> 选项或者配合 <code>xargs</code> 命令来实现，简单易用还不会出错，一个可行的方案如下（可以很好地处理文件空格）：
 </p>
@@ -111,12 +111,9 @@ find ~/.vim -type f -print0 | xargs -0 dos2unix
 </p>
 
 <ol class="org-ol">
-<li><a href="http://serverfault.com/questions/205499/how-to-do-dos2unix-to-tpl-recursively-in-linux">http://serverfault.com/questions/205499/how-to-do-dos2unix-to-tpl-recursively-in-linux</a>
-</li>
-<li><a href="http://stackoverflow.com/questions/11929461/dos2unix-command-on-entire-directory">http://stackoverflow.com/questions/11929461/dos2unix-command-on-entire-directory</a>
-</li>
-<li><a href="http://stackoverflow.com/questions/5607542/why-does-find-exec-mv-target-not-work">http://stackoverflow.com/questions/5607542/why-does-find-exec-mv-target-not-work</a>
-</li>
+<li><a href="http://serverfault.com/questions/205499/how-to-do-dos2unix-to-tpl-recursively-in-linux">http://serverfault.com/questions/205499/how-to-do-dos2unix-to-tpl-recursively-in-linux</a></li>
+<li><a href="http://stackoverflow.com/questions/11929461/dos2unix-command-on-entire-directory">http://stackoverflow.com/questions/11929461/dos2unix-command-on-entire-directory</a></li>
+<li><a href="http://stackoverflow.com/questions/5607542/why-does-find-exec-mv-target-not-work">http://stackoverflow.com/questions/5607542/why-does-find-exec-mv-target-not-work</a></li>
 </ol>
 
 <p>

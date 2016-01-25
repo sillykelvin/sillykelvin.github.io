@@ -34,9 +34,9 @@
 <h1>Windows平台X64函数调用约定与汇编代码分析</h1>
 
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">起因</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">起因</h2>
+<div class="outline-text-2" id="text-orgheadline1">
 <p>
 整件事源自于公司的一个公共模块，有很多项目都依赖于这个公共模块，我们项目是其中之一。假定依赖的函数原型为：
 </p>
@@ -90,9 +90,9 @@ int ret = pf(1, 2, 3, 4, 5);
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">分析</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">分析</h2>
+<div class="outline-text-2" id="text-orgheadline2">
 <p>
 于是，我写了如下的一个例子，来分析一番：
 </p>
@@ -149,7 +149,7 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </pre>
 
 <p>
-如果对于x64的CPU结构不太熟悉的话，上面的汇编着实不太好理解，下面给出一张x64结构的CPU寄存器构造图<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>：
+如果对于x64的CPU结构不太熟悉的话，上面的汇编着实不太好理解，下面给出一张x64结构的CPU寄存器构造图<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>：
 </p>
 
 <p>
@@ -161,39 +161,25 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </p>
 
 <p>
-知道了寄存器的结构，还是不足以理解上面的汇编函数调用，此外，还需要知道Intel X64汇编函数调用的一些约定<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>：
+知道了寄存器的结构，还是不足以理解上面的汇编函数调用，此外，还需要知道Intel X64汇编函数调用的一些约定<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>：
 </p>
 
 <blockquote>
 <ul class="org-ul">
-<li>RCX, RDX, R8, R9 are used for integer and pointer arguments in that order left to right.
-</li>
-<li>XMM0, 1, 2, and 3 are used for floating point arguments.
-</li>
-<li>Additional arguments are pushed on the stack left to right.
-</li>
-<li>Parameters less than 64 bits long are not zero extended; the high bits contain garbage.
-</li>
-<li>It is the caller's responsibility to allocate 32 bytes of "shadow space" (for storing RCX, RDX, R8, and R9 if needed) before calling the function.
-</li>
-<li>It is the caller's responsibility to clean the stack after the call.
-</li>
-<li>Integer return values (similar to x86) are returned in RAX if 64 bits or less.
-</li>
-<li>Floating point return values are returned in XMM0.
-</li>
-<li>Larger return values (structs) have space allocated on the stack by the caller, and RCX then contains a pointer to the return space when the callee is called. Register usage for integer parameters is then pushed one to the right. RAX returns this address to the caller.
-</li>
-<li>The stack is 16-byte aligned. The "call" instruction pushes an 8-byte return value, so the all non-leaf functions must adjust the stack by a value of the form 16n+8 when allocating stack space.
-</li>
-<li>Registers RAX, RCX, RDX, R8, R9, R10, and R11 are considered volatile and must be considered destroyed on function calls.
-</li>
-<li>RBX, RBP, RDI, RSI, R12, R14, R14, and R15 must be saved in any function using them.
-</li>
-<li>Note there is no calling convention for the floating point (and thus MMX) registers.
-</li>
-<li>Further details (varargs, exception handling, stack unwinding) are at Microsoft's site.
-</li>
+<li>RCX, RDX, R8, R9 are used for integer and pointer arguments in that order left to right.</li>
+<li>XMM0, 1, 2, and 3 are used for floating point arguments.</li>
+<li>Additional arguments are pushed on the stack left to right.</li>
+<li>Parameters less than 64 bits long are not zero extended; the high bits contain garbage.</li>
+<li>It is the caller's responsibility to allocate 32 bytes of "shadow space" (for storing RCX, RDX, R8, and R9 if needed) before calling the function.</li>
+<li>It is the caller's responsibility to clean the stack after the call.</li>
+<li>Integer return values (similar to x86) are returned in RAX if 64 bits or less.</li>
+<li>Floating point return values are returned in XMM0.</li>
+<li>Larger return values (structs) have space allocated on the stack by the caller, and RCX then contains a pointer to the return space when the callee is called. Register usage for integer parameters is then pushed one to the right. RAX returns this address to the caller.</li>
+<li>The stack is 16-byte aligned. The "call" instruction pushes an 8-byte return value, so the all non-leaf functions must adjust the stack by a value of the form 16n+8 when allocating stack space.</li>
+<li>Registers RAX, RCX, RDX, R8, R9, R10, and R11 are considered volatile and must be considered destroyed on function calls.</li>
+<li>RBX, RBP, RDI, RSI, R12, R14, R14, and R15 must be saved in any function using them.</li>
+<li>Note there is no calling convention for the floating point (and thus MMX) registers.</li>
+<li>Further details (varargs, exception handling, stack unwinding) are at Microsoft's site.</li>
 </ul>
 </blockquote>
 
@@ -206,20 +192,13 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </p>
 
 <ol class="org-ol">
-<li>主调函数（main）将栈指针RSP下移0x48，即分配栈空间；
-</li>
-<li>将最后一个调用参数5入栈，存放于[RSP + 0x20]处，这样一来，栈上面空出的 <i>0x48 - 0x20 = 0x28 = 40 = 32 + 8</i> 的空间就用于存放本地变量，其中8字节应该是用来对齐栈的；
-</li>
-<li>将前四个参数分别放入约定中的那四个寄存器；
-</li>
-<li>调用 <code>add</code> 函数（在这个指令中，栈指针RSP又下移了8个字节，这8个字节用来存放RIP指针的值）；
-</li>
-<li>进入 <code>add</code> 函数，把在四个寄存器中的参数又放回栈上（栈上的用于存放这四个寄存器空间就是“shadow space”，如果需要，由被调用者负责将这四个寄存器的值放回栈<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>），然后执行加操作，最后的结果存放于RAX中；
-</li>
-<li>返回 <code>main</code> 函数后，取出RAX的值，再放回本地变量的栈空间中；
-</li>
-<li>...
-</li>
+<li>主调函数（main）将栈指针RSP下移0x48，即分配栈空间；</li>
+<li>将最后一个调用参数5入栈，存放于[RSP + 0x20]处，这样一来，栈上面空出的 <i>0x48 - 0x20 = 0x28 = 40 = 32 + 8</i> 的空间就用于存放本地变量，其中8字节应该是用来对齐栈的；</li>
+<li>将前四个参数分别放入约定中的那四个寄存器；</li>
+<li>调用 <code>add</code> 函数（在这个指令中，栈指针RSP又下移了8个字节，这8个字节用来存放RIP指针的值）；</li>
+<li>进入 <code>add</code> 函数，把在四个寄存器中的参数又放回栈上（栈上的用于存放这四个寄存器空间就是“shadow space”，如果需要，由被调用者负责将这四个寄存器的值放回栈<sup><a id="fnr.3" class="footref" href="#fn.3">3</a></sup>），然后执行加操作，最后的结果存放于RAX中；</li>
+<li>返回 <code>main</code> 函数后，取出RAX的值，再放回本地变量的栈空间中；</li>
+<li>...</li>
 </ol>
 
 <p>
@@ -231,7 +210,7 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </p>
 
 <p>
-另外，再附上一张MSDN上画的栈分配的示例图<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>（和上面我画的差不多，只不过我画的是针对于具体的例子）：
+另外，再附上一张MSDN上画的栈分配的示例图<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>（和上面我画的差不多，只不过我画的是针对于具体的例子）：
 </p>
 
 <p>
@@ -240,68 +219,68 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3">结论</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">结论</h2>
+<div class="outline-text-2" id="text-orgheadline3">
 <p>
 按照分析中所指出的，在X64平台的函数调用中，函数前四个参数之外的参数会被入栈，如上面的栈分配图所示，实际上在主调函数中，分配的栈参数空间上面还有本地变量空间，所以，如果偶然多了一个参数的话，其实没有关系，不会导致crash，只不过这个参数的值会是无效的。既然参数值无效，程序运行应该会出bug才对，后来问了这个公共模块的负责人，才知道这个新加的参数没有使用。。擦，没有使用，你乱改接口，新加参数干嘛。。
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4">附：X86的几种调用约定</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">附：X86的几种调用约定</h2>
+<div class="outline-text-2" id="text-orgheadline4">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
 <colgroup>
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="left">Name</th>
-<th scope="col" class="left">Arguments</th>
-<th scope="col" class="left">Stack unwinding</th>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Arguments</th>
+<th scope="col" class="org-left">Stack unwinding</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="left">Win32 (stdcall)</td>
-<td class="left">push stack, right to left</td>
-<td class="left">callee</td>
+<td class="org-left">Win32 (stdcall)</td>
+<td class="org-left">push stack, right to left</td>
+<td class="org-left">callee</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">Native C++ (thiscall)</td>
-<td class="left">push stack, right to left, "this" pointer in ECX</td>
-<td class="left">callee</td>
+<td class="org-left">Native C++ (thiscall)</td>
+<td class="org-left">push stack, right to left, "this" pointer in ECX</td>
+<td class="org-left">callee</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">COM (stdcall for C++)</td>
-<td class="left">push stack, right to left, then "this"</td>
-<td class="left">callee</td>
+<td class="org-left">COM (stdcall for C++)</td>
+<td class="org-left">push stack, right to left, then "this"</td>
+<td class="org-left">callee</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">fastcall</td>
-<td class="left">arg1 in ECX, arg2 in EDX, remaining pushed to stack, right to left</td>
-<td class="left">callee</td>
+<td class="org-left">fastcall</td>
+<td class="org-left">arg1 in ECX, arg2 in EDX, remaining pushed to stack, right to left</td>
+<td class="org-left">callee</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
-<td class="left">cdecl</td>
-<td class="left">push stack, right to left</td>
-<td class="left">caller</td>
+<td class="org-left">cdecl</td>
+<td class="org-left">push stack, right to left</td>
+<td class="org-left">caller</td>
 </tr>
 </tbody>
 </table>
@@ -316,24 +295,19 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </div>
 </div>
 
-<div id="outline-container-sec-5" class="outline-2">
-<h2 id="sec-5">参考文档</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">参考文档</h2>
+<div class="outline-text-2" id="text-orgheadline5">
 <ol class="org-ol">
-<li><a href="http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf">http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf</a>
-</li>
+<li><a href="http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf">http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf</a></li>
 
-<li><a href="http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx">http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx</a>
-</li>
+<li><a href="http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx">http://blogs.msdn.com/b/oldnewthing/archive/2004/01/14/58579.aspx</a></li>
 
-<li><a href="http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx">http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx</a>
-</li>
+<li><a href="http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx">http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx</a></li>
 
-<li><a href="http://msdn.microsoft.com/en-us/library/ew5tede7.aspx">http://msdn.microsoft.com/en-us/library/ew5tede7.aspx</a>
-</li>
+<li><a href="http://msdn.microsoft.com/en-us/library/ew5tede7.aspx">http://msdn.microsoft.com/en-us/library/ew5tede7.aspx</a></li>
 
-<li>公司内部一个介绍Windows X64 Debug的PPT，这个就不放出来了 :-D
-</li>
+<li>公司内部一个介绍Windows X64 Debug的PPT，这个就不放出来了 :-D</li>
 </ol>
 </div>
 </div>
@@ -341,21 +315,21 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
 这张图来自Intel的X64汇编介绍文档：<a href="http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf">http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf</a>
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
 同1，这段约定也来自上面的文档
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.3" class="footnum" href="#fnr.3">3</a></sup> <div class="footpara"><p class="footpara">
 这句说明（The callee has the responsibility of dumping the register parameters into their shadow space if needed.）来自MSDN：<a href="http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx">http://msdn.microsoft.com/en-us/library/zthk2dkh.aspx</a>
-</p></div>
+</p></div></div>
 
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+<div class="footdef"><sup><a id="fn.4" class="footnum" href="#fnr.4">4</a></sup> <div class="footpara"><p class="footpara">
 来源：<a href="http://msdn.microsoft.com/en-us/library/ew5tede7.aspx">http://msdn.microsoft.com/en-us/library/ew5tede7.aspx</a>
-</p></div>
+</p></div></div>
 
 
 </div>

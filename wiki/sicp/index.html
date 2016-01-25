@@ -36,34 +36,32 @@
 这里记录了我在学习SICP的过程中的一点笔记，以及作业解答，现在还正在学习中。。（因为作业太多了，读起来真慢。。）
 </p>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">构造过程抽象</h2>
-<div class="outline-text-2" id="text-1">
-</div><div id="outline-container-sec-1-1" class="outline-3">
-<h3 id="sec-1-1">求值模型</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-orgheadline47" class="outline-2">
+<h2 id="orgheadline47">构造过程抽象</h2>
+<div class="outline-text-2" id="text-orgheadline47">
+</div><div id="outline-container-orgheadline1" class="outline-3">
+<h3 id="orgheadline1">求值模型</h3>
+<div class="outline-text-3" id="text-orgheadline1">
 <ul class="org-ul">
-<li>正则序求值：先将复合式代入实际参数，再逐渐展开，直到得到一个只包含基本运算符的表达式，再对其进行求值。（完全展开而后归约）
-</li>
+<li>正则序求值：先将复合式代入实际参数，再逐渐展开，直到得到一个只包含基本运算符的表达式，再对其进行求值。（完全展开而后归约）</li>
 
-<li>应用序求值：对于复合型表达式，将能进行计算的一些子表达式求值，再对其进行展开，再求值能够进行计算的子表达式，直到求出最终结果。（展开一层归约一层）
-</li>
+<li>应用序求值：对于复合型表达式，将能进行计算的一些子表达式求值，再对其进行展开，再求值能够进行计算的子表达式，直到求出最终结果。（展开一层归约一层）</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-sec-1-2" class="outline-3">
-<h3 id="sec-1-2">练习1.2</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2">练习1.2</h3>
+<div class="outline-text-3" id="text-orgheadline2">
 <pre class="example">
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5))))) (* 3 (- 6 2) (- 2 7)))
 </pre>
 </div>
 </div>
 
-<div id="outline-container-sec-1-3" class="outline-3">
-<h3 id="sec-1-3">练习1.3</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3">练习1.3</h3>
+<div class="outline-text-3" id="text-orgheadline3">
 <div class="org-src-container">
 
 <pre class="src src-scheme">;; the answer below is wrong!!!
@@ -75,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-4" class="outline-3">
-<h3 id="sec-1-4">练习1.5</h3>
-<div class="outline-text-3" id="text-1-4">
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4">练习1.5</h3>
+<div class="outline-text-3" id="text-orgheadline4">
 <p>
 初看到 <code>(define (p) (p))</code> 这样的定义吓了我一跳，细看其实是一个递归函数的定义，但由没有退出条件，所以一旦有 <code>(p)</code> 这样的调用，程序将陷入死循环。
 </p>
@@ -98,9 +96,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-5" class="outline-3">
-<h3 id="sec-1-5">练习1.6</h3>
-<div class="outline-text-3" id="text-1-5">
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5">练习1.6</h3>
+<div class="outline-text-3" id="text-orgheadline5">
 <p>
 这个题目看了半天，大概猜到是跟求值模型相关的，但在解释器racket上试，和使用原始版本的if结果一模一样。。
 </p>
@@ -111,9 +109,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-6" class="outline-3">
-<h3 id="sec-1-6">练习1.7</h3>
-<div class="outline-text-3" id="text-1-6">
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6">练习1.7</h3>
+<div class="outline-text-3" id="text-orgheadline6">
 <p>
 另一个 <code>good-enough?</code> 函数：
 </p>
@@ -131,9 +129,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-7" class="outline-3">
-<h3 id="sec-1-7">练习1.8</h3>
-<div class="outline-text-3" id="text-1-7">
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7">练习1.8</h3>
+<div class="outline-text-3" id="text-orgheadline7">
 <p>
 牛顿法解立方根：
 </p>
@@ -155,9 +153,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-8" class="outline-3">
-<h3 id="sec-1-8">线性递归和迭代</h3>
-<div class="outline-text-3" id="text-1-8">
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="orgheadline8">线性递归和迭代</h3>
+<div class="outline-text-3" id="text-orgheadline8">
 <p>
 作为一个递归过程，但其计算过程可能会是递归的，也可能是迭代的。以阶乘计算为例：
 </p>
@@ -194,9 +192,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-9" class="outline-3">
-<h3 id="sec-1-9">练习1.9</h3>
-<div class="outline-text-3" id="text-1-9">
+<div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9">练习1.9</h3>
+<div class="outline-text-3" id="text-orgheadline9">
 <p>
 这是一个递归计算过程：
 </p>
@@ -227,9 +225,9 @@
 </div>
 </div>
 
-<div id="outline-container-sec-1-10" class="outline-3">
-<h3 id="sec-1-10">练习1.10</h3>
-<div class="outline-text-3" id="text-1-10">
+<div id="outline-container-orgheadline10" class="outline-3">
+<h3 id="orgheadline10">练习1.10</h3>
+<div class="outline-text-3" id="text-orgheadline10">
 <pre class="example">
 (A 1 10) =&gt; 1024
 (A 2 4)  =&gt; 65536
@@ -244,9 +242,9 @@ h(n) = 2^h(n-1)
 </div>
 </div>
 
-<div id="outline-container-sec-1-11" class="outline-3">
-<h3 id="sec-1-11">练习1.11</h3>
-<div class="outline-text-3" id="text-1-11">
+<div id="outline-container-orgheadline11" class="outline-3">
+<h3 id="orgheadline11">练习1.11</h3>
+<div class="outline-text-3" id="text-orgheadline11">
 <p>
 n &lt; 3, f(n) = n; n &gt;= 3, f(n) = f(n-1) + 2f(n-2) + 3f(n-3)
 </p>
@@ -290,9 +288,9 @@ c &lt;= b
 </div>
 </div>
 
-<div id="outline-container-sec-1-12" class="outline-3">
-<h3 id="sec-1-12">练习1.12</h3>
-<div class="outline-text-3" id="text-1-12">
+<div id="outline-container-orgheadline12" class="outline-3">
+<h3 id="orgheadline12">练习1.12</h3>
+<div class="outline-text-3" id="text-orgheadline12">
 <p>
 杨辉三角的规律：f(n, 1) = f(n, n) = 1, f(n, m) = f(n-1, m-1) + f(n-1, m), 1 &lt; m &lt; n
 </p>
@@ -309,9 +307,9 @@ c &lt;= b
 </div>
 </div>
 
-<div id="outline-container-sec-1-13" class="outline-3">
-<h3 id="sec-1-13">练习1.13</h3>
-<div class="outline-text-3" id="text-1-13">
+<div id="outline-container-orgheadline13" class="outline-3">
+<h3 id="orgheadline13">练习1.13</h3>
+<div class="outline-text-3" id="text-orgheadline13">
 <p>
 <del>暂时跳过，现在手头只有一台电脑，草稿纸和笔都没有，无法证明。。</del>
 </p>
@@ -321,40 +319,37 @@ c &lt;= b
 </p>
 
 <ol class="org-ol">
-<li>按提示，证明 <code>Fib(n) = (φ^n - ψ^n) / √5</code> ，其中 <code>φ = (1 + √5) / 2</code> ， <code>ψ = (1 - √5) / 2</code> ，证明过程比较简单，根据数学归纳法和Fib(n)的定义即可。
-</li>
+<li>按提示，证明 <code>Fib(n) = (φ^n - ψ^n) / √5</code> ，其中 <code>φ = (1 + √5) / 2</code> ， <code>ψ = (1 - √5) / 2</code> ，证明过程比较简单，根据数学归纳法和Fib(n)的定义即可。</li>
 
-<li>之后，要证明Fib(n)是最接近φ^n/√5的整数，只需要证明 <code>|Fib(n) - φ^n/√5| ≤ 0.5</code> 即可。经过化简，需要证明的不等式变成 <code>|ψ^n / √5| ≤ 0.5</code> 。
-</li>
+<li>之后，要证明Fib(n)是最接近φ^n/√5的整数，只需要证明 <code>|Fib(n) - φ^n/√5| ≤ 0.5</code> 即可。经过化简，需要证明的不等式变成 <code>|ψ^n / √5| ≤ 0.5</code> 。</li>
 
-<li>经过观察， <code>|ψ^n / √5|</code> 实际上是趋于0的极限，所以只需要证明两点即可：
+<li><p>
+经过观察， <code>|ψ^n / √5|</code> 实际上是趋于0的极限，所以只需要证明两点即可：
+</p>
 
 <ol class="org-ol">
-<li><code>|ψ^n / √5| ≤ |ψ^(n-1) / √5|</code>
-</li>
-<li><code>|ψ^0 / √5| ≤ 0.5</code>
-</li>
+<li><code>|ψ^n / √5| ≤ |ψ^(n-1) / √5|</code></li>
+<li><code>|ψ^0 / √5| ≤ 0.5</code></li>
 </ol>
 <p>
 这两点都是比较好证明的。于是再反推回到第二步，就证明了Fib(n)是离φ^n/√5最近的整数。
-</p>
-</li>
+</p></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-sec-1-14" class="outline-3">
-<h3 id="sec-1-14">练习1.14</h3>
-<div class="outline-text-3" id="text-1-14">
+<div id="outline-container-orgheadline14" class="outline-3">
+<h3 id="orgheadline14">练习1.14</h3>
+<div class="outline-text-3" id="text-orgheadline14">
 <p>
 <b>再略过。。手头没有笔和纸，泪流满面。。</b>
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-1-15" class="outline-3">
-<h3 id="sec-1-15">练习1.15</h3>
-<div class="outline-text-3" id="text-1-15">
+<div id="outline-container-orgheadline15" class="outline-3">
+<h3 id="orgheadline15">练习1.15</h3>
+<div class="outline-text-3" id="text-orgheadline15">
 <p>
 a) 这个问题一时半会儿不知道如何作答，就直接暴力地在函数 <code>p(x)</code> 的定义中加了一个打印函数来打印x以确定被调用了几次，结果显示， <code>(sine 12.15)</code> 调用了5次 <code>p(x)</code> 函数。
 </p>
@@ -365,9 +360,9 @@ b) 对 <code>(sine a)</code> 进行展开，第一次后a变成a/3，第二次�
 </div>
 </div>
 
-<div id="outline-container-sec-1-16" class="outline-3">
-<h3 id="sec-1-16">练习1.16</h3>
-<div class="outline-text-3" id="text-1-16">
+<div id="outline-container-orgheadline16" class="outline-3">
+<h3 id="orgheadline16">练习1.16</h3>
+<div class="outline-text-3" id="text-orgheadline16">
 <p>
 题目要求：1.只能用迭代，不能递归；2.增长的阶是对数级。
 </p>
@@ -381,10 +376,8 @@ b) 对 <code>(sine a)</code> 进行展开，第一次后a变成a/3，第二次�
 </p>
 
 <ol class="org-ol">
-<li>n为偶数时：a(b^2)^(n/2) = ab^n
-</li>
-<li>n为奇数时：ab*b^(n-1) = ab^n
-</li>
+<li>n为偶数时：a(b^2)^(n/2) = ab^n</li>
+<li>n为奇数时：ab*b^(n-1) = ab^n</li>
 </ol>
 
 <p>
@@ -428,9 +421,9 @@ n &lt;= n - 1
 </div>
 </div>
 
-<div id="outline-container-sec-1-17" class="outline-3">
-<h3 id="sec-1-17">练习1.17</h3>
-<div class="outline-text-3" id="text-1-17">
+<div id="outline-container-orgheadline17" class="outline-3">
+<h3 id="orgheadline17">练习1.17</h3>
+<div class="outline-text-3" id="text-orgheadline17">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (my* a b)
@@ -448,18 +441,16 @@ n &lt;= n - 1
 </div>
 </div>
 
-<div id="outline-container-sec-1-18" class="outline-3">
-<h3 id="sec-1-18">练习1.18</h3>
-<div class="outline-text-3" id="text-1-18">
+<div id="outline-container-orgheadline18" class="outline-3">
+<h3 id="orgheadline18">练习1.18</h3>
+<div class="outline-text-3" id="text-orgheadline18">
 <p>
 有了1.16的基础，再来这道题就好多了，这题的难点是构造类似1.16中的ab^n。和1.16不同，这里的构造等式如下（状态变量定义为s）：
 </p>
 
 <ol class="org-ol">
-<li>b为偶数：s + ab = s + a*2 * b/2
-</li>
-<li>b为奇数：s + ab = (s + a) + a * (b - 1)
-</li>
+<li>b为偶数：s + ab = s + a*2 * b/2</li>
+<li>b为奇数：s + ab = (s + a) + a * (b - 1)</li>
 </ol>
 
 <p>
@@ -480,9 +471,9 @@ n &lt;= n - 1
 </div>
 </div>
 
-<div id="outline-container-sec-1-19" class="outline-3">
-<h3 id="sec-1-19">练习1.19</h3>
-<div class="outline-text-3" id="text-1-19">
+<div id="outline-container-orgheadline19" class="outline-3">
+<h3 id="orgheadline19">练习1.19</h3>
+<div class="outline-text-3" id="text-orgheadline19">
 <p>
 这个题是要求p'和q'，根据T^2 = T'，可以得到两个关于p'和q'的方程，联立方程可得解。
 </p>
@@ -502,18 +493,18 @@ q' = q^2 + 2pq
 </div>
 </div>
 
-<div id="outline-container-sec-1-20" class="outline-3">
-<h3 id="sec-1-20">练习1.20</h3>
-<div class="outline-text-3" id="text-1-20">
+<div id="outline-container-orgheadline20" class="outline-3">
+<h3 id="orgheadline20">练习1.20</h3>
+<div class="outline-text-3" id="text-orgheadline20">
 <p>
 个人觉得这个题的水平略低，因为只是按照定义对过程调用进行展开而已。关键是，如果你展开的内容少一点也可以接受，但是 <code>(gcd 206 40)</code> 的正规序展开内容太多了，我写了几层，就写不下去了。。最后看了<a href="http://www.billthelizard.com/2010/01/sicp-exercise-120-gcd.html">这里</a>的详细展开内容，那哥们真是耐得住。。其实题目的意思大概是想让我们对这两种展开方式有一个比较深刻的理解，但这样大量的重复性工作，显得没有必要，所以我没有耐得住寂寞展开到最后。。从那哥们展开的结果来看，最后的答案是18和4。
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-1-21" class="outline-3">
-<h3 id="sec-1-21">练习1.21</h3>
-<div class="outline-text-3" id="text-1-21">
+<div id="outline-container-orgheadline21" class="outline-3">
+<h3 id="orgheadline21">练习1.21</h3>
+<div class="outline-text-3" id="text-orgheadline21">
 <p>
 把书中的的 <code>smallest-divisor</code> 及相关定义照执行一遍就行了，结果如下：
 </p>
@@ -530,9 +521,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-22" class="outline-3">
-<h3 id="sec-1-22">练习1.22</h3>
-<div class="outline-text-3" id="text-1-22">
+<div id="outline-container-orgheadline22" class="outline-3">
+<h3 id="orgheadline22">练习1.22</h3>
+<div class="outline-text-3" id="text-orgheadline22">
 <p>
 我使用的Scheme实现是Racket，这个实现并没有包含如题目中所说的 <code>runtime</code> ，于是我Google了一下，发现有一个过程叫 <code>current-inexact-milliseconds</code> 可以达到要求，于是就用它代替了 <code>runtime</code> 。
 </p>
@@ -593,9 +584,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-23" class="outline-3">
-<h3 id="sec-1-23">练习1.23</h3>
-<div class="outline-text-3" id="text-1-23">
+<div id="outline-container-orgheadline23" class="outline-3">
+<h3 id="orgheadline23">练习1.23</h3>
+<div class="outline-text-3" id="text-orgheadline23">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (next n)
@@ -672,9 +663,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-24" class="outline-3">
-<h3 id="sec-1-24">练习1.24</h3>
-<div class="outline-text-3" id="text-1-24">
+<div id="outline-container-orgheadline24" class="outline-3">
+<h3 id="orgheadline24">练习1.24</h3>
+<div class="outline-text-3" id="text-orgheadline24">
 <p>
 这个练习，将 <code>start-prime-test</code> 中的 <code>prime?</code> 换成 <code>fast-prime?</code> 即可：
 </p>
@@ -728,9 +719,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-25" class="outline-3">
-<h3 id="sec-1-25">练习1.25</h3>
-<div class="outline-text-3" id="text-1-25">
+<div id="outline-container-orgheadline25" class="outline-3">
+<h3 id="orgheadline25">练习1.25</h3>
+<div class="outline-text-3" id="text-orgheadline25">
 <p>
 其实这个问题的答案在前面的脚注46中就说了：
 </p>
@@ -759,9 +750,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-26" class="outline-3">
-<h3 id="sec-1-26">练习1.26</h3>
-<div class="outline-text-3" id="text-1-26">
+<div id="outline-container-orgheadline26" class="outline-3">
+<h3 id="orgheadline26">练习1.26</h3>
+<div class="outline-text-3" id="text-orgheadline26">
 <p>
 这个题还比较好理解，在使用 <code>square</code> 的时候，只需要在 <code>expmod</code> 内部执行一次递归调用，但直接使用乘法的话，会执行两次递归调用，情况如下：
 </p>
@@ -770,42 +761,42 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 
 
 <colgroup>
-<col  class="right" />
+<col  class="org-right" />
 
-<col  class="left" />
+<col  class="org-left" />
 
-<col  class="left" />
+<col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="right">次数</th>
-<th scope="col" class="left">递归情况(square)</th>
-<th scope="col" class="left">递归情况(*)</th>
+<th scope="col" class="org-right">次数</th>
+<th scope="col" class="org-left">递归情况(square)</th>
+<th scope="col" class="org-left">递归情况(*)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="right">1</td>
-<td class="left">n</td>
-<td class="left">n</td>
+<td class="org-right">1</td>
+<td class="org-left">n</td>
+<td class="org-left">n</td>
 </tr>
 
 <tr>
-<td class="right">2</td>
-<td class="left">n/2</td>
-<td class="left">n/2 * n/2</td>
+<td class="org-right">2</td>
+<td class="org-left">n/2</td>
+<td class="org-left">n/2 * n/2</td>
 </tr>
 
 <tr>
-<td class="right">3</td>
-<td class="left">n/4</td>
-<td class="left">n/4 * n/4 * n/4 * n/4</td>
+<td class="org-right">3</td>
+<td class="org-left">n/4</td>
+<td class="org-left">n/4 * n/4 * n/4 * n/4</td>
 </tr>
 
 <tr>
-<td class="right">&#x2026;</td>
-<td class="left">&#xa0;</td>
-<td class="left">&#xa0;</td>
+<td class="org-right">&#x2026;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 </tr>
 </tbody>
 </table>
@@ -820,9 +811,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-27" class="outline-3">
-<h3 id="sec-1-27">练习1.27</h3>
-<div class="outline-text-3" id="text-1-27">
+<div id="outline-container-orgheadline27" class="outline-3">
+<h3 id="orgheadline27">练习1.27</h3>
+<div class="outline-text-3" id="text-orgheadline27">
 <p>
 这个题目比较简单，定义的两个函数如下：
 </p>
@@ -845,9 +836,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-28" class="outline-3">
-<h3 id="sec-1-28">练习1.28</h3>
-<div class="outline-text-3" id="text-1-28">
+<div id="outline-container-orgheadline28" class="outline-3">
+<h3 id="orgheadline28">练习1.28</h3>
+<div class="outline-text-3" id="text-orgheadline28">
 <p>
 这个题目是费马测试的一个变形，因为费马测试会被Carmichael数骗，所以这个Miller-Rabin检查增强了限制，Carmichael数也通不过检查。增强的条件是：如果大于1小于n - 1的一个数的平方取模n等于1，则n不是素数。这样，需要我们将费马测试中的 <code>expmod</code> 函数加以改进，所有相关的过程如下：
 </p>
@@ -884,9 +875,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-29" class="outline-3">
-<h3 id="sec-1-29">练习1.29</h3>
-<div class="outline-text-3" id="text-1-29">
+<div id="outline-container-orgheadline29" class="outline-3">
+<h3 id="orgheadline29">练习1.29</h3>
+<div class="outline-text-3" id="text-orgheadline29">
 <p>
 定义两个过程如下：
 </p>
@@ -915,9 +906,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-30" class="outline-3">
-<h3 id="sec-1-30">练习1.30</h3>
-<div class="outline-text-3" id="text-1-30">
+<div id="outline-container-orgheadline30" class="outline-3">
+<h3 id="orgheadline30">练习1.30</h3>
+<div class="outline-text-3" id="text-orgheadline30">
 <p>
 采用迭代进行计算的 <code>sum</code> 过程如下：
 </p>
@@ -935,9 +926,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-31" class="outline-3">
-<h3 id="sec-1-31">练习1.31</h3>
-<div class="outline-text-3" id="text-1-31">
+<div id="outline-container-orgheadline31" class="outline-3">
+<h3 id="orgheadline31">练习1.31</h3>
+<div class="outline-text-3" id="text-orgheadline31">
 <p>
 递归的 <code>product</code> 过程：
 </p>
@@ -1005,9 +996,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-32" class="outline-3">
-<h3 id="sec-1-32">练习1.32</h3>
-<div class="outline-text-3" id="text-1-32">
+<div id="outline-container-orgheadline32" class="outline-3">
+<h3 id="orgheadline32">练习1.32</h3>
+<div class="outline-text-3" id="text-orgheadline32">
 <p>
 递归的 <code>accumulate</code> 过程：
 </p>
@@ -1053,9 +1044,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-33" class="outline-3">
-<h3 id="sec-1-33">练习1.33</h3>
-<div class="outline-text-3" id="text-1-33">
+<div id="outline-container-orgheadline33" class="outline-3">
+<h3 id="orgheadline33">练习1.33</h3>
+<div class="outline-text-3" id="text-orgheadline33">
 <p>
 <code>filtered-accumulate</code> 过程以及根据其定义的求素数和、求互素正整数积的过程：
 </p>
@@ -1078,9 +1069,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-34" class="outline-3">
-<h3 id="sec-1-34">练习1.34</h3>
-<div class="outline-text-3" id="text-1-34">
+<div id="outline-container-orgheadline34" class="outline-3">
+<h3 id="orgheadline34">练习1.34</h3>
+<div class="outline-text-3" id="text-orgheadline34">
 <p>
 如果求值 <code>(f f)</code> ，展开的流程如下：
 </p>
@@ -1095,9 +1086,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-35" class="outline-3">
-<h3 id="sec-1-35">练习1.35</h3>
-<div class="outline-text-3" id="text-1-35">
+<div id="outline-container-orgheadline35" class="outline-3">
+<h3 id="orgheadline35">练习1.35</h3>
+<div class="outline-text-3" id="text-orgheadline35">
 <p>
 <code>x |-&gt; 1 + 1/x</code> 的不动点即要求满足 <code>x = 1 + 1/x</code> ，两边乘以x得到 <code>x^2 = x + 1</code> ，即黄金分割满足的方程。
 </p>
@@ -1112,9 +1103,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-36" class="outline-3">
-<h3 id="sec-1-36">练习1.36</h3>
-<div class="outline-text-3" id="text-1-36">
+<div id="outline-container-orgheadline36" class="outline-3">
+<h3 id="orgheadline36">练习1.36</h3>
+<div class="outline-text-3" id="text-orgheadline36">
 <p>
 修改后的 <code>fixed-point</code> 过程：
 </p>
@@ -1157,9 +1148,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-37" class="outline-3">
-<h3 id="sec-1-37">练习1.37</h3>
-<div class="outline-text-3" id="text-1-37">
+<div id="outline-container-orgheadline37" class="outline-3">
+<h3 id="orgheadline37">练习1.37</h3>
+<div class="outline-text-3" id="text-orgheadline37">
 <p>
 递归的 <code>cont-frac</code> 过程：
 </p>
@@ -1215,9 +1206,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-38" class="outline-3">
-<h3 id="sec-1-38">练习1.38</h3>
-<div class="outline-text-3" id="text-1-38">
+<div id="outline-container-orgheadline38" class="outline-3">
+<h3 id="orgheadline38">练习1.38</h3>
+<div class="outline-text-3" id="text-orgheadline38">
 <p>
 这个题目最关键的是确定 <code>D(i)</code> 函数的值，观察规律，可以知道，序列中的3n项和3n+1项都是1，而3n+2项的值是2n+2，这里n是非负整数。所以，=D(i)= 相应的过程定义如下：
 </p>
@@ -1242,9 +1233,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-39" class="outline-3">
-<h3 id="sec-1-39">练习1.39</h3>
-<div class="outline-text-3" id="text-1-39">
+<div id="outline-container-orgheadline39" class="outline-3">
+<h3 id="orgheadline39">练习1.39</h3>
+<div class="outline-text-3" id="text-orgheadline39">
 <p>
 <code>tan-cf</code> 过程如下：
 </p>
@@ -1267,9 +1258,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-40" class="outline-3">
-<h3 id="sec-1-40">练习1.40</h3>
-<div class="outline-text-3" id="text-1-40">
+<div id="outline-container-orgheadline40" class="outline-3">
+<h3 id="orgheadline40">练习1.40</h3>
+<div class="outline-text-3" id="text-orgheadline40">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (cubic a b c)
@@ -1283,9 +1274,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-41" class="outline-3">
-<h3 id="sec-1-41">练习1.41</h3>
-<div class="outline-text-3" id="text-1-41">
+<div id="outline-container-orgheadline41" class="outline-3">
+<h3 id="orgheadline41">练习1.41</h3>
+<div class="outline-text-3" id="text-orgheadline41">
 <p>
 <code>double</code> 过程：
 </p>
@@ -1303,9 +1294,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-42" class="outline-3">
-<h3 id="sec-1-42">练习1.42</h3>
-<div class="outline-text-3" id="text-1-42">
+<div id="outline-container-orgheadline42" class="outline-3">
+<h3 id="orgheadline42">练习1.42</h3>
+<div class="outline-text-3" id="text-orgheadline42">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (compose f g)
@@ -1315,9 +1306,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-43" class="outline-3">
-<h3 id="sec-1-43">练习1.43</h3>
-<div class="outline-text-3" id="text-1-43">
+<div id="outline-container-orgheadline43" class="outline-3">
+<h3 id="orgheadline43">练习1.43</h3>
+<div class="outline-text-3" id="text-orgheadline43">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (repeated f n)
@@ -1334,9 +1325,9 @@ PS：SICP中文翻译中错误很多啊，比方说上面跟 <code>smallest-divi
 </div>
 </div>
 
-<div id="outline-container-sec-1-44" class="outline-3">
-<h3 id="sec-1-44">练习1.44</h3>
-<div class="outline-text-3" id="text-1-44">
+<div id="outline-container-orgheadline44" class="outline-3">
+<h3 id="orgheadline44">练习1.44</h3>
+<div class="outline-text-3" id="text-orgheadline44">
 <p>
 平滑过程 <code>smooth</code> ：
 </p>
@@ -1363,9 +1354,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-1-45" class="outline-3">
-<h3 id="sec-1-45">练习1.45</h3>
-<div class="outline-text-3" id="text-1-45">
+<div id="outline-container-orgheadline45" class="outline-3">
+<h3 id="orgheadline45">练习1.45</h3>
+<div class="outline-text-3" id="text-orgheadline45">
 <p>
 经过一系列实验，有如下结果（箭头前的数字代表是几次方根，箭头后的数字是表明要做几次平均阻尼）：
 </p>
@@ -1410,9 +1401,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-1-46" class="outline-3">
-<h3 id="sec-1-46">练习1.46</h3>
-<div class="outline-text-3" id="text-1-46">
+<div id="outline-container-orgheadline46" class="outline-3">
+<h3 id="orgheadline46">练习1.46</h3>
+<div class="outline-text-3" id="text-orgheadline46">
 <p>
 <code>iterative-improve</code> 过程：
 </p>
@@ -1450,12 +1441,12 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">构造数据抽象</h2>
-<div class="outline-text-2" id="text-2">
-</div><div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1">练习2.1</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-orgheadline120" class="outline-2">
+<h2 id="orgheadline120">构造数据抽象</h2>
+<div class="outline-text-2" id="text-orgheadline120">
+</div><div id="outline-container-orgheadline48" class="outline-3">
+<h3 id="orgheadline48">练习2.1</h3>
+<div class="outline-text-3" id="text-orgheadline48">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (make-rat n d)
@@ -1470,9 +1461,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2">练习2.2</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgheadline49" class="outline-3">
+<h3 id="orgheadline49">练习2.2</h3>
+<div class="outline-text-3" id="text-orgheadline49">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (make-segment point-x point-y)
@@ -1503,9 +1494,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-3" class="outline-3">
-<h3 id="sec-2-3">练习2.3</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgheadline50" class="outline-3">
+<h3 id="orgheadline50">练习2.3</h3>
+<div class="outline-text-3" id="text-orgheadline50">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (make-rectangle p-lu p-rd)
@@ -1533,9 +1524,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-4" class="outline-3">
-<h3 id="sec-2-4">练习2.4</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-orgheadline51" class="outline-3">
+<h3 id="orgheadline51">练习2.4</h3>
+<div class="outline-text-3" id="text-orgheadline51">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (cdr z)
@@ -1549,9 +1540,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-5" class="outline-3">
-<h3 id="sec-2-5">练习2.5</h3>
-<div class="outline-text-3" id="text-2-5">
+<div id="outline-container-orgheadline52" class="outline-3">
+<h3 id="orgheadline52">练习2.5</h3>
+<div class="outline-text-3" id="text-orgheadline52">
 <p>
 几个过程的定义如下：
 </p>
@@ -1590,9 +1581,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-6" class="outline-3">
-<h3 id="sec-2-6">练习2.6</h3>
-<div class="outline-text-3" id="text-2-6">
+<div id="outline-container-orgheadline53" class="outline-3">
+<h3 id="orgheadline53">练习2.6</h3>
+<div class="outline-text-3" id="text-orgheadline53">
 <p>
 初看到这个题目的时候，我的第一反应是“我操”（原谅我的粗口，但这确实是我的下意识反应。。），已经定义好的 <b>zero</b> 是一个过程，它会返回一个过程，返回的过程里面又会返回一个过程。。
 </p>
@@ -1650,9 +1641,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-7" class="outline-3">
-<h3 id="sec-2-7">练习2.7</h3>
-<div class="outline-text-3" id="text-2-7">
+<div id="outline-container-orgheadline54" class="outline-3">
+<h3 id="orgheadline54">练习2.7</h3>
+<div class="outline-text-3" id="text-orgheadline54">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (upper-bound z)
@@ -1665,9 +1656,9 @@ n次平滑过程 <code>smooth-n</code> ：
 </div>
 </div>
 
-<div id="outline-container-sec-2-8" class="outline-3">
-<h3 id="sec-2-8">练习2.8</h3>
-<div class="outline-text-3" id="text-2-8">
+<div id="outline-container-orgheadline55" class="outline-3">
+<h3 id="orgheadline55">练习2.8</h3>
+<div class="outline-text-3" id="text-orgheadline55">
 <p>
 根据之前的 <code>add-interval</code> 和 <code>mul-interval</code> 来看，对两个区间操作的结果，是这样一个区间：其下界是两个区间分别取一个点执行相应操作的可能取的最小值，而上界则是相应的可能的最大值。
 </p>
@@ -1698,18 +1689,18 @@ b1 - b2 &gt; a1 - b2
 </div>
 </div>
 
-<div id="outline-container-sec-2-9" class="outline-3">
-<h3 id="sec-2-9">练习2.9</h3>
-<div class="outline-text-3" id="text-2-9">
+<div id="outline-container-orgheadline56" class="outline-3">
+<h3 id="orgheadline56">练习2.9</h3>
+<div class="outline-text-3" id="text-orgheadline56">
 <p>
 对于加法和减法的证明，实在是不能再简单了，所以这里也就不写了，最后结果是，和和差的宽度都是两个操作数的宽度的算术平均值。至于乘和除，从定义上就可以看出来，其上界和下界的确定有一定的随机性（不像加和减，能完完全全推导出其上界和下界），所以，其宽度自然也不会是关于两个操作数的宽度的函数。
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-2-10" class="outline-3">
-<h3 id="sec-2-10">练习2.10</h3>
-<div class="outline-text-3" id="text-2-10">
+<div id="outline-container-orgheadline57" class="outline-3">
+<h3 id="orgheadline57">练习2.10</h3>
+<div class="outline-text-3" id="text-orgheadline57">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (div-interval x y)
@@ -1725,9 +1716,9 @@ b1 - b2 &gt; a1 - b2
 </div>
 </div>
 
-<div id="outline-container-sec-2-11" class="outline-3">
-<h3 id="sec-2-11">练习2.11</h3>
-<div class="outline-text-3" id="text-2-11">
+<div id="outline-container-orgheadline58" class="outline-3">
+<h3 id="orgheadline58">练习2.11</h3>
+<div class="outline-text-3" id="text-orgheadline58">
 <p>
 说实话，我个人觉得这个题目挺没意思的，原来的 <code>mul-interval</code> 的实现就是为了避免出现要区分区间边界正负的情况，而这个题目则要求把这些情况一一列出来。。
 </p>
@@ -1758,9 +1749,9 @@ aR, bR
 </div>
 </div>
 
-<div id="outline-container-sec-2-12" class="outline-3">
-<h3 id="sec-2-12">练习2.12</h3>
-<div class="outline-text-3" id="text-2-12">
+<div id="outline-container-orgheadline59" class="outline-3">
+<h3 id="orgheadline59">练习2.12</h3>
+<div class="outline-text-3" id="text-orgheadline59">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (make-center-percent c p)
@@ -1773,9 +1764,9 @@ aR, bR
 </div>
 </div>
 
-<div id="outline-container-sec-2-13" class="outline-3">
-<h3 id="sec-2-13">练习2.13</h3>
-<div class="outline-text-3" id="text-2-13">
+<div id="outline-container-orgheadline60" class="outline-3">
+<h3 id="orgheadline60">练习2.13</h3>
+<div class="outline-text-3" id="text-orgheadline60">
 <p>
 这个证明还比较简单，假设两个区间的中点和误差百分比分别为c1, p1和c2, p2，所以，两个区间可以表示为：
 </p>
@@ -1814,9 +1805,9 @@ p = width / center = (ub - lb) / (ub + lb)
 </div>
 </div>
 
-<div id="outline-container-sec-2-14" class="outline-3">
-<h3 id="sec-2-14">练习2.14</h3>
-<div class="outline-text-3" id="text-2-14">
+<div id="outline-container-orgheadline61" class="outline-3">
+<h3 id="orgheadline61">练习2.14</h3>
+<div class="outline-text-3" id="text-orgheadline61">
 <p>
 根据给出的 <code>par1</code> 和 <code>par2</code> 过程的定义，作如下验证：
 </p>
@@ -1846,9 +1837,9 @@ p = width / center = (ub - lb) / (ub + lb)
 </div>
 </div>
 
-<div id="outline-container-sec-2-15" class="outline-3">
-<h3 id="sec-2-15">练习2.15</h3>
-<div class="outline-text-3" id="text-2-15">
+<div id="outline-container-orgheadline62" class="outline-3">
+<h3 id="orgheadline62">练习2.15</h3>
+<div class="outline-text-3" id="text-orgheadline62">
 <p>
 <del>个人感觉，这个说法是站不住脚的。因为，根据当前的区间四则运算定义，数据精度的损失是跟计算次数有关的，而不是跟什么非准确性变量的出现次数有关。</del>
 </p>
@@ -1867,9 +1858,9 @@ p = width / center = (ub - lb) / (ub + lb)
 </div>
 </div>
 
-<div id="outline-container-sec-2-16" class="outline-3">
-<h3 id="sec-2-16">练习2.16</h3>
-<div class="outline-text-3" id="text-2-16">
+<div id="outline-container-orgheadline63" class="outline-3">
+<h3 id="orgheadline63">练习2.16</h3>
+<div class="outline-text-3" id="text-orgheadline63">
 <p>
 这个题目就更进一步，让我们自行设计一套针对区间的计算法则，让在数学上等价的计算公式通过我们的计算法则能算出相同的结果。
 </p>
@@ -1888,9 +1879,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-17" class="outline-3">
-<h3 id="sec-2-17">练习2.17</h3>
-<div class="outline-text-3" id="text-2-17">
+<div id="outline-container-orgheadline64" class="outline-3">
+<h3 id="orgheadline64">练习2.17</h3>
+<div class="outline-text-3" id="text-orgheadline64">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (last-pair items)
@@ -1902,9 +1893,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-18" class="outline-3">
-<h3 id="sec-2-18">练习2.18</h3>
-<div class="outline-text-3" id="text-2-18">
+<div id="outline-container-orgheadline65" class="outline-3">
+<h3 id="orgheadline65">练习2.18</h3>
+<div class="outline-text-3" id="text-orgheadline65">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (reverse items)
@@ -1916,9 +1907,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-19" class="outline-3">
-<h3 id="sec-2-19">练习2.19</h3>
-<div class="outline-text-3" id="text-2-19">
+<div id="outline-container-orgheadline66" class="outline-3">
+<h3 id="orgheadline66">练习2.19</h3>
+<div class="outline-text-3" id="text-orgheadline66">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (first-denomination coin-values)
@@ -1938,9 +1929,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-20" class="outline-3">
-<h3 id="sec-2-20">练习2.20</h3>
-<div class="outline-text-3" id="text-2-20">
+<div id="outline-container-orgheadline67" class="outline-3">
+<h3 id="orgheadline67">练习2.20</h3>
+<div class="outline-text-3" id="text-orgheadline67">
 <p>
 这个题目还很花了我一点时间。。主要是这货不是普通的 <code>if...else...</code> 型的简单的递归调用，而是有三个分支，而且递归终止条件也不太好控制。。
 </p>
@@ -1965,9 +1956,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-21" class="outline-3">
-<h3 id="sec-2-21">练习2.21</h3>
-<div class="outline-text-3" id="text-2-21">
+<div id="outline-container-orgheadline68" class="outline-3">
+<h3 id="orgheadline68">练习2.21</h3>
+<div class="outline-text-3" id="text-orgheadline68">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (square-list items)
@@ -1983,9 +1974,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-22" class="outline-3">
-<h3 id="sec-2-22">练习2.22</h3>
-<div class="outline-text-3" id="text-2-22">
+<div id="outline-container-orgheadline69" class="outline-3">
+<h3 id="orgheadline69">练习2.22</h3>
+<div class="outline-text-3" id="text-orgheadline69">
 <p>
 两种实现都是有问题的，例如对于如下调用：
 </p>
@@ -2020,9 +2011,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-23" class="outline-3">
-<h3 id="sec-2-23">练习2.23</h3>
-<div class="outline-text-3" id="text-2-23">
+<div id="outline-container-orgheadline70" class="outline-3">
+<h3 id="orgheadline70">练习2.23</h3>
+<div class="outline-text-3" id="text-orgheadline70">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (for-each proc items)
@@ -2035,9 +2026,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-24" class="outline-3">
-<h3 id="sec-2-24">练习2.24</h3>
-<div class="outline-text-3" id="text-2-24">
+<div id="outline-container-orgheadline71" class="outline-3">
+<h3 id="orgheadline71">练习2.24</h3>
+<div class="outline-text-3" id="text-orgheadline71">
 <p>
 这个题目的结果是 <code>(1 (2 (3 4)))</code> ，和图2-5刚好相反，图2-5是 <code>car</code> 复杂， <code>cdr</code> 简单，这个题目是 <code>cdr</code> 复杂， =car=简单。
 </p>
@@ -2048,9 +2039,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-25" class="outline-3">
-<h3 id="sec-2-25">练习2.25</h3>
-<div class="outline-text-3" id="text-2-25">
+<div id="outline-container-orgheadline72" class="outline-3">
+<h3 id="orgheadline72">练习2.25</h3>
+<div class="outline-text-3" id="text-orgheadline72">
 <pre class="example">
 (car (cdr (car (cdr (cdr '(1 3 (5 7) 9))))))
 (car (car '((7))))
@@ -2059,9 +2050,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-26" class="outline-3">
-<h3 id="sec-2-26">练习2.26</h3>
-<div class="outline-text-3" id="text-2-26">
+<div id="outline-container-orgheadline73" class="outline-3">
+<h3 id="orgheadline73">练习2.26</h3>
+<div class="outline-text-3" id="text-orgheadline73">
 <pre class="example">
 (append x y) = (1 2 3 4 5 6)
 (cons x y)   = ((1 2 3) 4 5 6)
@@ -2070,9 +2061,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-27" class="outline-3">
-<h3 id="sec-2-27">练习2.27</h3>
-<div class="outline-text-3" id="text-2-27">
+<div id="outline-container-orgheadline74" class="outline-3">
+<h3 id="orgheadline74">练习2.27</h3>
+<div class="outline-text-3" id="text-orgheadline74">
 <p>
 被这个题坑了好久才做出来。。这个题需要注意的是，假设x是 <code>((1 2) (3 4))</code> 的话，那么 <code>(car x)</code> 返回 <code>(1 2)</code> ，而 <code>(cdr x)</code> 返回 <code>((3 4))</code> ！！千万不要以为 <code>car</code> 和 <code>cdr</code> 是对等的！！前者是取元素，而后者是取剩下的表！！我就是坑在这一点上，在线性表的时候，这个坑还算比较小，如果是一棵树的话，这个坑就大了。。
 </p>
@@ -2092,9 +2083,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-28" class="outline-3">
-<h3 id="sec-2-28">练习2.28</h3>
-<div class="outline-text-3" id="text-2-28">
+<div id="outline-container-orgheadline75" class="outline-3">
+<h3 id="orgheadline75">练习2.28</h3>
+<div class="outline-text-3" id="text-orgheadline75">
 <p>
 这个题又是一个坑，不过有了上题的经验，这一题就好控制多了，与上一题不同的是，这一题用迭代来完成，因为要将树形的结构给转换成线性表，所以需要一个“全局”变量来存储中间转换结果，迭代是最适合的，用递归的话，可能需要 <code>let</code> 声明，而我是比较讨厌 <code>let</code> 的，能尽量不用就尽量不用。。
 </p>
@@ -2112,9 +2103,9 @@ PS：这个题目的后面有一个警告，说是这个问题非常难，所以
 </div>
 </div>
 
-<div id="outline-container-sec-2-29" class="outline-3">
-<h3 id="sec-2-29">练习2.29</h3>
-<div class="outline-text-3" id="text-2-29">
+<div id="outline-container-orgheadline76" class="outline-3">
+<h3 id="orgheadline76">练习2.29</h3>
+<div class="outline-text-3" id="text-orgheadline76">
 <p>
 a) 这几个过程还是相对比较简单的，取对应元素即可，需要注意的是，在取活动体右边的部分时，要用 <code>cadr</code> 而不是 <code>cdr</code> 。
 </p>
@@ -2174,9 +2165,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-30" class="outline-3">
-<h3 id="sec-2-30">练习2.30</h3>
-<div class="outline-text-3" id="text-2-30">
+<div id="outline-container-orgheadline77" class="outline-3">
+<h3 id="orgheadline77">练习2.30</h3>
+<div class="outline-text-3" id="text-orgheadline77">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (square-tree tree)
@@ -2196,9 +2187,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-31" class="outline-3">
-<h3 id="sec-2-31">练习2.31</h3>
-<div class="outline-text-3" id="text-2-31">
+<div id="outline-container-orgheadline78" class="outline-3">
+<h3 id="orgheadline78">练习2.31</h3>
+<div class="outline-text-3" id="text-orgheadline78">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (tree-map proc tree)
@@ -2212,9 +2203,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-32" class="outline-3">
-<h3 id="sec-2-32">练习2.32</h3>
-<div class="outline-text-3" id="text-2-32">
+<div id="outline-container-orgheadline79" class="outline-3">
+<h3 id="orgheadline79">练习2.32</h3>
+<div class="outline-text-3" id="text-orgheadline79">
 <p>
 这个解法，就是典型的分治算法，跟第一章那个硬币换零钱有点像，把看似无处下手的大问题硬生生化成多个小问题，再逐个解决。
 </p>
@@ -2224,10 +2215,8 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </p>
 
 <ul class="org-ul">
-<li>除第一个元素外，其它元素形成的集合的所有子集
-</li>
-<li>上一条中，所有子集再加入第一个元素所形成的所有集合
-</li>
+<li>除第一个元素外，其它元素形成的集合的所有子集</li>
+<li>上一条中，所有子集再加入第一个元素所形成的所有集合</li>
 </ul>
 
 <p>
@@ -2253,9 +2242,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-33" class="outline-3">
-<h3 id="sec-2-33">练习2.33</h3>
-<div class="outline-text-3" id="text-2-33">
+<div id="outline-container-orgheadline80" class="outline-3">
+<h3 id="orgheadline80">练习2.33</h3>
+<div class="outline-text-3" id="text-orgheadline80">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (map p sequence)
@@ -2271,9 +2260,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-34" class="outline-3">
-<h3 id="sec-2-34">练习2.34</h3>
-<div class="outline-text-3" id="text-2-34">
+<div id="outline-container-orgheadline81" class="outline-3">
+<h3 id="orgheadline81">练习2.34</h3>
+<div class="outline-text-3" id="text-orgheadline81">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (hornor-eval x coefficient-sequence)
@@ -2286,9 +2275,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-35" class="outline-3">
-<h3 id="sec-2-35">练习2.35</h3>
-<div class="outline-text-3" id="text-2-35">
+<div id="outline-container-orgheadline82" class="outline-3">
+<h3 id="orgheadline82">练习2.35</h3>
+<div class="outline-text-3" id="text-orgheadline82">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (count-leaves tree)
@@ -2301,9 +2290,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-36" class="outline-3">
-<h3 id="sec-2-36">练习2.36</h3>
-<div class="outline-text-3" id="text-2-36">
+<div id="outline-container-orgheadline83" class="outline-3">
+<h3 id="orgheadline83">练习2.36</h3>
+<div class="outline-text-3" id="text-orgheadline83">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (accumulate-n op init seqs)
@@ -2316,9 +2305,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-37" class="outline-3">
-<h3 id="sec-2-37">练习2.37</h3>
-<div class="outline-text-3" id="text-2-37">
+<div id="outline-container-orgheadline84" class="outline-3">
+<h3 id="orgheadline84">练习2.37</h3>
+<div class="outline-text-3" id="text-orgheadline84">
 <p>
 关于矩阵运算基本都忘光了，这个题目中的定义又不太清楚，摸索了老半天才战战兢兢地写出答案（其实矩阵和行向量不太能相乘的，因为矩阵乘法规定第一个矩阵的列数和第二个矩阵的行数必须相等，如果矩阵乘以行向量，那这个矩阵必须是列向量才行）：
 </p>
@@ -2344,9 +2333,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-38" class="outline-3">
-<h3 id="sec-2-38">练习2.38</h3>
-<div class="outline-text-3" id="text-2-38">
+<div id="outline-container-orgheadline85" class="outline-3">
+<h3 id="orgheadline85">练习2.38</h3>
+<div class="outline-text-3" id="text-orgheadline85">
 <p>
 <code>fold-left</code> 和 <code>fold-right</code> 不相同的不仅仅是累计作用的顺序，还有两个操作数的顺序也相反：
 </p>
@@ -2366,9 +2355,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-39" class="outline-3">
-<h3 id="sec-2-39">练习2.39</h3>
-<div class="outline-text-3" id="text-2-39">
+<div id="outline-container-orgheadline86" class="outline-3">
+<h3 id="orgheadline86">练习2.39</h3>
+<div class="outline-text-3" id="text-orgheadline86">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (reverse1 sequence)
@@ -2381,9 +2370,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-40" class="outline-3">
-<h3 id="sec-2-40">练习2.40</h3>
-<div class="outline-text-3" id="text-2-40">
+<div id="outline-container-orgheadline87" class="outline-3">
+<h3 id="orgheadline87">练习2.40</h3>
+<div class="outline-text-3" id="text-orgheadline87">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (unique-pairs n)
@@ -2396,9 +2385,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-41" class="outline-3">
-<h3 id="sec-2-41">练习2.41</h3>
-<div class="outline-text-3" id="text-2-41">
+<div id="outline-container-orgheadline88" class="outline-3">
+<h3 id="orgheadline88">练习2.41</h3>
+<div class="outline-text-3" id="text-orgheadline88">
 <p>
 在定义 <code>unique=triples</code> 的时候借用了前面的 <code>flatmap</code> ，但由于 <code>flatmap</code> 只能除去多余的一层括号，而我们的三元组有三层嵌套映射，比二元组多了一层，所以需要在外面再加上一层 <code>accumulate</code> 来去除多出来的一层括号。
 </p>
@@ -2424,9 +2413,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-42" class="outline-3">
-<h3 id="sec-2-42">练习2.42</h3>
-<div class="outline-text-3" id="text-2-42">
+<div id="outline-container-orgheadline89" class="outline-3">
+<h3 id="orgheadline89">练习2.42</h3>
+<div class="outline-text-3" id="text-orgheadline89">
 <p>
 这个是经典的八皇后问题，题目把框架给写好了，我们只需要填好 <code>empty-board</code> 变量、 <code>adjoin-position</code> 过程以及 <code>safe?</code> 过程即可。不过这个框架抽象程度比较高，要看懂还不太容易。。
 </p>
@@ -2463,9 +2452,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-43" class="outline-3">
-<h3 id="sec-2-43">练习2.43</h3>
-<div class="outline-text-3" id="text-2-43">
+<div id="outline-container-orgheadline90" class="outline-3">
+<h3 id="orgheadline90">练习2.43</h3>
+<div class="outline-text-3" id="text-orgheadline90">
 <p>
 这个题目，开始看了半天没看出来为什么：假设 <code>(queen-cols k)</code> 的解有 <code>f(k)</code> 个，那么一个是内层循环n次，外层循环f(k-1)次；另一个是内层循环f(k-1)次，外层循环n次，看起来好像没有区别。。于是把这两层循环换了一下，果然慢。。
 </p>
@@ -2480,9 +2469,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-44" class="outline-3">
-<h3 id="sec-2-44">练习2.44</h3>
-<div class="outline-text-3" id="text-2-44">
+<div id="outline-container-orgheadline91" class="outline-3">
+<h3 id="orgheadline91">练习2.44</h3>
+<div class="outline-text-3" id="text-orgheadline91">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (up-split painter n)
@@ -2495,9 +2484,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-45" class="outline-3">
-<h3 id="sec-2-45">练习2.45</h3>
-<div class="outline-text-3" id="text-2-45">
+<div id="outline-container-orgheadline92" class="outline-3">
+<h3 id="orgheadline92">练习2.45</h3>
+<div class="outline-text-3" id="text-orgheadline92">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (split proc1 proc2)
@@ -2511,9 +2500,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-46" class="outline-3">
-<h3 id="sec-2-46">练习2.46</h3>
-<div class="outline-text-3" id="text-2-46">
+<div id="outline-container-orgheadline93" class="outline-3">
+<h3 id="orgheadline93">练习2.46</h3>
+<div class="outline-text-3" id="text-orgheadline93">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (make-vect x y)
@@ -2545,9 +2534,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-47" class="outline-3">
-<h3 id="sec-2-47">练习2.47</h3>
-<div class="outline-text-3" id="text-2-47">
+<div id="outline-container-orgheadline94" class="outline-3">
+<h3 id="orgheadline94">练习2.47</h3>
+<div class="outline-text-3" id="text-orgheadline94">
 <p>
 方案1：
 </p>
@@ -2584,9 +2573,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-48" class="outline-3">
-<h3 id="sec-2-48">练习2.48</h3>
-<div class="outline-text-3" id="text-2-48">
+<div id="outline-container-orgheadline95" class="outline-3">
+<h3 id="orgheadline95">练习2.48</h3>
+<div class="outline-text-3" id="text-orgheadline95">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (make-segment start-vect end-vect)
@@ -2602,9 +2591,9 @@ d) 起初我以为要大修改才能达到要求，但仔细看了看，跟底�
 </div>
 </div>
 
-<div id="outline-container-sec-2-49" class="outline-3">
-<h3 id="sec-2-49">练习2.49</h3>
-<div class="outline-text-3" id="text-2-49">
+<div id="outline-container-orgheadline96" class="outline-3">
+<h3 id="orgheadline96">练习2.49</h3>
+<div class="outline-text-3" id="text-orgheadline96">
 <p>
 这个题目，只需要学好高中数学的向量部分就可以做了。
 </p>
@@ -2698,9 +2687,9 @@ origin + edeg1 + 0.5 * edge2
 </div>
 </div>
 
-<div id="outline-container-sec-2-50" class="outline-3">
-<h3 id="sec-2-50">练习2.50</h3>
-<div class="outline-text-3" id="text-2-50">
+<div id="outline-container-orgheadline97" class="outline-3">
+<h3 id="orgheadline97">练习2.50</h3>
+<div class="outline-text-3" id="text-orgheadline97">
 <p>
 这个题目训练的就是空间想象能力（其实还不是空间，只是二维的），而这刚好是我的强项。。
 </p>
@@ -2757,9 +2746,9 @@ origin + edeg1 + 0.5 * edge2
 </div>
 </div>
 
-<div id="outline-container-sec-2-51" class="outline-3">
-<h3 id="sec-2-51">练习2.51</h3>
-<div class="outline-text-3" id="text-2-51">
+<div id="outline-container-orgheadline98" class="outline-3">
+<h3 id="orgheadline98">练习2.51</h3>
+<div class="outline-text-3" id="text-orgheadline98">
 <p>
 模仿 <code>beside</code> 的定义，可以得到下面的 <code>below</code> 定义：
 </p>
@@ -2796,9 +2785,9 @@ origin + edeg1 + 0.5 * edge2
 </div>
 </div>
 
-<div id="outline-container-sec-2-52" class="outline-3">
-<h3 id="sec-2-52">练习2.52</h3>
-<div class="outline-text-3" id="text-2-52">
+<div id="outline-container-orgheadline99" class="outline-3">
+<h3 id="orgheadline99">练习2.52</h3>
+<div class="outline-text-3" id="text-orgheadline99">
 <p>
 a) 在练习2.49中我们就没有做，因此，这里也略过。。
 </p>
@@ -2835,9 +2824,9 @@ c) 这个就不多说了，代码如下：
 </div>
 </div>
 
-<div id="outline-container-sec-2-53" class="outline-3">
-<h3 id="sec-2-53">练习2.53</h3>
-<div class="outline-text-3" id="text-2-53">
+<div id="outline-container-orgheadline100" class="outline-3">
+<h3 id="orgheadline100">练习2.53</h3>
+<div class="outline-text-3" id="text-orgheadline100">
 <pre class="example">
 (a b c)
 ((george))
@@ -2850,9 +2839,9 @@ c) 这个就不多说了，代码如下：
 </div>
 </div>
 
-<div id="outline-container-sec-2-54" class="outline-3">
-<h3 id="sec-2-54">练习2.54</h3>
-<div class="outline-text-3" id="text-2-54">
+<div id="outline-container-orgheadline101" class="outline-3">
+<h3 id="orgheadline101">练习2.54</h3>
+<div class="outline-text-3" id="text-orgheadline101">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (equal? seq1 seq2)
@@ -2866,18 +2855,18 @@ c) 这个就不多说了，代码如下：
 </div>
 </div>
 
-<div id="outline-container-sec-2-55" class="outline-3">
-<h3 id="sec-2-55">练习2.55</h3>
-<div class="outline-text-3" id="text-2-55">
+<div id="outline-container-orgheadline102" class="outline-3">
+<h3 id="orgheadline102">练习2.55</h3>
+<div class="outline-text-3" id="text-orgheadline102">
 <p>
 <code>(car ''abracadabra)</code> 等价于 <code>(car (quote (quote abracadabra)))</code> ，这个表达式第二个元素求值的结果就是列表 <code>(quote abracadabra)</code> ，所以再通过 <code>car</code> 来取首元素的话，结果自然会是 <code>quote</code> 。
 </p>
 </div>
 </div>
 
-<div id="outline-container-sec-2-56" class="outline-3">
-<h3 id="sec-2-56">练习2.56</h3>
-<div class="outline-text-3" id="text-2-56">
+<div id="outline-container-orgheadline103" class="outline-3">
+<h3 id="orgheadline103">练习2.56</h3>
+<div class="outline-text-3" id="text-orgheadline103">
 <p>
 对于指数求导，将其符号表示定义为 <code>(** base exp)</code> ，剩下的基本也就是照葫芦画瓢，定义好相应的几个过程，在 <code>deriv</code> 过程里面再加一个分支来表示指数求导就可以了：
 </p>
@@ -2929,9 +2918,9 @@ c) 这个就不多说了，代码如下：
 </div>
 </div>
 
-<div id="outline-container-sec-2-57" class="outline-3">
-<h3 id="sec-2-57">练习2.57</h3>
-<div class="outline-text-3" id="text-2-57">
+<div id="outline-container-orgheadline104" class="outline-3">
+<h3 id="orgheadline104">练习2.57</h3>
+<div class="outline-text-3" id="text-orgheadline104">
 <p>
 开始我把这题想复杂了，将和与积相关的好多过程都重定义了一遍，结果证明这是没有必要的，例如对于表达式 <code>(+ x y z)</code> ，它会被分开成 <code>x</code> 和 <code>(+ y z)</code> 分别进行求导，再将结果利用 <code>make-sum</code> 给加起来。对于 <code>(+ y z)</code> 的求导结果来讲，它是独立的，所以 <code>make-sum</code> 过程不需要作任何修改，只需要修改 <code>augend</code> 过程，让其能产生正确的 <code>(+ y z)</code> 即可。同理， <code>multiplicand</code> 也需要作相应修改：
 </p>
@@ -2956,9 +2945,9 @@ c) 这个就不多说了，代码如下：
 </div>
 </div>
 
-<div id="outline-container-sec-2-58" class="outline-3">
-<h3 id="sec-2-58">练习2.58</h3>
-<div class="outline-text-3" id="text-2-58">
+<div id="outline-container-orgheadline105" class="outline-3">
+<h3 id="orgheadline105">练习2.58</h3>
+<div class="outline-text-3" id="text-orgheadline105">
 <p>
 a) 这个小题比较简单，之前所使用的是前缀表达式，现在要换成中缀表达式，所以，需要修改几个构造和访问表达式的过程，如下：
 </p>
@@ -2995,10 +2984,8 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 </p>
 
 <ul class="org-ul">
-<li>在有加法运算符存在的时候，整个表达式必须视为加法运算，否则就会出现上面的漏掉部分表达式的问题
-</li>
-<li>乘法和加法混合的优先级不用考虑，因为在需要求乘数和被乘数的时候，整个表达式里面已经没有加法运算符了
-</li>
+<li>在有加法运算符存在的时候，整个表达式必须视为加法运算，否则就会出现上面的漏掉部分表达式的问题</li>
+<li>乘法和加法混合的优先级不用考虑，因为在需要求乘数和被乘数的时候，整个表达式里面已经没有加法运算符了</li>
 </ul>
 
 <p>
@@ -3112,9 +3099,9 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 </div>
 </div>
 
-<div id="outline-container-sec-2-59" class="outline-3">
-<h3 id="sec-2-59">练习2.59</h3>
-<div class="outline-text-3" id="text-2-59">
+<div id="outline-container-orgheadline106" class="outline-3">
+<h3 id="orgheadline106">练习2.59</h3>
+<div class="outline-text-3" id="text-orgheadline106">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (union-set set1 set2)
@@ -3129,9 +3116,9 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 </div>
 </div>
 
-<div id="outline-container-sec-2-60" class="outline-3">
-<h3 id="sec-2-60">练习2.60</h3>
-<div class="outline-text-3" id="text-2-60">
+<div id="outline-container-orgheadline107" class="outline-3">
+<h3 id="orgheadline107">练习2.60</h3>
+<div class="outline-text-3" id="text-orgheadline107">
 <p>
 对于这种类型的集合，只需要重新定义 <code>adjoin-set</code> 和 <code>union-set</code> 两个过程即可：
 </p>
@@ -3152,9 +3139,9 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 </div>
 </div>
 
-<div id="outline-container-sec-2-61" class="outline-3">
-<h3 id="sec-2-61">练习2.61</h3>
-<div class="outline-text-3" id="text-2-61">
+<div id="outline-container-orgheadline108" class="outline-3">
+<h3 id="orgheadline108">练习2.61</h3>
+<div class="outline-text-3" id="text-orgheadline108">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (adjoin-set x set)
@@ -3172,9 +3159,9 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 </div>
 </div>
 
-<div id="outline-container-sec-2-62" class="outline-3">
-<h3 id="sec-2-62">练习2.62</h3>
-<div class="outline-text-3" id="text-2-62">
+<div id="outline-container-orgheadline109" class="outline-3">
+<h3 id="orgheadline109">练习2.62</h3>
+<div class="outline-text-3" id="text-orgheadline109">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (union-set set1 set2)
@@ -3201,9 +3188,9 @@ b) 这个小题如题目中所说，确实比较难，相当于我们要实现�
 </div>
 </div>
 
-<div id="outline-container-sec-2-63" class="outline-3">
-<h3 id="sec-2-63">练习2.63</h3>
-<div class="outline-text-3" id="text-2-63">
+<div id="outline-container-orgheadline110" class="outline-3">
+<h3 id="orgheadline110">练习2.63</h3>
+<div class="outline-text-3" id="text-orgheadline110">
 <p>
 a) 本来以为这两个过程会产生不同的结果的，但试了一下，结果是一样的。。第一个过程好理解，先遍历左子树，然后访问根，再遍历右子树；第二个过程采用了两次迭代，看起来要麻烦一点，但是从整体看，还是比较好理解的：先把右子树放到 <code>result-list</code> 里面，再把根加进去放到第一个，再把左子树加进去，至于左子树加的位置，因为 <code>copy-to-list</code> 过程只有在加根结点时才会改变 <code>result-list</code> ，而根结点会被加在第一个位置，所以可以肯定，左子树的位置是在最前面，因此，第二个过程的生成的表顺序也是左子树、根、右子树，和第一个过程一样。
 </p>
@@ -3214,9 +3201,9 @@ b) 其实在我看来，因为两者都要遍历所有的结点，都需要n步�
 </div>
 </div>
 
-<div id="outline-container-sec-2-64" class="outline-3">
-<h3 id="sec-2-64">练习2.64</h3>
-<div class="outline-text-3" id="text-2-64">
+<div id="outline-container-orgheadline111" class="outline-3">
+<h3 id="orgheadline111">练习2.64</h3>
+<div class="outline-text-3" id="text-orgheadline111">
 <p>
 a) <code>partial-tree</code> 这个函数很精妙，尤其是返回值，为了方便递归调用，将返回值定义成了两部分： <code>car</code> 是真正的转换后的平衡树， <code>cdr</code> 是表中剩下的元素。这样一来，在递归调用时，就很方便地可以取到表中剩下的元素进行操作。过程首先求值了左子树，为了保持树平衡，左子树的元素个数为 <i>(n - 1) / 2</i> 再向下取整，然后，将剩下的元素的首元素作为树的根结点，再利用再次剩下的元素求值右子树，右子树的元素个数为 <i>n - 左子树元素数 - 1</i> 。
 </p>
@@ -3227,9 +3214,9 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 
-<div id="outline-container-sec-2-65" class="outline-3">
-<h3 id="sec-2-65">练习2.65</h3>
-<div class="outline-text-3" id="text-2-65">
+<div id="outline-container-orgheadline112" class="outline-3">
+<h3 id="orgheadline112">练习2.65</h3>
+<div class="outline-text-3" id="text-orgheadline112">
 <p>
 偷懒的办法：先利用 <code>tree-&gt;list</code> 将树转换成有序表，再利用前面已经定义过的对有序表求交并集的过程得到结果，最后再利用 <code>list-&gt;tree</code> 给转换回来。。
 </p>
@@ -3274,9 +3261,9 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 
-<div id="outline-container-sec-2-66" class="outline-3">
-<h3 id="sec-2-66">练习2.66</h3>
-<div class="outline-text-3" id="text-2-66">
+<div id="outline-container-orgheadline113" class="outline-3">
+<h3 id="orgheadline113">练习2.66</h3>
+<div class="outline-text-3" id="text-orgheadline113">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (lookup given-key tree-of-records)
@@ -3289,9 +3276,9 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 
-<div id="outline-container-sec-2-67" class="outline-3">
-<h3 id="sec-2-67">练习2.67</h3>
-<div class="outline-text-3" id="text-2-67">
+<div id="outline-container-orgheadline114" class="outline-3">
+<h3 id="orgheadline114">练习2.67</h3>
+<div class="outline-text-3" id="text-orgheadline114">
 <p>
 这个题目的目的，就是让我们把所有的代码都敲一遍。。
 </p>
@@ -3302,9 +3289,9 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 
-<div id="outline-container-sec-2-68" class="outline-3">
-<h3 id="sec-2-68">练习2.68</h3>
-<div class="outline-text-3" id="text-2-68">
+<div id="outline-container-orgheadline115" class="outline-3">
+<h3 id="orgheadline115">练习2.68</h3>
+<div class="outline-text-3" id="text-orgheadline115">
 <div class="org-src-container">
 
 <pre class="src src-scheme">(define (symbol-on-tree? symbol tree)
@@ -3324,9 +3311,9 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 
-<div id="outline-container-sec-2-69" class="outline-3">
-<h3 id="sec-2-69">练习2.69</h3>
-<div class="outline-text-3" id="text-2-69">
+<div id="outline-container-orgheadline116" class="outline-3">
+<h3 id="orgheadline116">练习2.69</h3>
+<div class="outline-text-3" id="text-orgheadline116">
 <p>
 其实这个题目我觉得并不难，不知道为什么出题者在题目后面缀了那么大一段说明。。
 </p>
@@ -3344,9 +3331,9 @@ b) 因为要从列表中构建n个元素的树，必须访问这n个元素，所
 </div>
 </div>
 
-<div id="outline-container-sec-2-70" class="outline-3">
-<h3 id="sec-2-70">练习2.70</h3>
-<div class="outline-text-3" id="text-2-70">
+<div id="outline-container-orgheadline117" class="outline-3">
+<h3 id="orgheadline117">练习2.70</h3>
+<div class="outline-text-3" id="text-orgheadline117">
 <p>
 encode消息的相关变量定义及调用：
 </p>
@@ -3380,9 +3367,9 @@ encode消息的相关变量定义及调用：
 </div>
 </div>
 
-<div id="outline-container-sec-2-71" class="outline-3">
-<h3 id="sec-2-71">练习2.71</h3>
-<div class="outline-text-3" id="text-2-71">
+<div id="outline-container-orgheadline118" class="outline-3">
+<h3 id="orgheadline118">练习2.71</h3>
+<div class="outline-text-3" id="text-orgheadline118">
 <p>
 对于这样权重组成的符号，因为 <code>2 ^ (n - 1) + 2 ^ n &lt; 2 ^ (n + 1)</code> ， <code>2 ^ (n - 1) + 2 ^ n + 2 ^ (n + 1) &lt; 2 ^ (n + 2)</code> ，所以，构造Huffman树的话，每一步构造出来的树的权重都是最小的，因此，具有最高权重的符号必然只需要一个二进制位，而最不频繁的符号，则需要 <code>n - 1</code> 个二进制位。
 </p>
@@ -3397,15 +3384,15 @@ n = 5对应的Huffman树如下图所示：
 </div>
 </div>
 
-<div id="outline-container-sec-2-72" class="outline-3">
-<h3 id="sec-2-72">练习2.72</h3>
-<div class="outline-text-3" id="text-2-72">
+<div id="outline-container-orgheadline119" class="outline-3">
+<h3 id="orgheadline119">练习2.72</h3>
+<div class="outline-text-3" id="text-orgheadline119">
 <p>
 对于这种算法复杂度的题我最讨厌了。。主要是因为我太菜了。。
 </p>
 
 <p>
-按照<a href="#sec-2-71">上一题</a>的分析，对于最频繁的符号，只需要一次搜索，即<a href="#sec-2-68">练习2.68</a>中的 <code>symbol-on-tree?</code> 只需要执行一次， <code>symbol-on-tree?</code> 中的 <code>memq</code> 函数调用的复杂度是O(n)，所以编码最频繁的符号的复杂度是O(n)；对于最不频繁的符号，需要n-1次搜索，每次调用 <code>symbol-on-tree?</code> 的复杂度都是O(n)，所以总的复杂度就是O(n ^ 2)。
+按照<a href="#orgheadline118">上一题</a>的分析，对于最频繁的符号，只需要一次搜索，即<a href="#orgheadline115">练习2.68</a>中的 <code>symbol-on-tree?</code> 只需要执行一次， <code>symbol-on-tree?</code> 中的 <code>memq</code> 函数调用的复杂度是O(n)，所以编码最频繁的符号的复杂度是O(n)；对于最不频繁的符号，需要n-1次搜索，每次调用 <code>symbol-on-tree?</code> 的复杂度都是O(n)，所以总的复杂度就是O(n ^ 2)。
 </p>
 </div>
 </div>

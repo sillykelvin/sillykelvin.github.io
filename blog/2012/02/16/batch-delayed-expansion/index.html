@@ -146,7 +146,9 @@ echo %str%
 </p>
 
 <ol class="org-ol">
-<li>暂时关闭变量延迟：
+<li><p>
+暂时关闭变量延迟：
+</p>
 
 <div class="org-src-container">
 
@@ -170,10 +172,11 @@ setlocal enabledelayedexpansion
 
 <p>
 在需要处理感叹号的地方，暂时关闭变量延迟，处理完后再打开。这时能正常输出感叹号。
-</p>
-</li>
+</p></li>
 
-<li>在开启变量延迟之前set：
+<li><p>
+在开启变量延迟之前set：
+</p>
 
 <div class="org-src-container">
 
@@ -189,8 +192,7 @@ echo !str!    ::注意这里
 
 <p>
 在开启变量延迟之前设置好变量，但是要注意，在使用变量的时候，需要使用感叹号引用。这时感叹号也可以正常输出。
-</p>
-</li>
+</p></li>
 </ol>
 
 <hr  />
