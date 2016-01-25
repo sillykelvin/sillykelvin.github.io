@@ -10,7 +10,7 @@
 #+DESCRIPTION: notes about solving problems on projecteuler.net
 
 
-在偶然之间，得知了[[projecteuler.net]]这个网站（以下简称PE）。下面这段话摘自它的about页面的最底端：
+在偶然之间，得知了 [[http://projecteuler.net][projecteuler.net]] 这个网站（以下简称PE）。下面这段话摘自它的about页面的最底端：
 
 #+BEGIN_QUOTE
 Project Euler exists to encourage, challenge, and develop the skills and enjoyment of anyone with an interest in the fascinating world of mathematics.
