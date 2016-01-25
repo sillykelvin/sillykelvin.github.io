@@ -75,11 +75,11 @@ int main() {
 
 由于涉及随机数，所以每次程序输出都不一样，下面是其中一次的输出结果：
 
-#+BEGIN_SRC
+#+BEGIN_EXAMPLE
 Testing times: 100000000
 Always change choice, hit: 66663376, percentage: 0.666634
 Always unchange choice, hit: 33338904, percentage: 0.333389
-#+END_SRC
+#+END_EXAMPLE
 
 可以清楚地看到，改变主意大概占了66.6%，不改变主意大概占了33.3%，分别接近2/3和1/3。
 
