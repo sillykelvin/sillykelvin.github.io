@@ -16,22 +16,4 @@
 
 --------------------------------------------------------------------------------
 
-胡(×和谐×)涛，洋名Kelvin Hu，常用头像为带面具的V，并以ini/ini_always/kelvin/kelvinh/kelvin_hu等ID混于江湖。现实中，本人为80后非典型性技术男，伪geek一枚。
-
-这是我用 Emacs + Org mode + Git + [[https://github.com/kelvinh/org-page][Org-page]] + [[http://pages.github.com][GitHub Pages]] 搭建的个人站点，如其名字所说，我会不时在这上面胡言乱语一番。
-
-如果：
-
-- 你想更多地了解我，请前往@@html:<a href="/about/">About</a>@@页面
-
-- 想看看我的一些胡言乱语，请前往@@html:<a href="/blog/">Blog</a>@@页面
-
-- 想看看我平时记的一些杂七杂八的知识点，请前往@@html:<a href="/wiki/">Wiki</a>@@页面
-
-- 特别地，想看看我的SICP的习题解，那么传送门在@@html:<a href="/wiki/sicp/">这里</a>@@（不知道SICP是啥？请自行Google好么。。）
-
-- 再次特别地，想看看我的Project Euler的习题解，请前往此@@html:<a href="/wiki/project-euler/">传送门</a>@@（PS：这是个坑，跳时小心。。）
-
---------------------------------------------------------------------------------
-
-最后，再打个小广告：希望用 Emacs + Org-mode 写博客的朋友，不妨看看 [[https://github.com/kelvinh/org-page][Org-page]] 这个静态站点生成器，祝您生活愉快。 :-)
+胡(×和谐×)涛，洋名Kelvin Hu，常用头像为带面具的V，并以ini/ini_always/kelvin/kelvinh/kelvin_hu等ID混于江湖。
