@@ -37,6 +37,8 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#orgheadline1">Two Sum</a></li>
+<li><a href="#orgheadline2">Add Two Numbers</a></li>
+<li><a href="#orgheadline3">Longest Substring Without Repeating Characters</a></li>
 </ul>
 </div>
 </div>
@@ -49,7 +51,11 @@
 <div class="outline-text-2" id="text-orgheadline1">
 <blockquote>
 <p>
-where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+Given an array of integers, find two numbers such that they add up to a specific target number.
+</p>
+
+<p>
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
 </p>
 
 <p>
@@ -145,12 +151,146 @@ public:
 </div>
 </div>
 
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Add Two Numbers</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<blockquote>
+<p>
+You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+</p>
+
+<p>
+Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+Output: 7 -&gt; 0 -&gt; 8
+</p>
+</blockquote>
+
+<p>
+这个题目应该是很简单的，创建一个循环直到两个链表都空了为止，每个循环把两个数加起来，如果有进位，标记一下，下一轮进位。需要注意的是，在循环结束之后，如果还有进位，记得增加一个值为1的结点。代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        bool carry = false;
+        ListNode dummy(-1);
+        ListNode *last = &amp;dummy;
+
+        while (true) {
+            if (!l1 &amp;&amp; !l2)
+                break;
+
+            int val1 = l1 ? l1-&gt;val : 0;
+            int val2 = l2 ? l2-&gt;val : 0;
+
+            int sum = val1 + val2;
+            if (carry) {
+                sum += 1;
+                carry = false;
+            }
+
+            if (sum &gt;= 10) {
+                sum -= 10;
+                carry = true;
+            }
+
+            last-&gt;next = new ListNode(sum);
+            last = last-&gt;next;
+
+            l1 = l1 ? l1-&gt;next : NULL;
+            l2 = l2 ? l2-&gt;next : NULL;
+        }
+
+        if (carry)
+            last-&gt;next = new ListNode(1);
+
+        return dummy.next;
+    }
+};
+</pre>
+</div>
+
+<p>
+其实还有一个更好一点的解法：在一个链表结束后，直接把另外一个长链表剩下的部分挂到结果链表上，处理好进位即可。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Longest Substring Without Repeating Characters</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<blockquote>
+<p>
+Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+</p>
+</blockquote>
+
+<p>
+这个是查找字符串中最长无重复字符字串的问题。可以假设我已经有一个最长无重复的子串，那么下一步如何做？自然是判断下一个字符在这个子串里有没有，如果没有，加入这个字符，继续查找下一个；如果有，那么就把当前串里这个字符及以前的部分切掉，剩下的仍然是一个无重复的最大子串，继续查找下一个即可。但有一个关键点是，如果高效查找这个子串里是不是已经存在某个字符。简单的自然是循环一遍，不过因为字符数量有限，我采用了数组保存的方式，这样查找就能降到O(1)级别。代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int start = 0;
+        int end = 0;
+        int longest = 0;
+
+        int position[256] = {0};
+
+        while (end &lt; s.length()) {
+            char c = s[end];
+            int&amp; pos = position[c];
+            if (pos) {
+                int len = end - start;
+                if (len &gt; longest)
+                    longest = len;
+
+                int old_start = start;
+                start = pos;
+
+                for (int i = old_start; i &lt; pos; ++i)
+                    position[s[i]] = 0;
+            }
+
+            pos = end + 1;
+            ++end;
+        }
+
+        int len = end - start;
+        if (len &gt; longest)
+            longest = len;
+
+        return longest;
+    }
+};
+</pre>
+</div>
+
+<p>
+其中 <code>position[256]</code> 保存了字符在串中的位置，但因为0被用来表示没有出现，所以位置就只能从1开始了，所以那个 <code>pos = end + 1;</code> 看起来就会比较别扭。。。
+</p>
+</div>
+</div>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2016-01-20</span>
-        <span title="last modification date" class="post-info">2016-01-22</span>
+        <span title="last modification date" class="post-info">2016-01-26</span>
         <span title="tags" class="post-info"><a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/leetcode/">LeetCode</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
