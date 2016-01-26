@@ -15,7 +15,9 @@
 * Two Sum
 
 #+BEGIN_QUOTE
- where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
+Given an array of integers, find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
 
 You may assume that each input would have exactly one solution.
 
@@ -93,3 +95,113 @@ Output: index1=1, index2=2
 #+END_SRC
 
 经过改造之后，时间复杂度降到了O(nlogn)级别，所以通过了，这个理论上应该不会有更低的复杂度了，毕竟要遍历一遍。。。
+
+* Add Two Numbers
+
+#+BEGIN_QUOTE
+You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+#+END_QUOTE
+
+这个题目应该是很简单的，创建一个循环直到两个链表都空了为止，每个循环把两个数加起来，如果有进位，标记一下，下一轮进位。需要注意的是，在循环结束之后，如果还有进位，记得增加一个值为1的结点。代码如下：
+
+#+BEGIN_SRC C++
+  /**
+   ,* Definition for singly-linked list.
+   ,* struct ListNode {
+   ,*     int val;
+   ,*     ListNode *next;
+   ,*     ListNode(int x) : val(x), next(NULL) {}
+   ,* };
+   ,*/
+  class Solution {
+  public:
+      ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+          bool carry = false;
+          ListNode dummy(-1);
+          ListNode *last = &dummy;
+
+          while (true) {
+              if (!l1 && !l2)
+                  break;
+
+              int val1 = l1 ? l1->val : 0;
+              int val2 = l2 ? l2->val : 0;
+
+              int sum = val1 + val2;
+              if (carry) {
+                  sum += 1;
+                  carry = false;
+              }
+
+              if (sum >= 10) {
+                  sum -= 10;
+                  carry = true;
+              }
+
+              last->next = new ListNode(sum);
+              last = last->next;
+
+              l1 = l1 ? l1->next : NULL;
+              l2 = l2 ? l2->next : NULL;
+          }
+
+          if (carry)
+              last->next = new ListNode(1);
+
+          return dummy.next;
+      }
+  };
+#+END_SRC
+
+其实还有一个更好一点的解法：在一个链表结束后，直接把另外一个长链表剩下的部分挂到结果链表上，处理好进位即可。
+
+* Longest Substring Without Repeating Characters
+
+#+BEGIN_QUOTE
+Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+#+END_QUOTE
+
+这个是查找字符串中最长无重复字符字串的问题。可以假设我已经有一个最长无重复的子串，那么下一步如何做？自然是判断下一个字符在这个子串里有没有，如果没有，加入这个字符，继续查找下一个；如果有，那么就把当前串里这个字符及以前的部分切掉，剩下的仍然是一个无重复的最大子串，继续查找下一个即可。但有一个关键点是，如果高效查找这个子串里是不是已经存在某个字符。简单的自然是循环一遍，不过因为字符数量有限，我采用了数组保存的方式，这样查找就能降到O(1)级别。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      int lengthOfLongestSubstring(string s) {
+          int start = 0;
+          int end = 0;
+          int longest = 0;
+
+          int position[256] = {0};
+
+          while (end < s.length()) {
+              char c = s[end];
+              int& pos = position[c];
+              if (pos) {
+                  int len = end - start;
+                  if (len > longest)
+                      longest = len;
+
+                  int old_start = start;
+                  start = pos;
+
+                  for (int i = old_start; i < pos; ++i)
+                      position[s[i]] = 0;
+              }
+
+              pos = end + 1;
+              ++end;
+          }
+
+          int len = end - start;
+          if (len > longest)
+              longest = len;
+
+          return longest;
+      }
+  };
+#+END_SRC
+
+其中 =position[256]= 保存了字符在串中的位置，但因为0被用来表示没有出现，所以位置就只能从1开始了，所以那个 =pos = end + 1;= 看起来就会比较别扭。。。
