@@ -39,6 +39,7 @@
 <li><a href="#orgheadline1">Two Sum</a></li>
 <li><a href="#orgheadline2">Add Two Numbers</a></li>
 <li><a href="#orgheadline3">Longest Substring Without Repeating Characters</a></li>
+<li><a href="#orgheadline4">Median of Two Sorted Arrays</a></li>
 </ul>
 </div>
 </div>
@@ -285,12 +286,159 @@ public:
 </div>
 </div>
 
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Median of Two Sorted Arrays</h2>
+<div class="outline-text-2" id="text-orgheadline4">
+<blockquote>
+<p>
+There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+</p>
+</blockquote>
+
+<p>
+题目的意思是，找两个已经排序的数组的中位数，要求时间复杂度是O(log(m+n))。突然间觉得好对不起我的高中数学老师，我竟然不知道中位数是怎么算的了，google了一下才知道，对一个排好序的数列，如果项数是奇数项，中位数就是最中间的数；如果项数是偶数项，中位数就是最中间两个数的平均数。不过，下面的叙述中，为了方便理解，我们以奇数项为例，偶数项其实是一样，不过因为偶数项的中位数要涉及两个数，所以叙述上要麻烦一些。
+</p>
+
+<p>
+这个题目明确标明了是Hard，这也是这几题遇到的第一个Hard级别的题。如果将两个数混在一起排好序，取中间就可以了，但这样必然要到排序O(nlog(m+n))的复杂度，达不到要求。要达到O(log(m+n))的复杂度，必然要针对两个数组使用类似二分查找的算法才能满足。仔细分析了一下，发现我们的需求其实是淘汰掉两个数组中大约一半的最小的数，然后剩下的第一个数就是中位数。记要淘汰的个数为C，那么这个C应该等于(m+n)/2。如何淘汰呢？我们采用二分查找的方式：分别找到数组A、B中的第C/2个数，然后比较，如果A[C/2]大于B[C/2]，那么就直接把数组B中C/2及以前的数都淘汰掉，反之就淘汰掉A中C/2及以前的数。然后C减去已淘汰的个数，继续上述过程，直到C为0为止。那么剩下的两个数组中，最小的数就是中位数。当然，如果数组整体长度不够，就用整体长度来代替C/2。
+</p>
+
+<p>
+这个做法的正确性可以采用反证法很好地证明：假设A[C/2] &gt; B[C/2]，于是在淘汰B中的C/2个数时，淘汰了我们需要的中位数，那么这个数的位置P必然小于等于C/2，因为按照我们前面的约定，要淘汰掉C个数然后剩下的第一个才是中位数，那么我们就要找到C个小于等于B[P]的数才行。在B中，能淘汰的数是P-1个，要小于C/2，那么必然要求在A中淘汰大于C/2个数。但我们已经知道，A[C/2] &gt; B[C/2] &gt;= B[P]，那么A中自然是没有足够的数供淘汰的，于是正确性得证。
+</p>
+
+<p>
+实现代码如下，因为要不停地去判断是偶数项还是奇数项，还要判断数组长度，所以代码写得比较乱：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    double findMedianSortedArrays(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
+        int total = nums1.size() + nums2.size();
+        int before = (total - 1) / 2;
+
+        int start1 = 0;
+        int start2 = 0;
+
+        while (before &gt; 1) {
+            if (start1 &gt;= nums1.size()) {
+                start2 += before;
+                if (total % 2 == 0)
+                    return (nums2[start2] + nums2[start2 + 1]) * 1.0 / 2;
+                else
+                    return nums2[start2];
+            }
+
+            if (start2 &gt;= nums2.size()) {
+                start1 += before;
+                if (total % 2 == 0)
+                    return (nums1[start1] + nums1[start1 + 1]) * 1.0 / 2;
+                else
+                    return nums1[start1];
+            }
+
+            int count = before / 2;
+            int actual1, n1;
+            int actual2, n2;
+
+            int size1 = nums1.size() - start1;
+            int size2 = nums2.size() - start2;
+
+            if (count &gt;= size1) {
+                actual1 = size1;
+                n1 = nums1.back();
+            } else {
+                actual1 = count;
+                n1 = nums1.at(start1 + count - 1);
+            }
+
+            if (count &gt;= size2) {
+                actual2 = size2;
+                n2 = nums2.back();
+            } else {
+                actual2 = count;
+                n2 = nums2.at(start2 + count - 1);
+            }
+
+            if (n1 &gt; n2) {
+                start2 += actual2;
+                before -= actual2;
+            } else {
+                start1 += actual1;
+                before -= actual1;
+            }
+        }
+
+        if (before == 1) {
+            if (start1 &gt;= nums1.size())
+                start2 += 1;
+            else if (start2 &gt;= nums2.size())
+                start1 += 1;
+            else {
+                if (nums1[start1] &gt; nums2[start2])
+                    start2 += 1;
+                else
+                    start1 += 1;
+            }
+
+            before = 0;
+        }
+
+        if (total % 2 == 0) {
+            if (start1 &gt;= nums1.size())
+                return (nums2[start2] + nums2[start2 + 1]) * 1.0 / 2;
+            else if (start2 &gt;= nums2.size())
+                return (nums1[start1] + nums1[start1 + 1]) * 1.0 / 2;
+            else {
+                int m1, m2;
+                if (nums1[start1] &gt; nums2[start2]) {
+                    m1 = nums2[start2];
+                    start2 += 1;
+                } else {
+                    m1 = nums1[start1];
+                    start1 += 1;
+                }
+
+                if (start1 &gt;= nums1.size())
+                    m2 = nums2[start2];
+                else if (start2 &gt;= nums2.size())
+                    m2 = nums1[start1];
+                else {
+                    if (nums1[start1] &gt; nums2[start2])
+                        m2 = nums2[start2];
+                    else
+                        m2 = nums1[start1];
+                }
+
+                return (m1 + m2) * 1.0 / 2;
+            }
+        } else {
+            if (start1 &gt;= nums1.size())
+                return nums2[start2];
+            else if (start2 &gt;= nums2.size())
+                return nums1[start1];
+            else {
+                if (nums1[start1] &gt; nums2[start2])
+                    return nums2[start2];
+                else
+                    return nums1[start1];
+            }
+        }
+    }
+};
+</pre>
+</div>
+</div>
+</div>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2016-01-20</span>
-        <span title="last modification date" class="post-info">2016-01-26</span>
+        <span title="last modification date" class="post-info">2016-01-31</span>
         <span title="tags" class="post-info"><a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/leetcode/">LeetCode</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
