@@ -337,3 +337,136 @@ There are two sorted arrays nums1 and nums2 of size m and n respectively. Find t
       }
   };
 #+END_SRC
+
+* Longest Palindromic Substring
+
+#+BEGIN_QUOTE
+Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+#+END_QUOTE
+
+题目的意思是找字符串中最长的回文字符串。初步想法是遍历字符串，然后以当前字符为中轴，同时向前向后进行匹配，找到最长的回文串。感觉应该还有更简单更高效的做法，但目前还没想出来。。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      string longestPalindrome(string s) {
+          int longest_start = 0;
+          int longest_length = 0;
+
+          int pos = 0;
+          while (pos < s.length()) {
+              int next = pos + 1;
+              int back = pos;
+              int start = pos;
+              int length = 0;
+              while (next < s.length() && back >= 0) {
+                  if (s[next] == s[back]) {
+                      start = back;
+                      length += 2;
+                      --back;
+                      ++next;
+                      continue;
+                  }
+
+                  break;
+              }
+
+              if (length == 0)
+                  length = 1;
+
+              if (length > longest_length) {
+                  longest_start = start;
+                  longest_length = length;
+              }
+
+              next = pos + 1;
+              back = pos - 1;
+              start = pos;
+              length = 1;
+              while (next < s.length() && back >= 0) {
+                  if (s[next] == s[back]) {
+                      start = back;
+                      length += 2;
+                      --back;
+                      ++next;
+                      continue;
+                  }
+
+                  break;
+              }
+
+              if (length > longest_length) {
+                  longest_start = start;
+                  longest_length = length;
+              }
+
+              ++pos;
+          }
+
+          return s.substr(longest_start, longest_length);
+      }
+  };
+#+END_SRC
+
+* ZigZag Conversion
+
+#+BEGIN_QUOTE
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+#+BEGIN_EXAMPLE
+P   A   H   N
+A P L S I I G
+Y   I   R
+#+END_EXAMPLE
+
+And then read line by line: "PAHNAPLSIIGYIR"
+Write the code that will take a string and make this conversion given a number of rows:
+
+#+BEGIN_EXAMPLE
+string convert(string text, int nRows);
+#+END_EXAMPLE
+
+=convert("PAYPALISHIRING", 3)= should return "PAHNAPLSIIGYIR".
+#+END_QUOTE
+
+题目的意思是，把一个字符串折成锯齿状，然后再按行返回。这是目前为止第一个标记为Easy的题目，实际也确实比较简单，找到规律即可。其实可以发现：对于每一行的下一个字符的位置，都可以根据当前位置算出来，比如对于顶点，同一行的两个顶点之间，除了两个顶点行之外，其它行上的点都重复了两遍，再加上不重复的两个顶点即可，即：(n-2)*2+2。不是顶点的点同样可以用类似的方法推导出。所以只要知道了每行第一个点的位置就好办了，而每行第一个点的位置就是行数所对应的点。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      string convert(string s, int numRows) {
+          if (numRows == 1 || s.length() <= numRows)
+              return s;
+
+          string result;
+          result.reserve(s.length());
+
+          const int n = numRows;
+
+          for (int i = 0; i < n; ++i) {
+              int next = i;
+              bool down = true;
+              while (next < s.length()) {
+                  result.push_back(s[next]);
+
+                  if (i == 0 || i == n - 1) {
+                      // next += (n - 1 - 1) * 2 + 2;
+                      next += (n - 1) << 1;
+                      continue;
+                  }
+
+                  if (down)
+                      // next += (n - i - 1 - 1) * 2 + 2;
+                      next += (n - i - 1) << 1;
+                  else
+                      // next += (i - 1) * 2 + 2;
+                      next += i << 1;
+
+                  down = !down;
+              }
+          }
+
+          return result;
+      }
+  };
+#+END_SRC
