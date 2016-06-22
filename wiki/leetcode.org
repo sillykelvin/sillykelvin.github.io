@@ -408,6 +408,66 @@ Given a string S, find the longest palindromic substring in S. You may assume th
   };
 #+END_SRC
 
+补充：后来在看到《算法导论》的动态规划的时候，有一道习题就是这个，当时想：哇，可以用动态规划解耶！于是苦苦思索，终于想出解法，其实关键就是将子串是否是回文的信息存下来，供父串来判断。本来以为性能会比前面的算法好，但没想到却比前面的算法要差不少，因为要双重for循环，所以是O(n^2)级，确实是要差一些。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      static const int max_length = 1001;
+
+      bool isPalindrome(const string& s, int start, int count, char *array) {
+          char *c = (array + start * max_length) + count;
+          if (*c == 1)
+              return true;
+
+          if (*c == -1)
+              return false;
+
+          if (s.at(start) != s.at(start + count - 1))
+              return false;
+
+          if (isPalindrome(s, start + 1, count - 2, array)) {
+              ,*c = 1;
+              return true;
+          } else {
+              ,*c = -1;
+              return false;
+          }
+      }
+
+      string longestPalindrome(string s) {
+          if (s.empty())
+              return s;
+
+          char array[max_length][max_length];
+          memset(array, 0x00, sizeof(array));
+
+          for (int i = 0; i < s.length(); ++i) {
+              array[i][0] = 1;
+              array[i][1] = 1;
+          }
+
+          int start = 0;
+          int count = 1;
+          for (int i = 0; i < s.length(); ++i) {
+              for (int j = i + 1; j < s.length(); ++j) {
+                  int len = j - i + 1;
+                  if (len < count)
+                      continue;
+                  if (isPalindrome(s, i, len, (char *) array)) {
+                      if (len > count) {
+                          start = i;
+                          count = len;
+                      }
+                  }
+              }
+          }
+
+          return s.substr(start, count);
+      }
+  };
+#+END_SRC
+
 * ZigZag Conversion
 
 #+BEGIN_QUOTE
@@ -467,6 +527,55 @@ string convert(string text, int nRows);
           }
 
           return result;
+      }
+  };
+#+END_SRC
+
+* Reverse Integer
+
+#+BEGIN_QUOTE
+Reverse digits of an integer.
+
+Example1: x = 123, return 321
+Example2: x = -123, return -321
+#+END_QUOTE
+
+题目的意思很简单，反转一个整型数并返回。但这个问题关键并不是考算法，而是在考一些边缘情况，比方说反转后溢出的问题。不说了，提交了两次都被坑，第三次才通过，代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      int reverse(int x) {
+          int max = static_cast<int>(static_cast<unsigned int>(-1) >> 1);
+          if (x == max + 1)
+              return 0;
+
+          bool negative = false;
+          if (x < 0) {
+              negative = true;
+              x = -x;
+          }
+
+          int max_high = max / 10;
+          int max_low  = max % 10;
+
+          int ret = 0;
+
+          int num = 0;
+          while (x != 0) {
+              num = x % 10;
+              x /= 10;
+
+              if (ret > max_high || (ret == max_high && num > max_low))
+                  return 0;
+
+              ret = ret * 10 + num;
+          }
+
+          if (negative)
+              ret = -ret;
+
+          return ret;
       }
   };
 #+END_SRC
