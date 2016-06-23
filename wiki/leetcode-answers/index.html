@@ -22,7 +22,7 @@
           <li><a href="https://github.com/kelvinh">GitHub</a></li>
           <li><a href="/rss.xml">RSS</a></li>
         </ul>
-        <form method="get" id="searchform" action="http://www.google.com/search">
+        <form method="get" id="searchform" action="//www.google.com/search">
           <input type="text" class="field" name="q" id="s" placeholder="Search">
           <input type="hidden" name="as_sitesearch" value="kelvinh.github.io">
         </form>
@@ -42,6 +42,8 @@
 <li><a href="#orgheadline4">Median of Two Sorted Arrays</a></li>
 <li><a href="#orgheadline5">Longest Palindromic Substring</a></li>
 <li><a href="#orgheadline6">ZigZag Conversion</a></li>
+<li><a href="#orgheadline7">Reverse Integer</a></li>
+<li><a href="#orgheadline8">String to Integer (atoi)</a></li>
 </ul>
 </div>
 </div>
@@ -511,6 +513,70 @@ public:
 };
 </pre>
 </div>
+
+<p>
+补充：后来在看到《算法导论》的动态规划的时候，有一道习题就是这个，当时想：哇，可以用动态规划解耶！于是苦苦思索，终于想出解法，其实关键就是将子串是否是回文的信息存下来，供父串来判断。本来以为性能会比前面的算法好，但没想到却比前面的算法要差不少，因为要双重for循环，所以是O(n^2)级，确实是要差一些。代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    static const int max_length = 1001;
+
+    bool isPalindrome(const string&amp; s, int start, int count, char *array) {
+        char *c = (array + start * max_length) + count;
+        if (*c == 1)
+            return true;
+
+        if (*c == -1)
+            return false;
+
+        if (s.at(start) != s.at(start + count - 1))
+            return false;
+
+        if (isPalindrome(s, start + 1, count - 2, array)) {
+            *c = 1;
+            return true;
+        } else {
+            *c = -1;
+            return false;
+        }
+    }
+
+    string longestPalindrome(string s) {
+        if (s.empty())
+            return s;
+
+        char array[max_length][max_length];
+        memset(array, 0x00, sizeof(array));
+
+        for (int i = 0; i &lt; s.length(); ++i) {
+            array[i][0] = 1;
+            array[i][1] = 1;
+        }
+
+        int start = 0;
+        int count = 1;
+        for (int i = 0; i &lt; s.length(); ++i) {
+            for (int j = i + 1; j &lt; s.length(); ++j) {
+                int len = j - i + 1;
+                if (len &lt; count)
+                    continue;
+                if (isPalindrome(s, i, len, (char *) array)) {
+                    if (len &gt; count) {
+                        start = i;
+                        count = len;
+                    }
+                }
+            }
+        }
+
+        return s.substr(start, count);
+    }
+};
+</pre>
+</div>
 </div>
 </div>
 
@@ -590,16 +656,171 @@ public:
 </div>
 </div>
 
+<div id="outline-container-orgheadline7" class="outline-2">
+<h2 id="orgheadline7">Reverse Integer</h2>
+<div class="outline-text-2" id="text-orgheadline7">
+<blockquote>
+<p>
+Reverse digits of an integer.
+</p>
+
+<p>
+Example1: x = 123, return 321
+Example2: x = -123, return -321
+</p>
+</blockquote>
+
+<p>
+题目的意思很简单，反转一个整型数并返回。但这个问题关键并不是考算法，而是在考一些边缘情况，比方说反转后溢出的问题。不说了，提交了两次都被坑，第三次才通过，代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    int reverse(int x) {
+        int max = static_cast&lt;int&gt;(static_cast&lt;unsigned int&gt;(-1) &gt;&gt; 1);
+        if (x == max + 1)
+            return 0;
+
+        bool negative = false;
+        if (x &lt; 0) {
+            negative = true;
+            x = -x;
+        }
+
+        int max_high = max / 10;
+        int max_low  = max % 10;
+
+        int ret = 0;
+
+        int num = 0;
+        while (x != 0) {
+            num = x % 10;
+            x /= 10;
+
+            if (ret &gt; max_high || (ret == max_high &amp;&amp; num &gt; max_low))
+                return 0;
+
+            ret = ret * 10 + num;
+        }
+
+        if (negative)
+            ret = -ret;
+
+        return ret;
+    }
+};
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline8" class="outline-2">
+<h2 id="orgheadline8">String to Integer (atoi)</h2>
+<div class="outline-text-2" id="text-orgheadline8">
+<blockquote>
+<p>
+Implement atoi to convert a string to an integer.
+</p>
+
+<p>
+Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+</p>
+
+<p>
+Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
+</p>
+</blockquote>
+
+<p>
+这个题目也很简单，实现一个 <code>atoi</code> 函数，但是和上一题一样，关键不是考算法，而是考一些边缘情况，比方说溢出以及无效字符。代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    enum state {
+        prefix,
+        number
+    };
+
+    int myAtoi(string str) {
+        const int max = static_cast&lt;int&gt;(static_cast&lt;unsigned int&gt;(-1) &gt;&gt; 1);
+        const int max_high = max / 10;
+        const int max_low  = max % 10;
+        int ret = 0;
+        bool positive = true;
+        state s = prefix;
+        for (int i = 0; i &lt; str.length(); ++i) {
+            char c = str[i];
+            switch (s) {
+            case prefix: {
+                if (c == ' ' || c == '\t' || c == '\n' || c == '\r')
+                    break;
+
+                if (c == '+') {
+                    s = number;
+                    break;
+                }
+
+                if (c == '-') {
+                    positive = false;
+                    s = number;
+                    break;
+                }
+
+                if (c &gt;= '0' &amp;&amp; c &lt;= '9') {
+                    ret = ret * 10 + c - '0';
+                    s = number;
+                    break;
+                }
+
+                return 0;
+            }
+            case number: {
+                if (c &lt; '0' || c &gt; '9')
+                    goto end;
+
+                if (ret &gt; max_high)
+                    return positive ? max : max + 1;
+
+                if (ret == max_high &amp;&amp; (c - '0') &gt; max_low)
+                    return positive ? max : max + 1;
+
+                ret = ret * 10 + c - '0';
+                break;
+            }
+            default:
+                break;
+            }
+        }
+
+    end:
+
+        if (!positive) {
+            ret = -ret;
+        }
+
+        return ret;
+    }
+};
+</pre>
+</div>
+</div>
+</div>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2016-01-20</span>
-        <span title="last modification date" class="post-info">2016-02-01</span>
+        <span title="last modification date" class="post-info">2016-06-23</span>
         <span title="tags" class="post-info"><a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/leetcode/">LeetCode</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+      <script src="//code.jquery.com/jquery-latest.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.js"></script>
       <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       <script src="/media/js/main.js"></script>

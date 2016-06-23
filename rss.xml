@@ -4,79 +4,79 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Mon, 01 Feb 2016 21:34:55 CST</pubDate>
-    <lastBuildDate>Mon, 01 Feb 2016 21:34:55 CST</lastBuildDate>
+    <pubDate>Thu, 23 Jun 2016 22:54:20 CST</pubDate>
+    <lastBuildDate>Thu, 23 Jun 2016 22:54:20 CST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
     <item>
       <title>LeetCode题解</title>
       <link>http://kelvinh.github.io/wiki/leetcode-answers/</link>
       <description><![CDATA[我个人的LeetCode OJ题解]]></description>
-      <pubDate>2016-02-01</pubDate>
+      <pubDate>2016-06-23</pubDate>
       <guid>http://kelvinh.github.io/wiki/leetcode-answers/</guid>
     </item>
     <item>
-      <title>C++中对成员访问操作符-&gt;的重载</title>
-      <link>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</link>
-      <description><![CDATA[Introduction to overloading of -> operator in C++]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</guid>
+      <title>黑客档案：0day漏洞之简单溢出的利用</title>
+      <link>http://kelvinh.github.io/blog/2009/06/09/hack-using-stack-overflow/</link>
+      <description><![CDATA[security issue led by stack overflow]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2009/06/09/hack-using-stack-overflow/</guid>
     </item>
     <item>
-      <title>三门问题的程序解与解释</title>
-      <link>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</link>
-      <description><![CDATA[the famous Monty Hall problem and use program to explain it]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</guid>
-    </item>
-    <item>
-      <title>岁月如歌——甘十九妹</title>
-      <link>http://kelvinh.github.io/blog/2016/01/24/time-is-like-a-song/</link>
-      <description><![CDATA[回忆往事，岁月如歌]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2016/01/24/time-is-like-a-song/</guid>
-    </item>
-    <item>
-      <title>Project Euler的解题笔记</title>
-      <link>http://kelvinh.github.io/wiki/project-euler/</link>
-      <description><![CDATA[notes about solving problems on projecteuler.net]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/wiki/project-euler/</guid>
+      <title>七月的尾巴，我不是狮子座</title>
+      <link>http://kelvinh.github.io/blog/2011/07/31/memento-of-first-month-left-school/</link>
+      <description><![CDATA[memento of first month left school]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2011/07/31/memento-of-first-month-left-school/</guid>
     </item>
     <item>
       <title>C++模板元编程进阶实例</title>
       <link>http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/</link>
       <description><![CDATA[an example of advanced C++ template meta-programming]]></description>
-      <pubDate>2015-01-26</pubDate>
+      <pubDate>2016-06-22</pubDate>
       <guid>http://kelvinh.github.io/blog/2014/03/21/cpp-template-meta-programming-advanced/</guid>
     </item>
     <item>
-      <title>好久不见</title>
-      <link>http://kelvinh.github.io/blog/2014/10/08/aaabbbbbbb/</link>
-      <description><![CDATA[好久都没有更新博客了，各位新年快乐]]></description>
-      <pubDate>2015-01-01</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/10/08/aaabbbbbbb/</guid>
+      <title>C++模板元编程初探</title>
+      <link>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</link>
+      <description><![CDATA[basic knowledge of C++ template meta-programming]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/08/09/cpp-template-meta-programming/</guid>
     </item>
     <item>
-      <title>最受欢迎的C++代码段</title>
-      <link>http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/</link>
-      <description><![CDATA[在reddit上投票出来的最受欢迎的C++代码段]]></description>
-      <pubDate>2014-05-03</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/05/03/the-favourite-cpp-snippets-on-reddit/</guid>
+      <title>瓜行记</title>
+      <link>http://kelvinh.github.io/blog/2013/06/15/a-meaningful-bicycling-day/</link>
+      <description><![CDATA[a meaningful day for bicycling]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/06/15/a-meaningful-bicycling-day/</guid>
     </item>
     <item>
-      <title>深入探究C++的new/delete操作符</title>
-      <link>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</link>
-      <description><![CDATA[关于C++的new和delete的比较深入的探究]]></description>
-      <pubDate>2014-04-20</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/</guid>
+      <title>给Archlinux添加swap空间</title>
+      <link>http://kelvinh.github.io/blog/2013/10/27/add-swap-on-archlinux/</link>
+      <description><![CDATA[How to create and add swap file on archlinux]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/10/27/add-swap-on-archlinux/</guid>
     </item>
     <item>
-      <title>[翻译]看老夫如何调戏C++编译器</title>
-      <link>http://kelvinh.github.io/blog/2014/03/30/how-to-abuse-a-cpp-compiler/</link>
-      <description><![CDATA[翻译的一篇讲C++模板的文章]]></description>
-      <pubDate>2014-03-30</pubDate>
-      <guid>http://kelvinh.github.io/blog/2014/03/30/how-to-abuse-a-cpp-compiler/</guid>
+      <title>jQuery发送含有数组参数的ajax请求以及后台Struts2的OGNL解析错误</title>
+      <link>http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/</link>
+      <description><![CDATA[slove jquery ajax request contains array]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2011/12/17/jquery-ajax-request-and-struts2-ognl-error/</guid>
+    </item>
+    <item>
+      <title>Archlinux上fcitx的折腾笔记</title>
+      <link>http://kelvinh.github.io/blog/2013/03/29/fix-fcitx-on-archlinux/</link>
+      <description><![CDATA[在archlinux上折腾fcitx]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/03/29/fix-fcitx-on-archlinux/</guid>
+    </item>
+    <item>
+      <title>批处理之坑爹的感叹号和变量延迟扩展</title>
+      <link>http://kelvinh.github.io/blog/2012/02/16/batch-delayed-expansion/</link>
+      <description><![CDATA[variable delayed expansion in batch]]></description>
+      <pubDate>2016-06-22</pubDate>
+      <guid>http://kelvinh.github.io/blog/2012/02/16/batch-delayed-expansion/</guid>
     </item>
   </channel>
 </rss>
