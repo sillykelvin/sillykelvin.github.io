@@ -579,3 +579,85 @@ Example2: x = -123, return -321
       }
   };
 #+END_SRC
+
+* String to Integer (atoi)
+
+#+BEGIN_QUOTE
+Implement atoi to convert a string to an integer.
+
+Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
+
+Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
+#+END_QUOTE
+
+这个题目也很简单，实现一个 =atoi= 函数，但是和上一题一样，关键不是考算法，而是考一些边缘情况，比方说溢出以及无效字符。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      enum state {
+          prefix,
+          number
+      };
+
+      int myAtoi(string str) {
+          const int max = static_cast<int>(static_cast<unsigned int>(-1) >> 1);
+          const int max_high = max / 10;
+          const int max_low  = max % 10;
+          int ret = 0;
+          bool positive = true;
+          state s = prefix;
+          for (int i = 0; i < str.length(); ++i) {
+              char c = str[i];
+              switch (s) {
+              case prefix: {
+                  if (c == ' ' || c == '\t' || c == '\n' || c == '\r')
+                      break;
+
+                  if (c == '+') {
+                      s = number;
+                      break;
+                  }
+
+                  if (c == '-') {
+                      positive = false;
+                      s = number;
+                      break;
+                  }
+
+                  if (c >= '0' && c <= '9') {
+                      ret = ret * 10 + c - '0';
+                      s = number;
+                      break;
+                  }
+
+                  return 0;
+              }
+              case number: {
+                  if (c < '0' || c > '9')
+                      goto end;
+
+                  if (ret > max_high)
+                      return positive ? max : max + 1;
+
+                  if (ret == max_high && (c - '0') > max_low)
+                      return positive ? max : max + 1;
+
+                  ret = ret * 10 + c - '0';
+                  break;
+              }
+              default:
+                  break;
+              }
+          }
+
+      end:
+
+          if (!positive) {
+              ret = -ret;
+          }
+
+          return ret;
+      }
+  };
+#+END_SRC
