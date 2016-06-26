@@ -661,3 +661,28 @@ Notes: It is intended for this problem to be specified vaguely (ie, no given inp
       }
   };
 #+END_SRC
+
+* Palindrome Number
+
+#+BEGIN_QUOTE
+Determine whether an integer is a palindrome. Do this without extra space.
+#+END_QUOTE
+
+这个题目也很简单，判断一个数字是否是回文数，但有一个关键点是，要求不能分配多余的空间。其实这个是有一点模糊的，因为多余的空间也没有指明是堆空间还是连栈空间都不能分配。前面有一个题目是反转数字，这个题目可以用到，将这个数字反转，如果和原来的数字相同，那么肯定是回文数，反之就不是。不过，前面那个反转需要考虑是否溢出的问题，这里就不需要，如果一个数字是回文数，那反转后因为是它本身，所以肯定不会溢出；如果反转后溢出了，那原来的数字肯定不是回文数。不过，因为考虑到原来的算法需要分配栈空间去保存临时变量，于是我改造了一个递归的版本（这其实不过是自欺欺人：难道函数调用的栈帧分配就不是多余空间吗。。），不过好歹是通过了测试，代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      int reverse(int x) {
+          if (x == 0) return 0;
+          return (x % 10) * static_cast<int>(pow(10, static_cast<int>(log10(x)))) + reverse(x / 10);
+      }
+
+      bool isPalindrome(int x) {
+          if (x < 0)
+              return false;
+
+          return x == reverse(x);
+      }
+  };
+#+END_SRC
