@@ -44,6 +44,7 @@
 <li><a href="#orgheadline6">ZigZag Conversion</a></li>
 <li><a href="#orgheadline7">Reverse Integer</a></li>
 <li><a href="#orgheadline8">String to Integer (atoi)</a></li>
+<li><a href="#orgheadline9">Palindrome Number</a></li>
 </ul>
 </div>
 </div>
@@ -811,12 +812,46 @@ public:
 </div>
 </div>
 
+<div id="outline-container-orgheadline9" class="outline-2">
+<h2 id="orgheadline9">Palindrome Number</h2>
+<div class="outline-text-2" id="text-orgheadline9">
+<blockquote>
+<p>
+Determine whether an integer is a palindrome. Do this without extra space.
+</p>
+</blockquote>
+
+<p>
+这个题目也很简单，判断一个数字是否是回文数，但有一个关键点是，要求不能分配多余的空间。其实这个是有一点模糊的，因为多余的空间也没有指明是堆空间还是连栈空间都不能分配。前面有一个题目是反转数字，这个题目可以用到，将这个数字反转，如果和原来的数字相同，那么肯定是回文数，反之就不是。不过，前面那个反转需要考虑是否溢出的问题，这里就不需要，如果一个数字是回文数，那反转后因为是它本身，所以肯定不会溢出；如果反转后溢出了，那原来的数字肯定不是回文数。不过，因为考虑到原来的算法需要分配栈空间去保存临时变量，于是我改造了一个递归的版本（这其实不过是自欺欺人：难道函数调用的栈帧分配就不是多余空间吗。。），不过好歹是通过了测试，代码如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-C++">class Solution {
+public:
+    int reverse(int x) {
+        if (x == 0) return 0;
+        return (x % 10) * static_cast&lt;int&gt;(pow(10, static_cast&lt;int&gt;(log10(x)))) + reverse(x / 10);
+    }
+
+    bool isPalindrome(int x) {
+        if (x &lt; 0)
+            return false;
+
+        return x == reverse(x);
+    }
+};
+</pre>
+</div>
+</div>
+</div>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2016-01-20</span>
-        <span title="last modification date" class="post-info">2016-06-23</span>
+        <span title="last modification date" class="post-info">2016-06-26</span>
         <span title="tags" class="post-info"><a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/leetcode/">LeetCode</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
