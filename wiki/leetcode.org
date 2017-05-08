@@ -686,3 +686,252 @@ Determine whether an integer is a palindrome. Do this without extra space.
       }
   };
 #+END_SRC
+
+* Regular Expression Matching
+
+#+BEGIN_QUOTE
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "a*") → true
+isMatch("aa", ".*") → true
+isMatch("ab", ".*") → true
+isMatch("aab", "c*a*b") → true
+#+END_QUOTE
+
+这个题目要实现一个正则表达式引擎，比较难，但还好内容比较少，只需要处理普通字符和'.'以及'*'就可以了。正则表达式需要用到NFA和DFA，以及NFA朝DFA的转换，之前没有系统地学习过这方面的知识，所以下面的实现参考了 [[https://www.codeproject.com/Articles/5412/Writing-own-regular-expression-parser][这篇文章]] 和 [[http://charlee.li/parse-regex-with-dfa.html][这篇文章]] 。代码如下：
+
+#+BEGIN_SRC C++
+  class state;
+  typedef std::set<state*> state_set;
+  typedef std::vector<state*> state_vector;
+  typedef std::map<char, state_vector> trans_map;
+  typedef std::map<state*, state_set> dfa_map;
+
+  static const int episilon_transition = 0;
+
+  class state {
+  public:
+      state(bool accepting) : accept_(accepting) {}
+
+      void add_transition(char c, state *s) {
+          // disable this test to increase performance
+          // if (c != episilon_transition) {
+          //     auto it = trans_.find(c);
+          //     assert(it == trans_.end());
+          // }
+
+          trans_[c].push_back(s);
+      }
+
+      bool accepting() const { return accept_; }
+      void set_accepting(bool accepting) { accept_ = accepting; }
+
+      bool epsilon_closure(state_set& closure) {
+          if (closure.find(this) != closure.end()) return accept_;
+
+          closure.insert(this);
+
+          auto it = trans_.find(episilon_transition);
+          if (it == trans_.end()) return accept_;
+
+          bool accept = accept_;
+          for (auto& s : it->second) {
+              if (closure.find(s) == closure.end())
+                  if (s->epsilon_closure(closure) && !accept)
+                      accept = true;
+          }
+
+          return accept;
+      }
+
+      void move(char c, state_set& states) {
+          auto it = trans_.find(c);
+          if (it == trans_.end()) return;
+
+          for (auto& s : it->second)
+              states.insert(s);
+      }
+
+      const state_vector *next(char c) {
+          auto it = trans_.find(c);
+          if (it == trans_.end())
+              return nullptr;
+
+          return &(it->second);
+      }
+
+  private:
+      bool accept_;
+      trans_map trans_;
+  };
+
+  class regexp_engine {
+  public:
+      regexp_engine(const std::string& pattern)
+          : nfa_start_(nullptr), dfa_start_(nullptr) {
+          build_nfa(pattern);
+          build_dfa();
+      }
+
+      ~regexp_engine() {
+          for (auto& s : all_states_) delete s;
+      }
+
+      bool match(const std::string& str) {
+          state *s = dfa_start_;
+          for (size_t i = 0; i < str.length(); ++i) {
+              char c = str.at(i);
+
+              const state_vector *next = s->next(c);
+              if (!next) return false;
+
+              assert(next->size() == 1);
+              s = next->at(0);
+          }
+
+          return s->accepting();
+      }
+
+  private:
+      state *new_state(bool accepting) {
+          state *s = new state(accepting);
+          all_states_.push_back(s);
+          return s;
+      }
+
+      bool epsilon_closure(const state_set& states, state_set& closure) {
+          bool accept = false;
+          for (auto& s : states) {
+              if (s->epsilon_closure(closure))
+                  accept = true;
+          }
+          return accept;
+      }
+
+      void move(char c, const state_set& current_closure,
+                state_set& next_closure, bool& accept) {
+          state_set next;
+          for (auto& s : current_closure) {
+              s->move(c, next);
+          }
+          accept = epsilon_closure(next, next_closure);
+      }
+
+      bool equal(const state_set& closure1, const state_set& closure2) {
+          if (closure1.size() != closure2.size()) return false;
+
+          auto end2 = closure2.end();
+          for (auto& s : closure1) {
+              if (closure2.find(s) == end2)
+                  return false;
+          }
+          return true;
+      }
+
+      void dfa_scan(const state_set& current_closure,
+                    dfa_map& dstate2nstates, state *current_state) {
+          for (char c : inputs_) {
+              state_set next_closure;
+              bool accept = false;
+              move(c, current_closure, next_closure, accept);
+              if (!next_closure.empty()) {
+                  bool exists = false;
+                  for (auto& it : dstate2nstates) {
+                      if (equal(next_closure, it.second)) {
+                          current_state->add_transition(c, it.first);
+                          if (accept) it.first->set_accepting(true);
+
+                          exists = true;
+                          break;
+                      }
+                  }
+
+                  if (!exists) {
+                      state *s = new_state(accept);
+                      current_state->add_transition(c, s);
+                      dstate2nstates[s] = next_closure;
+                      dfa_scan(next_closure, dstate2nstates, s);
+                  }
+              }
+          }
+      }
+
+      void build_dfa() {
+          state_set init_closure;
+          bool accept = nfa_start_->epsilon_closure(init_closure);
+
+          dfa_map dstate2nstates;
+          dfa_start_ = new_state(accept);
+          dstate2nstates[dfa_start_] = init_closure;
+
+          dfa_scan(init_closure, dstate2nstates, dfa_start_);
+      }
+
+      void build_nfa(const std::string& regexp) {
+          nfa_start_ = new_state(false);
+          state *s = nfa_start_;
+          state *e = nfa_start_;
+
+          for (size_t i = 0; i < regexp.length(); ++i) {
+              char c = regexp.at(i);
+
+              if (c == '*') {
+                  s->add_transition(episilon_transition, e);
+                  e->add_transition(episilon_transition, s);
+              } else if (c == '.') {
+                  state *start = new_state(false);
+                  state *end = new_state(false);
+
+                  for (char x = 'a'; x <= 'z'; ++x) {
+                      start->add_transition(x, end);
+                      inputs_.insert(x);
+                  }
+                  for (char x = 'A'; x <= 'Z'; ++x) {
+                      start->add_transition(x, end);
+                      inputs_.insert(x);
+                  }
+
+                  e->add_transition(episilon_transition, start);
+                  s = start;
+                  e = end;
+              } else {
+                  state *start = new_state(false);
+                  state *end = new_state(false);
+                  start->add_transition(c, end);
+
+                  e->add_transition(episilon_transition, start);
+                  s = start;
+                  e = end;
+
+                  inputs_.insert(c);
+              }
+          }
+
+          e->set_accepting(true);
+      }
+
+  private:
+      state *nfa_start_;
+      state *dfa_start_;
+      std::set<char> inputs_;
+      state_vector all_states_;
+  };
+
+  class Solution {
+  public:
+      bool isMatch(string s, string p) {
+          regexp_engine re(p);
+          return re.match(s);
+      }
+  };
+#+END_SRC
