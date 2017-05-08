@@ -36,15 +36,16 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgheadline1">Two Sum</a></li>
-<li><a href="#orgheadline2">Add Two Numbers</a></li>
-<li><a href="#orgheadline3">Longest Substring Without Repeating Characters</a></li>
-<li><a href="#orgheadline4">Median of Two Sorted Arrays</a></li>
-<li><a href="#orgheadline5">Longest Palindromic Substring</a></li>
-<li><a href="#orgheadline6">ZigZag Conversion</a></li>
-<li><a href="#orgheadline7">Reverse Integer</a></li>
-<li><a href="#orgheadline8">String to Integer (atoi)</a></li>
-<li><a href="#orgheadline9">Palindrome Number</a></li>
+<li><a href="#org88404d5">Two Sum</a></li>
+<li><a href="#org8160c5f">Add Two Numbers</a></li>
+<li><a href="#org2eb9de8">Longest Substring Without Repeating Characters</a></li>
+<li><a href="#orge95f99b">Median of Two Sorted Arrays</a></li>
+<li><a href="#org167a600">Longest Palindromic Substring</a></li>
+<li><a href="#org2d09958">ZigZag Conversion</a></li>
+<li><a href="#orgf6584e0">Reverse Integer</a></li>
+<li><a href="#orgf11bc69">String to Integer (atoi)</a></li>
+<li><a href="#orgd686dd3">Palindrome Number</a></li>
+<li><a href="#org3dfaef1">Regular Expression Matching</a></li>
 </ul>
 </div>
 </div>
@@ -52,9 +53,9 @@
 之前无数的事实证明，我是一个挖坑的好手。。。这又是一个无比大的坑，不求其它，只求能填上。。。挖坑不填是SB。。。
 </p>
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">Two Sum</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org88404d5" class="outline-2">
+<h2 id="org88404d5">Two Sum</h2>
+<div class="outline-text-2" id="text-org88404d5">
 <blockquote>
 <p>
 Given an array of integers, find two numbers such that they add up to a specific target number.
@@ -79,7 +80,6 @@ Output: index1=1, index2=2
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     vector&lt;int&gt; twoSum(vector&lt;int&gt;&amp; nums, int target) {
@@ -105,7 +105,6 @@ public:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     struct entity {
@@ -157,9 +156,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">Add Two Numbers</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-org8160c5f" class="outline-2">
+<h2 id="org8160c5f">Add Two Numbers</h2>
+<div class="outline-text-2" id="text-org8160c5f">
 <blockquote>
 <p>
 You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
@@ -176,7 +175,6 @@ Output: 7 -&gt; 0 -&gt; 8
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">/**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -232,9 +230,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">Longest Substring Without Repeating Characters</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-org2eb9de8" class="outline-2">
+<h2 id="org2eb9de8">Longest Substring Without Repeating Characters</h2>
+<div class="outline-text-2" id="text-org2eb9de8">
 <blockquote>
 <p>
 Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
@@ -246,7 +244,6 @@ Given a string, find the length of the longest substring without repeating chara
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
@@ -291,9 +288,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">Median of Two Sorted Arrays</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-orge95f99b" class="outline-2">
+<h2 id="orge95f99b">Median of Two Sorted Arrays</h2>
+<div class="outline-text-2" id="text-orge95f99b">
 <blockquote>
 <p>
 There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
@@ -317,7 +314,6 @@ There are two sorted arrays nums1 and nums2 of size m and n respectively. Find t
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     double findMedianSortedArrays(vector&lt;int&gt;&amp; nums1, vector&lt;int&gt;&amp; nums2) {
@@ -438,9 +434,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">Longest Palindromic Substring</h2>
-<div class="outline-text-2" id="text-orgheadline5">
+<div id="outline-container-org167a600" class="outline-2">
+<h2 id="org167a600">Longest Palindromic Substring</h2>
+<div class="outline-text-2" id="text-org167a600">
 <blockquote>
 <p>
 Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
@@ -452,7 +448,6 @@ Given a string S, find the longest palindromic substring in S. You may assume th
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     string longestPalindrome(string s) {
@@ -520,7 +515,6 @@ public:
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     static const int max_length = 1001;
@@ -581,9 +575,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6">ZigZag Conversion</h2>
-<div class="outline-text-2" id="text-orgheadline6">
+<div id="outline-container-org2d09958" class="outline-2">
+<h2 id="org2d09958">ZigZag Conversion</h2>
+<div class="outline-text-2" id="text-org2d09958">
 <blockquote>
 <p>
 The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
@@ -614,7 +608,6 @@ string convert(string text, int nRows);
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     string convert(string s, int numRows) {
@@ -657,9 +650,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline7" class="outline-2">
-<h2 id="orgheadline7">Reverse Integer</h2>
-<div class="outline-text-2" id="text-orgheadline7">
+<div id="outline-container-orgf6584e0" class="outline-2">
+<h2 id="orgf6584e0">Reverse Integer</h2>
+<div class="outline-text-2" id="text-orgf6584e0">
 <blockquote>
 <p>
 Reverse digits of an integer.
@@ -676,7 +669,6 @@ Example2: x = -123, return -321
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     int reverse(int x) {
@@ -717,9 +709,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline8" class="outline-2">
-<h2 id="orgheadline8">String to Integer (atoi)</h2>
-<div class="outline-text-2" id="text-orgheadline8">
+<div id="outline-container-orgf11bc69" class="outline-2">
+<h2 id="orgf11bc69">String to Integer (atoi)</h2>
+<div class="outline-text-2" id="text-orgf11bc69">
 <blockquote>
 <p>
 Implement atoi to convert a string to an integer.
@@ -739,7 +731,6 @@ Notes: It is intended for this problem to be specified vaguely (ie, no given inp
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     enum state {
@@ -812,9 +803,9 @@ public:
 </div>
 </div>
 
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9">Palindrome Number</h2>
-<div class="outline-text-2" id="text-orgheadline9">
+<div id="outline-container-orgd686dd3" class="outline-2">
+<h2 id="orgd686dd3">Palindrome Number</h2>
+<div class="outline-text-2" id="text-orgd686dd3">
 <blockquote>
 <p>
 Determine whether an integer is a palindrome. Do this without extra space.
@@ -826,7 +817,6 @@ Determine whether an integer is a palindrome. Do this without extra space.
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">class Solution {
 public:
     int reverse(int x) {
@@ -846,12 +836,275 @@ public:
 </div>
 </div>
 
+<div id="outline-container-org3dfaef1" class="outline-2">
+<h2 id="org3dfaef1">Regular Expression Matching</h2>
+<div class="outline-text-2" id="text-org3dfaef1">
+<blockquote>
+<p>
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+</p>
+
+<p>
+The matching should cover the entire input string (not partial).
+</p>
+
+<p>
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+</p>
+
+<p>
+Some examples:
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "a*") → true
+isMatch("aa", ".*") → true
+isMatch("ab", ".*") → true
+isMatch("aab", "c*a*b") → true
+</p>
+</blockquote>
+
+<p>
+这个题目要实现一个正则表达式引擎，比较难，但还好内容比较少，只需要处理普通字符和'.'以及'*'就可以了。正则表达式需要用到NFA和DFA，以及NFA朝DFA的转换，之前没有系统地学习过这方面的知识，所以下面的实现参考了 <a href="https://www.codeproject.com/Articles/5412/Writing-own-regular-expression-parser">这篇文章</a> 和 <a href="http://charlee.li/parse-regex-with-dfa.html">这篇文章</a> 。代码如下：
+</p>
+
+<div class="org-src-container">
+<pre class="src src-C++">class state;
+typedef std::set&lt;state*&gt; state_set;
+typedef std::vector&lt;state*&gt; state_vector;
+typedef std::map&lt;char, state_vector&gt; trans_map;
+typedef std::map&lt;state*, state_set&gt; dfa_map;
+
+static const int episilon_transition = 0;
+
+class state {
+public:
+    state(bool accepting) : accept_(accepting) {}
+
+    void add_transition(char c, state *s) {
+        // disable this test to increase performance
+        // if (c != episilon_transition) {
+        //     auto it = trans_.find(c);
+        //     assert(it == trans_.end());
+        // }
+
+        trans_[c].push_back(s);
+    }
+
+    bool accepting() const { return accept_; }
+    void set_accepting(bool accepting) { accept_ = accepting; }
+
+    bool epsilon_closure(state_set&amp; closure) {
+        if (closure.find(this) != closure.end()) return accept_;
+
+        closure.insert(this);
+
+        auto it = trans_.find(episilon_transition);
+        if (it == trans_.end()) return accept_;
+
+        bool accept = accept_;
+        for (auto&amp; s : it-&gt;second) {
+            if (closure.find(s) == closure.end())
+                if (s-&gt;epsilon_closure(closure) &amp;&amp; !accept)
+                    accept = true;
+        }
+
+        return accept;
+    }
+
+    void move(char c, state_set&amp; states) {
+        auto it = trans_.find(c);
+        if (it == trans_.end()) return;
+
+        for (auto&amp; s : it-&gt;second)
+            states.insert(s);
+    }
+
+    const state_vector *next(char c) {
+        auto it = trans_.find(c);
+        if (it == trans_.end())
+            return nullptr;
+
+        return &amp;(it-&gt;second);
+    }
+
+private:
+    bool accept_;
+    trans_map trans_;
+};
+
+class regexp_engine {
+public:
+    regexp_engine(const std::string&amp; pattern)
+        : nfa_start_(nullptr), dfa_start_(nullptr) {
+        build_nfa(pattern);
+        build_dfa();
+    }
+
+    ~regexp_engine() {
+        for (auto&amp; s : all_states_) delete s;
+    }
+
+    bool match(const std::string&amp; str) {
+        state *s = dfa_start_;
+        for (size_t i = 0; i &lt; str.length(); ++i) {
+            char c = str.at(i);
+
+            const state_vector *next = s-&gt;next(c);
+            if (!next) return false;
+
+            assert(next-&gt;size() == 1);
+            s = next-&gt;at(0);
+        }
+
+        return s-&gt;accepting();
+    }
+
+private:
+    state *new_state(bool accepting) {
+        state *s = new state(accepting);
+        all_states_.push_back(s);
+        return s;
+    }
+
+    bool epsilon_closure(const state_set&amp; states, state_set&amp; closure) {
+        bool accept = false;
+        for (auto&amp; s : states) {
+            if (s-&gt;epsilon_closure(closure))
+                accept = true;
+        }
+        return accept;
+    }
+
+    void move(char c, const state_set&amp; current_closure,
+              state_set&amp; next_closure, bool&amp; accept) {
+        state_set next;
+        for (auto&amp; s : current_closure) {
+            s-&gt;move(c, next);
+        }
+        accept = epsilon_closure(next, next_closure);
+    }
+
+    bool equal(const state_set&amp; closure1, const state_set&amp; closure2) {
+        if (closure1.size() != closure2.size()) return false;
+
+        auto end2 = closure2.end();
+        for (auto&amp; s : closure1) {
+            if (closure2.find(s) == end2)
+                return false;
+        }
+        return true;
+    }
+
+    void dfa_scan(const state_set&amp; current_closure,
+                  dfa_map&amp; dstate2nstates, state *current_state) {
+        for (char c : inputs_) {
+            state_set next_closure;
+            bool accept = false;
+            move(c, current_closure, next_closure, accept);
+            if (!next_closure.empty()) {
+                bool exists = false;
+                for (auto&amp; it : dstate2nstates) {
+                    if (equal(next_closure, it.second)) {
+                        current_state-&gt;add_transition(c, it.first);
+                        if (accept) it.first-&gt;set_accepting(true);
+
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    state *s = new_state(accept);
+                    current_state-&gt;add_transition(c, s);
+                    dstate2nstates[s] = next_closure;
+                    dfa_scan(next_closure, dstate2nstates, s);
+                }
+            }
+        }
+    }
+
+    void build_dfa() {
+        state_set init_closure;
+        bool accept = nfa_start_-&gt;epsilon_closure(init_closure);
+
+        dfa_map dstate2nstates;
+        dfa_start_ = new_state(accept);
+        dstate2nstates[dfa_start_] = init_closure;
+
+        dfa_scan(init_closure, dstate2nstates, dfa_start_);
+    }
+
+    void build_nfa(const std::string&amp; regexp) {
+        nfa_start_ = new_state(false);
+        state *s = nfa_start_;
+        state *e = nfa_start_;
+
+        for (size_t i = 0; i &lt; regexp.length(); ++i) {
+            char c = regexp.at(i);
+
+            if (c == '*') {
+                s-&gt;add_transition(episilon_transition, e);
+                e-&gt;add_transition(episilon_transition, s);
+            } else if (c == '.') {
+                state *start = new_state(false);
+                state *end = new_state(false);
+
+                for (char x = 'a'; x &lt;= 'z'; ++x) {
+                    start-&gt;add_transition(x, end);
+                    inputs_.insert(x);
+                }
+                for (char x = 'A'; x &lt;= 'Z'; ++x) {
+                    start-&gt;add_transition(x, end);
+                    inputs_.insert(x);
+                }
+
+                e-&gt;add_transition(episilon_transition, start);
+                s = start;
+                e = end;
+            } else {
+                state *start = new_state(false);
+                state *end = new_state(false);
+                start-&gt;add_transition(c, end);
+
+                e-&gt;add_transition(episilon_transition, start);
+                s = start;
+                e = end;
+
+                inputs_.insert(c);
+            }
+        }
+
+        e-&gt;set_accepting(true);
+    }
+
+private:
+    state *nfa_start_;
+    state *dfa_start_;
+    std::set&lt;char&gt; inputs_;
+    state_vector all_states_;
+};
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        regexp_engine re(p);
+        return re.match(s);
+    }
+};
+</pre>
+</div>
+</div>
+</div>
+
 </div>
 </div>
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2016-01-20</span>
-        <span title="last modification date" class="post-info">2016-06-26</span>
+        <span title="last modification date" class="post-info">2017-05-08</span>
         <span title="tags" class="post-info"><a href="/tags/algorithm/">Algorithm</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/leetcode/">LeetCode</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>
@@ -870,7 +1123,7 @@ public:
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.x (<a href="http://orgmode.org">Org mode</a> 9.x)</p>
         <p>
           Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;

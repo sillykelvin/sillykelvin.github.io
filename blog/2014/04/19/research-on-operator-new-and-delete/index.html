@@ -34,9 +34,9 @@
 <h1>深入探究C++的new/delete操作符</h1>
 
 
-<div id="outline-container-orgheadline1" class="outline-2">
-<h2 id="orgheadline1">前戏，啊不，其实我是说前言</h2>
-<div class="outline-text-2" id="text-orgheadline1">
+<div id="outline-container-org26d3b0b" class="outline-2">
+<h2 id="org26d3b0b">前戏，啊不，其实我是说前言</h2>
+<div class="outline-text-2" id="text-org26d3b0b">
 <p>
 今天在重温《More Effective C++》的时候，又看到讲 <code>operator new</code> 和 <code>operator delete</code> 的那条规则，虽然大概明白其原理，但是实际中却从来没用过，所以，就想写个小程序来试一试。如果你还不知道它们，或者听说过但不知道具体意义，那我就正好吓吓你：
 </p>
@@ -56,7 +56,6 @@ placement new/new[]  // 注意，没有 placement delete/delete[]
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">Class *pc = new Class;
 // ...
 delete pc;
@@ -68,7 +67,6 @@ delete pc;
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">void *p = operator new(sizeof(Class));
 // 对p指向的内存调用Class的构造函数，此处无法用直观的代码展现
 Class *pc = static_cast&lt;Class*&gt;(p);
@@ -96,7 +94,6 @@ operator delete(pc);
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">void * operator new(std::size_t size) throw(std::bad_alloc) {
     if (size == 0)
         size = 1;
@@ -157,15 +154,14 @@ Class *pc = new (nullptr) Class(); // nullptr是C++11中的空指针定义
 </div>
 </div>
 
-<div id="outline-container-orgheadline2" class="outline-2">
-<h2 id="orgheadline2">实例</h2>
-<div class="outline-text-2" id="text-orgheadline2">
+<div id="outline-container-orgf9d75c6" class="outline-2">
+<h2 id="orgf9d75c6">实例</h2>
+<div class="outline-text-2" id="text-orgf9d75c6">
 <p>
 码农？找不到对象？没事儿，不拼爹妈，更不靠干爹干妈，我们自己new一个出来。不过，别人都从堆上new，太没挑战了，我们从栈上new！
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">#include &lt;iostream&gt;
 
 using namespace std;
@@ -231,15 +227,14 @@ We should do nothing in operator delete.
 </div>
 </div>
 
-<div id="outline-container-orgheadline3" class="outline-2">
-<h2 id="orgheadline3">演变</h2>
-<div class="outline-text-2" id="text-orgheadline3">
+<div id="outline-container-orgb98f974" class="outline-2">
+<h2 id="orgb98f974">演变</h2>
+<div class="outline-text-2" id="text-orgb98f974">
 <p>
 我突然想到了一个坏主意：我们对上面的例子做一个小小的改动，将main函数中buf的长度变短，其它不变：
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">int main() {
     char buf[sizeof(C) - 3]; // 注意此处
     C *pc = new (buf, "Yeah, I'm crazy!") C(1024);
@@ -264,15 +259,14 @@ We should do nothing in operator delete.
 </div>
 </div>
 
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4">更进一步</h2>
-<div class="outline-text-2" id="text-orgheadline4">
+<div id="outline-container-orgc8e1b8f" class="outline-2">
+<h2 id="orgc8e1b8f">更进一步</h2>
+<div class="outline-text-2" id="text-orgc8e1b8f">
 <p>
 怎么回事？难不成编译器智能地探测到buf的内存不足以装下C的实例，所以自动扩充了3个字节？于是，我们再稍作修改，在buf的两边都加上指示性的变量，以方便探测其边界：
 </p>
 
 <div class="org-src-container">
-
 <pre class="src src-C++">int main() {
     int a = 0x01020304; // 定义成这样是为了在GDB中调试时方便查看内存，下同
     char buf[sizeof(C) - 3];
@@ -295,7 +289,7 @@ Breakpoint 1 at 0x100001082: file new.cpp, line 41.
 Starting program: /Users/kelvin/new
 
 Breakpoint 1, main () at new.cpp:41
-41      int a = 0x01020304;
+41	    int a = 0x01020304;
 </pre>
 
 <p>
@@ -310,9 +304,9 @@ $2 = (char (*)[1]) 0x7fff5fbffa4f
 (gdb) p &amp;b
 $3 = (int *) 0x7fff5fbffa48
 (gdb) x/24b &amp;b
-0x7fff5fbffa48: -56 -6  -65 95  -1  127 0 0
-0x7fff5fbffa50: 0 0 0 0 0 0 0 0
-0x7fff5fbffa58: 0 0 0 0 0 0 0 0
+0x7fff5fbffa48:	-56	-6	-65	95	-1	127	0	0
+0x7fff5fbffa50:	0	0	0	0	0	0	0	0
+0x7fff5fbffa58:	0	0	0	0	0	0	0	0
 </pre>
 
 <p>
@@ -321,11 +315,11 @@ a在栈的最下面，所以a的地址最高。从打印出的内存来看，此
 
 <pre class="example">
 (gdb) n
-43      int b = 0x04030201;
+43	    int b = 0x04030201;
 (gdb) x/24b &amp;b
-0x7fff5fbffa48: -56 -6  -65 95  -1  127 0 0
-0x7fff5fbffa50: 4 3 2 1 0 0 0 0
-0x7fff5fbffa58: 0 0 0 0 0 0 0 0
+0x7fff5fbffa48:	-56	-6	-65	95	-1	127	0	0
+0x7fff5fbffa50:	4	3	2	1	0	0	0	0
+0x7fff5fbffa58:	0	0	0	0	0	0	0	0
 </pre>
 
 <p>
@@ -334,11 +328,11 @@ a在栈的最下面，所以a的地址最高。从打印出的内存来看，此
 
 <pre class="example">
 (gdb) n
-44      C *pc = new(buf, "Yeah, I'm crazy!") C(0xFEDCBA98);
+44	    C *pc = new(buf, "Yeah, I'm crazy!") C(0xFEDCBA98);
 (gdb) x/24b &amp;b
-0x7fff5fbffa48: 1 2 3 4 -1  127 0 0
-0x7fff5fbffa50: 4 3 2 1 0 0 0 0
-0x7fff5fbffa58: -128  46  0 0 1 0 0 0
+0x7fff5fbffa48:	1	2	3	4	-1	127	0	0
+0x7fff5fbffa50:	4	3	2	1	0	0	0	0
+0x7fff5fbffa58:	-128	46	0	0	1	0	0	0
 </pre>
 
 <p>
@@ -350,11 +344,11 @@ GDB机智地跳过了声明buf的语句，直接执行了对b的赋值语句，�
 In our own operator new.
 Yeah, I'm crazy!
 C constructor.
-45      pc-&gt;f();
+45	    pc-&gt;f();
 (gdb) x/24b &amp;b
-0x7fff5fbffa48: 1 2 3 4 -1  127 0 -104
-0x7fff5fbffa50: -70 -36 -2  1 0 0 0 0
-0x7fff5fbffa58: -128  46  0 0 1 0 0 0
+0x7fff5fbffa48:	1	2	3	4	-1	127	0	-104
+0x7fff5fbffa50:	-70	-36	-2	1	0	0	0	0
+0x7fff5fbffa58:	-128	46	0	0	1	0	0	0
 </pre>
 
 <p>
@@ -363,9 +357,9 @@ pc被正常构造，但需要注意的是，从地址0x7fff5fbffa4f到0x7fff5fbf
 
 <pre class="example">
 (gdb) x/24x &amp;b
-0x7fff5fbffa48: 0x01  0x02  0x03  0x04  0xff  0x7f  0x00  0x98
-0x7fff5fbffa50: 0xba  0xdc  0xfe  0x01  0x00  0x00  0x00  0x00
-0x7fff5fbffa58: 0x80  0x2e  0x00  0x00  0x01  0x00  0x00  0x00
+0x7fff5fbffa48:	0x01	0x02	0x03	0x04	0xff	0x7f	0x00	0x98
+0x7fff5fbffa50:	0xba	0xdc	0xfe	0x01	0x00	0x00	0x00	0x00
+0x7fff5fbffa58:	0x80	0x2e	0x00	0x00	0x01	0x00	0x00	0x00
 </pre>
 
 <p>
@@ -393,9 +387,9 @@ $5 = 0x1fedcba
 </div>
 </div>
 
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5">总结</h2>
-<div class="outline-text-2" id="text-orgheadline5">
+<div id="outline-container-org9922323" class="outline-2">
+<h2 id="org9922323">总结</h2>
+<div class="outline-text-2" id="text-org9922323">
 <p>
 废话了这么多，那 <code>operator new/delete, placement new/delete</code> 到底有什么用呢？
 </p>
@@ -413,9 +407,9 @@ $5 = 0x1fedcba
 </div>
 </div>
 
-<div id="outline-container-orgheadline6" class="outline-2">
-<h2 id="orgheadline6">参考资料</h2>
-<div class="outline-text-2" id="text-orgheadline6">
+<div id="outline-container-org95d9aeb" class="outline-2">
+<h2 id="org95d9aeb">参考资料</h2>
+<div class="outline-text-2" id="text-org95d9aeb">
 <ol class="org-ol">
 <li>More Effective C++, Item 8</li>
 <li><a href="http://llvm.org/svn/llvm-project/libcxx/trunk/include/new">http://llvm.org/svn/llvm-project/libcxx/trunk/include/new</a></li>
@@ -469,7 +463,7 @@ $5 = 0x1fedcba
         })();
       </script>
       <div class="footer">
-        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.x (<a href="http://orgmode.org">Org mode</a> 8.x)</p>
+        <p>Generated by <a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.x (<a href="http://orgmode.org">Org mode</a> 9.x)</p>
         <p>
           Copyright &copy; 2012 - <span id="footerYear"></span> <a href="mailto:ini &lt;dot&gt; kelvin &lt;at&gt; gmail &lt;dot&gt; com">Kelvin Hu</a>
           &nbsp;&nbsp;-&nbsp;&nbsp;
