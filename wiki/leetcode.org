@@ -980,3 +980,79 @@ isMatch("aab", "c*a*b") → true
 #+END_SRC
 
 后来看论坛发现，还有一种用DP解的方式，仔细看了原理，原来是人肉将上面的递归版本改成了迭代版本，大神真是无处不在。。
+
+* Container With Most Water
+
+#+BEGIN_QUOTE
+Given n non-negative integers a1, a2, ..., an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+
+Note: You may not slant the container and n is at least 2.
+#+END_QUOTE
+
+这个题目的意思是，有一些高度不同的木板，相邻的木板之间的距离都是1，拿两块木板做成一个桶，求这个桶能装的最大的水量。其实所谓的桶只有高度和宽度，没有长度，所以实际上是求矩形面积，矩形的宽度是两块木板的距离，高度是以矮的那一块木板为准。
+
+最原始的思路，当然是brute-force，代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      int maxArea(vector<int>& height) {
+          int max = 0;
+          for (int i = 0; i < height.size(); ++i) {
+              for (int j = i + 1; j < height.size(); ++j) {
+                  int h = std::min(height[i], height[j]);
+                  int w = j - i;
+                  int a = h * w;
+                  if (max < a)
+                      max = a;
+              }
+          }
+
+          return max;
+      }
+  };
+#+END_SRC
+
+代码逻辑正确，但很不幸，超时了。。看来出题者需要比平方级更低的时间复杂度。于是再仔细分析下，发现对于任意一块木板，它所能围成的最大面积，取决于所能达到的最大宽度。这样我们就可以从最矮的木板来：它能达到的最大宽度必然是到最边上的木板的距离（注意有两边，取较大者），那么第二高的也是这样。但如果最矮的是在最边上，那么第二高的就需要先去掉最边上的最矮的这块木板。照着这个思路，有下面的代码：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      int maxArea(vector<int>& height) {
+          std::vector<std::pair<int, int>> height2index;
+          height2index.reserve(height.size());
+
+          for (int i = 0; i < height.size(); ++i)
+              height2index.push_back(std::make_pair(height[i], i));
+
+          // 从低到高排列
+          std::sort(height2index.begin(), height2index.end(),
+                    [](const std::pair<int, int>& l, const std::pair<int, int>& r) {
+                        if (l.first != r.first) return l.first < r.first;
+                        return l.second < r.second;
+                    });
+
+          int max = 0;
+          int s = 0, e = height.size() - 1;
+          for (const auto& it : height2index) {
+              int i = it.second;
+              int h = it.first;
+              int w = std::max(std::abs(i - s), std::abs(i - e));
+              max = std::max(max, h * w);
+
+              // 表示下标为i的这块木板用过了，其实应该再需要一个容器，
+              // 但为了性能，就复用了height，因为这个vector已经不用了
+              height[i] = -1;
+
+              // 对于边上的已经用过的木板，我们需要移
+              // 除掉，因为接下来的木板都比用过的要高
+              while (s < height.size() && height[s] == -1) ++s;
+              while (e >= 0 && height[e] == -1) --e;
+          }
+
+          return max;
+      }
+  };
+#+END_SRC
+
+看了论坛，还有一种更巧妙的只需要一层循环的解：假定最大面积就是距离最远的两块木板，如果内部的木板要比这个面积大，因为宽度小了，那么高度必须要比最边上矮的那块高，越朝里循环，高度要求就越来越高，这样就可以跳过许多不必要的计算：实在是妙！
