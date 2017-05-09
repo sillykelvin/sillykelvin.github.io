@@ -41,9 +41,9 @@
 <li>目标：arch和mac os双系统共存（其实我的最终目的是只有arch，完全删除mac os，我对苹果的东西完全无爱，如果不是抽奖抽到的，我是不会主动去买苹果的东西的。但因为是第一次在mac上安装arch，所以先让mac os再存在一会儿，以免arch安装失败后没系统可用了，等摸清楚一些细节之后，就直接格整个硬盘只留arch）</li>
 </ul>
 
-<div id="outline-container-org7928cc7" class="outline-2">
-<h2 id="org7928cc7">Mac和PC的不同点</h2>
-<div class="outline-text-2" id="text-org7928cc7">
+<div id="outline-container-orga55a624" class="outline-2">
+<h2 id="orga55a624">Mac和PC的不同点</h2>
+<div class="outline-text-2" id="text-orga55a624">
 <ul class="org-ul">
 <li>mac引导程序是UEFI，而普通PC是BIOS</li>
 <li>mac的分区表是GPT，普通PC是MBR，MBR由于66字节的限制，只能有四个主分区，GPT没有这个限制</li>
@@ -56,9 +56,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgef52e48" class="outline-2">
-<h2 id="orgef52e48">过程</h2>
-<div class="outline-text-2" id="text-orgef52e48">
+<div id="outline-container-org5cfdf3c" class="outline-2">
+<h2 id="org5cfdf3c">过程</h2>
+<div class="outline-text-2" id="text-org5cfdf3c">
 <ol class="org-ol">
 <li>使用dd命令制作用于安装的U盘，如何使用请自行google</li>
 <li>调整硬盘分区，这个可以使用mac os的Disk Utility完成，缩减mac os的硬盘分区大小，以空出一部分空间来安装archlinux</li>
@@ -73,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-org8280efe" class="outline-2">
-<h2 id="org8280efe">安装过程中的一些注意事项</h2>
-<div class="outline-text-2" id="text-org8280efe">
+<div id="outline-container-org50b5560" class="outline-2">
+<h2 id="org50b5560">安装过程中的一些注意事项</h2>
+<div class="outline-text-2" id="text-org50b5560">
 <ol class="org-ol">
 <li>在对硬盘进行分区时，对硬盘分区的工具请选择gdisk/cgdisk，而不是常用的fdisk/cfdisk！！！因为Mac的分区表是GPT，fdisk/cfdisk只支持MBR，如果强行使用的话，就等着丢数据吧。。</li>
 
@@ -110,9 +110,9 @@ cp /boot/backup.efi /boot/efi/EFI/BOOT/BOOTX64.efi
 </div>
 </div>
 
-<div id="outline-container-org9df8091" class="outline-2">
-<h2 id="org9df8091">附</h2>
-<div class="outline-text-2" id="text-org9df8091">
+<div id="outline-container-orgfdf06c8" class="outline-2">
+<h2 id="orgfdf06c8">附</h2>
+<div class="outline-text-2" id="text-orgfdf06c8">
 <ol class="org-ol">
 <li>如果进入系统后触摸板无效，是因为驱动没有装好，安装 <code>xf86-input-synaptics</code> 即可。</li>
 

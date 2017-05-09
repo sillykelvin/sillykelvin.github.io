@@ -40,9 +40,9 @@
 <b>最新说明</b> ：因为本人换了team，新team可能再也接触不到跟Java有关的东西了，而除了项目之外，本人也实在没有太多精力去再看nettty的源代码，所以，这一篇关于netty的心得可能到这里就不会再更新了 &#x2014; <span class="timestamp-wrapper"><span class="timestamp">&lt;2013-03-27 Wed&gt;</span></span>
 </p>
 
-<div id="outline-container-org5c524a6" class="outline-2">
-<h2 id="org5c524a6"><code>ChannelInitializer&lt;C extends Channel&gt;</code></h2>
-<div class="outline-text-2" id="text-org5c524a6">
+<div id="outline-container-org855acc6" class="outline-2">
+<h2 id="org855acc6"><code>ChannelInitializer&lt;C extends Channel&gt;</code></h2>
+<div class="outline-text-2" id="text-org855acc6">
 <p>
 这个类本身也是一个handler，主要关注 <code>channel register</code> 事件，关键方法如下：
 </p>
@@ -72,9 +72,9 @@ public final void channelRegistered(ChannelHandlerContext ctx)
 </div>
 </div>
 
-<div id="outline-container-orgdf16dd9" class="outline-2">
-<h2 id="orgdf16dd9">DefaultChannelHandlerContext中的Buffer Chain</h2>
-<div class="outline-text-2" id="text-orgdf16dd9">
+<div id="outline-container-orgc0a76a7" class="outline-2">
+<h2 id="orgc0a76a7">DefaultChannelHandlerContext中的Buffer Chain</h2>
+<div class="outline-text-2" id="text-orgc0a76a7">
 <p>
 DefaultChannelHandlerContext本身就是一系列context chain的一个结点，每个结点会维护prev和next两个指针，分别指向前后结点。
 </p>
@@ -96,9 +96,9 @@ DefaultChannelHandlerContext本身就是一系列context chain的一个结点，
 </div>
 </div>
 
-<div id="outline-container-orgc8a3c46" class="outline-2">
-<h2 id="orgc8a3c46"><code>AttributeMap &amp; attr()</code></h2>
-<div class="outline-text-2" id="text-orgc8a3c46">
+<div id="outline-container-org19ee274" class="outline-2">
+<h2 id="org19ee274"><code>AttributeMap &amp; attr()</code></h2>
+<div class="outline-text-2" id="text-org19ee274">
 <p>
 Java NIO的SelectionKey中有一个attachment，这在传递一些额外的信息时很有用，Netty也有类似的实现，就是 <code>AttributeMap</code> 这个接口，其只定义了一个 <code>attr()</code> 方法。
 </p>
