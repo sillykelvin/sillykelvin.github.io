@@ -1056,3 +1056,189 @@ Note: You may not slant the container and n is at least 2.
 #+END_SRC
 
 看了论坛，还有一种更巧妙的只需要一层循环的解：假定最大面积就是距离最远的两块木板，如果内部的木板要比这个面积大，因为宽度小了，那么高度必须要比最边上矮的那块高，越朝里循环，高度要求就越来越高，这样就可以跳过许多不必要的计算：实在是妙！
+
+* Integer to Roman
+
+#+BEGIN_QUOTE
+Given an integer, convert it to a roman numeral.
+
+Input is guaranteed to be within the range from 1 to 3999.
+#+END_QUOTE
+
+这个题目还是比较简单的，就是把一个阿拉伯数字转换成罗马数字，并且已经规定了范围在[1, 3999]之内。以前只看过钟表上的罗马数字（只有1-12），所以特地去维基百科查了一下，发现更大的数字的组成规律跟1-10类似。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      std::string intToRoman(int num) {
+          if (num >= 1000) {
+              int count = num / 1000;
+              int left  = num % 1000;
+
+              return std::string(count, 'M') + intToRoman(left);
+          }
+
+          if (num >= 900) {
+              int left = num % 900;
+              return "CM" + intToRoman(left);
+          }
+
+          if (num >= 500) {
+              int count = num / 100;
+              int delta = count - 5;
+              int left  = num % (500 + delta * 100);
+              return "D" + std::string(delta, 'C') + intToRoman(left);
+          }
+
+          if (num >= 400) {
+              int left = num % 400;
+              return "CD" + intToRoman(left);
+          }
+
+          if (num >= 100) {
+              int count = num / 100;
+              int left  = num % 100;
+              return std::string(count, 'C') + intToRoman(left);
+          }
+
+          if (num >= 90) {
+              int left = num % 90;
+              return "XC" + intToRoman(left);
+          }
+
+          if (num >= 50) {
+              int count = num / 10;
+              int delta = count - 5;
+              int left  = num % (50 + delta * 10);
+              return "L" + std::string(delta, 'X') + intToRoman(left);
+          }
+
+          if (num >= 40) {
+              int left = num % 40;
+              return "XL" + intToRoman(left);
+          }
+
+          if (num >= 10) {
+              int count = num / 10;
+              int left  = num % 10;
+              return std::string(count, 'X') + intToRoman(left);
+          }
+
+          switch (num) {
+          case 9: return "IX";
+          case 8: return "VIII";
+          case 7: return "VII";
+          case 6: return "VI";
+          case 5: return "V";
+          case 4: return "IV";
+          case 3: return "III";
+          case 2: return "II";
+          case 1: return "I";
+          case 0: return "";
+          }
+      }
+  };
+#+END_SRC
+
+* Roman to Integer
+
+#+BEGIN_QUOTE
+Given a roman numeral, convert it to an integer.
+
+Input is guaranteed to be within the range from 1 to 3999.
+#+END_QUOTE
+
+这个题目是上一个题目的“反函数”，要求从罗马数字转换成阿拉伯数字，也比较简单，我的实现比较暴力，代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      int roman2int(const char *s) {
+          int num = 0;
+
+          while (*s == 'M') {
+              ++s;
+              num += 1000;
+          }
+
+          if (*s == 'C' && *(s + 1) == 'M') {
+              s += 2;
+              num += 900;
+          }
+
+          if (*s == 'D') {
+              ++s;
+              num += 500;
+              while (*s == 'C') {
+                  ++s;
+                  num += 100;
+              }
+          }
+
+          if (*s == 'C' && *(s + 1) == 'D') {
+              s += 2;
+              num += 400;
+          }
+
+          while (*s == 'C') {
+              ++s;
+              num += 100;
+          }
+
+          if (*s == 'X' && *(s + 1) == 'C') {
+              s += 2;
+              num += 90;
+          }
+
+          if (*s == 'L') {
+              ++s;
+              num += 50;
+              while (*s == 'X') {
+                  ++s;
+                  num += 10;
+              }
+          }
+
+          if (*s == 'X' && *(s + 1) == 'L') {
+              s += 2;
+              num += 40;
+          }
+
+          while (*s == 'X') {
+              ++s;
+              num += 10;
+          }
+
+          if (*s == 'I' && *(s + 1) == 'X') {
+              s += 2;
+              num += 9;
+          }
+
+          if (*s == 'V') {
+              ++s;
+              num += 5;
+              while (*s == 'I') {
+                  ++s;
+                  num += 1;
+              }
+          }
+
+          if (*s == 'I' && *(s + 1) == 'V') {
+              s += 2;
+              num += 4;
+          }
+
+          while (*s == 'I') {
+              ++s;
+              num += 1;
+          }
+
+          assert(!(*s));
+          return num;
+      }
+
+      int romanToInt(string s) {
+          return roman2int(s.c_str());
+      }
+  };
+#+END_SRC
