@@ -52,9 +52,9 @@ Fiddler是一个著名的调试代理工具，它不仅能解析HTTP，而且还
 于是，这两种情况综合一下，就促成了我们的解决方案：将Fiddler作为SSL代理以提供private key，然后用Wireshark实时监控以解密流量。
 </p>
 
-<div id="outline-container-org53d46f6" class="outline-2">
-<h2 id="org53d46f6">SSL介绍及SSL代理原理</h2>
-<div class="outline-text-2" id="text-org53d46f6">
+<div id="outline-container-org9a01956" class="outline-2">
+<h2 id="org9a01956">SSL介绍及SSL代理原理</h2>
+<div class="outline-text-2" id="text-org9a01956">
 <p>
 SSL（Secure Socket Layer）是Netscape公司设计用来加密Internet通信流量的，最新版本更名为TLS（Transport Layer Security）。它采用X509证书加密来保证通信的保密性和可靠性。加密采用的证书通常由第三方证书颁发机构颁发，而这些机构是被信任的，也就是说，它们不会利用这些颁发的证书来进行窃听等行为。基于此前提，SSL协议本身能够保证：如果发生了窃听，那么用来加密的证书必定是不受信任的（除非用户将这些证书添加到其受信任证书列表中）。
 </p>
@@ -65,9 +65,9 @@ SSL代理——换种说法，其实就是 <b>Man-in-the-Middle</b> 攻击。SSL
 </div>
 </div>
 
-<div id="outline-container-orgffa98e7" class="outline-2">
-<h2 id="orgffa98e7">设置解密环境</h2>
-<div class="outline-text-2" id="text-orgffa98e7">
+<div id="outline-container-org74f32e0" class="outline-2">
+<h2 id="org74f32e0">设置解密环境</h2>
+<div class="outline-text-2" id="text-org74f32e0">
 <p>
 要同时使用Fiddler和Wireshark，我们需要两台机器：机器A运行Fiddler作为代理，机器B运行Outlook，并且将系统代理设置成机器A以将所有流量导到机器A。然后在机器B上用Wireshark监听。之所以不能只用一台机器，是因为Wireshark的Windows版本在默认情况下，不支持loopback监听，简单说来，就是对127.0.0.1的监听。之于为什么、以及如何让其实现loopback监听，可以参看<a href="http://wiki.wireshark.org/CaptureSetup/Loopback">这里</a>和<a href="http://www.hsc.fr/ressources/articles/win_net_srv/missing_loopback.html">这里</a>。最终的流程如下所示：
 </p>
@@ -82,9 +82,9 @@ SSL代理——换种说法，其实就是 <b>Man-in-the-Middle</b> 攻击。SSL
 </div>
 </div>
 
-<div id="outline-container-org97dffe1" class="outline-2">
-<h2 id="org97dffe1">设置Fiddler并导出根证书到受信任列表</h2>
-<div class="outline-text-2" id="text-org97dffe1">
+<div id="outline-container-orgbe0aaf7" class="outline-2">
+<h2 id="orgbe0aaf7">设置Fiddler并导出根证书到受信任列表</h2>
+<div class="outline-text-2" id="text-orgbe0aaf7">
 <p>
 Fiddler作为一个能够代理所有HTTPS流量的工具，它需要提供所有网站的HTTPS证书。因此，最通用的做法，是自签一个根证书，然后用这个根证书来签发所有domain的证书，作为client，只需要信任这个根证书即可。这个方法也是流行的梯子工具——goagent所采用的。但是，Fiddler自己生成证书的工具 <code>makecert.exe</code> 并不提供导出其生成证书（包括根证书和生成的各个domain的证书）的private key的方法，因此，我们需要安装一个Fiddler的插件—— <b>CertMaker</b> 来代替Fiddler作为证书生成工具，因为这个工具可以看到private key。
 </p>
@@ -109,9 +109,9 @@ CertMaker插件并不影响Fiddler解密SSL的设置，它只是替换了Fiddler
 </div>
 </div>
 
-<div id="outline-container-orgb5dce42" class="outline-2">
-<h2 id="orgb5dce42">导出Fiddler生成证书的private key</h2>
-<div class="outline-text-2" id="text-orgb5dce42">
+<div id="outline-container-org6248dbe" class="outline-2">
+<h2 id="org6248dbe">导出Fiddler生成证书的private key</h2>
+<div class="outline-text-2" id="text-org6248dbe">
 <p>
 在使用了CertMaker插件之后，我们能看到Fiddler的根证书的private key了。 <b>但需要注意的是，我们需要的，不是Fiddler的根证书的private key，而是监视网站的private key。例如，如果我们要监视和<a href="https://www.example.com">https://www.example.com</a>的通信流量，我们需要Fiddler针对这个domain签发的证书的private key</b> 。所以，要做到这点，需要在Fiddler中设置一个属性：
 </p>
@@ -133,9 +133,9 @@ Base64 encoded private key here
 </div>
 </div>
 
-<div id="outline-container-org9d6e75c" class="outline-2">
-<h2 id="org9d6e75c">导入private key到Wireshark</h2>
-<div class="outline-text-2" id="text-org9d6e75c">
+<div id="outline-container-org16a3159" class="outline-2">
+<h2 id="org16a3159">导入private key到Wireshark</h2>
+<div class="outline-text-2" id="text-org16a3159">
 <p>
 在Wireshark中，打开Edit-&gt;Preferences-&gt;Protocols-&gt;SSL，然后点击RSA keys list的Edit按钮，点击New，添加一个新的Rule，IP和Port设置为代理机器A的地址和端口，然后Protocol设置为http，Key File选择我们刚生成的文件，然后确定，如下图：
 </p>
@@ -151,9 +151,9 @@ Base64 encoded private key here
 </div>
 </div>
 
-<div id="outline-container-org6d76cb2" class="outline-2">
-<h2 id="org6d76cb2">Reference</h2>
-<div class="outline-text-2" id="text-org6d76cb2">
+<div id="outline-container-org7734b4b" class="outline-2">
+<h2 id="org7734b4b">Reference</h2>
+<div class="outline-text-2" id="text-org7734b4b">
 <ol class="org-ol">
 <li><a href="https://en.wikipedia.org/wiki/Secure_Sockets_Layer">https://en.wikipedia.org/wiki/Secure_Sockets_Layer</a></li>
 <li><a href="http://wiki.wireshark.org/CaptureSetup/Loopback">http://wiki.wireshark.org/CaptureSetup/Loopback</a></li>

@@ -42,9 +42,9 @@
 
 <hr />
 
-<div id="outline-container-orgee39e67" class="outline-2">
-<h2 id="orgee39e67">关于成员函数指针</h2>
-<div class="outline-text-2" id="text-orgee39e67">
+<div id="outline-container-org469f43d" class="outline-2">
+<h2 id="org469f43d">关于成员函数指针</h2>
+<div class="outline-text-2" id="text-org469f43d">
 <p>
 成员函数指针是C++最少用到的语法之一，甚至有经验的C++码农有时候也会被它搞晕。这是一篇针对于初学者的教程，同时也给有经验的码农分享了一些我个人对底层机制的挖掘。在开始之前，让我们先看一段在第一次看时一定会高呼“我++”的代码（说明，这些代码都是翻译君重新手敲的，改正了原文代码中的一些不太好的空格、缩进，下同）：
 </p>
@@ -79,9 +79,9 @@ int main() {
 </div>
 </div>
 
-<div id="outline-container-org96d34f5" class="outline-2">
-<h2 id="org96d34f5">C++语法</h2>
-<div class="outline-text-2" id="text-org96d34f5">
+<div id="outline-container-org13181fb" class="outline-2">
+<h2 id="org13181fb">C++语法</h2>
+<div class="outline-text-2" id="text-org13181fb">
 <p>
 下面的语法展示了如何声明一个成员函数指针：
 </p>
@@ -166,9 +166,9 @@ int main(int argc, char *argv[]) {
 </div>
 </div>
 
-<div id="outline-container-orgc81a7cf" class="outline-2">
-<h2 id="orgc81a7cf">成员函数指针不是常规指针</h2>
-<div class="outline-text-2" id="text-orgc81a7cf">
+<div id="outline-container-org9c9fdc8" class="outline-2">
+<h2 id="org9c9fdc8">成员函数指针不是常规指针</h2>
+<div class="outline-text-2" id="text-org9c9fdc8">
 <p>
 成员函数指针不像常规指针那样保存某个“准确”的地址。我们可以把它想像成保存的是成员函数在类布局中的“相对”地址。让我们来展示一下二者的不同。我们只对类 <code>Foo</code> 做一个小手术：将成员函数 <code>f</code> 变成 <code>static</code> ：
 </p>
@@ -209,12 +209,12 @@ int (Foo::*fptr) (string) = &amp;Foo::f;
 </div>
 </div>
 
-<div id="outline-container-org1e8daa4" class="outline-2">
-<h2 id="org1e8daa4">C++类型转换规则</h2>
-<div class="outline-text-2" id="text-org1e8daa4">
-</div><div id="outline-container-orgd74bcea" class="outline-3">
-<h3 id="orgd74bcea">非虚函数情形</h3>
-<div class="outline-text-3" id="text-orgd74bcea">
+<div id="outline-container-org2f37f42" class="outline-2">
+<h2 id="org2f37f42">C++类型转换规则</h2>
+<div class="outline-text-2" id="text-org2f37f42">
+</div><div id="outline-container-orga75de26" class="outline-3">
+<h3 id="orga75de26">非虚函数情形</h3>
+<div class="outline-text-3" id="text-orga75de26">
 <p>
 我们在前面一节看到，成员函数指针并不是常规指针，所以，成员函数指针（非静态）不能被转换成常规指针（当然，如果哪个脑残真想这么做的话，可以使用汇编技术来暴力解决），因为成员函数指针代表了 <b>偏移量</b> 而不是 <b>绝对地址</b> 。但是，如果是成员函数指针之间相互转换呢？
 </p>
@@ -301,14 +301,14 @@ Bar obj;
 </pre>
 
 <p>
-尽管我们想要调用的是 <code>Bar::b()</code> ，但是 <code>Foo::f()</code> 却被调用了，因为fptr是静态绑定（翻译君注：这里的静态绑定，即指在编译阶段，fptr的值已经确定了，所以即使进行强制转换，依然调用的是Foo类的f()函数）。（请围观<a href="#org52ba5fe">成员函数调用和 <code>this</code> 指针</a>）
+尽管我们想要调用的是 <code>Bar::b()</code> ，但是 <code>Foo::f()</code> 却被调用了，因为fptr是静态绑定（翻译君注：这里的静态绑定，即指在编译阶段，fptr的值已经确定了，所以即使进行强制转换，依然调用的是Foo类的f()函数）。（请围观<a href="#orgc5f9249">成员函数调用和 <code>this</code> 指针</a>）
 </p>
 </div>
 </div>
 
-<div id="outline-container-org61e4227" class="outline-3">
-<h3 id="org61e4227">虚函数情形</h3>
-<div class="outline-text-3" id="text-org61e4227">
+<div id="outline-container-orge379ffb" class="outline-3">
+<h3 id="orge379ffb">虚函数情形</h3>
+<div class="outline-text-3" id="text-orge379ffb">
 <p>
 我们只将前例中的所有成员函数变成虚函数，其它都不动：
 </p>
@@ -366,9 +366,9 @@ int main(int argc, char *argv[]) {
 </div>
 </div>
 
-<div id="outline-container-org7b033ad" class="outline-2">
-<h2 id="org7b033ad">成员函数指针数组及其应用</h2>
-<div class="outline-text-2" id="text-org7b033ad">
+<div id="outline-container-orge7730b6" class="outline-2">
+<h2 id="orge7730b6">成员函数指针数组及其应用</h2>
+<div class="outline-text-2" id="text-orge7730b6">
 <p>
 成员函数指针的一个重要应用就是根据输入来生成响应事件，下面的 <code>Printer</code> 类和指针数组 <code>pfm</code> 展示了这一点：
 </p>
@@ -433,9 +433,9 @@ int main() {
 </div>
 </div>
 
-<div id="outline-container-org52ba5fe" class="outline-2">
-<h2 id="org52ba5fe">成员函数调用和 <code>this</code> 指针</h2>
-<div class="outline-text-2" id="text-org52ba5fe">
+<div id="outline-container-orgc5f9249" class="outline-2">
+<h2 id="orgc5f9249">成员函数调用和 <code>this</code> 指针</h2>
+<div class="outline-text-2" id="text-orgc5f9249">
 <p>
 现在我们回到文章最开始的地方。为什么一个空指针也能调用成员函数？对于一个非虚函数调用，例如： <code>p-&gt;f()</code> ，编译器会生成类似如下代码：
 </p>
@@ -458,9 +458,9 @@ void Foo::f(Foo *const this) {
 </div>
 </div>
 
-<div id="outline-container-orgd786892" class="outline-2">
-<h2 id="orgd786892">结论</h2>
-<div class="outline-text-2" id="text-orgd786892">
+<div id="outline-container-org909c65b" class="outline-2">
+<h2 id="org909c65b">结论</h2>
+<div class="outline-text-2" id="text-org909c65b">
 <p>
 简单总结一下，通过上述文章，我们学到了：
 </p>

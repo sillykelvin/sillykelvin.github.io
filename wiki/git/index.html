@@ -36,12 +36,12 @@
 这是一篇备忘性质的文章，主要记录我在使用git的过程中，个人觉得一些比较有用的命令。会不定期更新。
 </p>
 
-<div id="outline-container-orgb76f908" class="outline-2">
-<h2 id="orgb76f908">useful commands</h2>
-<div class="outline-text-2" id="text-orgb76f908">
-</div><div id="outline-container-org195dda8" class="outline-3">
-<h3 id="org195dda8">pretty log:</h3>
-<div class="outline-text-3" id="text-org195dda8">
+<div id="outline-container-org4bc104e" class="outline-2">
+<h2 id="org4bc104e">useful commands</h2>
+<div class="outline-text-2" id="text-org4bc104e">
+</div><div id="outline-container-org7d40120" class="outline-3">
+<h3 id="org7d40120">pretty log:</h3>
+<div class="outline-text-3" id="text-org7d40120">
 <p>
 以前我会用一些GUI的git工具来看历史提交记录，现在有了这个命令，发现那些GUI工具都弱爆了。。
 </p>
@@ -52,9 +52,9 @@ git log --oneline --graph --decorate
 </div>
 </div>
 
-<div id="outline-container-org049ccc0" class="outline-3">
-<h3 id="org049ccc0">modify commit message:</h3>
-<div class="outline-text-3" id="text-org049ccc0">
+<div id="outline-container-org2f1402c" class="outline-3">
+<h3 id="org2f1402c">modify commit message:</h3>
+<div class="outline-text-3" id="text-org2f1402c">
 <p>
 当某个commit提交后发现message错误时，可以用此命令修正：
 </p>
@@ -65,9 +65,9 @@ git commit --amend -m "correct message"
 </div>
 </div>
 
-<div id="outline-container-orga0827c5" class="outline-3">
-<h3 id="orga0827c5">clean useless files:</h3>
-<div class="outline-text-3" id="text-orga0827c5">
+<div id="outline-container-orgfc65f2b" class="outline-3">
+<h3 id="orgfc65f2b">clean useless files:</h3>
+<div class="outline-text-3" id="text-orgfc65f2b">
 <p>
 在工作区进行某些测试，例如 <code>make</code> ，可能会产生很多不需要提交到repository的文件，手动一个个删除又太麻烦，可以利用下面这个命令：
 </p>
@@ -88,9 +88,9 @@ git clean -fdx
 </div>
 </div>
 
-<div id="outline-container-org01406b8" class="outline-3">
-<h3 id="org01406b8">clear obsolete branch:</h3>
-<div class="outline-text-3" id="text-org01406b8">
+<div id="outline-container-orgc343f92" class="outline-3">
+<h3 id="orgc343f92">clear obsolete branch:</h3>
+<div class="outline-text-3" id="text-orgc343f92">
 <p>
 If some branches are deleted at remote repository, the local branches will not be deleted automatically (e.g. a branch named <i>devel</i> at remote repo is deleted, the branch "remotes/origin/devel" will still exist), so use this command to clear the obsolete local branches:
 </p>
@@ -102,12 +102,12 @@ git remote prune origin
 </div>
 </div>
 
-<div id="outline-container-org7c93369" class="outline-2">
-<h2 id="org7c93369">misc</h2>
-<div class="outline-text-2" id="text-org7c93369">
-</div><div id="outline-container-orgd9e0904" class="outline-3">
-<h3 id="orgd9e0904">github proxy settings under windows</h3>
-<div class="outline-text-3" id="text-orgd9e0904">
+<div id="outline-container-orgf1b2c8d" class="outline-2">
+<h2 id="orgf1b2c8d">misc</h2>
+<div class="outline-text-2" id="text-orgf1b2c8d">
+</div><div id="outline-container-org37b94cc" class="outline-3">
+<h3 id="org37b94cc">github proxy settings under windows</h3>
+<div class="outline-text-3" id="text-org37b94cc">
 <p>
 万恶的GFW，前两天封了github，这两天虽然解封了，但是访问速度慢得要死，clone一个repo才1KB/s。。。无奈，使用代理，但是windows下怎么设置代理还没弄过，折腾了好一阵子，才弄出来，只需要在命令行设置以下环境变量：
 </p>
