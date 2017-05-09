@@ -40,9 +40,9 @@
 于是，把这事托付于万能的Google，还真有人为这个折腾过，于是，我就把前人折腾的过程来做个总结。
 </p>
 
-<div id="outline-container-orgd903e80" class="outline-2">
-<h2 id="orgd903e80">测试图片类型是否被支持</h2>
-<div class="outline-text-2" id="text-orgd903e80">
+<div id="outline-container-org88f2e27" class="outline-2">
+<h2 id="org88f2e27">测试图片类型是否被支持</h2>
+<div class="outline-text-2" id="text-org88f2e27">
 <p>
 Emacs有内建函数用于测试特定类型的图片是否被支持，于是，测试几种常见类型的代码<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>如下：
 </p>
@@ -62,9 +62,9 @@ Emacs有内建函数用于测试特定类型的图片是否被支持，于是，
 </div>
 </div>
 
-<div id="outline-container-org455943e" class="outline-2">
-<h2 id="org455943e">添加支持</h2>
-<div class="outline-text-2" id="text-org455943e">
+<div id="outline-container-org136ec69" class="outline-2">
+<h2 id="org136ec69">添加支持</h2>
+<div class="outline-text-2" id="text-org136ec69">
 <p>
 下面是来自Emacs的官方文档<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>：
 </p>
@@ -144,9 +144,9 @@ because they do not depend on external libraries and are always available.
 </div>
 </div>
 
-<div id="outline-container-org0fbfdbe" class="outline-2">
-<h2 id="org0fbfdbe">小插曲</h2>
-<div class="outline-text-2" id="text-org0fbfdbe">
+<div id="outline-container-orgb4f6936" class="outline-2">
+<h2 id="orgb4f6936">小插曲</h2>
+<div class="outline-text-2" id="text-orgb4f6936">
 <p>
 到此似乎结束了，于是，重启Emacs打开一个图片试试，什么？？还是二进制内容？？于是把第一节中的那几句测试代码再跑一遍，发现其它都返回 <code>t</code> 只有png那一行返回 <code>nil</code> ，而我打开的图片刚好是png的。。于是再找张jpg打开，没有问题。
 </p>

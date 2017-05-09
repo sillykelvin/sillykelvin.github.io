@@ -74,9 +74,9 @@ virtual memory exhausted: Cannot allocate memory
 好在，Linux系统的可配置性极高，但如果要调整磁盘分区增加一个swap分区的话，可能不太现实，万一把磁盘弄挂掉那悲剧可就不是一点两点了，好在普通文件也能达到同样的效果，于是，果断创建一个文件来作为swap空间。
 </p>
 
-<div id="outline-container-org010ffa1" class="outline-3">
-<h3 id="org010ffa1">创建一个文件：</h3>
-<div class="outline-text-3" id="text-org010ffa1">
+<div id="outline-container-org0741435" class="outline-3">
+<h3 id="org0741435">创建一个文件：</h3>
+<div class="outline-text-3" id="text-org0741435">
 <pre class="example">
 # dd if=/dev/zero of=/swapfile bs=1M count=512
 </pre>
@@ -87,9 +87,9 @@ virtual memory exhausted: Cannot allocate memory
 </div>
 </div>
 
-<div id="outline-container-org6dadd9e" class="outline-3">
-<h3 id="org6dadd9e">给这个文件加上正确的权限：</h3>
-<div class="outline-text-3" id="text-org6dadd9e">
+<div id="outline-container-org5a7ac47" class="outline-3">
+<h3 id="org5a7ac47">给这个文件加上正确的权限：</h3>
+<div class="outline-text-3" id="text-org5a7ac47">
 <pre class="example">
 # chown root:root /swapfile
 # chmod 0600 /swapfile
@@ -101,18 +101,18 @@ virtual memory exhausted: Cannot allocate memory
 </div>
 </div>
 
-<div id="outline-container-orgecbfefc" class="outline-3">
-<h3 id="orgecbfefc">设置swap空间：</h3>
-<div class="outline-text-3" id="text-orgecbfefc">
+<div id="outline-container-org6d38c88" class="outline-3">
+<h3 id="org6d38c88">设置swap空间：</h3>
+<div class="outline-text-3" id="text-org6d38c88">
 <pre class="example">
 # mkswap /swapfile
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org4bb80f4" class="outline-3">
-<h3 id="org4bb80f4">激活这个刚刚创建的swap空间：</h3>
-<div class="outline-text-3" id="text-org4bb80f4">
+<div id="outline-container-orge01c7d5" class="outline-3">
+<h3 id="orge01c7d5">激活这个刚刚创建的swap空间：</h3>
+<div class="outline-text-3" id="text-orge01c7d5">
 <pre class="example">
 # swapon /swapfile
 </pre>
@@ -131,9 +131,9 @@ virtual memory exhausted: Cannot allocate memory
 </div>
 </div>
 
-<div id="outline-container-orga51b808" class="outline-2">
-<h2 id="orga51b808">参考文档</h2>
-<div class="outline-text-2" id="text-orga51b808">
+<div id="outline-container-org696459a" class="outline-2">
+<h2 id="org696459a">参考文档</h2>
+<div class="outline-text-2" id="text-org696459a">
 <ol class="org-ol">
 <li><a href="https://wiki.archlinux.org/index.php/swap">https://wiki.archlinux.org/index.php/swap</a></li>
 <li><a href="http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/">http://www.cyberciti.biz/faq/linux-add-a-swap-file-howto/</a></li>

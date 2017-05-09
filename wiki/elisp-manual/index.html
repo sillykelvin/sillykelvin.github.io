@@ -36,12 +36,12 @@
 Notes recorded during learning <i>Emacs Lisp Reference Manual</i>, I did not finish the whole book, only 12 chapters.
 </p>
 
-<div id="outline-container-org0222299" class="outline-2">
-<h2 id="org0222299">Introduction</h2>
-<div class="outline-text-2" id="text-org0222299">
-</div><div id="outline-container-org0d077aa" class="outline-3">
-<h3 id="org0d077aa"><code>nil</code> and <code>t</code></h3>
-<div class="outline-text-3" id="text-org0d077aa">
+<div id="outline-container-org8d1277e" class="outline-2">
+<h2 id="org8d1277e">Introduction</h2>
+<div class="outline-text-2" id="text-org8d1277e">
+</div><div id="outline-container-org59344db" class="outline-3">
+<h3 id="org59344db"><code>nil</code> and <code>t</code></h3>
+<div class="outline-text-3" id="text-org59344db">
 <ul class="org-ul">
 <li><code>nil</code>
 <ol class="org-ol">
@@ -62,9 +62,9 @@ return non-=nil= if <i>obj</i> is t or nil, otherwise not</li>
 </div>
 </div>
 
-<div id="outline-container-org150cd7e" class="outline-3">
-<h3 id="org150cd7e">version info</h3>
-<div class="outline-text-3" id="text-org150cd7e">
+<div id="outline-container-orgcfab79c" class="outline-3">
+<h3 id="orgcfab79c">version info</h3>
+<div class="outline-text-3" id="text-orgcfab79c">
 <ul class="org-ul">
 <li><code>emacs-version</code> <b>&amp;optional</b> <i>here</i> function</li>
 
@@ -80,26 +80,26 @@ return non-=nil= if <i>obj</i> is t or nil, otherwise not</li>
 </div>
 </div>
 
-<div id="outline-container-org228940f" class="outline-2">
-<h2 id="org228940f">Data Types</h2>
-<div class="outline-text-2" id="text-org228940f">
+<div id="outline-container-orgd23da98" class="outline-2">
+<h2 id="orgd23da98">Data Types</h2>
+<div class="outline-text-2" id="text-orgd23da98">
 <p>
 one object can have <b>only one</b> primitive type, but may can belong to several other types primitive types are: <code>integer, float, cons, symbol, string, vector, hash-table, subr, byte-code function</code>
 </p>
 </div>
 
-<div id="outline-container-orgd312bdc" class="outline-3">
-<h3 id="orgd312bdc">character type</h3>
-<div class="outline-text-3" id="text-orgd312bdc">
+<div id="outline-container-org378748d" class="outline-3">
+<h3 id="org378748d">character type</h3>
+<div class="outline-text-3" id="text-org378748d">
 <p>
 the read syntax of basic char is ?&lt;X&gt;, &lt;X&gt; stands for the character to be represented, so ?A stands for 'A'
 </p>
 </div>
 </div>
 
-<div id="outline-container-org95f1526" class="outline-3">
-<h3 id="org95f1526">equality predicates</h3>
-<div class="outline-text-3" id="text-org95f1526">
+<div id="outline-container-orge20055f" class="outline-3">
+<h3 id="orge20055f">equality predicates</h3>
+<div class="outline-text-3" id="text-orge20055f">
 <dl class="org-dl">
 <dt><code>eq</code> <i>obj1</i> <i>obj2</i></dt><dd><p>
 return <code>t</code> if <i>obj1</i> and <i>obj2</i> are the same object, otherwise return <code>nil</code> integers with same value are considered to be the same object, so <code>(eq 1 1)</code> will return <code>t</code>
@@ -121,12 +121,12 @@ unlike <code>eq</code>, <code>equal</code> will look into arguments to check if 
 </div>
 </div>
 
-<div id="outline-container-org7a2b400" class="outline-2">
-<h2 id="org7a2b400">Numbers</h2>
-<div class="outline-text-2" id="text-org7a2b400">
-</div><div id="outline-container-org6403dca" class="outline-3">
-<h3 id="org6403dca">two types</h3>
-<div class="outline-text-3" id="text-org6403dca">
+<div id="outline-container-org8744e9c" class="outline-2">
+<h2 id="org8744e9c">Numbers</h2>
+<div class="outline-text-2" id="text-org8744e9c">
+</div><div id="outline-container-org190041c" class="outline-3">
+<h3 id="org190041c">two types</h3>
+<div class="outline-text-3" id="text-org190041c">
 <ul class="org-ul">
 <li><code>integer</code></li>
 <li><code>float</code></li>
@@ -134,9 +134,9 @@ unlike <code>eq</code>, <code>equal</code> will look into arguments to check if 
 </div>
 </div>
 
-<div id="outline-container-org784df98" class="outline-3">
-<h3 id="org784df98">type predicates functions</h3>
-<div class="outline-text-3" id="text-org784df98">
+<div id="outline-container-org99fa3ff" class="outline-3">
+<h3 id="org99fa3ff">type predicates functions</h3>
+<div class="outline-text-3" id="text-org99fa3ff">
 <ul class="org-ul">
 <li><code>floatp</code> <i>object</i></li>
 <li><code>integerp</code> <i>object</i></li>
@@ -147,9 +147,9 @@ unlike <code>eq</code>, <code>equal</code> will look into arguments to check if 
 </div>
 </div>
 
-<div id="outline-container-org4fbcfbe" class="outline-3">
-<h3 id="org4fbcfbe">comparison functions</h3>
-<div class="outline-text-3" id="text-org4fbcfbe">
+<div id="outline-container-org3d900b8" class="outline-3">
+<h3 id="org3d900b8">comparison functions</h3>
+<div class="outline-text-3" id="text-org3d900b8">
 <ul class="org-ul">
 <li><code>max</code> <i>num1</i> <b>&amp;rest</b> <i>nums</i> return the maximum value</li>
 
@@ -158,9 +158,9 @@ unlike <code>eq</code>, <code>equal</code> will look into arguments to check if 
 </div>
 </div>
 
-<div id="outline-container-org64854bc" class="outline-3">
-<h3 id="org64854bc">conversion functions</h3>
-<div class="outline-text-3" id="text-org64854bc">
+<div id="outline-container-orgb951959" class="outline-3">
+<h3 id="orgb951959">conversion functions</h3>
+<div class="outline-text-3" id="text-orgb951959">
 <ul class="org-ul">
 <li><code>float</code> <i>number</i> convert the <i>number</i> to float type</li>
 
@@ -175,9 +175,9 @@ unlike <code>eq</code>, <code>equal</code> will look into arguments to check if 
 </div>
 </div>
 
-<div id="outline-container-orge178229" class="outline-3">
-<h3 id="orge178229">random function</h3>
-<div class="outline-text-3" id="text-orge178229">
+<div id="outline-container-org1132e47" class="outline-3">
+<h3 id="org1132e47">random function</h3>
+<div class="outline-text-3" id="text-org1132e47">
 <ul class="org-ul">
 <li><p>
 <code>random</code> <b>&amp;optional</b> <i>limit</i> returns a pseudo-random integer
@@ -195,12 +195,12 @@ if <i>limit</i> is <code>t</code>, it will choose a new seed, otherwise Emacs wi
 </div>
 </div>
 
-<div id="outline-container-org79b2d33" class="outline-2">
-<h2 id="org79b2d33">Strings and Characters</h2>
-<div class="outline-text-2" id="text-org79b2d33">
-</div><div id="outline-container-org89d5bf1" class="outline-3">
-<h3 id="org89d5bf1">predicates functions</h3>
-<div class="outline-text-3" id="text-org89d5bf1">
+<div id="outline-container-org31ed1a3" class="outline-2">
+<h2 id="org31ed1a3">Strings and Characters</h2>
+<div class="outline-text-2" id="text-org31ed1a3">
+</div><div id="outline-container-orge8f4ca6" class="outline-3">
+<h3 id="orge8f4ca6">predicates functions</h3>
+<div class="outline-text-3" id="text-orge8f4ca6">
 <ul class="org-ul">
 <li><code>stringp</code> <i>object</i></li>
 <li><code>string-or-null-p</code> <i>object</i></li>
@@ -209,9 +209,9 @@ if <i>limit</i> is <code>t</code>, it will choose a new seed, otherwise Emacs wi
 </div>
 </div>
 
-<div id="outline-container-org3f74c89" class="outline-3">
-<h3 id="org3f74c89">useful functions</h3>
-<div class="outline-text-3" id="text-org3f74c89">
+<div id="outline-container-org740f98a" class="outline-3">
+<h3 id="org740f98a">useful functions</h3>
+<div class="outline-text-3" id="text-org740f98a">
 <ul class="org-ul">
 <li><code>substring</code> : to get substring</li>
 <li><code>concat</code> : to concatenate strings together</li>
@@ -224,12 +224,12 @@ if <i>limit</i> is <code>t</code>, it will choose a new seed, otherwise Emacs wi
 </div>
 </div>
 
-<div id="outline-container-org5859105" class="outline-2">
-<h2 id="org5859105">Lists</h2>
-<div class="outline-text-2" id="text-org5859105">
-</div><div id="outline-container-org3a3b834" class="outline-3">
-<h3 id="org3a3b834">cons cells</h3>
-<div class="outline-text-3" id="text-org3a3b834">
+<div id="outline-container-orgffa9380" class="outline-2">
+<h2 id="orgffa9380">Lists</h2>
+<div class="outline-text-2" id="text-orgffa9380">
+</div><div id="outline-container-orgdedee7c" class="outline-3">
+<h3 id="orgdedee7c">cons cells</h3>
+<div class="outline-text-3" id="text-orgdedee7c">
 <p>
 a cons cell has two slots, the first is called CAR and the second is called CDR, and it may looks like the structure below:
 </p>
@@ -248,9 +248,9 @@ so the two slots can hold any values, and lists are built up from cons cell, whi
 </div>
 </div>
 
-<div id="outline-container-orgd50658b" class="outline-3">
-<h3 id="orgd50658b">element accessing functions</h3>
-<div class="outline-text-3" id="text-orgd50658b">
+<div id="outline-container-org229d747" class="outline-3">
+<h3 id="org229d747">element accessing functions</h3>
+<div class="outline-text-3" id="text-org229d747">
 <ul class="org-ul">
 <li><code>car</code> / <code>cdr</code></li>
 <li><code>pop</code></li>
@@ -260,9 +260,9 @@ so the two slots can hold any values, and lists are built up from cons cell, whi
 </div>
 </div>
 
-<div id="outline-container-orgf7f1639" class="outline-3">
-<h3 id="orgf7f1639">building functions</h3>
-<div class="outline-text-3" id="text-orgf7f1639">
+<div id="outline-container-org7f6982b" class="outline-3">
+<h3 id="org7f6982b">building functions</h3>
+<div class="outline-text-3" id="text-org7f6982b">
 <ul class="org-ul">
 <li><code>cons</code></li>
 <li><code>list</code></li>
@@ -274,9 +274,9 @@ so the two slots can hold any values, and lists are built up from cons cell, whi
 </div>
 </div>
 
-<div id="outline-container-org1a64c1c" class="outline-3">
-<h3 id="org1a64c1c">modification functions</h3>
-<div class="outline-text-3" id="text-org1a64c1c">
+<div id="outline-container-orgdbeb849" class="outline-3">
+<h3 id="orgdbeb849">modification functions</h3>
+<div class="outline-text-3" id="text-orgdbeb849">
 <ul class="org-ul">
 <li><code>push</code></li>
 
@@ -301,9 +301,9 @@ so the two slots can hold any values, and lists are built up from cons cell, whi
 </div>
 </div>
 
-<div id="outline-container-org0589623" class="outline-3">
-<h3 id="org0589623">association lists</h3>
-<div class="outline-text-3" id="text-org0589623">
+<div id="outline-container-org17e4ccd" class="outline-3">
+<h3 id="org17e4ccd">association lists</h3>
+<div class="outline-text-3" id="text-org17e4ccd">
 <p>
 <i>alist</i> for short, it is a list consists of cons cells, that is to say, every element of alist is a cons cell, the CAR of the cons cell stores <b>key</b> while the CDR stores <b>value</b>
 </p>
@@ -323,18 +323,18 @@ so the two slots can hold any values, and lists are built up from cons cell, whi
 </div>
 </div>
 
-<div id="outline-container-org696afce" class="outline-2">
-<h2 id="org696afce">Sequences, Arrays and Vectors</h2>
-<div class="outline-text-2" id="text-org696afce">
+<div id="outline-container-org5e5e018" class="outline-2">
+<h2 id="org5e5e018">Sequences, Arrays and Vectors</h2>
+<div class="outline-text-2" id="text-org5e5e018">
 <p>
 sequence: list, array
 array: vector, string, char-table, bool-vector
 </p>
 </div>
 
-<div id="outline-container-orgb57f6a3" class="outline-3">
-<h3 id="orgb57f6a3">sequence functions</h3>
-<div class="outline-text-3" id="text-orgb57f6a3">
+<div id="outline-container-org3eeee79" class="outline-3">
+<h3 id="org3eeee79">sequence functions</h3>
+<div class="outline-text-3" id="text-org3eeee79">
 <ul class="org-ul">
 <li><code>sequencep</code></li>
 <li><code>length</code></li>
@@ -344,9 +344,9 @@ array: vector, string, char-table, bool-vector
 </div>
 </div>
 
-<div id="outline-container-org53331a3" class="outline-3">
-<h3 id="org53331a3">array functions</h3>
-<div class="outline-text-3" id="text-org53331a3">
+<div id="outline-container-orgde68087" class="outline-3">
+<h3 id="orgde68087">array functions</h3>
+<div class="outline-text-3" id="text-orgde68087">
 <ul class="org-ul">
 <li><code>arrayp</code></li>
 
@@ -359,9 +359,9 @@ array: vector, string, char-table, bool-vector
 </div>
 </div>
 
-<div id="outline-container-orge0a2d2d" class="outline-3">
-<h3 id="orge0a2d2d">vector functions</h3>
-<div class="outline-text-3" id="text-orge0a2d2d">
+<div id="outline-container-orga1a05a9" class="outline-3">
+<h3 id="orga1a05a9">vector functions</h3>
+<div class="outline-text-3" id="text-orga1a05a9">
 <ul class="org-ul">
 <li><code>vectorp</code></li>
 
@@ -374,9 +374,9 @@ array: vector, string, char-table, bool-vector
 </div>
 </div>
 
-<div id="outline-container-org1eb4d16" class="outline-3">
-<h3 id="org1eb4d16">char-table, bool-vector (skipped)</h3>
-<div class="outline-text-3" id="text-org1eb4d16">
+<div id="outline-container-org1a836dc" class="outline-3">
+<h3 id="org1a836dc">char-table, bool-vector (skipped)</h3>
+<div class="outline-text-3" id="text-org1a836dc">
 <p>
 not so useful, so skip them
 </p>
@@ -384,21 +384,21 @@ not so useful, so skip them
 </div>
 </div>
 
-<div id="outline-container-orgb8d2a06" class="outline-2">
-<h2 id="orgb8d2a06">Hash Tables (skipped)</h2>
-<div class="outline-text-2" id="text-orgb8d2a06">
+<div id="outline-container-org3b5626c" class="outline-2">
+<h2 id="org3b5626c">Hash Tables (skipped)</h2>
+<div class="outline-text-2" id="text-org3b5626c">
 <p>
 not so useful, so skip it
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2f67e09" class="outline-2">
-<h2 id="org2f67e09">Symbols</h2>
-<div class="outline-text-2" id="text-org2f67e09">
-</div><div id="outline-container-org37d178c" class="outline-3">
-<h3 id="org37d178c">symbol components</h3>
-<div class="outline-text-3" id="text-org37d178c">
+<div id="outline-container-org638e4f3" class="outline-2">
+<h2 id="org638e4f3">Symbols</h2>
+<div class="outline-text-2" id="text-org638e4f3">
+</div><div id="outline-container-org3230190" class="outline-3">
+<h3 id="org3230190">symbol components</h3>
+<div class="outline-text-3" id="text-org3230190">
 <p>
 each symbol has four components:
 </p>
@@ -415,9 +415,9 @@ each symbol has four components:
 </div>
 </div>
 
-<div id="outline-container-org9f2d0b4" class="outline-3">
-<h3 id="org9f2d0b4">create and intern symbols</h3>
-<div class="outline-text-3" id="text-org9f2d0b4">
+<div id="outline-container-org2a8788b" class="outline-3">
+<h3 id="org2a8788b">create and intern symbols</h3>
+<div class="outline-text-3" id="text-org2a8788b">
 <p>
 symbols are stored in a vector called <i>obarray</i>, symbol name and symbol is with a one-to-one mapping relationship interning a symbol means hash it and put it into <i>obarray</i>, or find it from <i>obarray</i>, so there will never be two symbols with same name in one <i>obarray</i>, or two names pointing to one symbol.
 </p>
@@ -432,9 +432,9 @@ of course there are <i>uninterned symbols</i>, it means they are not put into an
 </div>
 </div>
 
-<div id="outline-container-orgc6574da" class="outline-3">
-<h3 id="orgc6574da">functions</h3>
-<div class="outline-text-3" id="text-orgc6574da">
+<div id="outline-container-org22bae88" class="outline-3">
+<h3 id="org22bae88">functions</h3>
+<div class="outline-text-3" id="text-org22bae88">
 <ul class="org-ul">
 <li><code>symbol-name</code></li>
 <li><code>make-symbol</code></li>
@@ -447,18 +447,18 @@ of course there are <i>uninterned symbols</i>, it means they are not put into an
 </div>
 </div>
 
-<div id="outline-container-org61a1319" class="outline-3">
-<h3 id="org61a1319">property list</h3>
-<div class="outline-text-3" id="text-org61a1319">
+<div id="outline-container-orga44347c" class="outline-3">
+<h3 id="orga44347c">property list</h3>
+<div class="outline-text-3" id="text-orga44347c">
 <p>
 property list (so called <i>plist</i>) is like association list (<i>alist</i>), it is also key-value pair data structure, but it often uses symbol as the key, so a plist may always have unique keys, while alist may not.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org3670a20" class="outline-3">
-<h3 id="org3670a20">plist functions</h3>
-<div class="outline-text-3" id="text-org3670a20">
+<div id="outline-container-orgfb33119" class="outline-3">
+<h3 id="orgfb33119">plist functions</h3>
+<div class="outline-text-3" id="text-orgfb33119">
 <ul class="org-ul">
 <li><code>symbol-plist</code> <i>symbol</i></li>
 <li><code>setplist</code> <i>symbol</i> <i>plist</i></li>
@@ -472,17 +472,17 @@ property list (so called <i>plist</i>) is like association list (<i>alist</i>), 
 </div>
 </div>
 
-<div id="outline-container-orgb923817" class="outline-2">
-<h2 id="orgb923817">Evaluation</h2>
-<div class="outline-text-2" id="text-orgb923817">
+<div id="outline-container-orga5f8e25" class="outline-2">
+<h2 id="orga5f8e25">Evaluation</h2>
+<div class="outline-text-2" id="text-orga5f8e25">
 <p>
 a Lisp object that is intended for evaluation is called a <i>form</i> or <i>expression</i>, or <i>S-expression</i> any Lisp object can be evaluated, but in practice only numbers, string, symbols, lists are evaluated very often
 </p>
 </div>
 
-<div id="outline-container-orgffb4f14" class="outline-3">
-<h3 id="orgffb4f14">kinds of forms</h3>
-<div class="outline-text-3" id="text-orgffb4f14">
+<div id="outline-container-orgaef249c" class="outline-3">
+<h3 id="orgaef249c">kinds of forms</h3>
+<div class="outline-text-3" id="text-orgaef249c">
 <p>
 how Emacs evaluates a form depends on its data type: symbols, lists, and "all other data types"
 </p>
@@ -511,21 +511,21 @@ the result of self-evaluating is the object itself, so 25 will be evaluated to 2
 </div>
 </div>
 
-<div id="outline-container-orgb30e7b6" class="outline-2">
-<h2 id="orgb30e7b6">Control Structures (skipped)</h2>
-<div class="outline-text-2" id="text-orgb30e7b6">
+<div id="outline-container-orgf91721b" class="outline-2">
+<h2 id="orgf91721b">Control Structures (skipped)</h2>
+<div class="outline-text-2" id="text-orgf91721b">
 <p>
 things about special forms for flow control, such as <i>if</i>, <i>progn</i>, <i>cond</i>, <i>while</i>, so skip it
 </p>
 </div>
 </div>
 
-<div id="outline-container-orge05d1cb" class="outline-2">
-<h2 id="orge05d1cb">Variables</h2>
-<div class="outline-text-2" id="text-orge05d1cb">
-</div><div id="outline-container-org9961668" class="outline-3">
-<h3 id="org9961668">local variables</h3>
-<div class="outline-text-3" id="text-org9961668">
+<div id="outline-container-orgbab37e7" class="outline-2">
+<h2 id="orgbab37e7">Variables</h2>
+<div class="outline-text-2" id="text-orgbab37e7">
+</div><div id="outline-container-org2bde987" class="outline-3">
+<h3 id="org2bde987">local variables</h3>
+<div class="outline-text-3" id="text-org2bde987">
 <ul class="org-ul">
 <li><code>let</code> <i>bindings&#x2026;</i> <i>forms&#x2026;</i></li>
 <li><code>let*</code> <i>bindings&#x2026;</i> <i>forms&#x2026;</i> : like <code>let</code>, difference is a local variable binding will take effect immediately before next local variable binding takes place</li>
@@ -536,9 +536,9 @@ things about special forms for flow control, such as <i>if</i>, <i>progn</i>, <i
 </div>
 </div>
 
-<div id="outline-container-org9977678" class="outline-3">
-<h3 id="org9977678">global variables</h3>
-<div class="outline-text-3" id="text-org9977678">
+<div id="outline-container-orgf6bed21" class="outline-3">
+<h3 id="orgf6bed21">global variables</h3>
+<div class="outline-text-3" id="text-orgf6bed21">
 <p>
 global variables can be defined by <code>defvar</code> and <code>defconst</code>, they do not have actually difference, <code>defconst</code> is intent to inform human readers that the variable may should not be changed, but actually its value can be changed
 </p>
@@ -546,9 +546,9 @@ global variables can be defined by <code>defvar</code> and <code>defconst</code>
 </div>
 </div>
 
-<div id="outline-container-org1e77b8a" class="outline-2">
-<h2 id="org1e77b8a">Functions</h2>
-<div class="outline-text-2" id="text-org1e77b8a">
+<div id="outline-container-orgcdfb4a5" class="outline-2">
+<h2 id="orgcdfb4a5">Functions</h2>
+<div class="outline-text-2" id="text-orgcdfb4a5">
 <p>
 function types:
 </p>
@@ -564,9 +564,9 @@ function types:
 </ul>
 </div>
 
-<div id="outline-container-orged49d39" class="outline-3">
-<h3 id="orged49d39">mapping functions</h3>
-<div class="outline-text-3" id="text-orged49d39">
+<div id="outline-container-org56ea9e2" class="outline-3">
+<h3 id="org56ea9e2">mapping functions</h3>
+<div class="outline-text-3" id="text-org56ea9e2">
 <ul class="org-ul">
 <li><code>mapcar</code> <i>function</i> <i>sequence</i> : applies <i>function</i> to each element in <i>sequence</i> in turn, return a list of results</li>
 <li><code>mapc</code> <i>function</i> <i>sequence</i> : like <code>mapcar</code>, but it is used for side effects, return value will be ignored</li>

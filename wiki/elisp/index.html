@@ -36,9 +36,9 @@
 这是一篇备忘性质的文章，主要记录我在Elisp编程过程中总结的一些比较有用的tips。会不定期更新。
 </p>
 
-<div id="outline-container-orgc8123d4" class="outline-2">
-<h2 id="orgc8123d4">正则表达式分组与匹配</h2>
-<div class="outline-text-2" id="text-orgc8123d4">
+<div id="outline-container-orgd3d8073" class="outline-2">
+<h2 id="orgd3d8073">正则表达式分组与匹配</h2>
+<div class="outline-text-2" id="text-orgd3d8073">
 <p>
 在用正则表达式进行搜索的时候，可以方便地按需要进行分组，假设buffer中有以下内容：
 </p>
@@ -69,9 +69,9 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 </div>
 </div>
 
-<div id="outline-container-orgb64544c" class="outline-2">
-<h2 id="orgb64544c">强大的 <code>format-spec</code> 函数</h2>
-<div class="outline-text-2" id="text-orgb64544c">
+<div id="outline-container-orga2d18af" class="outline-2">
+<h2 id="orga2d18af">强大的 <code>format-spec</code> 函数</h2>
+<div class="outline-text-2" id="text-orga2d18af">
 <p>
 灵活使用 <code>format-spec</code> 函数，可以定义多种多样的模板，有例为证：
 </p>
@@ -89,9 +89,9 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 </div>
 </div>
 
-<div id="outline-container-orgb8eb94c" class="outline-2">
-<h2 id="orgb8eb94c"><code>shell-command</code> 函数的工作目录</h2>
-<div class="outline-text-2" id="text-orgb8eb94c">
+<div id="outline-container-org31188af" class="outline-2">
+<h2 id="org31188af"><code>shell-command</code> 函数的工作目录</h2>
+<div class="outline-text-2" id="text-org31188af">
 <p>
 默认情况下， <code>shell-command</code> 的工作目录是当前buffer对应文件所在的目录，但有时候需要在其它目录执行一个命令，比方说去某个git的repo执行一下 <code>git status</code> ，但是又不离开当前buffer，就需要change一下 <code>default-directory</code> 这个变量的值：
 </p>
@@ -107,9 +107,9 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 </div>
 </div>
 
-<div id="outline-container-orga17a0f0" class="outline-2">
-<h2 id="orga17a0f0">以字符串形式输出变量</h2>
-<div class="outline-text-2" id="text-orga17a0f0">
+<div id="outline-container-org222e37b" class="outline-2">
+<h2 id="org222e37b">以字符串形式输出变量</h2>
+<div class="outline-text-2" id="text-org222e37b">
 <p>
 在调试的过程中，有时我们需要看一个变量的内容，或者把一个变量的内容稍微做一些修改，于是，就需要用到 <code>prin1-to-string</code> 这个函数，再加上insert就perfect了：
 </p>
