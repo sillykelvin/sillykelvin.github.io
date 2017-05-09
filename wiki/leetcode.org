@@ -935,3 +935,48 @@ isMatch("aab", "c*a*b") → true
       }
   };
 #+END_SRC
+
+在写完上面这段程序后，因为时间性能表现不佳（毕竟太重量级），我又进行了复盘，发现其实像'.*'和'a*'的DFA都非常简单（a*就是一个状态，然后有一个a路径迁移到自己，并且这个状态是可接受状态），可以人肉构建DFA从而省去从NFA到DFA转换牺牲的性能。基本思路就是一个字符一个字符地解析，遇到'a*'或者'.*'就特殊处理，但程序写完后，发现对于'.*a'处理不了：按照我的思路，应该是一个从a到z迁移到自己的状态，再有一个a路径指向另外一个最终状态，但这其实就是NFA就不是DFA了（因为a路径迁移到了两个状态）。人肉转换后，发现这个DFA其实是两个状态M和N，对于bcd等路径，M迁移到自己，对于a路径，M迁移到N。而对于N来说，对于a路径，迁移到自己，对于bcd等路径，迁移到M，其中N是最终状态。这时我才认识到，表达式前后是互相影响的，并不能简单按单元来分割表达式从而顺序地构造DFA，所以这条路走不通。但在写这个失败程序的过程中，我又发现了另一种思路：虽然不能按单元来顺序构造DFA，但我们可以按单元来顺序匹配，根本不需要构造DFA！例如表达式'.*a'和字符串'ba'，我们可以先匹配'.*'和''，再匹配剩下的'a'和'ba'；发现失败，我们再尝试匹配'.*'和'b'，再匹配剩下的'a'和'a'，发现可以匹配成功了。这样整个代码好懂很多，而且性能有了很大提升。代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      bool match(const char *p, const char *s) {
+          if (!(*p)) return !(*s);
+
+          if (*p == '*') {
+              assert(0);
+          } else if (*p == '.') {
+              if (*(p + 1) == '*') {
+                  if (match(p + 2, s))
+                      return true;
+
+                  while (*s) {
+                      if (match(p + 2, ++s))
+                          return true;
+                  }
+                  return false;
+              }
+              return *s && match(p + 1, s + 1);
+          } else {
+              if (*(p + 1) == '*') {
+                  if (match(p + 2, s))
+                      return true;
+
+                  while (*s == *p) {
+                      if (match(p + 2, ++s))
+                          return true;
+                  }
+                  return false;
+              }
+              return (*p == *s) && match(p + 1, s + 1);
+          }
+      }
+
+      bool isMatch(string s, string p) {
+          return match(p.c_str(), s.c_str());
+      }
+  };
+#+END_SRC
+
+后来看论坛发现，还有一种用DP解的方式，仔细看了原理，原来是人肉将上面的递归版本改成了迭代版本，大神真是无处不在。。
