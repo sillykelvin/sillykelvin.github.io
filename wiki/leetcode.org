@@ -1242,3 +1242,40 @@ Input is guaranteed to be within the range from 1 to 3999.
       }
   };
 #+END_SRC
+
+* Longest Common Prefix
+
+#+BEGIN_QUOTE
+Write a function to find the longest common prefix string amongst an array of strings.
+#+END_QUOTE
+
+这个题目也很简单，求一组字符串的最长前缀，代码如下：
+
+#+BEGIN_SRC C++
+  class Solution {
+  public:
+      string longestCommonPrefix(vector<string>& strs) {
+          if (strs.empty()) return "";
+          if (strs.size() == 1) return strs[0];
+
+          const std::string& base = strs[0];
+          int pos = 0;
+
+          int min = base.length();
+          for (int i = 1; i < strs.size(); ++i)
+              if (strs[i].length() < min)
+                  min = strs[i].length();
+
+          for (pos = 0; pos < min; ++pos) {
+              for (int i = 1; i < strs.size(); ++i) {
+                  if (strs[i][pos] == base[pos])
+                      continue;
+
+                  return base.substr(0, pos);
+              }
+          }
+
+          return base.substr(0, pos);
+      }
+  };
+#+END_SRC
