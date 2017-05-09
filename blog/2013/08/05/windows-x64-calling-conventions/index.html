@@ -34,9 +34,9 @@
 <h1>Windows平台X64函数调用约定与汇编代码分析</h1>
 
 
-<div id="outline-container-org67ca6c8" class="outline-2">
-<h2 id="org67ca6c8">起因</h2>
-<div class="outline-text-2" id="text-org67ca6c8">
+<div id="outline-container-orgba92f2f" class="outline-2">
+<h2 id="orgba92f2f">起因</h2>
+<div class="outline-text-2" id="text-orgba92f2f">
 <p>
 整件事源自于公司的一个公共模块，有很多项目都依赖于这个公共模块，我们项目是其中之一。假定依赖的函数原型为：
 </p>
@@ -89,9 +89,9 @@ int ret = pf(1, 2, 3, 4, 5);
 </div>
 </div>
 
-<div id="outline-container-org9747d3f" class="outline-2">
-<h2 id="org9747d3f">分析</h2>
-<div class="outline-text-2" id="text-org9747d3f">
+<div id="outline-container-org89ff7b6" class="outline-2">
+<h2 id="org89ff7b6">分析</h2>
+<div class="outline-text-2" id="text-org89ff7b6">
 <p>
 于是，我写了如下的一个例子，来分析一番：
 </p>
@@ -217,18 +217,18 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </div>
 </div>
 
-<div id="outline-container-org27cbee6" class="outline-2">
-<h2 id="org27cbee6">结论</h2>
-<div class="outline-text-2" id="text-org27cbee6">
+<div id="outline-container-orgc29f1e0" class="outline-2">
+<h2 id="orgc29f1e0">结论</h2>
+<div class="outline-text-2" id="text-orgc29f1e0">
 <p>
 按照分析中所指出的，在X64平台的函数调用中，函数前四个参数之外的参数会被入栈，如上面的栈分配图所示，实际上在主调函数中，分配的栈参数空间上面还有本地变量空间，所以，如果偶然多了一个参数的话，其实没有关系，不会导致crash，只不过这个参数的值会是无效的。既然参数值无效，程序运行应该会出bug才对，后来问了这个公共模块的负责人，才知道这个新加的参数没有使用。。擦，没有使用，你乱改接口，新加参数干嘛。。
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgef84c31" class="outline-2">
-<h2 id="orgef84c31">附：X86的几种调用约定</h2>
-<div class="outline-text-2" id="text-orgef84c31">
+<div id="outline-container-org97627e4" class="outline-2">
+<h2 id="org97627e4">附：X86的几种调用约定</h2>
+<div class="outline-text-2" id="text-org97627e4">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -293,9 +293,9 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </div>
 </div>
 
-<div id="outline-container-org1d62fe1" class="outline-2">
-<h2 id="org1d62fe1">参考文档</h2>
-<div class="outline-text-2" id="text-org1d62fe1">
+<div id="outline-container-org7db2cbb" class="outline-2">
+<h2 id="org7db2cbb">参考文档</h2>
+<div class="outline-text-2" id="text-org7db2cbb">
 <ol class="org-ol">
 <li><a href="http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf">http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf</a></li>
 

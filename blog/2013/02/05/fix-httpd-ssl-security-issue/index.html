@@ -40,9 +40,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 但悲剧的是，Apache httpd只是说在2.2.24以后的版本，或者2.4.x版本才会包括这个选项，公司server的2.2.15并没有这个设置项。。而且，CentOS把httpd和mod_ssl作为两个package给分开了，这个选项的开关是在mod_ssl里面。。再次而且，由于防火墙的限制，server上是不能访问外网的，所以只能自己下载ssl module的source code和patch，自己编译了。但实际上mod_ssl已经和httpd整合在一起了，所以需要下载整个httpd的source code进行编译。（真想不通CentOS为什么要把两者分开。。。）
 </p>
 
-<div id="outline-container-org392c8bb" class="outline-2">
-<h2 id="org392c8bb">下载httpd 2.2.23的source code</h2>
-<div class="outline-text-2" id="text-org392c8bb">
+<div id="outline-container-org7a11e5c" class="outline-2">
+<h2 id="org7a11e5c">下载httpd 2.2.23的source code</h2>
+<div class="outline-text-2" id="text-org7a11e5c">
 <p>
 这个就不用多说了吧。。在这里：<a href="http://httpd.apache.org/download.cgi">http://httpd.apache.org/download.cgi</a>
 </p>
@@ -55,9 +55,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 </div>
 </div>
 
-<div id="outline-container-org6abeb30" class="outline-2">
-<h2 id="org6abeb30">安装patch</h2>
-<div class="outline-text-2" id="text-org6abeb30">
+<div id="outline-container-org656e506" class="outline-2">
+<h2 id="org656e506">安装patch</h2>
+<div class="outline-text-2" id="text-org656e506">
 <p>
 根据前面的链接，顺利找到patch，下载并安装（注意我们是在httpd的解压目录里面）：
 </p>
@@ -73,9 +73,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 </div>
 </div>
 
-<div id="outline-container-org67c2e51" class="outline-2">
-<h2 id="org67c2e51">configure &amp; make</h2>
-<div class="outline-text-2" id="text-org67c2e51">
+<div id="outline-container-org0dcefad" class="outline-2">
+<h2 id="org0dcefad">configure &amp; make</h2>
+<div class="outline-text-2" id="text-org0dcefad">
 <p>
 实际上我只需要编译出ssl的module就行了，可是按正常的：
 </p>
@@ -108,9 +108,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 </div>
 </div>
 
-<div id="outline-container-org6f1c7c4" class="outline-2">
-<h2 id="org6f1c7c4">安装编译后的mod_ssl</h2>
-<div class="outline-text-2" id="text-org6f1c7c4">
+<div id="outline-container-orgdc045f0" class="outline-2">
+<h2 id="orgdc045f0">安装编译后的mod_ssl</h2>
+<div class="outline-text-2" id="text-orgdc045f0">
 <p>
 下面就直接安装编译好的mod_ssl就可以了：
 </p>

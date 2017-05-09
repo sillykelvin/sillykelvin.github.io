@@ -135,9 +135,9 @@ w2.operator-&gt;().operator-&gt;()-&gt;a	7
 其中最为诡异的就是 <code>w2-&gt;a</code> 输出的是7，按照上面总结的结论，这个调用其实会被编译器转换成 <code>w2.operator-&gt;().operator-&gt;()-&gt;a</code> 的形式，所以输出是7。
 </p>
 
-<div id="outline-container-org7e1880e" class="outline-2">
-<h2 id="org7e1880e">调戏编译器</h2>
-<div class="outline-text-2" id="text-org7e1880e">
+<div id="outline-container-org1f6da66" class="outline-2">
+<h2 id="org1f6da66">调戏编译器</h2>
+<div class="outline-text-2" id="text-org1f6da66">
 <p>
 既然 <code>-&gt;</code> 的重载可以返回一个类型的实例而非指针，那如果返回本身的类型呢，它会继续调用自己的 <code>operator-&gt;()</code> ，永无止尽。写个小程序试试：
 </p>
@@ -169,18 +169,18 @@ error: circular pointer delegation detected
 </div>
 </div>
 
-<div id="outline-container-orgbaaba51" class="outline-2">
-<h2 id="orgbaaba51">说明</h2>
-<div class="outline-text-2" id="text-orgbaaba51">
+<div id="outline-container-org9be4290" class="outline-2">
+<h2 id="org9be4290">说明</h2>
+<div class="outline-text-2" id="text-org9be4290">
 <p>
 本文最开头提到了 <code>std::auto_ptr</code> ，但并不代表推荐使用它，如果需要使用智能指针，请根据使用环境要求尽量使用 <code>std::unique_ptr</code> 或者 <code>boost::shared_ptr</code> 。
 </p>
 </div>
 </div>
 
-<div id="outline-container-org0b3f849" class="outline-2">
-<h2 id="org0b3f849">参考文档</h2>
-<div class="outline-text-2" id="text-org0b3f849">
+<div id="outline-container-org45aa8c4" class="outline-2">
+<h2 id="org45aa8c4">参考文档</h2>
+<div class="outline-text-2" id="text-org45aa8c4">
 <ol class="org-ol">
 <li><a href="http://www.tutorialspoint.com/cplusplus/class_member_access_operator_overloading.htm">http://www.tutorialspoint.com/cplusplus/class_member_access_operator_overloading.htm</a></li>
 <li><a href="http://stackoverflow.com/questions/8777845/overloading-member-access-operators-c">http://stackoverflow.com/questions/8777845/overloading-member-access-operators-c</a></li>

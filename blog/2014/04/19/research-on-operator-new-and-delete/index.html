@@ -34,9 +34,9 @@
 <h1>深入探究C++的new/delete操作符</h1>
 
 
-<div id="outline-container-org16339ac" class="outline-2">
-<h2 id="org16339ac">前戏，啊不，其实我是说前言</h2>
-<div class="outline-text-2" id="text-org16339ac">
+<div id="outline-container-org9aaf4b6" class="outline-2">
+<h2 id="org9aaf4b6">前戏，啊不，其实我是说前言</h2>
+<div class="outline-text-2" id="text-org9aaf4b6">
 <p>
 今天在重温《More Effective C++》的时候，又看到讲 <code>operator new</code> 和 <code>operator delete</code> 的那条规则，虽然大概明白其原理，但是实际中却从来没用过，所以，就想写个小程序来试一试。如果你还不知道它们，或者听说过但不知道具体意义，那我就正好吓吓你：
 </p>
@@ -154,9 +154,9 @@ Class *pc = new (nullptr) Class(); // nullptr是C++11中的空指针定义
 </div>
 </div>
 
-<div id="outline-container-orga14f7a0" class="outline-2">
-<h2 id="orga14f7a0">实例</h2>
-<div class="outline-text-2" id="text-orga14f7a0">
+<div id="outline-container-org194fa94" class="outline-2">
+<h2 id="org194fa94">实例</h2>
+<div class="outline-text-2" id="text-org194fa94">
 <p>
 码农？找不到对象？没事儿，不拼爹妈，更不靠干爹干妈，我们自己new一个出来。不过，别人都从堆上new，太没挑战了，我们从栈上new！
 </p>
@@ -227,9 +227,9 @@ We should do nothing in operator delete.
 </div>
 </div>
 
-<div id="outline-container-orgac69528" class="outline-2">
-<h2 id="orgac69528">演变</h2>
-<div class="outline-text-2" id="text-orgac69528">
+<div id="outline-container-orgda5a591" class="outline-2">
+<h2 id="orgda5a591">演变</h2>
+<div class="outline-text-2" id="text-orgda5a591">
 <p>
 我突然想到了一个坏主意：我们对上面的例子做一个小小的改动，将main函数中buf的长度变短，其它不变：
 </p>
@@ -259,9 +259,9 @@ We should do nothing in operator delete.
 </div>
 </div>
 
-<div id="outline-container-orgae22bd1" class="outline-2">
-<h2 id="orgae22bd1">更进一步</h2>
-<div class="outline-text-2" id="text-orgae22bd1">
+<div id="outline-container-orgdb694de" class="outline-2">
+<h2 id="orgdb694de">更进一步</h2>
+<div class="outline-text-2" id="text-orgdb694de">
 <p>
 怎么回事？难不成编译器智能地探测到buf的内存不足以装下C的实例，所以自动扩充了3个字节？于是，我们再稍作修改，在buf的两边都加上指示性的变量，以方便探测其边界：
 </p>
@@ -387,9 +387,9 @@ $5 = 0x1fedcba
 </div>
 </div>
 
-<div id="outline-container-orge85f3e8" class="outline-2">
-<h2 id="orge85f3e8">总结</h2>
-<div class="outline-text-2" id="text-orge85f3e8">
+<div id="outline-container-org961a2a9" class="outline-2">
+<h2 id="org961a2a9">总结</h2>
+<div class="outline-text-2" id="text-org961a2a9">
 <p>
 废话了这么多，那 <code>operator new/delete, placement new/delete</code> 到底有什么用呢？
 </p>
@@ -407,9 +407,9 @@ $5 = 0x1fedcba
 </div>
 </div>
 
-<div id="outline-container-org9cc3a06" class="outline-2">
-<h2 id="org9cc3a06">参考资料</h2>
-<div class="outline-text-2" id="text-org9cc3a06">
+<div id="outline-container-orgd886e95" class="outline-2">
+<h2 id="orgd886e95">参考资料</h2>
+<div class="outline-text-2" id="text-orgd886e95">
 <ol class="org-ol">
 <li>More Effective C++, Item 8</li>
 <li><a href="http://llvm.org/svn/llvm-project/libcxx/trunk/include/new">http://llvm.org/svn/llvm-project/libcxx/trunk/include/new</a></li>

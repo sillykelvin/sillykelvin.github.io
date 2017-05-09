@@ -36,12 +36,12 @@
 这是一篇备忘性质的文章，主要记录我在配置和管理CentOS服务器的过程中，遇到的一些问题及相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
 </p>
 
-<div id="outline-container-org3b80f69" class="outline-2">
-<h2 id="org3b80f69">yum related</h2>
-<div class="outline-text-2" id="text-org3b80f69">
-</div><div id="outline-container-orgf4845cd" class="outline-3">
-<h3 id="orgf4845cd">error 404:</h3>
-<div class="outline-text-3" id="text-orgf4845cd">
+<div id="outline-container-org43b2edc" class="outline-2">
+<h2 id="org43b2edc">yum related</h2>
+<div class="outline-text-2" id="text-org43b2edc">
+</div><div id="outline-container-orgc803e03" class="outline-3">
+<h3 id="orgc803e03">error 404:</h3>
+<div class="outline-text-3" id="text-orgc803e03">
 <p>
 有时， <code>yum makecache</code> 或者其它命令可能会出现以下错误：
 </p>
@@ -56,9 +56,9 @@
 </div>
 </div>
 
-<div id="outline-container-org80f8308" class="outline-3">
-<h3 id="org80f8308">Public key not installed:</h3>
-<div class="outline-text-3" id="text-org80f8308">
+<div id="outline-container-org06aea87" class="outline-3">
+<h3 id="org06aea87">Public key not installed:</h3>
+<div class="outline-text-3" id="text-org06aea87">
 <p>
 在安装软件包 <code>yum install xxx</code> 时出现 "Public key for * is not installed"：
 </p>
@@ -71,12 +71,12 @@ $ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
 </div>
 </div>
 
-<div id="outline-container-org784b3d1" class="outline-2">
-<h2 id="org784b3d1">ftp related</h2>
-<div class="outline-text-2" id="text-org784b3d1">
-</div><div id="outline-container-orgcc282f4" class="outline-3">
-<h3 id="orgcc282f4"><code>tar</code> error with ftp downloaded file:</h3>
-<div class="outline-text-3" id="text-orgcc282f4">
+<div id="outline-container-orgf269742" class="outline-2">
+<h2 id="orgf269742">ftp related</h2>
+<div class="outline-text-2" id="text-orgf269742">
+</div><div id="outline-container-orgfd05244" class="outline-3">
+<h3 id="orgfd05244"><code>tar</code> error with ftp downloaded file:</h3>
+<div class="outline-text-3" id="text-orgfd05244">
 <p>
 在解压用ftp下载的包时，出现以下错误：
 </p>
@@ -96,12 +96,12 @@ Tar: Exiting with failure status due to previous errors
 </div>
 </div>
 
-<div id="outline-container-org6a9e4de" class="outline-2">
-<h2 id="org6a9e4de">network related</h2>
-<div class="outline-text-2" id="text-org6a9e4de">
-</div><div id="outline-container-org875f334" class="outline-3">
-<h3 id="org875f334">no network in a virtual machine:</h3>
-<div class="outline-text-3" id="text-org875f334">
+<div id="outline-container-orge397159" class="outline-2">
+<h2 id="orge397159">network related</h2>
+<div class="outline-text-2" id="text-orge397159">
+</div><div id="outline-container-org245bdb2" class="outline-3">
+<h3 id="org245bdb2">no network in a virtual machine:</h3>
+<div class="outline-text-3" id="text-org245bdb2">
 <p>
 虚拟机中，以minimal模式新安装的CentOS连不上Internet，因为默认eth0没有打开，编辑以下文件：
 </p>
@@ -116,9 +116,9 @@ Tar: Exiting with failure status due to previous errors
 </div>
 </div>
 
-<div id="outline-container-org84c45a5" class="outline-3">
-<h3 id="org84c45a5">shutdown firewall:</h3>
-<div class="outline-text-3" id="text-org84c45a5">
+<div id="outline-container-orgc179dd2" class="outline-3">
+<h3 id="orgc179dd2">shutdown firewall:</h3>
+<div class="outline-text-3" id="text-orgc179dd2">
 <p>
 CentOS的防火墙默认打开，并且应用了很强的规则，这时候其它机器无法访问其apache等web服务，应用以下命令关闭防火墙（这并非最好的解决方式，最好的解决方式是配置防火墙规则，放行某些端口）：
 </p>
@@ -131,9 +131,9 @@ chkconfig iptables off
 </div>
 </div>
 
-<div id="outline-container-orga2cc8cc" class="outline-3">
-<h3 id="orga2cc8cc">device "eth0" does not seem to be present:</h3>
-<div class="outline-text-3" id="text-orga2cc8cc">
+<div id="outline-container-org21f2ed7" class="outline-3">
+<h3 id="org21f2ed7">device "eth0" does not seem to be present:</h3>
+<div class="outline-text-3" id="text-org21f2ed7">
 <p>
 将一个虚拟机revert回某一个snapshot的时候，会报 <code>device "eth0" does not seem to be present</code> 的错误，打开 <code>/etc/sysconfig/network-scripts/ifcfg-eth0</code> ，会发现里面的MAC地址和Vmware虚拟机的settings里面的MAC address对不上。目测这应该是发生这个错误的原因所在。
 </p>
