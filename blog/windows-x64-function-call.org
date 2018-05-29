@@ -92,7 +92,7 @@
 
   如果对于x64的CPU结构不太熟悉的话，上面的汇编着实不太好理解，下面给出一张x64结构的CPU寄存器构造图[fn:1]：
 
-  @@html:<a href="http://www.flickr.com/photos/ini_always/9529603220/" title="X64 CPU Registers by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3670/9529603220_c204c7df54_o.png" alt="X64 CPU Registers"></a>@@
+  [[file:../assets/images/windows-x64-call0.png]]
 
   从图上可以看到，X64架构相对于X32架构的主要变化，是将原来所有的寄存器都扩大了一倍，例如EAX现在扩充成RAX，同时，又新增加了从R8到R15这8个64位的寄位器。
 
@@ -129,11 +129,11 @@
 
   上面的指令对栈操作比较多，我画了一个调用栈的分配情况图（用Window Paint画的，花的时间不比写这篇博客的时间短，中间还画错了一次。。 =_=#!）：
 
-  @@html:<a href="http://www.flickr.com/photos/ini_always/9530479682/" title="X64 calling stack by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3693/9530479682_a13a4ec944_o.png" alt="X64 calling stack"></a>@@
+  [[file:../assets/images/windows-x64-call1.png]]
 
   另外，再附上一张MSDN上画的栈分配的示例图[fn:4]（和上面我画的差不多，只不过我画的是针对于具体的例子）：
 
-  @@html:<a href="http://www.flickr.com/photos/ini_always/9530563392/" title="X64 stack allocation by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3832/9530563392_146caf1e39_o.png" alt="X64 stack allocation"></a>@@
+  [[file:../assets/images/windows-x64-call2.png]]
 
 * 结论
 

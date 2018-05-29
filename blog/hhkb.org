@@ -20,11 +20,11 @@
 
 这个是盒子：
 
-@@html:<a href="http://www.flickr.com/photos/ini_always/9181934631/" title="HHKB by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2872/9181934631_d51abd9a45_o.jpg" alt="HHKB"></a>@@
+[[file:../assets/images/HHKB0.jpg]]
 
 这个就是庐山真面目了（黑无刻，够装13了吧）：
 
-@@html:<a href="http://www.flickr.com/photos/ini_always/9181927457/" title="HHKB by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7333/9181927457_5abc2b2626_o.jpg" alt="HHKB`"></a>@@
+[[file:../assets/images/HHKB1.jpg]]
 
 * 键位映射
 
