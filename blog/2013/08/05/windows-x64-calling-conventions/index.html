@@ -34,15 +34,16 @@
 <h1>Windows平台X64函数调用约定与汇编代码分析</h1>
 
 
-<div id="outline-container-org1bbdba9" class="outline-2">
-<h2 id="org1bbdba9">起因</h2>
-<div class="outline-text-2" id="text-org1bbdba9">
+<div id="outline-container-orgff151a2" class="outline-2">
+<h2 id="orgff151a2">起因</h2>
+<div class="outline-text-2" id="text-orgff151a2">
 <p>
 整件事源自于公司的一个公共模块，有很多项目都依赖于这个公共模块，我们项目是其中之一。假定依赖的函数原型为：
 </p>
 
 <pre class="example">
 int add(int a, int b, int c, int d, int e)
+
 </pre>
 
 <p>
@@ -51,6 +52,7 @@ int add(int a, int b, int c, int d, int e)
 
 <pre class="example">
 int add(int a, int b, int c, int d, int e, int f)
+
 </pre>
 
 <p>
@@ -89,9 +91,9 @@ int ret = pf(1, 2, 3, 4, 5);
 </div>
 </div>
 
-<div id="outline-container-orgff564a5" class="outline-2">
-<h2 id="orgff564a5">分析</h2>
-<div class="outline-text-2" id="text-orgff564a5">
+<div id="outline-container-org018f809" class="outline-2">
+<h2 id="org018f809">分析</h2>
+<div class="outline-text-2" id="text-org018f809">
 <p>
 于是，我写了如下的一个例子，来分析一番：
 </p>
@@ -144,15 +146,18 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
     4 00000001`3ff21722 03442420         add     eax,dword ptr [rsp+20h]
     4 00000001`3ff21726 03442428         add     eax,dword ptr [rsp+28h]
     5 00000001`3ff2172a c3               ret
+
 </pre>
 
 <p>
 如果对于x64的CPU结构不太熟悉的话，上面的汇编着实不太好理解，下面给出一张x64结构的CPU寄存器构造图<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/9529603220/" title="X64 CPU Registers by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3670/9529603220_c204c7df54_o.png" alt="X64 CPU Registers"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/08/05/windows-x64-calling-conventions/windows-x64-call0.png" alt="windows-x64-call0.png" />
 </p>
+</div>
 
 <p>
 从图上可以看到，X64架构相对于X32架构的主要变化，是将原来所有的寄存器都扩大了一倍，例如EAX现在扩充成RAX，同时，又新增加了从R8到R15这8个64位的寄位器。
@@ -203,32 +208,36 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 上面的指令对栈操作比较多，我画了一个调用栈的分配情况图（用Window Paint画的，花的时间不比写这篇博客的时间短，中间还画错了一次。。 =_=#!）：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/9530479682/" title="X64 calling stack by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3693/9530479682_a13a4ec944_o.png" alt="X64 calling stack"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/08/05/windows-x64-calling-conventions/windows-x64-call1.png" alt="windows-x64-call1.png" />
 </p>
+</div>
 
 <p>
 另外，再附上一张MSDN上画的栈分配的示例图<sup><a id="fnr.4" class="footref" href="#fn.4">4</a></sup>（和上面我画的差不多，只不过我画的是针对于具体的例子）：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/9530563392/" title="X64 stack allocation by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3832/9530563392_146caf1e39_o.png" alt="X64 stack allocation"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/08/05/windows-x64-calling-conventions/windows-x64-call2.png" alt="windows-x64-call2.png" />
 </p>
 </div>
 </div>
+</div>
 
-<div id="outline-container-orgff55bee" class="outline-2">
-<h2 id="orgff55bee">结论</h2>
-<div class="outline-text-2" id="text-orgff55bee">
+<div id="outline-container-org2e6a857" class="outline-2">
+<h2 id="org2e6a857">结论</h2>
+<div class="outline-text-2" id="text-org2e6a857">
 <p>
 按照分析中所指出的，在X64平台的函数调用中，函数前四个参数之外的参数会被入栈，如上面的栈分配图所示，实际上在主调函数中，分配的栈参数空间上面还有本地变量空间，所以，如果偶然多了一个参数的话，其实没有关系，不会导致crash，只不过这个参数的值会是无效的。既然参数值无效，程序运行应该会出bug才对，后来问了这个公共模块的负责人，才知道这个新加的参数没有使用。。擦，没有使用，你乱改接口，新加参数干嘛。。
 </p>
 </div>
 </div>
 
-<div id="outline-container-org4c2460f" class="outline-2">
-<h2 id="org4c2460f">附：X86的几种调用约定</h2>
-<div class="outline-text-2" id="text-org4c2460f">
+<div id="outline-container-orgef093f6" class="outline-2">
+<h2 id="orgef093f6">附：X86的几种调用约定</h2>
+<div class="outline-text-2" id="text-orgef093f6">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -293,9 +302,9 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
 </div>
 </div>
 
-<div id="outline-container-org2c8da88" class="outline-2">
-<h2 id="org2c8da88">参考文档</h2>
-<div class="outline-text-2" id="text-org2c8da88">
+<div id="outline-container-org722fbcc" class="outline-2">
+<h2 id="org722fbcc">参考文档</h2>
+<div class="outline-text-2" id="text-org722fbcc">
 <ol class="org-ol">
 <li><a href="http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf">http://software.intel.com/sites/default/files/m/d/4/1/d/8/Introduction_to_x64_Assembly.pdf</a></li>
 
@@ -337,7 +346,7 @@ Project1!add [d:\codelabs\functest\c++\project1\source.cpp @ 3]:
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2013-08-05</span>
-        <span title="last modification date" class="post-info">2013-08-17</span>
+        <span title="last modification date" class="post-info">2018-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/windows/">Windows</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/assembly/">Assembly</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>

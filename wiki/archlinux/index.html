@@ -36,23 +36,24 @@
 这是一篇备忘性质的文章，主要记录我在使用Archlinux的过程中，遇到的一些问题及相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
 </p>
 
-<div id="outline-container-org98d2f93" class="outline-2">
-<h2 id="org98d2f93">sudo related</h2>
-<div class="outline-text-2" id="text-org98d2f93">
+<div id="outline-container-orgbd81f69" class="outline-2">
+<h2 id="orgbd81f69">sudo related</h2>
+<div class="outline-text-2" id="text-orgbd81f69">
 <p>
 For other more <code>sudoers</code> configuration, please see this <a href="https://wiki.archlinux.org/index.php/Sudo">wiki page</a>.
 </p>
 </div>
 
-<div id="outline-container-org88e51f9" class="outline-3">
-<h3 id="org88e51f9">add a user to sudoers file:</h3>
-<div class="outline-text-3" id="text-org88e51f9">
+<div id="outline-container-org73d87f2" class="outline-3">
+<h3 id="org73d87f2">add a user to sudoers file:</h3>
+<div class="outline-text-3" id="text-org73d87f2">
 <p>
 Users who do not exist in <code>/etc/sudoers</code> will not have permission to run command <code>sudo ...</code>, add the following line to this file:
 </p>
 
 <pre class="example">
 &lt;username&gt; ALL=(ALL) ALL
+
 </pre>
 
 <p>
@@ -61,15 +62,16 @@ Now the user <i>&lt;username&gt;</i> will have the root privileges.
 </div>
 </div>
 
-<div id="outline-container-orge92411a" class="outline-3">
-<h3 id="orge92411a">make a user password needless:</h3>
-<div class="outline-text-3" id="text-orge92411a">
+<div id="outline-container-org5b1fddd" class="outline-3">
+<h3 id="org5b1fddd">make a user password needless:</h3>
+<div class="outline-text-3" id="text-org5b1fddd">
 <p>
 Input password every time when you run <code>sudo ...</code> is really annoying, put the following line into <code>/etc/sudoers/</code>:
 </p>
 
 <pre class="example">
 Defaults:&lt;username&gt; !authenticate
+
 </pre>
 
 <p>
@@ -79,15 +81,17 @@ Now the user <i>&lt;username&gt;</i> will not need to input password any more wh
 </div>
 </div>
 
-<div id="outline-container-org7cf85b2" class="outline-2">
-<h2 id="org7cf85b2">wireless related</h2>
-<div class="outline-text-2" id="text-org7cf85b2">
-</div><div id="outline-container-org4f74f49" class="outline-3">
-<h3 id="org4f74f49">set up connection using netcfg, with WPA:</h3>
-<div class="outline-text-3" id="text-org4f74f49">
+<div id="outline-container-orga261e0d" class="outline-2">
+<h2 id="orga261e0d">wireless related</h2>
+<div class="outline-text-2" id="text-orga261e0d">
+</div>
+<div id="outline-container-org87ad2d2" class="outline-3">
+<h3 id="org87ad2d2">set up connection using netcfg, with WPA:</h3>
+<div class="outline-text-3" id="text-org87ad2d2">
 <pre class="example">
 touch /etc/network.d/home  # the file name can be whatever you like
 vi /etc/network.d/home
+
 </pre>
 
 <p>
@@ -103,6 +107,7 @@ IP="dhcp"
 TIMEOUT="10"
 SECURITY="wpa"
 KEY="&lt;passphrase&gt;"    # replace it with your real passphrase
+
 </pre>
 
 <p>
@@ -111,6 +116,7 @@ then save this file, run the following command:
 
 <pre class="example">
 netcfg home
+
 </pre>
 
 <p>
@@ -126,6 +132,7 @@ ip link set wlan0 up/down # take up/down the wireless network
 ip addr show wlan0        # show state of the wireless network
 iwlist wlan0 scan         # scan available wireless points
 iw dev wlan0 scan         # same as above
+
 </pre>
 
 <p>
@@ -135,21 +142,23 @@ Command <code>wifi-menu</code> is also very useful in package <i>netcfg</i>.
 </div>
 </div>
 
-<div id="outline-container-org11a41fd" class="outline-2">
-<h2 id="org11a41fd">pacman related</h2>
-<div class="outline-text-2" id="text-org11a41fd">
-</div><div id="outline-container-orgd1ada12" class="outline-3">
-<h3 id="orgd1ada12">query the package that a file belongs to:</h3>
-<div class="outline-text-3" id="text-orgd1ada12">
+<div id="outline-container-org92e467c" class="outline-2">
+<h2 id="org92e467c">pacman related</h2>
+<div class="outline-text-2" id="text-org92e467c">
+</div>
+<div id="outline-container-org4aa8d1c" class="outline-3">
+<h3 id="org4aa8d1c">query the package that a file belongs to:</h3>
+<div class="outline-text-3" id="text-org4aa8d1c">
 <pre class="example">
 pacman -Qo /path/to/file
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgac550e7" class="outline-3">
-<h3 id="orgac550e7">updating error:</h3>
-<div class="outline-text-3" id="text-orgac550e7">
+<div id="outline-container-orgddd4938" class="outline-3">
+<h3 id="orgddd4938">updating error:</h3>
+<div class="outline-text-3" id="text-orgddd4938">
 <p>
 When updating archlinux through pacman with <code>pacman -Syu</code>, below error occurs:
 </p>
@@ -171,19 +180,22 @@ Solution: modify <b>/etc/pacman.conf</b>, change the value of global <code>SigLe
 <pre class="example">
 #SigLevel = Required DatabaseOptional
 SigLevel  = Optional TrustAll
+
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgcf5a714" class="outline-2">
-<h2 id="orgcf5a714">usefull commands</h2>
-<div class="outline-text-2" id="text-orgcf5a714">
-</div><div id="outline-container-orge2d18e8" class="outline-3">
-<h3 id="orge2d18e8">查看端口占用情况</h3>
-<div class="outline-text-3" id="text-orge2d18e8">
+<div id="outline-container-org421f7d3" class="outline-2">
+<h2 id="org421f7d3">usefull commands</h2>
+<div class="outline-text-2" id="text-org421f7d3">
+</div>
+<div id="outline-container-org7867049" class="outline-3">
+<h3 id="org7867049">查看端口占用情况</h3>
+<div class="outline-text-3" id="text-org7867049">
 <pre class="example">
 netstat -anput
+
 </pre>
 
 <p>
@@ -208,15 +220,17 @@ netstat -anput
 
 <pre class="example">
 lsof -i :8080
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org31b9d3c" class="outline-3">
-<h3 id="org31b9d3c">lookup binary dependency</h3>
-<div class="outline-text-3" id="text-org31b9d3c">
+<div id="outline-container-org8b8c798" class="outline-3">
+<h3 id="org8b8c798">lookup binary dependency</h3>
+<div class="outline-text-3" id="text-org8b8c798">
 <pre class="example">
 ldd [-v] &lt;path/to/binary&gt;
+
 </pre>
 
 <p>
@@ -225,17 +239,19 @@ or
 
 <pre class="example">
 readelf
+
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge495fc6" class="outline-2">
-<h2 id="orge495fc6">emacs related</h2>
-<div class="outline-text-2" id="text-orge495fc6">
-</div><div id="outline-container-orgdb5a4a6" class="outline-3">
-<h3 id="orgdb5a4a6">emacs/fcitx快捷键冲突</h3>
-<div class="outline-text-3" id="text-orgdb5a4a6">
+<div id="outline-container-orgcd32f5c" class="outline-2">
+<h2 id="orgcd32f5c">emacs related</h2>
+<div class="outline-text-2" id="text-orgcd32f5c">
+</div>
+<div id="outline-container-org7ef0c12" class="outline-3">
+<h3 id="org7ef0c12">emacs/fcitx快捷键冲突</h3>
+<div class="outline-text-3" id="text-org7ef0c12">
 <p>
 Emacs选择的默认快捷键是Ctrl + Space，和fcitx的激活快捷键Ctrl + Space冲突。
 </p>
@@ -247,6 +263,7 @@ Emacs选择的默认快捷键是Ctrl + Space，和fcitx的激活快捷键Ctrl + 
 <pre class="example">
 TriggerKey=CTRL_RSHIFT    # default value is CTRL_SPACE
 IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
+
 </pre>
 
 <p>
@@ -259,9 +276,9 @@ IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
 </div>
 </div>
 
-<div id="outline-container-org7423107" class="outline-3">
-<h3 id="org7423107">emacs中文输入</h3>
-<div class="outline-text-3" id="text-org7423107">
+<div id="outline-container-orga61aa55" class="outline-3">
+<h3 id="orga61aa55">emacs中文输入</h3>
+<div class="outline-text-3" id="text-orga61aa55">
 <p>
 要在emacs中输入中文，还需要设置LC_CTYPE为zh_CN.UTF-8，不然依旧无法输入。比较好的解决方法：
 </p>
@@ -270,6 +287,7 @@ IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
 sudo mv /usr/bin/emacs /usr/bin/emacs.origin
 sudo touch /usr/bin/emacs
 sudo chmod 755 /usr/bin/emacs
+
 </pre>
 
 <p>
@@ -280,6 +298,7 @@ sudo chmod 755 /usr/bin/emacs
 #!/bin/zsh
 LC_CTYPE=zh_CN.UTF-8
 /usr/bin/emacs.origin "$@"
+
 </pre>
 
 <p>
@@ -289,18 +308,20 @@ LC_CTYPE=zh_CN.UTF-8
 </div>
 </div>
 
-<div id="outline-container-org2d979af" class="outline-2">
-<h2 id="org2d979af">mplayer related</h2>
-<div class="outline-text-2" id="text-org2d979af">
-</div><div id="outline-container-org4100c8e" class="outline-3">
-<h3 id="org4100c8e">改变音轨</h3>
-<div class="outline-text-3" id="text-org4100c8e">
+<div id="outline-container-orga989bc2" class="outline-2">
+<h2 id="orga989bc2">mplayer related</h2>
+<div class="outline-text-2" id="text-orga989bc2">
+</div>
+<div id="outline-container-orgf4561aa" class="outline-3">
+<h3 id="orgf4561aa">改变音轨</h3>
+<div class="outline-text-3" id="text-orgf4561aa">
 <p>
 有些电影本身就是双语的，这时候只需要切换一下音轨就可以了：
 </p>
 
 <pre class="example">
 mplayer ... -aid 0/1 (for more than one language)
+
 </pre>
 
 <p>
@@ -309,15 +330,16 @@ mplayer ... -aid 0/1 (for more than one language)
 </div>
 </div>
 
-<div id="outline-container-org4ad57f1" class="outline-3">
-<h3 id="org4ad57f1">字幕乱码</h3>
-<div class="outline-text-3" id="text-org4ad57f1">
+<div id="outline-container-org267df4a" class="outline-3">
+<h3 id="org267df4a">字幕乱码</h3>
+<div class="outline-text-3" id="text-org267df4a">
 <p>
 不太清楚mplayer默认使用的是什么编码，但肯定有些字幕采用的编码和mplayer默认使用的编码不同，这就导致播放的时候会乱码，但因为大家都是天朝人，所以还是可以大致猜到字幕的编码的，一般情况加上下面的参数就OK了：
 </p>
 
 <pre class="example">
 mplayer ... -subcp cp936
+
 </pre>
 
 <p>
@@ -327,9 +349,9 @@ mplayer ... -subcp cp936
 </div>
 </div>
 
-<div id="outline-container-orge407b1b" class="outline-2">
-<h2 id="orge407b1b">终端某些文字显示为白色小方块</h2>
-<div class="outline-text-2" id="text-orge407b1b">
+<div id="outline-container-org4f8f16f" class="outline-2">
+<h2 id="org4f8f16f">终端某些文字显示为白色小方块</h2>
+<div class="outline-text-2" id="text-org4f8f16f">
 <p>
 因为locale选了其它语言，但又没安装其它语言的字体，所以显示小方块。
 </p>
@@ -340,15 +362,16 @@ mplayer ... -subcp cp936
 </div>
 </div>
 
-<div id="outline-container-org573297f" class="outline-2">
-<h2 id="org573297f">NTFS partitions</h2>
-<div class="outline-text-2" id="text-org573297f">
+<div id="outline-container-org181cb8e" class="outline-2">
+<h2 id="org181cb8e">NTFS partitions</h2>
+<div class="outline-text-2" id="text-org181cb8e">
 <p>
 when writing files to NTFS partitions, it will raise an error:
 </p>
 
 <pre class="example">
 cannot create regular file 'filename': Permission denied
+
 </pre>
 
 <p>
@@ -361,6 +384,7 @@ after googling, it is because the partition type is improper during mounting, tr
 
 <pre class="example">
 sudo mount -t ntfs-3g /dev/sdb1 /mnt
+
 </pre>
 
 <p>
@@ -369,6 +393,7 @@ here <code>/dev/sdb1</code> is the NTFS partition, if <b>ntfs-3g</b> is not inst
 
 <pre class="example">
 sudo pacman -S ntfs-3g
+
 </pre>
 </div>
 </div>

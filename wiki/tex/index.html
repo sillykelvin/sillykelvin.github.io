@@ -34,9 +34,9 @@
 <h1>关于TeX/LaTeX/XeLaTeX的一些使用技巧</h1>
 
 
-<div id="outline-container-orgc6bf70b" class="outline-2">
-<h2 id="orgc6bf70b">Code Snippets Processing</h2>
-<div class="outline-text-2" id="text-orgc6bf70b">
+<div id="outline-container-org4d79a5d" class="outline-2">
+<h2 id="org4d79a5d">Code Snippets Processing</h2>
+<div class="outline-text-2" id="text-org4d79a5d">
 <p>
 There is a package called <b>listings</b>, it is a very handy package for code snippets processing, include highlighting, formatting, numbering, etc.
 </p>
@@ -75,6 +75,7 @@ The commonly used settings by myself:
   %% columns=fixed,
   %% extendedchars=true,
 }
+
 </pre>
 
 <p>
@@ -88,6 +89,7 @@ A code snippet example:
 1.5
 &gt;&gt;&gt;
 \end{lstlisting}
+
 </pre>
 
 <p>
@@ -101,9 +103,9 @@ Network resource for <b>listings</b>:
 </div>
 </div>
 
-<div id="outline-container-org2383cec" class="outline-2">
-<h2 id="org2383cec">Remove Border of ToC/Links/Footnotes</h2>
-<div class="outline-text-2" id="text-org2383cec">
+<div id="outline-container-org51bcd57" class="outline-2">
+<h2 id="org51bcd57">Remove Border of ToC/Links/Footnotes</h2>
+<div class="outline-text-2" id="text-org51bcd57">
 <p>
 There is a discussion <a href="http://stackoverflow.com/questions/544907/remove-boxes-from-hyperlinked-toc-in-latex">here</a>.
 </p>
@@ -125,6 +127,7 @@ Many solutions are mentioned in above link, I prefer this one:
     linkcolor=black,
     urlcolor=black
 }
+
 </pre>
 
 <p>
@@ -133,9 +136,9 @@ This can not only remove the ugly border, but also customize the link color.
 </div>
 </div>
 
-<div id="outline-container-orgad6beef" class="outline-2">
-<h2 id="orgad6beef">Make A Title Multi Lines</h2>
-<div class="outline-text-2" id="text-orgad6beef">
+<div id="outline-container-org48deb19" class="outline-2">
+<h2 id="org48deb19">Make A Title Multi Lines</h2>
+<div class="outline-text-2" id="text-org48deb19">
 <p>
 Use a line break operator(double backslash) can achieve this:
 </p>
@@ -146,6 +149,7 @@ Use a line break operator(double backslash) can achieve this:
 \title{First line of title \\
 Second line of title}\maketitle
 \end{document}
+
 </pre>
 
 <p>
@@ -154,9 +158,9 @@ Reference: <a href="http://tex.stackexchange.com/questions/56222/how-to-make-a-t
 </div>
 </div>
 
-<div id="outline-container-org65062fb" class="outline-2">
-<h2 id="org65062fb">Error of Package hyperref With XeLaTeX</h2>
-<div class="outline-text-2" id="text-org65062fb">
+<div id="outline-container-org7248fee" class="outline-2">
+<h2 id="org7248fee">Error of Package hyperref With XeLaTeX</h2>
+<div class="outline-text-2" id="text-org7248fee">
 <p>
 When compiling with <code>xelatex</code>, an error occurs:
 </p>
@@ -165,6 +169,7 @@ When compiling with <code>xelatex</code>, an error occurs:
 mktexmf: empty or non-existent rootfile! kpathsea: Running mktexmf pzdr.mf
 The command name is D:\TexLive\bin\win32\mktexmf
 Cannot find pzdr.mf.
+
 </pre>
 
 <p>
@@ -181,6 +186,7 @@ This page is in Korean, but it does not affect too much, from the first reply, I
 
 <pre class="example">
 tlmgr install zapfding
+
 </pre>
 
 <p>
@@ -193,9 +199,9 @@ Another useful link: <a href="http://tex.stackexchange.com/questions/50596/latex
 </div>
 </div>
 
-<div id="outline-container-orgc719589" class="outline-2">
-<h2 id="orgc719589">Error of Package xunicode</h2>
-<div class="outline-text-2" id="text-orgc719589">
+<div id="outline-container-org2dc2057" class="outline-2">
+<h2 id="org2dc2057">Error of Package xunicode</h2>
+<div class="outline-text-2" id="text-org2dc2057">
 <p>
 The error is as following:
 </p>
@@ -203,6 +209,7 @@ The error is as following:
 <pre class="example">
 /XXX/XXX/xunicode.sty
 ! I can't find file `t3enc.def'.
+
 </pre>
 
 <p>
@@ -215,6 +222,7 @@ So, install the missing package will solve the issue:
 
 <pre class="example">
 tlmgr install tipa
+
 </pre>
 
 <p>
@@ -223,9 +231,9 @@ Reference: <a href="http://tex.stackexchange.com/questions/31341/cant-use-fontsp
 </div>
 </div>
 
-<div id="outline-container-org5556ed3" class="outline-2">
-<h2 id="org5556ed3">Use Different Font For Different Language</h2>
-<div class="outline-text-2" id="text-org5556ed3">
+<div id="outline-container-orgfc327cf" class="outline-2">
+<h2 id="orgfc327cf">Use Different Font For Different Language</h2>
+<div class="outline-text-2" id="text-orgfc327cf">
 <p>
 XeLaTeX allows usage of system fonts, the following code snippet can make ASCII characters use font <i>Segoe UI</i>, monospace font is <i>Consolas</i>, but Chinese characters will use font <i>Microsoft YaHei</i>:
 </p>
@@ -237,6 +245,7 @@ XeLaTeX allows usage of system fonts, the following code snippet can make ASCII 
 \setmainfont[ItalicFont={* Italic},BoldFont={* Bold},BoldItalicFont={* Bold Italic}]{Segoe UI}
 \setmonofont[ItalicFont={* Italic},BoldFont={* Bold},BoldItalicFont={* Bold Italic}]{Consolas}
 \setCJKmainfont{Microsoft YaHei}
+
 </pre>
 
 <p>
@@ -245,9 +254,9 @@ Reference: <a href="http://tex.stackexchange.com/questions/21046/change-xetex-fo
 </div>
 </div>
 
-<div id="outline-container-orged1b823" class="outline-2">
-<h2 id="orged1b823">Error with Code Snippets in Beamer</h2>
-<div class="outline-text-2" id="text-orged1b823">
+<div id="outline-container-orgf924cbb" class="outline-2">
+<h2 id="orgf924cbb">Error with Code Snippets in Beamer</h2>
+<div class="outline-text-2" id="text-orgf924cbb">
 <p>
 A typical beamer frame may looks like this:
 </p>
@@ -265,6 +274,7 @@ Code Snippet 2
 \end{verbatim}
 
 \end{frame}
+
 </pre>
 
 <p>
@@ -274,6 +284,7 @@ No matter using <code>listings</code> package or <code>begin{verbatim}</code> to
 <pre class="example">
 Paragraph ended before \@xverbatim was complete \end{frame}  %% generated by \begin{verbatim} command
 Paragraph ended before \lst@next was complete \end{frame}    %% generated by listings package
+
 </pre>
 
 <p>
@@ -283,6 +294,7 @@ Add an optional parameter to <code>begin{frame}</code> will fix this issue:
 <pre class="example">
 \begin{frame}[fragile]
 ...
+
 </pre>
 
 <p>

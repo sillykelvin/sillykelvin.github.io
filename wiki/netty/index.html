@@ -40,9 +40,9 @@
 <b>最新说明</b> ：因为本人换了team，新team可能再也接触不到跟Java有关的东西了，而除了项目之外，本人也实在没有太多精力去再看nettty的源代码，所以，这一篇关于netty的心得可能到这里就不会再更新了 &#x2014; <span class="timestamp-wrapper"><span class="timestamp">&lt;2013-03-27 Wed&gt;</span></span>
 </p>
 
-<div id="outline-container-orgeebc00b" class="outline-2">
-<h2 id="orgeebc00b"><code>ChannelInitializer&lt;C extends Channel&gt;</code></h2>
-<div class="outline-text-2" id="text-orgeebc00b">
+<div id="outline-container-org3888ac9" class="outline-2">
+<h2 id="org3888ac9"><code>ChannelInitializer&lt;C extends Channel&gt;</code></h2>
+<div class="outline-text-2" id="text-org3888ac9">
 <p>
 这个类本身也是一个handler，主要关注 <code>channel register</code> 事件，关键方法如下：
 </p>
@@ -64,6 +64,7 @@ public final void channelRegistered(ChannelHandlerContext ctx)
         // ...
     }
 }
+
 </pre>
 
 <p>
@@ -72,9 +73,9 @@ public final void channelRegistered(ChannelHandlerContext ctx)
 </div>
 </div>
 
-<div id="outline-container-org17206a5" class="outline-2">
-<h2 id="org17206a5">DefaultChannelHandlerContext中的Buffer Chain</h2>
-<div class="outline-text-2" id="text-org17206a5">
+<div id="outline-container-org023e815" class="outline-2">
+<h2 id="org023e815">DefaultChannelHandlerContext中的Buffer Chain</h2>
+<div class="outline-text-2" id="text-org023e815">
 <p>
 DefaultChannelHandlerContext本身就是一系列context chain的一个结点，每个结点会维护prev和next两个指针，分别指向前后结点。
 </p>
@@ -96,9 +97,9 @@ DefaultChannelHandlerContext本身就是一系列context chain的一个结点，
 </div>
 </div>
 
-<div id="outline-container-org2cb05e3" class="outline-2">
-<h2 id="org2cb05e3"><code>AttributeMap &amp; attr()</code></h2>
-<div class="outline-text-2" id="text-org2cb05e3">
+<div id="outline-container-orgc7ce5e5" class="outline-2">
+<h2 id="orgc7ce5e5"><code>AttributeMap &amp; attr()</code></h2>
+<div class="outline-text-2" id="text-orgc7ce5e5">
 <p>
 Java NIO的SelectionKey中有一个attachment，这在传递一些额外的信息时很有用，Netty也有类似的实现，就是 <code>AttributeMap</code> 这个接口，其只定义了一个 <code>attr()</code> 方法。
 </p>
@@ -123,6 +124,7 @@ public synchronized &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key)
     }
     return attr;
 }
+
 </pre>
 
 <p>
@@ -132,6 +134,7 @@ public synchronized &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key)
 <pre class="example">
 private class DefaultAttribute&lt;T&gt; extends AtomicReference&lt;T&gt; implements Attribute&lt;T&gt;
 ...
+
 </pre>
 
 <p>

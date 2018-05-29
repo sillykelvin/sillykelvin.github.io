@@ -44,9 +44,9 @@
 我还忍受了一阵子的 <i>拼音+英文</i> 组合，但发现五笔用多了，拼音输入实在不是我的菜，于是乎，折腾开始了。。
 </p>
 
-<div id="outline-container-org4d23573" class="outline-2">
-<h2 id="org4d23573">降级</h2>
-<div class="outline-text-2" id="text-org4d23573">
+<div id="outline-container-org73a53b3" class="outline-2">
+<h2 id="org73a53b3">降级</h2>
+<div class="outline-text-2" id="text-org73a53b3">
 <p>
 我的第一反应，是fcitx升级导致的，这可能是升级后的版本的bug，于是执行以下命令把找到的与fcitx相关的包通通给降级到4.2.7.4：
 </p>
@@ -57,6 +57,7 @@ $ sudo pacman -U fcitx-4.2.7-4-x86_64.pkg.tar.xz
 $ sudo pacman -U fcitx-gtk3-4.2.7-4-x86_64.pkg.tar.xz
 $ sudo pacman -U fcitx-gtk2-4.2.7-4-x86_64.pkg.tar.xz
 $ sudo pacman -U fcitx-qt4-4.2.7-4-x86_64.pkg.tar.xz
+
 </pre>
 
 <p>
@@ -65,6 +66,7 @@ $ sudo pacman -U fcitx-qt4-4.2.7-4-x86_64.pkg.tar.xz
 
 <pre class="example">
 (ERROR-1583 /build/src/fcitx-4.2.7/src/lib/fcitx/ime.c:281) IM: open /usr/lib/fcitx/fcitx-keyboard.so fail libicuuc.so.50: cannot open shared object file: No such file or directory
+
 </pre>
 
 <p>
@@ -74,6 +76,7 @@ $ sudo pacman -U fcitx-qt4-4.2.7-4-x86_64.pkg.tar.xz
 <pre class="example">
 $ cd /usr/lib
 $ sudo ln -s libicuuc.so.51.1 libicuuc.so.50
+
 </pre>
 
 <p>
@@ -82,6 +85,7 @@ $ sudo ln -s libicuuc.so.51.1 libicuuc.so.50
 
 <pre class="example">
 (ERROR-1634 /build/src/fcitx-4.2.7/src/lib/fcitx/ime.c:281) IM: open /usr/lib/fcitx/fcitx-keyboard.so fail /usr/lib/fcitx/fcitx-keyboard.so: undefined symbol: unorm_normalize_05
+
 </pre>
 
 <p>
@@ -91,6 +95,7 @@ $ sudo ln -s libicuuc.so.51.1 libicuuc.so.50
 <pre class="example">
 $ pacman -Qo /usr/lib/libicuuc.so.51.1
 =&gt; /usr/lib/libicuuc.so.51.1 is owned by icu 51.1-1
+
 </pre>
 
 <p>
@@ -99,9 +104,9 @@ $ pacman -Qo /usr/lib/libicuuc.so.51.1
 </div>
 </div>
 
-<div id="outline-container-org3b474e9" class="outline-2">
-<h2 id="org3b474e9">继续降级</h2>
-<div class="outline-text-2" id="text-org3b474e9">
+<div id="outline-container-orgd85f4ed" class="outline-2">
+<h2 id="orgd85f4ed">继续降级</h2>
+<div class="outline-text-2" id="text-orgd85f4ed">
 <p>
 从<a href="http://arm.konnichi.com/">ARM</a>的 <b>extra</b> 仓库顺利找到了这个旧包 <code>icu-50.1.1-1-x86_64.pkg.tar.xz</code> ，于是迫不及待下载下来，用 <code>pacman -U</code> 降级安装。
 </p>
@@ -113,6 +118,7 @@ $ pacman -Qo /usr/lib/libicuuc.so.51.1
 <pre class="example">
 (ERROR-880 /build/src/fcitx-4.2.7/src/lib/fcitx/module.c:61) Module: open /usr/lib/fcitx/fcitx-vk.so fail libicule.so.51: cannot open shared object file: No such file or directory
 (ERROR-880 /build/src/fcitx-4.2.7/src/lib/fcitx/ui.c:191) UI: open /usr/lib/fcitx/fcitx-classic-ui.so fail libicule.so.51: cannot open shared object file: No such file or directory
+
 </pre>
 
 <p>
@@ -125,9 +131,9 @@ $ pacman -Qo /usr/lib/libicuuc.so.51.1
 </div>
 </div>
 
-<div id="outline-container-org0d7e1d1" class="outline-2">
-<h2 id="org0d7e1d1">终于。。</h2>
-<div class="outline-text-2" id="text-org0d7e1d1">
+<div id="outline-container-org3f7f7b0" class="outline-2">
+<h2 id="org3f7f7b0">终于。。</h2>
+<div class="outline-text-2" id="text-org3f7f7b0">
 <p>
 没辙了，于是，去 <i>archlinux-cn</i> 的mailing-list里面来了一发。。
 </p>
@@ -148,6 +154,7 @@ $ pacman -Qo /usr/lib/libicuuc.so.51.1
 
 <pre class="example">
 EnabledIMList=fcitx-keyboard-us:True,wbpy:True,wubi:True, ...
+
 </pre>
 
 <p>

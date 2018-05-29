@@ -60,9 +60,9 @@
 GRUB2指GRUB 1.98或者更高的版本，GRUB 0.97版本则被称为GRUB。GRUB是 <i>GRand Unified Bootloader</i> 的简写，从ubuntu9.10(Karmic Koala)开始，GRUB2就成为其默认的启动加载器(boot loader)，负责在开机的时候引导不同的操作系统（如果你的电脑是多系统的话）。可以用 <code>grub-install -v</code> 来检测GRUB的版本。GRUB 1.99版本将会作为ubuntu11.04默认的启动加载器，这里讲的主要是针对GRUB 1.98版本。
 </p>
 
-<div id="outline-container-orgf5ede44" class="outline-2">
-<h2 id="orgf5ede44">改进</h2>
-<div class="outline-text-2" id="text-orgf5ede44">
+<div id="outline-container-orgecc766a" class="outline-2">
+<h2 id="orgecc766a">改进</h2>
+<div class="outline-text-2" id="text-orgecc766a">
 <p>
 GRUB2相对于GRUB的主要新特性包括：
 </p>
@@ -82,9 +82,9 @@ GRUB2相对于GRUB的主要新特性包括：
 </div>
 </div>
 
-<div id="outline-container-org2c32cb7" class="outline-2">
-<h2 id="org2c32cb7">GRUB vs GRUB2</h2>
-<div class="outline-text-2" id="text-org2c32cb7">
+<div id="outline-container-org41b541f" class="outline-2">
+<h2 id="org41b541f">GRUB vs GRUB2</h2>
+<div class="outline-text-2" id="text-org41b541f">
 <p>
 GRUB2默认的菜单和GRUB看起来是一样的，但在这相同的表面之下，两者却拥有众多的不同。
 </p>
@@ -106,18 +106,18 @@ GRUB2默认的菜单和GRUB看起来是一样的，但在这相同的表面之�
 </div>
 </div>
 
-<div id="outline-container-org99b77fb" class="outline-2">
-<h2 id="org99b77fb">安装</h2>
-<div class="outline-text-2" id="text-org99b77fb">
+<div id="outline-container-org5974f60" class="outline-2">
+<h2 id="org5974f60">安装</h2>
+<div class="outline-text-2" id="text-org5974f60">
 <p>
 这部分就省略了，因为从9.10开始就是GRUB2了，我想应该没人还在用9.04以前的版本，如果需要请前往原文观摩。 ^_^
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2cf02bd" class="outline-2">
-<h2 id="org2cf02bd">文件结构</h2>
-<div class="outline-text-2" id="text-org2cf02bd">
+<div id="outline-container-org1a47910" class="outline-2">
+<h2 id="org1a47910">文件结构</h2>
+<div class="outline-text-2" id="text-org1a47910">
 <p>
 GRUB2使用了改进的文件和目录体系，GRUB的menu.lst文件也不再被使用。
 </p>
@@ -127,9 +127,9 @@ GRUB2主要使用的目录和文件主要包括：
 </p>
 </div>
 
-<div id="outline-container-org068c767" class="outline-3">
-<h3 id="org068c767">/boot/grub/grub.cfg</h3>
-<div class="outline-text-3" id="text-org068c767">
+<div id="outline-container-orgb888825" class="outline-3">
+<h3 id="orgb888825">/boot/grub/grub.cfg</h3>
+<div class="outline-text-3" id="text-orgb888825">
 <p>
 这个是最接近GRUB的/boot/grub/menu.lst的文件，它包含了GRUB2的启动菜单信息，但不像menu.lst，它不建议被直接编辑。
 </p>
@@ -147,18 +147,18 @@ GRUB2主要使用的目录和文件主要包括：
 </div>
 </div>
 
-<div id="outline-container-org629a375" class="outline-3">
-<h3 id="org629a375">/etc/default/grub</h3>
-<div class="outline-text-3" id="text-org629a375">
+<div id="outline-container-orgc6dd742" class="outline-3">
+<h3 id="orgc6dd742">/etc/default/grub</h3>
+<div class="outline-text-3" id="text-orgc6dd742">
 <p>
 这个文件包含了详细的配置信息，具有root权限的用户可以编辑它，并且执行更新指令后会将其合并到grub.cfg文件。
 </p>
 </div>
 </div>
 
-<div id="outline-container-org84a4a6c" class="outline-3">
-<h3 id="org84a4a6c">/etc/grub.d/（目录）</h3>
-<div class="outline-text-3" id="text-org84a4a6c">
+<div id="outline-container-org60bc8b1" class="outline-3">
+<h3 id="org60bc8b1">/etc/grub.d/（目录）</h3>
+<div class="outline-text-3" id="text-org60bc8b1">
 <ul class="org-ul">
 <li>这个目录内的文件在执行 <code>update-grub</code> 命令期间会被读取，它们包含的指令会被合并到grub.cfg文件</li>
 <li>启动菜单项在grub.cfg文件中的先后顺序是由这个目录中的文件执行顺序来决定的，具有较小数字前缀的文件会先被执行，如10_linux会在20_memtest之前执行，字母开头的文件会在数字开头的文件之后执行</li>
@@ -183,12 +183,13 @@ GRUB2主要使用的目录和文件主要包括：
 </div>
 </div>
 
-<div id="outline-container-orgbfb9446" class="outline-2">
-<h2 id="orgbfb9446">配置GRUB2</h2>
-<div class="outline-text-2" id="text-orgbfb9446">
-</div><div id="outline-container-orgc650e79" class="outline-3">
-<h3 id="orgc650e79">/etc/default/grub</h3>
-<div class="outline-text-3" id="text-orgc650e79">
+<div id="outline-container-orgc143956" class="outline-2">
+<h2 id="orgc143956">配置GRUB2</h2>
+<div class="outline-text-2" id="text-orgc143956">
+</div>
+<div id="outline-container-orga3e98e2" class="outline-3">
+<h3 id="orga3e98e2">/etc/default/grub</h3>
+<div class="outline-text-3" id="text-orga3e98e2">
 <p>
 这个是可以让用户修改来改变GRUB默认设置的配置文件，以下是可以由用户编辑的变量：
 </p>
@@ -235,43 +236,43 @@ GRUB_DISABLE_OS_PROBER=true：加了这个后，就不会再检查其它分区�
 </div>
 </div>
 
-<div id="outline-container-org9acf9b3" class="outline-2">
-<h2 id="org9acf9b3">Boot Display Behavior</h2>
-<div class="outline-text-2" id="text-org9acf9b3">
+<div id="outline-container-org8f6ac69" class="outline-2">
+<h2 id="org8f6ac69">Boot Display Behavior</h2>
+<div class="outline-text-2" id="text-org8f6ac69">
 <p>
 GRUB2是在加载任何操作系统之前载入内存的，它是按最低需求载入的模块化组件。菜单显示的样式由/etc/default/grub中的设置决定。
 </p>
 </div>
 
-<div id="outline-container-org4da3585" class="outline-3">
-<h3 id="org4da3585">Initial Default</h3>
-<div class="outline-text-3" id="text-org4da3585">
+<div id="outline-container-org8cf4c8a" class="outline-3">
+<h3 id="org8cf4c8a">Initial Default</h3>
+<div class="outline-text-3" id="text-org8cf4c8a">
 <p>
 如果没有检测到别的操作系统， GRUB2会直接引导进入默认的操作系统，并且也不会显示启动菜单；如果检测到其它操作系统的话，才显示启动菜单。
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcc296be" class="outline-3">
-<h3 id="orgcc296be">Timed Display</h3>
-<div class="outline-text-3" id="text-orgcc296be">
+<div id="outline-container-orga67aefa" class="outline-3">
+<h3 id="orga67aefa">Timed Display</h3>
+<div class="outline-text-3" id="text-orga67aefa">
 <p>
 启动菜单将显示预定的超时时间，如果超过预定的超时时间用户没有动作，就会启动默认的系统。用户可以通过上下箭头来手动选择操作系统，然后按Enter进入，一旦用户有输入，设定的超时时间倒计时就会停止。
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd2f3731" class="outline-3">
-<h3 id="orgd2f3731">Hidden（略）</h3>
+<div id="outline-container-org7d5fcd9" class="outline-3">
+<h3 id="org7d5fcd9">Hidden（略）</h3>
 </div>
 
-<div id="outline-container-orgb4d5013" class="outline-3">
-<h3 id="orgb4d5013">Saved（略)</h3>
+<div id="outline-container-org5859c68" class="outline-3">
+<h3 id="org5859c68">Saved（略)</h3>
 </div>
 
-<div id="outline-container-org38f3b59" class="outline-3">
-<h3 id="org38f3b59">Last Boot Failed or Boot into Recovery Mode</h3>
-<div class="outline-text-3" id="text-org38f3b59">
+<div id="outline-container-org42b78b6" class="outline-3">
+<h3 id="org42b78b6">Last Boot Failed or Boot into Recovery Mode</h3>
+<div class="outline-text-3" id="text-org42b78b6">
 <p>
 如果上次启动失败或者是以恢复模式启动的，启动菜单就会一直被显示直到用户作了选择，前面设定的超时时间在这里不起作用，要改变这个设置的话，需要修改/etc/grub.d/00_header文件里的内容。
 </p>
@@ -279,13 +280,13 @@ GRUB2是在加载任何操作系统之前载入内存的，它是按最低需求
 </div>
 </div>
 
-<div id="outline-container-org713710c" class="outline-2">
-<h2 id="org713710c">用户自定义菜单项（略）</h2>
+<div id="outline-container-org864b6de" class="outline-2">
+<h2 id="org864b6de">用户自定义菜单项（略）</h2>
 </div>
 
-<div id="outline-container-org63fe308" class="outline-2">
-<h2 id="org63fe308">背景图片和主题</h2>
-<div class="outline-text-2" id="text-org63fe308">
+<div id="outline-container-orgffdd6ac" class="outline-2">
+<h2 id="orgffdd6ac">背景图片和主题</h2>
+<div class="outline-text-2" id="text-orgffdd6ac">
 <p>
 GRUB2设置背景图片只需要两步：选择一幅图像，然后选择字体颜色。注意：设置背景图片需要GRUB 1.98或者更高的版本，对应的ubuntu版本是10.04或者更高。
 </p>
@@ -296,6 +297,7 @@ GRUB2的背景图片由 <code>GRUB_BACKGROUND</code> 变量控制，打开 <b>/e
 
 <pre class="example">
 GRUB_BACKGROUND=/usr/share/images/desktop-base/moreblue-orbit-grub.png
+
 </pre>
 
 <p>
@@ -324,9 +326,9 @@ GRUB_BACKGROUND=/usr/share/images/desktop-base/moreblue-orbit-grub.png
 </div>
 </div>
 
-<div id="outline-container-orga7febf7" class="outline-2">
-<h2 id="orga7febf7">设置菜单字体和高亮颜色</h2>
-<div class="outline-text-2" id="text-orga7febf7">
+<div id="outline-container-orgf4fc0a0" class="outline-2">
+<h2 id="orgf4fc0a0">设置菜单字体和高亮颜色</h2>
+<div class="outline-text-2" id="text-orgf4fc0a0">
 <p>
 这些设置包含在/etc/grub.d/05_debian_theme文件里面，具体要修改哪些部分依赖于是否选择了背景图片。
 </p>

@@ -33,9 +33,9 @@
 <div class="post">
 <h1>解决Windows上程序运行时的side by side错误</h1>
 
-<div id="outline-container-orgadddb5e" class="outline-2">
-<h2 id="orgadddb5e">起因</h2>
-<div class="outline-text-2" id="text-orgadddb5e">
+<div id="outline-container-orgdda9e81" class="outline-2">
+<h2 id="orgdda9e81">起因</h2>
+<div class="outline-text-2" id="text-orgdda9e81">
 <p>
 前两天写了个小工具，在我的机器跑得好好的，QA的测试机里面却死活跑不起来，一运行就出现一个对话框，报一个side by side的错误：
 </p>
@@ -52,6 +52,7 @@ The application has failed to start because its side-by-side configuration is in
 
 <pre class="example">
 use the command-line sxstrace.exe tool for more detail
+
 </pre>
 
 <p>
@@ -60,15 +61,16 @@ use the command-line sxstrace.exe tool for more detail
 </div>
 </div>
 
-<div id="outline-container-orgc2c93dc" class="outline-2">
-<h2 id="orgc2c93dc">解决过程</h2>
-<div class="outline-text-2" id="text-orgc2c93dc">
+<div id="outline-container-org2880854" class="outline-2">
+<h2 id="org2880854">解决过程</h2>
+<div class="outline-text-2" id="text-org2880854">
 <p>
 按照<a href="http://www.arkhamconsulting.com/blogs/?p=8">这个</a>帖子，先打开sxstrace.exe的调试模式：
 </p>
 
 <pre class="example">
 sxstrace trace -logfile:C:/trace.bin
+
 </pre>
 
 <p>
@@ -77,6 +79,7 @@ sxstrace trace -logfile:C:/trace.bin
 
 <pre class="example">
 sxstrace parse -logfile:C:/trace.bin -outfile:C:/trace.log
+
 </pre>
 
 <p>
@@ -129,6 +132,7 @@ INFO: Resolving reference Microsoft.VC90.CRT,processorArchitecture="x86",publicK
     ERROR: Cannot resolve reference Microsoft.VC90.CRT,processorArchitecture="x86",publicKeyToken="1fc8b3b9a1e18e3b",type="win32",version="9.0.21022.8".
 ERROR: Activation Context generation failed.
 End Activation Context Generation.
+
 </pre>
 
 <p>
@@ -137,9 +141,9 @@ End Activation Context Generation.
 </div>
 </div>
 
-<div id="outline-container-org7537bd2" class="outline-2">
-<h2 id="org7537bd2">总结</h2>
-<div class="outline-text-2" id="text-org7537bd2">
+<div id="outline-container-org8d60b3d" class="outline-2">
+<h2 id="org8d60b3d">总结</h2>
+<div class="outline-text-2" id="text-org8d60b3d">
 <p>
 对于windows我一向没有好感，不评价，写这篇blog主要是为了记录 <code>sxstrace.exe</code> 这个工具，感觉用来debug不错。
 </p>

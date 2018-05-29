@@ -34,9 +34,9 @@
 <h1>深入探究C++的new/delete操作符</h1>
 
 
-<div id="outline-container-org9c0c6fe" class="outline-2">
-<h2 id="org9c0c6fe">前戏，啊不，其实我是说前言</h2>
-<div class="outline-text-2" id="text-org9c0c6fe">
+<div id="outline-container-org6dc5586" class="outline-2">
+<h2 id="org6dc5586">前戏，啊不，其实我是说前言</h2>
+<div class="outline-text-2" id="text-org6dc5586">
 <p>
 今天在重温《More Effective C++》的时候，又看到讲 <code>operator new</code> 和 <code>operator delete</code> 的那条规则，虽然大概明白其原理，但是实际中却从来没用过，所以，就想写个小程序来试一试。如果你还不知道它们，或者听说过但不知道具体意义，那我就正好吓吓你：
 </p>
@@ -45,6 +45,7 @@
 new/delete/new[]/delete[] operator
 operator new/delete/new[]/delete[]
 placement new/new[]  // 注意，没有 placement delete/delete[]
+
 </pre>
 
 <p>
@@ -125,6 +126,7 @@ void operator delete(void* ptr) {
 
 <pre class="example">
 inline _LIBCPP_INLINE_VISIBILITY void* operator new  (std::size_t, void* __p) _NOEXCEPT {return __p;}
+
 </pre>
 
 <p>
@@ -134,6 +136,7 @@ inline _LIBCPP_INLINE_VISIBILITY void* operator new  (std::size_t, void* __p) _N
 <pre class="example">
 void *buf = // 在这里为buf分配内存
 Class *pc = new (buf) Class();
+
 </pre>
 
 <p>
@@ -142,6 +145,7 @@ Class *pc = new (buf) Class();
 
 <pre class="example">
 Class *pc = new (nullptr) Class(); // nullptr是C++11中的空指针定义
+
 </pre>
 
 <p>
@@ -154,9 +158,9 @@ Class *pc = new (nullptr) Class(); // nullptr是C++11中的空指针定义
 </div>
 </div>
 
-<div id="outline-container-org4c98c64" class="outline-2">
-<h2 id="org4c98c64">实例</h2>
-<div class="outline-text-2" id="text-org4c98c64">
+<div id="outline-container-orgd4eb61d" class="outline-2">
+<h2 id="orgd4eb61d">实例</h2>
+<div class="outline-text-2" id="text-orgd4eb61d">
 <p>
 码农？找不到对象？没事儿，不拼爹妈，更不靠干爹干妈，我们自己new一个出来。不过，别人都从堆上new，太没挑战了，我们从栈上new！
 </p>
@@ -223,13 +227,14 @@ C constructor.
 hello object, i: 1024
 C destructor.
 We should do nothing in operator delete.
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgefee31f" class="outline-2">
-<h2 id="orgefee31f">演变</h2>
-<div class="outline-text-2" id="text-orgefee31f">
+<div id="outline-container-orgad2cccd" class="outline-2">
+<h2 id="orgad2cccd">演变</h2>
+<div class="outline-text-2" id="text-orgad2cccd">
 <p>
 我突然想到了一个坏主意：我们对上面的例子做一个小小的改动，将main函数中buf的长度变短，其它不变：
 </p>
@@ -259,9 +264,9 @@ We should do nothing in operator delete.
 </div>
 </div>
 
-<div id="outline-container-orge594649" class="outline-2">
-<h2 id="orge594649">更进一步</h2>
-<div class="outline-text-2" id="text-orge594649">
+<div id="outline-container-org65d736e" class="outline-2">
+<h2 id="org65d736e">更进一步</h2>
+<div class="outline-text-2" id="text-org65d736e">
 <p>
 怎么回事？难不成编译器智能地探测到buf的内存不足以装下C的实例，所以自动扩充了3个字节？于是，我们再稍作修改，在buf的两边都加上指示性的变量，以方便探测其边界：
 </p>
@@ -290,6 +295,7 @@ Starting program: /Users/kelvin/new
 
 Breakpoint 1, main () at new.cpp:41
 41	    int a = 0x01020304;
+
 </pre>
 
 <p>
@@ -307,6 +313,7 @@ $3 = (int *) 0x7fff5fbffa48
 0x7fff5fbffa48:	-56	-6	-65	95	-1	127	0	0
 0x7fff5fbffa50:	0	0	0	0	0	0	0	0
 0x7fff5fbffa58:	0	0	0	0	0	0	0	0
+
 </pre>
 
 <p>
@@ -320,6 +327,7 @@ a在栈的最下面，所以a的地址最高。从打印出的内存来看，此
 0x7fff5fbffa48:	-56	-6	-65	95	-1	127	0	0
 0x7fff5fbffa50:	4	3	2	1	0	0	0	0
 0x7fff5fbffa58:	0	0	0	0	0	0	0	0
+
 </pre>
 
 <p>
@@ -333,6 +341,7 @@ a在栈的最下面，所以a的地址最高。从打印出的内存来看，此
 0x7fff5fbffa48:	1	2	3	4	-1	127	0	0
 0x7fff5fbffa50:	4	3	2	1	0	0	0	0
 0x7fff5fbffa58:	-128	46	0	0	1	0	0	0
+
 </pre>
 
 <p>
@@ -349,6 +358,7 @@ C constructor.
 0x7fff5fbffa48:	1	2	3	4	-1	127	0	-104
 0x7fff5fbffa50:	-70	-36	-2	1	0	0	0	0
 0x7fff5fbffa58:	-128	46	0	0	1	0	0	0
+
 </pre>
 
 <p>
@@ -360,6 +370,7 @@ pc被正常构造，但需要注意的是，从地址0x7fff5fbffa4f到0x7fff5fbf
 0x7fff5fbffa48:	0x01	0x02	0x03	0x04	0xff	0x7f	0x00	0x98
 0x7fff5fbffa50:	0xba	0xdc	0xfe	0x01	0x00	0x00	0x00	0x00
 0x7fff5fbffa58:	0x80	0x2e	0x00	0x00	0x01	0x00	0x00	0x00
+
 </pre>
 
 <p>
@@ -375,6 +386,7 @@ pc被正常构造，但需要注意的是，从地址0x7fff5fbffa4f到0x7fff5fbf
 $4 = 33479866
 (gdb) p/x a
 $5 = 0x1fedcba
+
 </pre>
 
 <p>
@@ -387,9 +399,9 @@ $5 = 0x1fedcba
 </div>
 </div>
 
-<div id="outline-container-org7505ebd" class="outline-2">
-<h2 id="org7505ebd">总结</h2>
-<div class="outline-text-2" id="text-org7505ebd">
+<div id="outline-container-orgd513466" class="outline-2">
+<h2 id="orgd513466">总结</h2>
+<div class="outline-text-2" id="text-orgd513466">
 <p>
 废话了这么多，那 <code>operator new/delete, placement new/delete</code> 到底有什么用呢？
 </p>
@@ -407,9 +419,9 @@ $5 = 0x1fedcba
 </div>
 </div>
 
-<div id="outline-container-org710aa3f" class="outline-2">
-<h2 id="org710aa3f">参考资料</h2>
-<div class="outline-text-2" id="text-org710aa3f">
+<div id="outline-container-orgc65f63f" class="outline-2">
+<h2 id="orgc65f63f">参考资料</h2>
+<div class="outline-text-2" id="text-orgc65f63f">
 <ol class="org-ol">
 <li>More Effective C++, Item 8</li>
 <li><a href="http://llvm.org/svn/llvm-project/libcxx/trunk/include/new">http://llvm.org/svn/llvm-project/libcxx/trunk/include/new</a></li>

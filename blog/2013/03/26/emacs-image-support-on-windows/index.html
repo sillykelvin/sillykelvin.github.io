@@ -40,9 +40,9 @@
 于是，把这事托付于万能的Google，还真有人为这个折腾过，于是，我就把前人折腾的过程来做个总结。
 </p>
 
-<div id="outline-container-org51fef2b" class="outline-2">
-<h2 id="org51fef2b">测试图片类型是否被支持</h2>
-<div class="outline-text-2" id="text-org51fef2b">
+<div id="outline-container-orgef12260" class="outline-2">
+<h2 id="orgef12260">测试图片类型是否被支持</h2>
+<div class="outline-text-2" id="text-orgef12260">
 <p>
 Emacs有内建函数用于测试特定类型的图片是否被支持，于是，测试几种常见类型的代码<sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>如下：
 </p>
@@ -54,6 +54,7 @@ Emacs有内建函数用于测试特定类型的图片是否被支持，于是，
 (image-type-available-p 'tiff)
 (image-type-available-p 'xbm)
 (image-type-available-p 'xpm)
+
 </pre>
 
 <p>
@@ -62,9 +63,9 @@ Emacs有内建函数用于测试特定类型的图片是否被支持，于是，
 </div>
 </div>
 
-<div id="outline-container-orgb100121" class="outline-2">
-<h2 id="orgb100121">添加支持</h2>
-<div class="outline-text-2" id="text-orgb100121">
+<div id="outline-container-org777d1f4" class="outline-2">
+<h2 id="org777d1f4">添加支持</h2>
+<div class="outline-text-2" id="text-org777d1f4">
 <p>
 下面是来自Emacs的官方文档<sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>：
 </p>
@@ -107,6 +108,7 @@ Value: ((xpm "libxpm.dll" "xpm4.dll" "libXpm-nox4.dll")
  (gobject "libgobject-2.0-0.dll")
  (gnutls "libgnutls-28.dll" "libgnutls-26.dll")
  (libxml2 "libxml2-2.dll" "libxml2.dll"))
+
 </pre>
 
 <p>
@@ -144,9 +146,9 @@ because they do not depend on external libraries and are always available.
 </div>
 </div>
 
-<div id="outline-container-orgbf1ae07" class="outline-2">
-<h2 id="orgbf1ae07">小插曲</h2>
-<div class="outline-text-2" id="text-orgbf1ae07">
+<div id="outline-container-org82cdab8" class="outline-2">
+<h2 id="org82cdab8">小插曲</h2>
+<div class="outline-text-2" id="text-org82cdab8">
 <p>
 到此似乎结束了，于是，重启Emacs打开一个图片试试，什么？？还是二进制内容？？于是把第一节中的那几句测试代码再跑一遍，发现其它都返回 <code>t</code> 只有png那一行返回 <code>nil</code> ，而我打开的图片刚好是png的。。于是再找张jpg打开，没有问题。
 </p>

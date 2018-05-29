@@ -36,9 +36,9 @@
 This file recorded all the notes during learning <i>Spring in Action 3rd Edition</i>, I did not complete the book, and may continue to finish reading it later.
 </p>
 
-<div id="outline-container-orgb13d0e4" class="outline-2">
-<h2 id="orgb13d0e4">Chapter 2 Wiring beans</h2>
-<div class="outline-text-2" id="text-orgb13d0e4">
+<div id="outline-container-org891667b" class="outline-2">
+<h2 id="org891667b">Chapter 2 Wiring beans</h2>
+<div class="outline-text-2" id="text-org891667b">
 <p>
 All namespaces could be contained in spring xml configuration file:
 </p>
@@ -111,15 +111,16 @@ All namespaces could be contained in spring xml configuration file:
 </table>
 </div>
 
-<div id="outline-container-orgbecf93e" class="outline-3">
-<h3 id="orgbecf93e">Wiring beans through constructor</h3>
-<div class="outline-text-3" id="text-orgbecf93e">
+<div id="outline-container-org1256210" class="outline-3">
+<h3 id="org1256210">Wiring beans through constructor</h3>
+<div class="outline-text-3" id="text-org1256210">
 <p>
 The bean below will be wired by its default constructor:
 </p>
 
 <pre class="example">
 &lt;bean id="hello" class="ini.kelvin.spring.Hello" /&gt;
+
 </pre>
 
 <p>
@@ -131,6 +132,7 @@ But if the bean definition does not have a default constructor:
     &lt;constructor-arg value="someValue" /&gt;
     &lt;constructor-arg ref="beanId" /&gt;
 &lt;bean&gt;
+
 </pre>
 
 <p>
@@ -139,9 +141,9 @@ The example above will use the constructor which has two args, 1st one is basic 
 </div>
 </div>
 
-<div id="outline-container-orgcbfa9e6" class="outline-3">
-<h3 id="orgcbfa9e6">Wiring beans through factory method</h3>
-<div class="outline-text-3" id="text-orgcbfa9e6">
+<div id="outline-container-org8ddb675" class="outline-3">
+<h3 id="org8ddb675">Wiring beans through factory method</h3>
+<div class="outline-text-3" id="text-org8ddb675">
 <p>
 Some definition of classes may not have a visible constructor, an example is the singleton bean definition, as below:
 </p>
@@ -169,13 +171,14 @@ Under this condition, we can use following to construct the bean:
 &lt;bean id="singleton"
       class="Singleton"
       factory-method="getInstance" /&gt;
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org4a323cb" class="outline-3">
-<h3 id="org4a323cb">Bean scoping</h3>
-<div class="outline-text-3" id="text-org4a323cb">
+<div id="outline-container-orgfb03734" class="outline-3">
+<h3 id="orgfb03734">Bean scoping</h3>
+<div class="outline-text-3" id="text-orgfb03734">
 <p>
 The definition of bean scope is as following:
 </p>
@@ -248,9 +251,9 @@ The definition of bean scope is as following:
 </div>
 </div>
 
-<div id="outline-container-orgeddbce0" class="outline-3">
-<h3 id="orgeddbce0">Initializing and destroying</h3>
-<div class="outline-text-3" id="text-orgeddbce0">
+<div id="outline-container-org09866f0" class="outline-3">
+<h3 id="org09866f0">Initializing and destroying</h3>
+<div class="outline-text-3" id="text-org09866f0">
 <p>
 Specify attributes <code>init-method</code> and <code>destroy-method</code> in a bean definition, the method specified by <code>init-method</code> will be invoked after the bean is constructed, and the method specified by <code>destroy-method</code> will be invoked before the bean is removed from the container.
 </p>
@@ -260,6 +263,7 @@ Specify attributes <code>init-method</code> and <code>destroy-method</code> in a
       class="xxx.Resource"
       init-method="allocateResource"
       destroy-method="freeResource" /&gt;
+
 </pre>
 
 <p>
@@ -268,9 +272,9 @@ As the example shows, the required resources will be allocated after constructed
 </div>
 </div>
 
-<div id="outline-container-org20d6235" class="outline-3">
-<h3 id="org20d6235">Wiring beans through property setting methods</h3>
-<div class="outline-text-3" id="text-org20d6235">
+<div id="outline-container-orgf27bc69" class="outline-3">
+<h3 id="orgf27bc69">Wiring beans through property setting methods</h3>
+<div class="outline-text-3" id="text-orgf27bc69">
 <p>
 <code>&lt;property&gt;</code> is like <code>&lt;constructor-arg&gt;</code>, example:
 </p>
@@ -280,6 +284,7 @@ As the example shows, the required resources will be allocated after constructed
     &lt;property name="stringProperty" value="someValue" /&gt;
     &lt;property name="objectProperty" ref="beanId" /&gt;
 &lt;bean&gt;
+
 </pre>
 
 <p>
@@ -301,13 +306,14 @@ In the example above, if there are several <code>property</code>, and all of the
         &lt;bean class="package.path.InnerBean" /&gt;
     &lt;/property&gt;
 &lt;bean&gt;
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org011d8b8" class="outline-3">
-<h3 id="org011d8b8">Wiring collections</h3>
-<div class="outline-text-3" id="text-org011d8b8">
+<div id="outline-container-org283e781" class="outline-3">
+<h3 id="org283e781">Wiring collections</h3>
+<div class="outline-text-3" id="text-org283e781">
 <p>
 Elements for collection wiring:
 </p>
@@ -376,6 +382,7 @@ An example of <code>&lt;list&gt;</code> (<code>&lt;set&gt;</code> is similar):
         &lt;/list&gt;
     &lt;/property&gt;
 &lt;/bean&gt;
+
 </pre>
 
 <p>
@@ -392,6 +399,7 @@ An example of <code>&lt;map&gt;</code>:
         &lt;/map&gt;
     &lt;/property&gt;
 &lt;/bean&gt;
+
 </pre>
 
 <p>
@@ -412,13 +420,14 @@ An example of <code>&lt;props&gt;</code>:
         &lt;/props&gt;
     &lt;/property&gt;
 &lt;/bean&gt;
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org0c855fa" class="outline-3">
-<h3 id="org0c855fa">Wiring nothing(null)</h3>
-<div class="outline-text-3" id="text-org0c855fa">
+<div id="outline-container-org356099e" class="outline-3">
+<h3 id="org356099e">Wiring nothing(null)</h3>
+<div class="outline-text-3" id="text-org356099e">
 <p>
 Example:
 </p>
@@ -427,13 +436,14 @@ Example:
 &lt;property ...&gt;
     &lt;null /&gt;
 &lt;/property&gt;
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgfae839c" class="outline-3">
-<h3 id="orgfae839c">Spring expression language (SpEL):</h3>
-<div class="outline-text-3" id="text-orgfae839c">
+<div id="outline-container-org9cfe25b" class="outline-3">
+<h3 id="org9cfe25b">Spring expression language (SpEL):</h3>
+<div class="outline-text-3" id="text-org9cfe25b">
 <p>
 <b>This section is omitted.</b>
 </p>
@@ -441,18 +451,18 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-org05c4fa4" class="outline-2">
-<h2 id="org05c4fa4">Chapter 3 Minimizing XML configuration in Spring</h2>
-<div class="outline-text-2" id="text-org05c4fa4">
+<div id="outline-container-org1a87782" class="outline-2">
+<h2 id="org1a87782">Chapter 3 Minimizing XML configuration in Spring</h2>
+<div class="outline-text-2" id="text-org1a87782">
 <ul class="org-ul">
 <li>Autowiring helps reduce <code>&lt;property&gt;</code> and <code>&lt;constructor-arg&gt;</code>.</li>
 <li>Autodiscovery helps reduce <code>&lt;bean&gt;</code>.</li>
 </ul>
 </div>
 
-<div id="outline-container-org36f8d72" class="outline-3">
-<h3 id="org36f8d72">Automatically wiring</h3>
-<div class="outline-text-3" id="text-org36f8d72">
+<div id="outline-container-org62fac63" class="outline-3">
+<h3 id="org62fac63">Automatically wiring</h3>
+<div class="outline-text-3" id="text-org62fac63">
 <ul class="org-ul">
 <li><code>byName</code> : search beans, if a bean's id matches the property name, then it will be wired into this property</li>
 
@@ -465,15 +475,16 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-org8187b79" class="outline-3">
-<h3 id="org8187b79">Wiring with annotations</h3>
-<div class="outline-text-3" id="text-org8187b79">
+<div id="outline-container-org18a9e1e" class="outline-3">
+<h3 id="org18a9e1e">Wiring with annotations</h3>
+<div class="outline-text-3" id="text-org18a9e1e">
 <p>
 By default annotation wiring is turned off, use the following line to turn it on:
 </p>
 
 <pre class="example">
 &lt;context:annotation-config /&gt;
+
 </pre>
 
 <p>
@@ -492,9 +503,9 @@ Autowiring annotations:
 </div>
 </div>
 
-<div id="outline-container-org900e67e" class="outline-3">
-<h3 id="org900e67e">Automatically discovering</h3>
-<div class="outline-text-3" id="text-org900e67e">
+<div id="outline-container-org8dfef12" class="outline-3">
+<h3 id="org8dfef12">Automatically discovering</h3>
+<div class="outline-text-3" id="text-org8dfef12">
 <p>
 <code>&lt;context:annotation-config&gt;</code> is only used for automatically wiring, but <code>&lt;context:component-scan&gt;</code> will used for both autowiring, but also autodiscovery, as below:
 </p>
@@ -504,6 +515,7 @@ Autowiring annotations:
     &lt;context:component-scan base-package="com.mycompany.xxx"&gt;
     &lt;/context:component-scan&gt;
 &lt;/beans&gt;
+
 </pre>
 
 <p>
@@ -528,9 +540,9 @@ Annotations can be used:
 </div>
 </div>
 
-<div id="outline-container-orga4627a8" class="outline-3">
-<h3 id="orga4627a8">Java-based configuration</h3>
-<div class="outline-text-3" id="text-orga4627a8">
+<div id="outline-container-org2ec6f75" class="outline-3">
+<h3 id="org2ec6f75">Java-based configuration</h3>
+<div class="outline-text-3" id="text-org2ec6f75">
 <p>
 <b>not used so often, omitted</b>
 </p>
@@ -538,9 +550,9 @@ Annotations can be used:
 </div>
 </div>
 
-<div id="outline-container-org933aecc" class="outline-2">
-<h2 id="org933aecc">Chapter 4 Aspect-oriented Spring</h2>
-<div class="outline-text-2" id="text-org933aecc">
+<div id="outline-container-orgd0718d1" class="outline-2">
+<h2 id="orgd0718d1">Chapter 4 Aspect-oriented Spring</h2>
+<div class="outline-text-2" id="text-orgd0718d1">
 <p>
 AOP terminology
 </p>
@@ -608,9 +620,9 @@ An <i>introduction</i> allows to add new methods or attributes to existing class
 </ul>
 </div>
 
-<div id="outline-container-orge23192c" class="outline-3">
-<h3 id="orge23192c">Declaring aspects in XML</h3>
-<div class="outline-text-3" id="text-orge23192c">
+<div id="outline-container-org7eb1d5e" class="outline-3">
+<h3 id="org7eb1d5e">Declaring aspects in XML</h3>
+<div class="outline-text-3" id="text-org7eb1d5e">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -717,6 +729,7 @@ A typical configuration:
         &lt;aop:before pointcut-ref="aPointCut" method="aspectMethod" /&gt;
     &lt;/aop:aspect&gt;
 &lt;/aop:config&gt;
+
 </pre>
 
 <p>
@@ -729,6 +742,7 @@ But, for the type <code>&lt;aop:around&gt;</code>, it is not that simple like th
 
 <pre class="example">
 public void aspectMethod(ProceedingJoinPoint joinPoint)
+
 </pre>
 
 <p>
@@ -737,9 +751,9 @@ and the invocation of <code>joinPoint.proceed()</code> will invoke the advised m
 </div>
 </div>
 
-<div id="outline-container-orgad0790b" class="outline-3">
-<h3 id="orgad0790b">Annotating aspects</h3>
-<div class="outline-text-3" id="text-orgad0790b">
+<div id="outline-container-org8f5de83" class="outline-3">
+<h3 id="org8f5de83">Annotating aspects</h3>
+<div class="outline-text-3" id="text-org8f5de83">
 <p>
 <b>omitted</b>
 </p>
@@ -747,9 +761,9 @@ and the invocation of <code>joinPoint.proceed()</code> will invoke the advised m
 </div>
 </div>
 
-<div id="outline-container-org153479c" class="outline-2">
-<h2 id="org153479c">Chapter 5 Hitting the database</h2>
-<div class="outline-text-2" id="text-org153479c">
+<div id="outline-container-orgd36e758" class="outline-2">
+<h2 id="orgd36e758">Chapter 5 Hitting the database</h2>
+<div class="outline-text-2" id="text-orgd36e758">
 <p>
 Several options to configure a data source:
 </p>
@@ -766,9 +780,9 @@ PS: This chapter seems quite simple, no more to note.
 </div>
 </div>
 
-<div id="outline-container-org461e573" class="outline-2">
-<h2 id="org461e573">Chapter 6 Managing transactions</h2>
-<div class="outline-text-2" id="text-org461e573">
+<div id="outline-container-orgadffc96" class="outline-2">
+<h2 id="orgadffc96">Chapter 6 Managing transactions</h2>
+<div class="outline-text-2" id="text-orgadffc96">
 <p>
 A transaction manager should be chosen first: <code>DataSourceTransactionManager</code>, <code>HibernateTransactionManager</code>, etc.
 </p>

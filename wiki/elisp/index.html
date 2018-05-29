@@ -36,15 +36,16 @@
 这是一篇备忘性质的文章，主要记录我在Elisp编程过程中总结的一些比较有用的tips。会不定期更新。
 </p>
 
-<div id="outline-container-orgf4690ec" class="outline-2">
-<h2 id="orgf4690ec">正则表达式分组与匹配</h2>
-<div class="outline-text-2" id="text-orgf4690ec">
+<div id="outline-container-org89dd5e1" class="outline-2">
+<h2 id="org89dd5e1">正则表达式分组与匹配</h2>
+<div class="outline-text-2" id="text-org89dd5e1">
 <p>
 在用正则表达式进行搜索的时候，可以方便地按需要进行分组，假设buffer中有以下内容：
 </p>
 
 <pre class="example">
 this is group 1 :: this is group 2
+
 </pre>
 
 <p>
@@ -57,6 +58,7 @@ this is group 1 :: this is group 2
   (re-search-forward "^\\(.*\\) :: \\(.*\\)$" nil t)
   (setq key (match-string-no-properties 1 nil))
   (setq val (match-string-no-properties 2 nil)))
+
 </pre>
 
 <p>
@@ -69,9 +71,9 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 </div>
 </div>
 
-<div id="outline-container-orgc22e37a" class="outline-2">
-<h2 id="orgc22e37a">强大的 <code>format-spec</code> 函数</h2>
-<div class="outline-text-2" id="text-orgc22e37a">
+<div id="outline-container-org58ec054" class="outline-2">
+<h2 id="org58ec054">强大的 <code>format-spec</code> 函数</h2>
+<div class="outline-text-2" id="text-org58ec054">
 <p>
 灵活使用 <code>format-spec</code> 函数，可以定义多种多样的模板，有例为证：
 </p>
@@ -81,6 +83,7 @@ key的值是"this is group 1"，val的值是"this is group 2"。
          '((?a . "kelvin") (?e . "ini.kelvin@gmail.com")))
 
 =&gt; "author: kelvin, email: ini.kelvin@gmail.com"
+
 </pre>
 
 <p>
@@ -89,9 +92,9 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 </div>
 </div>
 
-<div id="outline-container-org1f91186" class="outline-2">
-<h2 id="org1f91186"><code>shell-command</code> 函数的工作目录</h2>
-<div class="outline-text-2" id="text-org1f91186">
+<div id="outline-container-org717150c" class="outline-2">
+<h2 id="org717150c"><code>shell-command</code> 函数的工作目录</h2>
+<div class="outline-text-2" id="text-org717150c">
 <p>
 默认情况下， <code>shell-command</code> 的工作目录是当前buffer对应文件所在的目录，但有时候需要在其它目录执行一个命令，比方说去某个git的repo执行一下 <code>git status</code> ，但是又不离开当前buffer，就需要change一下 <code>default-directory</code> 这个变量的值：
 </p>
@@ -99,6 +102,7 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 <pre class="example">
 (setq default-directory "/home/")
 (shell-command ...) # will be run under directory /home
+
 </pre>
 
 <p>
@@ -107,15 +111,16 @@ key的值是"this is group 1"，val的值是"this is group 2"。
 </div>
 </div>
 
-<div id="outline-container-org75f1ea6" class="outline-2">
-<h2 id="org75f1ea6">以字符串形式输出变量</h2>
-<div class="outline-text-2" id="text-org75f1ea6">
+<div id="outline-container-org5a6ba78" class="outline-2">
+<h2 id="org5a6ba78">以字符串形式输出变量</h2>
+<div class="outline-text-2" id="text-org5a6ba78">
 <p>
 在调试的过程中，有时我们需要看一个变量的内容，或者把一个变量的内容稍微做一些修改，于是，就需要用到 <code>prin1-to-string</code> 这个函数，再加上insert就perfect了：
 </p>
 
 <pre class="example">
 (insert (prin1-to-string var))  ;; 将var的内容以字符串形式插入到当前buffer
+
 </pre>
 
 <p>

@@ -36,9 +36,9 @@
 This file recorded notes during learning <i>Core Servlet and JSP</i>.
 </p>
 
-<div id="outline-container-org614d19e" class="outline-2">
-<h2 id="org614d19e">A sample <code>web.xml</code>:</h2>
-<div class="outline-text-2" id="text-org614d19e">
+<div id="outline-container-orgf8b4caa" class="outline-2">
+<h2 id="orgf8b4caa">A sample <code>web.xml</code>:</h2>
+<div class="outline-text-2" id="text-orgf8b4caa">
 <div class="org-src-container">
 <pre class="src src-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 
@@ -163,9 +163,9 @@ When defining the <code>&lt;location&gt;</code> of <code>&lt;error-page&gt;</cod
 </div>
 </div>
 
-<div id="outline-container-org7290ca9" class="outline-2">
-<h2 id="org7290ca9">HTTP/1.1 common request headers</h2>
-<div class="outline-text-2" id="text-org7290ca9">
+<div id="outline-container-orgfba4c51" class="outline-2">
+<h2 id="orgfba4c51">HTTP/1.1 common request headers</h2>
+<div class="outline-text-2" id="text-orgfba4c51">
 <ol class="org-ol">
 <li><code>Accept</code>: specify the MIME types that the browser can handle</li>
 
@@ -196,9 +196,9 @@ When defining the <code>&lt;location&gt;</code> of <code>&lt;error-page&gt;</cod
 </div>
 </div>
 
-<div id="outline-container-org0109a94" class="outline-2">
-<h2 id="org0109a94">HTTP/1.1 common response headers</h2>
-<div class="outline-text-2" id="text-org0109a94">
+<div id="outline-container-orgbee1dbc" class="outline-2">
+<h2 id="orgbee1dbc">HTTP/1.1 common response headers</h2>
+<div class="outline-text-2" id="text-orgbee1dbc">
 <ol class="org-ol">
 <li><code>Allow</code>: specify request methods the server supported</li>
 
@@ -222,6 +222,7 @@ When defining the <code>&lt;location&gt;</code> of <code>&lt;error-page&gt;</cod
 
 <pre class="example">
 Content-Disposition: attachment; filename=some-file-name
+
 </pre></li>
 
 <li><code>Content-Encoding</code>: the encoding used during response transmission</li>
@@ -236,6 +237,7 @@ Content-Disposition: attachment; filename=some-file-name
 
 <pre class="example">
 Content-Type: text/html; charset=utf-8
+
 </pre></li>
 
 <li><code>Expires</code>: see <code>Cache-Control</code> and <code>Pragma</code></li>
@@ -252,6 +254,7 @@ Content-Type: text/html; charset=utf-8
 
 <pre class="example">
 Refresh: 5; URL=http://host/path
+
 </pre></li>
 
 <li><code>Retry-After</code>: used with status code 503, tell the client to retry after the interval</li>

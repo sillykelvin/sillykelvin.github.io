@@ -56,6 +56,7 @@
 
 <pre class="example">
 void handler();
+
 </pre>
 
 <p>
@@ -64,6 +65,7 @@ void handler();
 
 <pre class="example">
 void handler(error_code ec);
+
 </pre>
 
 <p>
@@ -72,6 +74,7 @@ void handler(error_code ec);
 
 <pre class="example">
 void handler(error_code ec, size_t length);
+
 </pre>
 
 <p>
@@ -92,65 +95,81 @@ void handler(error_code ec, size_t length);
 <code>bind</code> 可以用来将用户提供的需要一个参数的函数转换成不需要参数的函数对象。绑定的值（在这个例子中是123）存储在函数对象内并且会被自动传递给用户指定的函数：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186646664/" title="bind-plain-function-one-var-zero-args by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7400/11186646664_83038e9c80_o.png" alt="bind plain function one var zero args"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind0.png" alt="boost-bind0.png" />
 </p>
+</div>
 
 <p>
 参数绑定也可以用于将类成员函数转换成零参数的函数对象。猿类们都知道，非静态成员函数需要一个隐式的 <code>this</code> 参数。这意味着需要绑定一个合适的类实例指针到这个函数对象：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186691485/" title="bind-member-function-one-var-zero-args by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3761/11186691485_7abb19f764_o.png" alt="bind member function one var zero args"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind1.png" alt="boost-bind1.png" />
 </p>
+</div>
 
 <p>
 相应地，隐式的 <code>this</code> 指针也可以显式地传递给需要一个参数的函数对象：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186786996/" title="bind-member-function-zero-vars-one-arg by kelvin_hu, on Flickr"><img src="http://farm4.staticflickr.com/3763/11186786996_123ea17f76_o.png" alt="bind member function zero vars one arg"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind2.png" alt="boost-bind2.png" />
 </p>
+</div>
 
 <p>
 函数对象经常同时使用提前绑定的参数和调用时才提供的参数。这个可以用成员函数来实现：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186780845/" title="bind-member-function-one-var-one-arg by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2860/11186780845_49ed0223d1_o.png" alt="bind member function one var one arg"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind3.png" alt="boost-bind3.png" />
 </p>
+</div>
 
 <p>
 当然也可以使用非成员函数：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186952943/" title="bind-plain-function-one-var-two-args by kelvin_hu, on Flickr"><img src="http://farm3.staticflickr.com/2888/11186952943_f43b8fbdbb_o.png" alt="bind plain function one var two args"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind4.png" alt="boost-bind4.png" />
 </p>
+</div>
 
 <p>
 有些时候函数对象被调用时会提供多余的参数，而这些参数是目标函数不需要的。 <code>bind</code> 会自动忽略这些多余的参数：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186896116/" title="bind-plain-function-one-var-two-args-second-ignored by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7452/11186896116_982d3ebebd_o.png" alt="bind plain function one var two args second ignored"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind5.png" alt="boost-bind5.png" />
 </p>
+</div>
 
 <p>
 这些多余的参数不需要一定在函数对象签名的最后：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186912194/" title="bind-plain-function-one-var-two-args-first-ignored by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7349/11186912194_6feb6a3e00_o.png" alt="bind plain function one var two args first ignored"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind6.png" alt="boost-bind6.png" />
 </p>
+</div>
 
 <p>
 最后， <code>bind</code> 还允许重新组织函数对象的参数顺序：
 </p>
 
-<p>
-<a href="http://www.flickr.com/photos/ini_always/11186950716/" title="bind-plain-function-one-var-two-args-reordered by kelvin_hu, on Flickr"><img src="http://farm8.staticflickr.com/7333/11186950716_4867598a6d_o.png" alt="bind plain function one var two args reordered"></a>
+
+<div class="figure">
+<p><img src="/assets/blog/2013/12/03/boost-bind-illustrated/boost-bind7.png" alt="boost-bind7.png" />
 </p>
+</div>
 
 <hr />
 
@@ -163,7 +182,7 @@ void handler(error_code ec, size_t length);
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2013-12-03</span>
-        <span title="last modification date" class="post-info">2016-07-28</span>
+        <span title="last modification date" class="post-info">2018-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/boost/">Boost</a>, <a href="/tags/c++/">C++</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>

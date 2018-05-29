@@ -41,9 +41,9 @@
 <li>目标：arch和mac os双系统共存（其实我的最终目的是只有arch，完全删除mac os，我对苹果的东西完全无爱，如果不是抽奖抽到的，我是不会主动去买苹果的东西的。但因为是第一次在mac上安装arch，所以先让mac os再存在一会儿，以免arch安装失败后没系统可用了，等摸清楚一些细节之后，就直接格整个硬盘只留arch）</li>
 </ul>
 
-<div id="outline-container-org3ff486b" class="outline-2">
-<h2 id="org3ff486b">Mac和PC的不同点</h2>
-<div class="outline-text-2" id="text-org3ff486b">
+<div id="outline-container-org91b4018" class="outline-2">
+<h2 id="org91b4018">Mac和PC的不同点</h2>
+<div class="outline-text-2" id="text-org91b4018">
 <ul class="org-ul">
 <li>mac引导程序是UEFI，而普通PC是BIOS</li>
 <li>mac的分区表是GPT，普通PC是MBR，MBR由于66字节的限制，只能有四个主分区，GPT没有这个限制</li>
@@ -56,9 +56,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgffbaec2" class="outline-2">
-<h2 id="orgffbaec2">过程</h2>
-<div class="outline-text-2" id="text-orgffbaec2">
+<div id="outline-container-org8757ad0" class="outline-2">
+<h2 id="org8757ad0">过程</h2>
+<div class="outline-text-2" id="text-org8757ad0">
 <ol class="org-ol">
 <li>使用dd命令制作用于安装的U盘，如何使用请自行google</li>
 <li>调整硬盘分区，这个可以使用mac os的Disk Utility完成，缩减mac os的硬盘分区大小，以空出一部分空间来安装archlinux</li>
@@ -73,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgf12bf2d" class="outline-2">
-<h2 id="orgf12bf2d">安装过程中的一些注意事项</h2>
-<div class="outline-text-2" id="text-orgf12bf2d">
+<div id="outline-container-org622a44b" class="outline-2">
+<h2 id="org622a44b">安装过程中的一些注意事项</h2>
+<div class="outline-text-2" id="text-org622a44b">
 <ol class="org-ol">
 <li>在对硬盘进行分区时，对硬盘分区的工具请选择gdisk/cgdisk，而不是常用的fdisk/cfdisk！！！因为Mac的分区表是GPT，fdisk/cfdisk只支持MBR，如果强行使用的话，就等着丢数据吧。。</li>
 
@@ -93,6 +93,7 @@ mount LABEL=EFI /boot/efi
 cp /boot/backup.efi /boot/efi/EFI/BOOT/BOOTX64.efi
 # 将我们刚刚backup的efi引导程序copy到这个boot分区，这里路径一定不能搞错！！
 # 据google到的小道消息，这个路径是苹果hard code指定的启动固件。。所以，拼写错了就找不到了。。
+
 </pre>
 
 <p>
@@ -110,9 +111,9 @@ cp /boot/backup.efi /boot/efi/EFI/BOOT/BOOTX64.efi
 </div>
 </div>
 
-<div id="outline-container-org83375eb" class="outline-2">
-<h2 id="org83375eb">附</h2>
-<div class="outline-text-2" id="text-org83375eb">
+<div id="outline-container-org135dfac" class="outline-2">
+<h2 id="org135dfac">附</h2>
+<div class="outline-text-2" id="text-org135dfac">
 <ol class="org-ol">
 <li>如果进入系统后触摸板无效，是因为驱动没有装好，安装 <code>xf86-input-synaptics</code> 即可。</li>
 
@@ -121,6 +122,7 @@ cp /boot/backup.efi /boot/efi/EFI/BOOT/BOOTX64.efi
 </p>
 <pre class="example">
 pointer = 1 2 3 5 4 6 7 8 9
+
 </pre>
 <p>
 注意4和5的位置，因为4和5分别代表上下滚动，所以将它们交换一下位置即可，修改完成后，记得执行 <code>xmodmap ~/.Xmodmap</code> 。

@@ -70,6 +70,7 @@ setSize(500, 400);
 
 <pre class="example">
 GroupLayout mainLayout = new GroupLayout(this);setLayout(mainLayout);
+
 </pre>
 
 <p>
@@ -79,6 +80,7 @@ GroupLayout mainLayout = new GroupLayout(this);setLayout(mainLayout);
 <pre class="example">
 GroupLayout mainLayout = new GroupLayout(getContentPane());
 getContentPane().setLayout(mainLayout);
+
 </pre>
 
 <p>
@@ -91,6 +93,7 @@ getContentPane().setLayout(mainLayout);
 
 <pre class="example">
 return getRootPane().getContentPane();
+
 </pre>
 
 <p>
@@ -99,6 +102,7 @@ return getRootPane().getContentPane();
 
 <pre class="example">
 return rootPane;
+
 </pre>
 
 <p>
@@ -111,6 +115,7 @@ return rootPane;
 
 <pre class="example">
 JRootPane rp = new JRootPane();
+
 </pre>
 
 <p>
@@ -134,6 +139,7 @@ Window.pack()
   -&gt; if (parent != host) {
          throw new IllegalArgumentException("GroupLayout can only be used with one Container at a time");
      }
+
 </pre>
 
 <p>
@@ -147,6 +153,7 @@ Window.pack()
 <pre class="example">
 GroupLayout layout = new GroupLayout(xxx1);
 xxx2.setLayout(mainLayout);
+
 </pre>
 
 <p>

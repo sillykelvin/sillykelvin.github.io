@@ -54,9 +54,9 @@
 下面，我就来演示一些包含无终结计算的代码片段，以及GCC(g++ 4.8.2)和Clang(clang++ 3.3)是如何来处理这些好玩但很脑残的代码的。（翻译君表示，原作者只测试了gcc和clang两种编译器，把巨硬家的MSVC给忽略了，而翻译君翻译的时候正好手边没有Windows环境，没法测试。不过，有热心人把在MSVC2013上的测试结果贴原文评论里了，翻译君看了一下，全部报错，而且错误信息莫名其妙，才知道作者不测试MSVC是有深刻原因的好吗！）
 </p>
 
-<div id="outline-container-org431a11b" class="outline-2">
-<h2 id="org431a11b">递归展开</h2>
-<div class="outline-text-2" id="text-org431a11b">
+<div id="outline-container-org6b83ce8" class="outline-2">
+<h2 id="org6b83ce8">递归展开</h2>
+<div class="outline-text-2" id="text-org6b83ce8">
 <p>
 在这个例子中，为了计算 <code>InfRec&lt;T&gt;::value</code> ，我们需要知道 <code>InfRec&lt; InfRec&lt;T&gt; &gt;::value</code> ，因此又需要知道 <code>InfRec&lt; InfRec&lt; InfRec&lt;T&gt; &gt; &gt;::value</code> ，由此无限循环下去……
 </p>
@@ -82,9 +82,9 @@ int main() {
 </div>
 </div>
 
-<div id="outline-container-org8d2553d" class="outline-2">
-<h2 id="org8d2553d">自我递归</h2>
-<div class="outline-text-2" id="text-org8d2553d">
+<div id="outline-container-orgae54ac9" class="outline-2">
+<h2 id="orgae54ac9">自我递归</h2>
+<div class="outline-text-2" id="text-orgae54ac9">
 <p>
 在这个例子中，为了计算 <code>SelfRec&lt;T&gt;::value</code> ，我们需要知道 <code>SelfRec&lt;T&gt;::value</code> ，也就是说，它的定义就是其本身。
 </p>
@@ -124,6 +124,7 @@ selfrec.cpp:9:32:   required from here
 selfrec.cpp:5:22: error: initializer invalid for static member with constructor
 selfrec.cpp:5:22: error: (an out of class initialization is required)
 selfrec.cpp:5:22: error: ‘SelfRec&lt;int&gt;::value’ cannot be initialized by a non-constant expression when being declared
+
 </pre>
 
 <p>
@@ -144,9 +145,9 @@ int main() {
 </div>
 </div>
 
-<div id="outline-container-org862e900" class="outline-2">
-<h2 id="org862e900">互相递归</h2>
-<div class="outline-text-2" id="text-org862e900">
+<div id="outline-container-org229d40a" class="outline-2">
+<h2 id="org229d40a">互相递归</h2>
+<div class="outline-text-2" id="text-org229d40a">
 <p>
 这个例子中，为了计算 <code>&lt;MutualRec&lt;A, B&gt;::value</code> ，我们需要知道 <code>MutualRec&lt;B, A&gt;::value</code> ，然后，就没有然后了……
 </p>
@@ -185,13 +186,14 @@ mutualrec.cpp:9:15: note: in instantiation of template class 'MutualRec&lt;float
         std::cout &lt;&lt; MutualRec&lt;float,int&gt;::value &lt;&lt; std::endl;
                      ^
 1 error generated.
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org5e53422" class="outline-2">
-<h2 id="org5e53422">自相矛盾</h2>
-<div class="outline-text-2" id="text-org5e53422">
+<div id="outline-container-org7d4e967" class="outline-2">
+<h2 id="org7d4e967">自相矛盾</h2>
+<div class="outline-text-2" id="text-org7d4e967">
 <p>
 从广义上来讲，这个例子中的定义并不是自相矛盾的，除了两个模板参数相同的情况。即 <code>Contra&lt;T, T&gt;::value</code> 被定义为 <code>Contra&lt;T, T&gt;::value</code> 的取反操作结果。
 </p>
@@ -235,6 +237,7 @@ contradict.cpp:5:20: error: (an out of class initialization is required)
 contradict.cpp:5:20: error: ‘Contra&lt;int, int&gt;::value’ cannot be initialized by a non-constant expression when being declared
 contradict.cpp:11: confused by earlier errors, bailing out
 Preprocessed source stored into /tmp/ccAf1N1I.out file, please attach this to your bugreport.
+
 </pre>
 
 <p>
@@ -243,9 +246,9 @@ Preprocessed source stored into /tmp/ccAf1N1I.out file, please attach this to yo
 </div>
 </div>
 
-<div id="outline-container-orgdc0b058" class="outline-2">
-<h2 id="orgdc0b058">罗素悖论（天哪，罗素悖论都出来了，翻译君压力山大……）</h2>
-<div class="outline-text-2" id="text-orgdc0b058">
+<div id="outline-container-orgf943f2b" class="outline-2">
+<h2 id="orgf943f2b">罗素悖论（天哪，罗素悖论都出来了，翻译君压力山大……）</h2>
+<div class="outline-text-2" id="text-orgf943f2b">
 <p>
 M是所有集合的集合，这些集合都不会包含自身为其元素。那么……请问，M包不包含它自己呢？
 </p>

@@ -36,18 +36,20 @@
 这是一篇备忘性质的文章，主要记录我在配置和管理CentOS服务器的过程中，遇到的一些问题及相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
 </p>
 
-<div id="outline-container-org9808a42" class="outline-2">
-<h2 id="org9808a42">yum related</h2>
-<div class="outline-text-2" id="text-org9808a42">
-</div><div id="outline-container-org59af3e2" class="outline-3">
-<h3 id="org59af3e2">error 404:</h3>
-<div class="outline-text-3" id="text-org59af3e2">
+<div id="outline-container-org844908f" class="outline-2">
+<h2 id="org844908f">yum related</h2>
+<div class="outline-text-2" id="text-org844908f">
+</div>
+<div id="outline-container-org3a1e2ec" class="outline-3">
+<h3 id="org3a1e2ec">error 404:</h3>
+<div class="outline-text-3" id="text-org3a1e2ec">
 <p>
 有时， <code>yum makecache</code> 或者其它命令可能会出现以下错误：
 </p>
 
 <pre class="example">
 [Errno 14] HTTP Error 404: Not Found
+
 </pre>
 
 <p>
@@ -56,9 +58,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgcb7d113" class="outline-3">
-<h3 id="orgcb7d113">Public key not installed:</h3>
-<div class="outline-text-3" id="text-orgcb7d113">
+<div id="outline-container-orgcba5f71" class="outline-3">
+<h3 id="orgcba5f71">Public key not installed:</h3>
+<div class="outline-text-3" id="text-orgcba5f71">
 <p>
 在安装软件包 <code>yum install xxx</code> 时出现 "Public key for * is not installed"：
 </p>
@@ -66,23 +68,26 @@
 <pre class="example">
 # 注意把以下命令末尾的版本改成对应的版本
 $ rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgcde0b92" class="outline-2">
-<h2 id="orgcde0b92">ftp related</h2>
-<div class="outline-text-2" id="text-orgcde0b92">
-</div><div id="outline-container-org733e9d1" class="outline-3">
-<h3 id="org733e9d1"><code>tar</code> error with ftp downloaded file:</h3>
-<div class="outline-text-3" id="text-org733e9d1">
+<div id="outline-container-orgc647706" class="outline-2">
+<h2 id="orgc647706">ftp related</h2>
+<div class="outline-text-2" id="text-orgc647706">
+</div>
+<div id="outline-container-org527d2d8" class="outline-3">
+<h3 id="org527d2d8"><code>tar</code> error with ftp downloaded file:</h3>
+<div class="outline-text-3" id="text-org527d2d8">
 <p>
 在解压用ftp下载的包时，出现以下错误：
 </p>
 
 <pre class="example">
 Tar: Exiting with failure status due to previous errors
+
 </pre>
 
 <p>
@@ -96,18 +101,20 @@ Tar: Exiting with failure status due to previous errors
 </div>
 </div>
 
-<div id="outline-container-org80a91c5" class="outline-2">
-<h2 id="org80a91c5">network related</h2>
-<div class="outline-text-2" id="text-org80a91c5">
-</div><div id="outline-container-org6be08df" class="outline-3">
-<h3 id="org6be08df">no network in a virtual machine:</h3>
-<div class="outline-text-3" id="text-org6be08df">
+<div id="outline-container-orgea2ab14" class="outline-2">
+<h2 id="orgea2ab14">network related</h2>
+<div class="outline-text-2" id="text-orgea2ab14">
+</div>
+<div id="outline-container-org98dd9a8" class="outline-3">
+<h3 id="org98dd9a8">no network in a virtual machine:</h3>
+<div class="outline-text-3" id="text-org98dd9a8">
 <p>
 虚拟机中，以minimal模式新安装的CentOS连不上Internet，因为默认eth0没有打开，编辑以下文件：
 </p>
 
 <pre class="example">
 /etc/sysconfig/network-scripts/ifcfg-eth0
+
 </pre>
 
 <p>
@@ -116,9 +123,9 @@ Tar: Exiting with failure status due to previous errors
 </div>
 </div>
 
-<div id="outline-container-orgc7b9e4d" class="outline-3">
-<h3 id="orgc7b9e4d">shutdown firewall:</h3>
-<div class="outline-text-3" id="text-orgc7b9e4d">
+<div id="outline-container-org5038557" class="outline-3">
+<h3 id="org5038557">shutdown firewall:</h3>
+<div class="outline-text-3" id="text-org5038557">
 <p>
 CentOS的防火墙默认打开，并且应用了很强的规则，这时候其它机器无法访问其apache等web服务，应用以下命令关闭防火墙（这并非最好的解决方式，最好的解决方式是配置防火墙规则，放行某些端口）：
 </p>
@@ -127,13 +134,14 @@ CentOS的防火墙默认打开，并且应用了很强的规则，这时候其�
 service iptables save
 service iptables stop
 chkconfig iptables off
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgf8aee33" class="outline-3">
-<h3 id="orgf8aee33">device "eth0" does not seem to be present:</h3>
-<div class="outline-text-3" id="text-orgf8aee33">
+<div id="outline-container-orgc96b836" class="outline-3">
+<h3 id="orgc96b836">device "eth0" does not seem to be present:</h3>
+<div class="outline-text-3" id="text-orgc96b836">
 <p>
 将一个虚拟机revert回某一个snapshot的时候，会报 <code>device "eth0" does not seem to be present</code> 的错误，打开 <code>/etc/sysconfig/network-scripts/ifcfg-eth0</code> ，会发现里面的MAC地址和Vmware虚拟机的settings里面的MAC address对不上。目测这应该是发生这个错误的原因所在。
 </p>
