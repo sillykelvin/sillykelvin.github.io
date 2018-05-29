@@ -57,7 +57,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 If /nCode/ is less than zero, the hook procedure must return the value returned by =CallNextHookEx=.
 
-If /nCode/ is greater than or equal to zero, and the hook procedure did not process the message, it is highly recommended that you call =CallNextHookEx= and return the value it returns; otherwise, other applications that have installed =WH_KEYBOARD_LL= hooks will not receive hook notifications and may behave incorrectly as a result. If the hook procedure processed the message, it may return a nonzero value to prevent the system from passing the messageto the rest of the hook chain or the target window procedure.
+If /nCode/ is greater than or equal to zero, and the hook procedure did not process the message, it is highly recommended that you call =CallNextHookEx= and return the value it returns; otherwise, other applications that have installed =WH_KEYBOARD_LL= hooks will not receive hook notifications and may behave incorrectly as a result. If the hook procedure processed the message, it may return a nonzero value to prevent the system from passing the message to the rest of the hook chain or the target window procedure.
 #+END_QUOTE
 
 按这里面的说明，如果已经处理了消息，就应该返回非零值防止系统传递这个消息，所以， =return 0;= 就会让系统继续传递这个消息，传递到魔兽那里后，它自然是按这个键的意思想干嘛就干嘛了。于是改成 =return 1;= 试试，结果就一切正常了。
