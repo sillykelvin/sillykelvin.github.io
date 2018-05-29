@@ -103,7 +103,7 @@ If <i>nCode</i> is less than zero, the hook procedure must return the value retu
 </p>
 
 <p>
-If <i>nCode</i> is greater than or equal to zero, and the hook procedure did not process the message, it is highly recommended that you call <code>CallNextHookEx</code> and return the value it returns; otherwise, other applications that have installed <code>WH_KEYBOARD_LL</code> hooks will not receive hook notifications and may behave incorrectly as a result. If the hook procedure processed the message, it may return a nonzero value to prevent the system from passing the messageto the rest of the hook chain or the target window procedure.
+If <i>nCode</i> is greater than or equal to zero, and the hook procedure did not process the message, it is highly recommended that you call <code>CallNextHookEx</code> and return the value it returns; otherwise, other applications that have installed <code>WH_KEYBOARD_LL</code> hooks will not receive hook notifications and may behave incorrectly as a result. If the hook procedure processed the message, it may return a nonzero value to prevent the system from passing the message to the rest of the hook chain or the target window procedure.
 </p>
 </blockquote>
 
@@ -120,7 +120,7 @@ If <i>nCode</i> is greater than or equal to zero, and the hook procedure did not
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2011-05-13</span>
-        <span title="last modification date" class="post-info">2013-06-13</span>
+        <span title="last modification date" class="post-info">2018-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/windows/">Windows</a>, <a href="/tags/c++/">C++</a>, <a href="/tags/misc/">Misc</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>

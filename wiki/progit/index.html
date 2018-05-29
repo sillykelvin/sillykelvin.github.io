@@ -36,9 +36,9 @@
 这是我读《Pro Git》这本书写的一点笔记和心得。我略过了自己在读这本书之前已经弄懂的，或者作为一个git使用者不需要去关心的内容，而详细写了自己不懂的地方，比方说子模块，我会一点一点去做实验，然后写下自己的实验心得。
 </p>
 
-<div id="outline-container-orgd229310" class="outline-2">
-<h2 id="orgd229310">起步</h2>
-<div class="outline-text-2" id="text-orgd229310">
+<div id="outline-container-orgab5be2a" class="outline-2">
+<h2 id="orgab5be2a">起步</h2>
+<div class="outline-text-2" id="text-orgab5be2a">
 <ul class="org-ul">
 <li>本地版本控制系统</li>
 <li>集中化版本控制系统（e.g. Perforce）</li>
@@ -50,9 +50,9 @@
 </p>
 </div>
 
-<div id="outline-container-orge16eeb2" class="outline-3">
-<h3 id="orge16eeb2">文件的三种状态</h3>
-<div class="outline-text-3" id="text-orge16eeb2">
+<div id="outline-container-org0b4533e" class="outline-3">
+<h3 id="org0b4533e">文件的三种状态</h3>
+<div class="outline-text-3" id="text-org0b4533e">
 <ul class="org-ul">
 <li>已提交（committed）：文件已保存在数据库中</li>
 <li>已修改（modified）：文件有修改，但尚未保存</li>
@@ -61,9 +61,9 @@
 </div>
 </div>
 
-<div id="outline-container-org6dd8c66" class="outline-3">
-<h3 id="org6dd8c66">配置文件</h3>
-<div class="outline-text-3" id="text-org6dd8c66">
+<div id="outline-container-org0906449" class="outline-3">
+<h3 id="org0906449">配置文件</h3>
+<div class="outline-text-3" id="text-org0906449">
 <p>
 git有三个level的配置文件：
 </p>
@@ -81,9 +81,9 @@ git有三个level的配置文件：
 </div>
 </div>
 
-<div id="outline-container-org6a59e89" class="outline-2">
-<h2 id="org6a59e89">基础</h2>
-<div class="outline-text-2" id="text-org6a59e89">
+<div id="outline-container-org76eb4d5" class="outline-2">
+<h2 id="org76eb4d5">基础</h2>
+<div class="outline-text-2" id="text-org76eb4d5">
 <p>
 .gitignore的规范：
 </p>
@@ -114,9 +114,9 @@ doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 </pre>
 </div>
 
-<div id="outline-container-org2c4157e" class="outline-3">
-<h3 id="org2c4157e">基本命令</h3>
-<div class="outline-text-3" id="text-org2c4157e">
+<div id="outline-container-orgcf0bf3b" class="outline-3">
+<h3 id="orgcf0bf3b">基本命令</h3>
+<div class="outline-text-3" id="text-orgcf0bf3b">
 <ul class="org-ul">
 <li><code>git add</code> ：将未跟踪、已修改的文件添加到暂存区</li>
 <li><code>git commit</code> ：提交已经添加到暂时区的文件</li>
@@ -140,9 +140,9 @@ doc/*.txt # 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 </div>
 </div>
 
-<div id="outline-container-org086eff1" class="outline-2">
-<h2 id="org086eff1">分支</h2>
-<div class="outline-text-2" id="text-org086eff1">
+<div id="outline-container-orge74c004" class="outline-2">
+<h2 id="orge74c004">分支</h2>
+<div class="outline-text-2" id="text-orge74c004">
 <p>
 Git每一次提交，都是创建了一棵树，树的叶子是blob对象，代表各个目录的文件，记录着这一次commit对于上一次commit的文件的改动。然后每个目录形成一个tree对象，记录着本目录中的文件和子目录，于是这样就形成了一棵类似于文件系统的树，除了叶子结点为blob对象代表文件外，其它结点为tree对象代表目录，最后的顶层结点代表project的根目录。最最后，有一个commit对象，其tree属性指向这个代表根目录的tree对象，同时，commit的另一个属性parent指向了上一次提交的commit对象。
 </p>
@@ -169,9 +169,9 @@ rebase：在某个分支的基础上，将另一个分支的改变全部整全�
 </div>
 </div>
 
-<div id="outline-container-org666ccae" class="outline-2">
-<h2 id="org666ccae">搭建服务器</h2>
-<div class="outline-text-2" id="text-org666ccae">
+<div id="outline-container-org703ecc9" class="outline-2">
+<h2 id="org703ecc9">搭建服务器</h2>
+<div class="outline-text-2" id="text-org703ecc9">
 <p>
 git访问的几种协议：
 </p>
@@ -189,22 +189,22 @@ git访问的几种协议：
 </div>
 </div>
 
-<div id="outline-container-org48ff293" class="outline-2">
-<h2 id="org48ff293">分布式</h2>
-<div class="outline-text-2" id="text-org48ff293">
+<div id="outline-container-orgef8f8b0" class="outline-2">
+<h2 id="orgef8f8b0">分布式</h2>
+<div class="outline-text-2" id="text-orgef8f8b0">
 <p>
 <b>本章讲如何进行多人同时协调工作，略。</b>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2adb17a" class="outline-2">
-<h2 id="org2adb17a">工具</h2>
-<div class="outline-text-2" id="text-org2adb17a">
+<div id="outline-container-orge2a8d0e" class="outline-2">
+<h2 id="orge2a8d0e">工具</h2>
+<div class="outline-text-2" id="text-orge2a8d0e">
 </div>
-<div id="outline-container-orga9a6051" class="outline-3">
-<h3 id="orga9a6051">修订版本（revision）选择</h3>
-<div class="outline-text-3" id="text-orga9a6051">
+<div id="outline-container-orgda5d276" class="outline-3">
+<h3 id="orgda5d276">修订版本（revision）选择</h3>
+<div class="outline-text-3" id="text-orgda5d276">
 <p>
 所谓的修订版本，就代指一次commit。git有各种各样强大的命令来选择某一个revision，或者某一个范围的revision。然后，就可以使用 <code>git log</code> 或者 <code>git show</code> 命令来显示这个revision或者这个范围的revision的信息。
 </p>
@@ -273,9 +273,9 @@ git log --left-right master...devel
 </div>
 </div>
 
-<div id="outline-container-org4ce1f79" class="outline-3">
-<h3 id="org4ce1f79">交互式暂存</h3>
-<div class="outline-text-3" id="text-org4ce1f79">
+<div id="outline-container-org050b742" class="outline-3">
+<h3 id="org050b742">交互式暂存</h3>
+<div class="outline-text-3" id="text-org050b742">
 <p>
 命令 <code>git add -i</code> 可以进行交互式暂存，包括以下操作：
 </p>
@@ -296,9 +296,9 @@ git log --left-right master...devel
 </div>
 </div>
 
-<div id="outline-container-org24feb48" class="outline-3">
-<h3 id="org24feb48">储藏（Stashing）</h3>
-<div class="outline-text-3" id="text-org24feb48">
+<div id="outline-container-orga721135" class="outline-3">
+<h3 id="orga721135">储藏（Stashing）</h3>
+<div class="outline-text-3" id="text-orga721135">
 <p>
 所谓的储藏，就是在工作了一段时间——修改或者添加了一些文件，并且已经暂存了部分文件之后，需要切换到其它分支，但是又不想提交这些还没完成的工作，那么就可以把这些工作先储藏起来，切换到其它分支工作，然后在需要的时候把储藏的工作再拿出来。
 </p>
@@ -332,9 +332,9 @@ git stash show -p stash@{0} | git apply -R
 </div>
 </div>
 
-<div id="outline-container-orgbdc3a55" class="outline-3">
-<h3 id="orgbdc3a55">修改提交历史</h3>
-<div class="outline-text-3" id="text-orgbdc3a55">
+<div id="outline-container-org1bdb5f1" class="outline-3">
+<h3 id="org1bdb5f1">修改提交历史</h3>
+<div class="outline-text-3" id="text-org1bdb5f1">
 <p>
 <b>注意，这部分涉及的命令基本都是rebase操作，也就是“破坏性”的，如果操作的提交已经push到服务器，建议不要执行这些操作。</b>
 </p>
@@ -474,9 +474,9 @@ git commit -m "remove extra 'dot' from README"  # 提交README文件
 </p>
 </div>
 
-<div id="outline-container-org200bc20" class="outline-4">
-<h4 id="org200bc20">核弹级选项：filter-branch</h4>
-<div class="outline-text-4" id="text-org200bc20">
+<div id="outline-container-orgea44135" class="outline-4">
+<h4 id="orgea44135">核弹级选项：filter-branch</h4>
+<div class="outline-text-4" id="text-orgea44135">
 <p>
 pro git直接把filter-branch命令为“核弹级选项”，应该是跟这个命令强大的力量有关，它能按
 照某些规则，一次操作大量的commit，如果使用得好，会产生很好的效果；如果使用不好，就会真的
@@ -510,9 +510,9 @@ git filter-branch --commit-filter '
 </div>
 </div>
 
-<div id="outline-container-org2072003" class="outline-3">
-<h3 id="org2072003">调试</h3>
-<div class="outline-text-3" id="text-org2072003">
+<div id="outline-container-org1ccb6e8" class="outline-3">
+<h3 id="org1ccb6e8">调试</h3>
+<div class="outline-text-3" id="text-org1ccb6e8">
 <p>
 主要是两个命令：
 </p>
@@ -571,9 +571,9 @@ git bisect run detect-bug.sh
 </div>
 </div>
 
-<div id="outline-container-orga841f50" class="outline-3">
-<h3 id="orga841f50">子模块</h3>
-<div class="outline-text-3" id="text-orga841f50">
+<div id="outline-container-org2be2c67" class="outline-3">
+<h3 id="org2be2c67">子模块</h3>
+<div class="outline-text-3" id="text-org2be2c67">
 <p>
 所谓子模块，就是把某个git的project，作为当前项目一个子模块，即形成了树关系。
 </p>
@@ -733,13 +733,13 @@ git commit -m "delete submodule 'lib'"
 </div>
 </div>
 
-<div id="outline-container-org84f406b" class="outline-2">
-<h2 id="org84f406b">自定义</h2>
-<div class="outline-text-2" id="text-org84f406b">
+<div id="outline-container-org3e18658" class="outline-2">
+<h2 id="org3e18658">自定义</h2>
+<div class="outline-text-2" id="text-org3e18658">
 </div>
-<div id="outline-container-orgb03b5da" class="outline-3">
-<h3 id="orgb03b5da">配置</h3>
-<div class="outline-text-3" id="text-orgb03b5da">
+<div id="outline-container-orga40cdd2" class="outline-3">
+<h3 id="orga40cdd2">配置</h3>
+<div class="outline-text-3" id="text-orga40cdd2">
 <p>
 git的配置存在于三个地方，/etc/gitconfig，~/.gitconfig，.git/config，优先级依次变高。
 </p>
@@ -834,9 +834,9 @@ git config --global diff.diff_wrapper.cmd \
 </div>
 </div>
 
-<div id="outline-container-org3040937" class="outline-3">
-<h3 id="org3040937">属性</h3>
-<div class="outline-text-3" id="text-org3040937">
+<div id="outline-container-orgb5cfc39" class="outline-3">
+<h3 id="orgb5cfc39">属性</h3>
+<div class="outline-text-3" id="text-orgb5cfc39">
 <p>
 git的属性配置在文件 <code>.gitattrubites</code> 中，个人感觉git属性的用处主要是下面几个：
 </p>
@@ -861,9 +861,9 @@ git config diff.exif.textconv exiftool
 </div>
 </div>
 
-<div id="outline-container-org3c6d6a0" class="outline-3">
-<h3 id="org3c6d6a0">钩子（hook）</h3>
-<div class="outline-text-3" id="text-org3c6d6a0">
+<div id="outline-container-orge2b0f42" class="outline-3">
+<h3 id="orge2b0f42">钩子（hook）</h3>
+<div class="outline-text-3" id="text-orge2b0f42">
 <p>
 钩子保存在 <code>.git/hooks</code> 目录中。可以是一些shell或者python脚本。用来在git的工作流程中做一些事情。
 </p>
@@ -875,18 +875,18 @@ git config diff.exif.textconv exiftool
 </div>
 </div>
 
-<div id="outline-container-orga7fd6c1" class="outline-2">
-<h2 id="orga7fd6c1">其它VCS</h2>
-<div class="outline-text-2" id="text-orga7fd6c1">
+<div id="outline-container-org18132bb" class="outline-2">
+<h2 id="org18132bb">其它VCS</h2>
+<div class="outline-text-2" id="text-org18132bb">
 <p>
 <b>基本是不会用到的，略之。</b>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org431eb3f" class="outline-2">
-<h2 id="org431eb3f">内部原理</h2>
-<div class="outline-text-2" id="text-org431eb3f">
+<div id="outline-container-orgd822793" class="outline-2">
+<h2 id="orgd822793">内部原理</h2>
+<div class="outline-text-2" id="text-orgd822793">
 <p>
 在执行 <code>git init</code> 之后，会在.git目录中生成以下目录和文件：
 </p>
@@ -914,9 +914,9 @@ index         # 暂存区文件
 </pre>
 </div>
 
-<div id="outline-container-org73f378b" class="outline-3">
-<h3 id="org73f378b">对象</h3>
-<div class="outline-text-3" id="text-org73f378b">
+<div id="outline-container-org7944fa8" class="outline-3">
+<h3 id="org7944fa8">对象</h3>
+<div class="outline-text-3" id="text-org7944fa8">
 <p>
 git对象是存储在 <code>.git/objects/</code> 中的，在初次提交后执行 <code>find .git/objects -type f</code> 命令，可以会有下面类似的输入（我用来测试的内容是提交了一个只写有一句"version 2"的test.txt文件）：
 </p>
@@ -957,9 +957,9 @@ git对象是存储在 <code>.git/objects/</code> 中的，在初次提交后执�
 </div>
 </div>
 
-<div id="outline-container-org5cb472b" class="outline-3">
-<h3 id="org5cb472b">对象存储</h3>
-<div class="outline-text-3" id="text-org5cb472b">
+<div id="outline-container-orgf7321ad" class="outline-3">
+<h3 id="orgf7321ad">对象存储</h3>
+<div class="outline-text-3" id="text-orgf7321ad">
 <p>
 先解出一个对象看看里面的内容，以上面的blob——test.txt文件为例，用以下python脚本去解：
 </p>
@@ -995,9 +995,9 @@ git对象是存储在 <code>.git/objects/</code> 中的，在初次提交后执�
 </div>
 </div>
 
-<div id="outline-container-orgc4428de" class="outline-3">
-<h3 id="orgc4428de">分支引用、标签</h3>
-<div class="outline-text-3" id="text-orgc4428de">
+<div id="outline-container-org37c1b56" class="outline-3">
+<h3 id="org37c1b56">分支引用、标签</h3>
+<div class="outline-text-3" id="text-org37c1b56">
 <p>
 分支引用就是指向某一个commit的指针，存储在目录 <code>.git/refs/heads</code> 中，而标签也是指向commit的指针，只不过标签是不变的，永远指向某个commit，标签存储在 <code>.git/refs/tags</code> 目录中。
 </p>
@@ -1032,9 +1032,9 @@ HEAD指针是一个特殊的指针，它指向一个分支引用：
 </div>
 </div>
 
-<div id="outline-container-orgbfa135d" class="outline-3">
-<h3 id="orgbfa135d">仓库压缩</h3>
-<div class="outline-text-3" id="text-orgbfa135d">
+<div id="outline-container-org3ca5afa" class="outline-3">
+<h3 id="org3ca5afa">仓库压缩</h3>
+<div class="outline-text-3" id="text-org3ca5afa">
 <p>
 假设有一个大文件，大概20KB，在添加了一行之后，再进行commit，git仍然保存了整个修改过的文件，而不是这个文件和前一个文件diff之后的那一行的内容。所以，在上一个commit，这个blob对象可能大概占用12KB空间，而这次添加了一行之后，它依然会生成一个占用12KB空间的blob对象，虽然其实只是添加了一行内容。
 </p>
@@ -1045,9 +1045,9 @@ HEAD指针是一个特殊的指针，它指向一个分支引用：
 </div>
 </div>
 
-<div id="outline-container-org52bb432" class="outline-3">
-<h3 id="org52bb432">refspec</h3>
-<div class="outline-text-3" id="text-org52bb432">
+<div id="outline-container-org02a1368" class="outline-3">
+<h3 id="org02a1368">refspec</h3>
+<div class="outline-text-3" id="text-org02a1368">
 <p>
 所谓refspec，就是远程仓库分支到本地分支的映射，保存在 <code>.git/config</code> 的 <code>[remote]</code> 区。包括fetch和push，可能看起来像这样：
 </p>
@@ -1071,9 +1071,9 @@ HEAD指针是一个特殊的指针，它指向一个分支引用：
 </div>
 </div>
 
-<div id="outline-container-orgaa7727a" class="outline-3">
-<h3 id="orgaa7727a">传输协议</h3>
-<div class="outline-text-3" id="text-orgaa7727a">
+<div id="outline-container-orgf6a55fb" class="outline-3">
+<h3 id="orgf6a55fb">传输协议</h3>
+<div class="outline-text-3" id="text-orgf6a55fb">
 <p>
 <b>这应该是Linus才需要关心的内容，作为一个使用者，就不关心这种太过底层的东西了，略之。</b>
 </p>

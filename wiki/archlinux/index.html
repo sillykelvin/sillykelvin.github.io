@@ -36,17 +36,17 @@
 这是一篇备忘性质的文章，主要记录我在使用Archlinux的过程中，遇到的一些问题及相应的解决办法，以及一些比较有用的命令或者tips。会不定期更新。
 </p>
 
-<div id="outline-container-orgbd81f69" class="outline-2">
-<h2 id="orgbd81f69">sudo related</h2>
-<div class="outline-text-2" id="text-orgbd81f69">
+<div id="outline-container-org3b023f8" class="outline-2">
+<h2 id="org3b023f8">sudo related</h2>
+<div class="outline-text-2" id="text-org3b023f8">
 <p>
 For other more <code>sudoers</code> configuration, please see this <a href="https://wiki.archlinux.org/index.php/Sudo">wiki page</a>.
 </p>
 </div>
 
-<div id="outline-container-org73d87f2" class="outline-3">
-<h3 id="org73d87f2">add a user to sudoers file:</h3>
-<div class="outline-text-3" id="text-org73d87f2">
+<div id="outline-container-orgc11d6ee" class="outline-3">
+<h3 id="orgc11d6ee">add a user to sudoers file:</h3>
+<div class="outline-text-3" id="text-orgc11d6ee">
 <p>
 Users who do not exist in <code>/etc/sudoers</code> will not have permission to run command <code>sudo ...</code>, add the following line to this file:
 </p>
@@ -62,9 +62,9 @@ Now the user <i>&lt;username&gt;</i> will have the root privileges.
 </div>
 </div>
 
-<div id="outline-container-org5b1fddd" class="outline-3">
-<h3 id="org5b1fddd">make a user password needless:</h3>
-<div class="outline-text-3" id="text-org5b1fddd">
+<div id="outline-container-org4f77d82" class="outline-3">
+<h3 id="org4f77d82">make a user password needless:</h3>
+<div class="outline-text-3" id="text-org4f77d82">
 <p>
 Input password every time when you run <code>sudo ...</code> is really annoying, put the following line into <code>/etc/sudoers/</code>:
 </p>
@@ -81,13 +81,13 @@ Now the user <i>&lt;username&gt;</i> will not need to input password any more wh
 </div>
 </div>
 
-<div id="outline-container-orga261e0d" class="outline-2">
-<h2 id="orga261e0d">wireless related</h2>
-<div class="outline-text-2" id="text-orga261e0d">
+<div id="outline-container-org5bb9631" class="outline-2">
+<h2 id="org5bb9631">wireless related</h2>
+<div class="outline-text-2" id="text-org5bb9631">
 </div>
-<div id="outline-container-org87ad2d2" class="outline-3">
-<h3 id="org87ad2d2">set up connection using netcfg, with WPA:</h3>
-<div class="outline-text-3" id="text-org87ad2d2">
+<div id="outline-container-org7a33ec4" class="outline-3">
+<h3 id="org7a33ec4">set up connection using netcfg, with WPA:</h3>
+<div class="outline-text-3" id="text-org7a33ec4">
 <pre class="example">
 touch /etc/network.d/home  # the file name can be whatever you like
 vi /etc/network.d/home
@@ -142,13 +142,13 @@ Command <code>wifi-menu</code> is also very useful in package <i>netcfg</i>.
 </div>
 </div>
 
-<div id="outline-container-org92e467c" class="outline-2">
-<h2 id="org92e467c">pacman related</h2>
-<div class="outline-text-2" id="text-org92e467c">
+<div id="outline-container-orgc6c57c1" class="outline-2">
+<h2 id="orgc6c57c1">pacman related</h2>
+<div class="outline-text-2" id="text-orgc6c57c1">
 </div>
-<div id="outline-container-org4aa8d1c" class="outline-3">
-<h3 id="org4aa8d1c">query the package that a file belongs to:</h3>
-<div class="outline-text-3" id="text-org4aa8d1c">
+<div id="outline-container-org546dcd0" class="outline-3">
+<h3 id="org546dcd0">query the package that a file belongs to:</h3>
+<div class="outline-text-3" id="text-org546dcd0">
 <pre class="example">
 pacman -Qo /path/to/file
 
@@ -156,9 +156,9 @@ pacman -Qo /path/to/file
 </div>
 </div>
 
-<div id="outline-container-orgddd4938" class="outline-3">
-<h3 id="orgddd4938">updating error:</h3>
-<div class="outline-text-3" id="text-orgddd4938">
+<div id="outline-container-org212cd10" class="outline-3">
+<h3 id="org212cd10">updating error:</h3>
+<div class="outline-text-3" id="text-org212cd10">
 <p>
 When updating archlinux through pacman with <code>pacman -Syu</code>, below error occurs:
 </p>
@@ -186,13 +186,13 @@ SigLevel  = Optional TrustAll
 </div>
 </div>
 
-<div id="outline-container-org421f7d3" class="outline-2">
-<h2 id="org421f7d3">usefull commands</h2>
-<div class="outline-text-2" id="text-org421f7d3">
+<div id="outline-container-orgb51d943" class="outline-2">
+<h2 id="orgb51d943">usefull commands</h2>
+<div class="outline-text-2" id="text-orgb51d943">
 </div>
-<div id="outline-container-org7867049" class="outline-3">
-<h3 id="org7867049">查看端口占用情况</h3>
-<div class="outline-text-3" id="text-org7867049">
+<div id="outline-container-org2a16af1" class="outline-3">
+<h3 id="org2a16af1">查看端口占用情况</h3>
+<div class="outline-text-3" id="text-org2a16af1">
 <pre class="example">
 netstat -anput
 
@@ -225,9 +225,9 @@ lsof -i :8080
 </div>
 </div>
 
-<div id="outline-container-org8b8c798" class="outline-3">
-<h3 id="org8b8c798">lookup binary dependency</h3>
-<div class="outline-text-3" id="text-org8b8c798">
+<div id="outline-container-orgd906fcc" class="outline-3">
+<h3 id="orgd906fcc">lookup binary dependency</h3>
+<div class="outline-text-3" id="text-orgd906fcc">
 <pre class="example">
 ldd [-v] &lt;path/to/binary&gt;
 
@@ -245,13 +245,13 @@ readelf
 </div>
 </div>
 
-<div id="outline-container-orgcd32f5c" class="outline-2">
-<h2 id="orgcd32f5c">emacs related</h2>
-<div class="outline-text-2" id="text-orgcd32f5c">
+<div id="outline-container-orgf2d7feb" class="outline-2">
+<h2 id="orgf2d7feb">emacs related</h2>
+<div class="outline-text-2" id="text-orgf2d7feb">
 </div>
-<div id="outline-container-org7ef0c12" class="outline-3">
-<h3 id="org7ef0c12">emacs/fcitx快捷键冲突</h3>
-<div class="outline-text-3" id="text-org7ef0c12">
+<div id="outline-container-org713f719" class="outline-3">
+<h3 id="org713f719">emacs/fcitx快捷键冲突</h3>
+<div class="outline-text-3" id="text-org713f719">
 <p>
 Emacs选择的默认快捷键是Ctrl + Space，和fcitx的激活快捷键Ctrl + Space冲突。
 </p>
@@ -276,9 +276,9 @@ IMSwitchHotkey=ALT_SUPER  # default value is CTRL_SHIFT
 </div>
 </div>
 
-<div id="outline-container-orga61aa55" class="outline-3">
-<h3 id="orga61aa55">emacs中文输入</h3>
-<div class="outline-text-3" id="text-orga61aa55">
+<div id="outline-container-org4b73ff5" class="outline-3">
+<h3 id="org4b73ff5">emacs中文输入</h3>
+<div class="outline-text-3" id="text-org4b73ff5">
 <p>
 要在emacs中输入中文，还需要设置LC_CTYPE为zh_CN.UTF-8，不然依旧无法输入。比较好的解决方法：
 </p>
@@ -308,13 +308,13 @@ LC_CTYPE=zh_CN.UTF-8
 </div>
 </div>
 
-<div id="outline-container-orga989bc2" class="outline-2">
-<h2 id="orga989bc2">mplayer related</h2>
-<div class="outline-text-2" id="text-orga989bc2">
+<div id="outline-container-org64baa69" class="outline-2">
+<h2 id="org64baa69">mplayer related</h2>
+<div class="outline-text-2" id="text-org64baa69">
 </div>
-<div id="outline-container-orgf4561aa" class="outline-3">
-<h3 id="orgf4561aa">改变音轨</h3>
-<div class="outline-text-3" id="text-orgf4561aa">
+<div id="outline-container-org177e395" class="outline-3">
+<h3 id="org177e395">改变音轨</h3>
+<div class="outline-text-3" id="text-org177e395">
 <p>
 有些电影本身就是双语的，这时候只需要切换一下音轨就可以了：
 </p>
@@ -330,9 +330,9 @@ mplayer ... -aid 0/1 (for more than one language)
 </div>
 </div>
 
-<div id="outline-container-org267df4a" class="outline-3">
-<h3 id="org267df4a">字幕乱码</h3>
-<div class="outline-text-3" id="text-org267df4a">
+<div id="outline-container-org506ba6c" class="outline-3">
+<h3 id="org506ba6c">字幕乱码</h3>
+<div class="outline-text-3" id="text-org506ba6c">
 <p>
 不太清楚mplayer默认使用的是什么编码，但肯定有些字幕采用的编码和mplayer默认使用的编码不同，这就导致播放的时候会乱码，但因为大家都是天朝人，所以还是可以大致猜到字幕的编码的，一般情况加上下面的参数就OK了：
 </p>
@@ -349,9 +349,9 @@ mplayer ... -subcp cp936
 </div>
 </div>
 
-<div id="outline-container-org4f8f16f" class="outline-2">
-<h2 id="org4f8f16f">终端某些文字显示为白色小方块</h2>
-<div class="outline-text-2" id="text-org4f8f16f">
+<div id="outline-container-org2f3cf3d" class="outline-2">
+<h2 id="org2f3cf3d">终端某些文字显示为白色小方块</h2>
+<div class="outline-text-2" id="text-org2f3cf3d">
 <p>
 因为locale选了其它语言，但又没安装其它语言的字体，所以显示小方块。
 </p>
@@ -362,9 +362,9 @@ mplayer ... -subcp cp936
 </div>
 </div>
 
-<div id="outline-container-org181cb8e" class="outline-2">
-<h2 id="org181cb8e">NTFS partitions</h2>
-<div class="outline-text-2" id="text-org181cb8e">
+<div id="outline-container-orgb02d657" class="outline-2">
+<h2 id="orgb02d657">NTFS partitions</h2>
+<div class="outline-text-2" id="text-orgb02d657">
 <p>
 when writing files to NTFS partitions, it will raise an error:
 </p>

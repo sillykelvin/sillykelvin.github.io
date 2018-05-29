@@ -40,9 +40,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 但悲剧的是，Apache httpd只是说在2.2.24以后的版本，或者2.4.x版本才会包括这个选项，公司server的2.2.15并没有这个设置项。。而且，CentOS把httpd和mod_ssl作为两个package给分开了，这个选项的开关是在mod_ssl里面。。再次而且，由于防火墙的限制，server上是不能访问外网的，所以只能自己下载ssl module的source code和patch，自己编译了。但实际上mod_ssl已经和httpd整合在一起了，所以需要下载整个httpd的source code进行编译。（真想不通CentOS为什么要把两者分开。。。）
 </p>
 
-<div id="outline-container-org37c8c45" class="outline-2">
-<h2 id="org37c8c45">下载httpd 2.2.23的source code</h2>
-<div class="outline-text-2" id="text-org37c8c45">
+<div id="outline-container-orgcca7c7a" class="outline-2">
+<h2 id="orgcca7c7a">下载httpd 2.2.23的source code</h2>
+<div class="outline-text-2" id="text-orgcca7c7a">
 <p>
 这个就不用多说了吧。。在这里：<a href="http://httpd.apache.org/download.cgi">http://httpd.apache.org/download.cgi</a>
 </p>
@@ -56,9 +56,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 </div>
 </div>
 
-<div id="outline-container-org66b81e3" class="outline-2">
-<h2 id="org66b81e3">安装patch</h2>
-<div class="outline-text-2" id="text-org66b81e3">
+<div id="outline-container-org6a8625a" class="outline-2">
+<h2 id="org6a8625a">安装patch</h2>
+<div class="outline-text-2" id="text-org6a8625a">
 <p>
 根据前面的链接，顺利找到patch，下载并安装（注意我们是在httpd的解压目录里面）：
 </p>
@@ -75,9 +75,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 </div>
 </div>
 
-<div id="outline-container-org07a5bfb" class="outline-2">
-<h2 id="org07a5bfb">configure &amp; make</h2>
-<div class="outline-text-2" id="text-org07a5bfb">
+<div id="outline-container-orgfc9d33d" class="outline-2">
+<h2 id="orgfc9d33d">configure &amp; make</h2>
+<div class="outline-text-2" id="text-orgfc9d33d">
 <p>
 实际上我只需要编译出ssl的module就行了，可是按正常的：
 </p>
@@ -113,9 +113,9 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
 </div>
 </div>
 
-<div id="outline-container-org5843281" class="outline-2">
-<h2 id="org5843281">安装编译后的mod_ssl</h2>
-<div class="outline-text-2" id="text-org5843281">
+<div id="outline-container-org00f49d2" class="outline-2">
+<h2 id="org00f49d2">安装编译后的mod_ssl</h2>
+<div class="outline-text-2" id="text-org00f49d2">
 <p>
 下面就直接安装编译好的mod_ssl就可以了：
 </p>
@@ -159,7 +159,7 @@ Team的一台web server，被公司负责安全的team扫出了security issue，
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2013-02-05</span>
-        <span title="last modification date" class="post-info">2013-05-30</span>
+        <span title="last modification date" class="post-info">2018-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/apache/">Apache</a>, <a href="/tags/http/">HTTP</a>, <a href="/tags/security/">Security</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>

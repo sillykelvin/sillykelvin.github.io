@@ -41,9 +41,9 @@
 <li>目标：arch和mac os双系统共存（其实我的最终目的是只有arch，完全删除mac os，我对苹果的东西完全无爱，如果不是抽奖抽到的，我是不会主动去买苹果的东西的。但因为是第一次在mac上安装arch，所以先让mac os再存在一会儿，以免arch安装失败后没系统可用了，等摸清楚一些细节之后，就直接格整个硬盘只留arch）</li>
 </ul>
 
-<div id="outline-container-org91b4018" class="outline-2">
-<h2 id="org91b4018">Mac和PC的不同点</h2>
-<div class="outline-text-2" id="text-org91b4018">
+<div id="outline-container-orgfacd01c" class="outline-2">
+<h2 id="orgfacd01c">Mac和PC的不同点</h2>
+<div class="outline-text-2" id="text-orgfacd01c">
 <ul class="org-ul">
 <li>mac引导程序是UEFI，而普通PC是BIOS</li>
 <li>mac的分区表是GPT，普通PC是MBR，MBR由于66字节的限制，只能有四个主分区，GPT没有这个限制</li>
@@ -56,9 +56,9 @@
 </div>
 </div>
 
-<div id="outline-container-org8757ad0" class="outline-2">
-<h2 id="org8757ad0">过程</h2>
-<div class="outline-text-2" id="text-org8757ad0">
+<div id="outline-container-org688bb33" class="outline-2">
+<h2 id="org688bb33">过程</h2>
+<div class="outline-text-2" id="text-org688bb33">
 <ol class="org-ol">
 <li>使用dd命令制作用于安装的U盘，如何使用请自行google</li>
 <li>调整硬盘分区，这个可以使用mac os的Disk Utility完成，缩减mac os的硬盘分区大小，以空出一部分空间来安装archlinux</li>
@@ -73,9 +73,9 @@
 </div>
 </div>
 
-<div id="outline-container-org622a44b" class="outline-2">
-<h2 id="org622a44b">安装过程中的一些注意事项</h2>
-<div class="outline-text-2" id="text-org622a44b">
+<div id="outline-container-org26f4b2d" class="outline-2">
+<h2 id="org26f4b2d">安装过程中的一些注意事项</h2>
+<div class="outline-text-2" id="text-org26f4b2d">
 <ol class="org-ol">
 <li>在对硬盘进行分区时，对硬盘分区的工具请选择gdisk/cgdisk，而不是常用的fdisk/cfdisk！！！因为Mac的分区表是GPT，fdisk/cfdisk只支持MBR，如果强行使用的话，就等着丢数据吧。。</li>
 
@@ -111,9 +111,9 @@ cp /boot/backup.efi /boot/efi/EFI/BOOT/BOOTX64.efi
 </div>
 </div>
 
-<div id="outline-container-org135dfac" class="outline-2">
-<h2 id="org135dfac">附</h2>
-<div class="outline-text-2" id="text-org135dfac">
+<div id="outline-container-orgc403509" class="outline-2">
+<h2 id="orgc403509">附</h2>
+<div class="outline-text-2" id="text-orgc403509">
 <ol class="org-ol">
 <li>如果进入系统后触摸板无效，是因为驱动没有装好，安装 <code>xf86-input-synaptics</code> 即可。</li>
 
@@ -136,7 +136,7 @@ pointer = 1 2 3 5 4 6 7 8 9
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2012-09-05</span>
-        <span title="last modification date" class="post-info">2013-06-30</span>
+        <span title="last modification date" class="post-info">2018-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/linux/">Linux</a>, <a href="/tags/archlinux/">Archlinux</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>

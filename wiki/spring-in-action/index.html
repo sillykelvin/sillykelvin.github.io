@@ -36,9 +36,9 @@
 This file recorded all the notes during learning <i>Spring in Action 3rd Edition</i>, I did not complete the book, and may continue to finish reading it later.
 </p>
 
-<div id="outline-container-org891667b" class="outline-2">
-<h2 id="org891667b">Chapter 2 Wiring beans</h2>
-<div class="outline-text-2" id="text-org891667b">
+<div id="outline-container-org4766b0a" class="outline-2">
+<h2 id="org4766b0a">Chapter 2 Wiring beans</h2>
+<div class="outline-text-2" id="text-org4766b0a">
 <p>
 All namespaces could be contained in spring xml configuration file:
 </p>
@@ -111,9 +111,9 @@ All namespaces could be contained in spring xml configuration file:
 </table>
 </div>
 
-<div id="outline-container-org1256210" class="outline-3">
-<h3 id="org1256210">Wiring beans through constructor</h3>
-<div class="outline-text-3" id="text-org1256210">
+<div id="outline-container-org9ec0884" class="outline-3">
+<h3 id="org9ec0884">Wiring beans through constructor</h3>
+<div class="outline-text-3" id="text-org9ec0884">
 <p>
 The bean below will be wired by its default constructor:
 </p>
@@ -141,9 +141,9 @@ The example above will use the constructor which has two args, 1st one is basic 
 </div>
 </div>
 
-<div id="outline-container-org8ddb675" class="outline-3">
-<h3 id="org8ddb675">Wiring beans through factory method</h3>
-<div class="outline-text-3" id="text-org8ddb675">
+<div id="outline-container-orgb274271" class="outline-3">
+<h3 id="orgb274271">Wiring beans through factory method</h3>
+<div class="outline-text-3" id="text-orgb274271">
 <p>
 Some definition of classes may not have a visible constructor, an example is the singleton bean definition, as below:
 </p>
@@ -176,9 +176,9 @@ Under this condition, we can use following to construct the bean:
 </div>
 </div>
 
-<div id="outline-container-orgfb03734" class="outline-3">
-<h3 id="orgfb03734">Bean scoping</h3>
-<div class="outline-text-3" id="text-orgfb03734">
+<div id="outline-container-org0b5257a" class="outline-3">
+<h3 id="org0b5257a">Bean scoping</h3>
+<div class="outline-text-3" id="text-org0b5257a">
 <p>
 The definition of bean scope is as following:
 </p>
@@ -251,9 +251,9 @@ The definition of bean scope is as following:
 </div>
 </div>
 
-<div id="outline-container-org09866f0" class="outline-3">
-<h3 id="org09866f0">Initializing and destroying</h3>
-<div class="outline-text-3" id="text-org09866f0">
+<div id="outline-container-orgbc59b7c" class="outline-3">
+<h3 id="orgbc59b7c">Initializing and destroying</h3>
+<div class="outline-text-3" id="text-orgbc59b7c">
 <p>
 Specify attributes <code>init-method</code> and <code>destroy-method</code> in a bean definition, the method specified by <code>init-method</code> will be invoked after the bean is constructed, and the method specified by <code>destroy-method</code> will be invoked before the bean is removed from the container.
 </p>
@@ -272,9 +272,9 @@ As the example shows, the required resources will be allocated after constructed
 </div>
 </div>
 
-<div id="outline-container-orgf27bc69" class="outline-3">
-<h3 id="orgf27bc69">Wiring beans through property setting methods</h3>
-<div class="outline-text-3" id="text-orgf27bc69">
+<div id="outline-container-orge1dae16" class="outline-3">
+<h3 id="orge1dae16">Wiring beans through property setting methods</h3>
+<div class="outline-text-3" id="text-orge1dae16">
 <p>
 <code>&lt;property&gt;</code> is like <code>&lt;constructor-arg&gt;</code>, example:
 </p>
@@ -311,9 +311,9 @@ In the example above, if there are several <code>property</code>, and all of the
 </div>
 </div>
 
-<div id="outline-container-org283e781" class="outline-3">
-<h3 id="org283e781">Wiring collections</h3>
-<div class="outline-text-3" id="text-org283e781">
+<div id="outline-container-org3b06807" class="outline-3">
+<h3 id="org3b06807">Wiring collections</h3>
+<div class="outline-text-3" id="text-org3b06807">
 <p>
 Elements for collection wiring:
 </p>
@@ -425,9 +425,9 @@ An example of <code>&lt;props&gt;</code>:
 </div>
 </div>
 
-<div id="outline-container-org356099e" class="outline-3">
-<h3 id="org356099e">Wiring nothing(null)</h3>
-<div class="outline-text-3" id="text-org356099e">
+<div id="outline-container-orgd6645b3" class="outline-3">
+<h3 id="orgd6645b3">Wiring nothing(null)</h3>
+<div class="outline-text-3" id="text-orgd6645b3">
 <p>
 Example:
 </p>
@@ -441,9 +441,9 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-org9cfe25b" class="outline-3">
-<h3 id="org9cfe25b">Spring expression language (SpEL):</h3>
-<div class="outline-text-3" id="text-org9cfe25b">
+<div id="outline-container-org5bf84fe" class="outline-3">
+<h3 id="org5bf84fe">Spring expression language (SpEL):</h3>
+<div class="outline-text-3" id="text-org5bf84fe">
 <p>
 <b>This section is omitted.</b>
 </p>
@@ -451,18 +451,18 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-org1a87782" class="outline-2">
-<h2 id="org1a87782">Chapter 3 Minimizing XML configuration in Spring</h2>
-<div class="outline-text-2" id="text-org1a87782">
+<div id="outline-container-org6a907f5" class="outline-2">
+<h2 id="org6a907f5">Chapter 3 Minimizing XML configuration in Spring</h2>
+<div class="outline-text-2" id="text-org6a907f5">
 <ul class="org-ul">
 <li>Autowiring helps reduce <code>&lt;property&gt;</code> and <code>&lt;constructor-arg&gt;</code>.</li>
 <li>Autodiscovery helps reduce <code>&lt;bean&gt;</code>.</li>
 </ul>
 </div>
 
-<div id="outline-container-org62fac63" class="outline-3">
-<h3 id="org62fac63">Automatically wiring</h3>
-<div class="outline-text-3" id="text-org62fac63">
+<div id="outline-container-org94edee5" class="outline-3">
+<h3 id="org94edee5">Automatically wiring</h3>
+<div class="outline-text-3" id="text-org94edee5">
 <ul class="org-ul">
 <li><code>byName</code> : search beans, if a bean's id matches the property name, then it will be wired into this property</li>
 
@@ -475,9 +475,9 @@ Example:
 </div>
 </div>
 
-<div id="outline-container-org18a9e1e" class="outline-3">
-<h3 id="org18a9e1e">Wiring with annotations</h3>
-<div class="outline-text-3" id="text-org18a9e1e">
+<div id="outline-container-org4bf33fc" class="outline-3">
+<h3 id="org4bf33fc">Wiring with annotations</h3>
+<div class="outline-text-3" id="text-org4bf33fc">
 <p>
 By default annotation wiring is turned off, use the following line to turn it on:
 </p>
@@ -503,9 +503,9 @@ Autowiring annotations:
 </div>
 </div>
 
-<div id="outline-container-org8dfef12" class="outline-3">
-<h3 id="org8dfef12">Automatically discovering</h3>
-<div class="outline-text-3" id="text-org8dfef12">
+<div id="outline-container-orgf37660e" class="outline-3">
+<h3 id="orgf37660e">Automatically discovering</h3>
+<div class="outline-text-3" id="text-orgf37660e">
 <p>
 <code>&lt;context:annotation-config&gt;</code> is only used for automatically wiring, but <code>&lt;context:component-scan&gt;</code> will used for both autowiring, but also autodiscovery, as below:
 </p>
@@ -540,9 +540,9 @@ Annotations can be used:
 </div>
 </div>
 
-<div id="outline-container-org2ec6f75" class="outline-3">
-<h3 id="org2ec6f75">Java-based configuration</h3>
-<div class="outline-text-3" id="text-org2ec6f75">
+<div id="outline-container-orge9e649f" class="outline-3">
+<h3 id="orge9e649f">Java-based configuration</h3>
+<div class="outline-text-3" id="text-orge9e649f">
 <p>
 <b>not used so often, omitted</b>
 </p>
@@ -550,9 +550,9 @@ Annotations can be used:
 </div>
 </div>
 
-<div id="outline-container-orgd0718d1" class="outline-2">
-<h2 id="orgd0718d1">Chapter 4 Aspect-oriented Spring</h2>
-<div class="outline-text-2" id="text-orgd0718d1">
+<div id="outline-container-org1e5b5db" class="outline-2">
+<h2 id="org1e5b5db">Chapter 4 Aspect-oriented Spring</h2>
+<div class="outline-text-2" id="text-org1e5b5db">
 <p>
 AOP terminology
 </p>
@@ -620,9 +620,9 @@ An <i>introduction</i> allows to add new methods or attributes to existing class
 </ul>
 </div>
 
-<div id="outline-container-org7eb1d5e" class="outline-3">
-<h3 id="org7eb1d5e">Declaring aspects in XML</h3>
-<div class="outline-text-3" id="text-org7eb1d5e">
+<div id="outline-container-org559166b" class="outline-3">
+<h3 id="org559166b">Declaring aspects in XML</h3>
+<div class="outline-text-3" id="text-org559166b">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -751,9 +751,9 @@ and the invocation of <code>joinPoint.proceed()</code> will invoke the advised m
 </div>
 </div>
 
-<div id="outline-container-org8f5de83" class="outline-3">
-<h3 id="org8f5de83">Annotating aspects</h3>
-<div class="outline-text-3" id="text-org8f5de83">
+<div id="outline-container-org6151657" class="outline-3">
+<h3 id="org6151657">Annotating aspects</h3>
+<div class="outline-text-3" id="text-org6151657">
 <p>
 <b>omitted</b>
 </p>
@@ -761,9 +761,9 @@ and the invocation of <code>joinPoint.proceed()</code> will invoke the advised m
 </div>
 </div>
 
-<div id="outline-container-orgd36e758" class="outline-2">
-<h2 id="orgd36e758">Chapter 5 Hitting the database</h2>
-<div class="outline-text-2" id="text-orgd36e758">
+<div id="outline-container-org1a61bd7" class="outline-2">
+<h2 id="org1a61bd7">Chapter 5 Hitting the database</h2>
+<div class="outline-text-2" id="text-org1a61bd7">
 <p>
 Several options to configure a data source:
 </p>
@@ -780,9 +780,9 @@ PS: This chapter seems quite simple, no more to note.
 </div>
 </div>
 
-<div id="outline-container-orgadffc96" class="outline-2">
-<h2 id="orgadffc96">Chapter 6 Managing transactions</h2>
-<div class="outline-text-2" id="text-orgadffc96">
+<div id="outline-container-orgf2b35d0" class="outline-2">
+<h2 id="orgf2b35d0">Chapter 6 Managing transactions</h2>
+<div class="outline-text-2" id="text-orgf2b35d0">
 <p>
 A transaction manager should be chosen first: <code>DataSourceTransactionManager</code>, <code>HibernateTransactionManager</code>, etc.
 </p>
@@ -794,7 +794,7 @@ A transaction manager should be chosen first: <code>DataSourceTransactionManager
     <div>
       <div class="post-meta">
         <span title="post date" class="post-info">2012-10-24</span>
-        <span title="last modification date" class="post-info">2013-04-01</span>
+        <span title="last modification date" class="post-info">2018-05-29</span>
         <span title="tags" class="post-info"><a href="/tags/java/">Java</a>, <a href="/tags/spring/">Spring</a></span>
         <span title="author" class="post-info">Kelvin Hu</span>
       </div>

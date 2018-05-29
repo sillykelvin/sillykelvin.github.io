@@ -4,8 +4,8 @@
     <title>Kelvin的胡言乱语</title>
     <link>http://kelvinh.github.io/</link>
     <description>==============&gt; 重剑无锋，大巧不工。</description>
-    <pubDate>Tue, 29 May 2018 20:05:09 DST</pubDate>
-    <lastBuildDate>Tue, 29 May 2018 20:05:09 DST</lastBuildDate>
+    <pubDate>Tue, 29 May 2018 20:34:38 DST</pubDate>
+    <lastBuildDate>Tue, 29 May 2018 20:34:38 DST</lastBuildDate>
     <docs>http://www.rssboard.org/rss-specification</docs>
     <generator>Org-page static site generator (https://github.com/kelvinh/org-page)</generator>
     <item>
@@ -30,6 +30,20 @@
       <guid>http://kelvinh.github.io/blog/2014/01/12/decrypt-ssl-using-fiddler-and-wireshark/</guid>
     </item>
     <item>
+      <title>让Windows版本的Emacs支持图片直接显示</title>
+      <link>http://kelvinh.github.io/blog/2013/03/26/emacs-image-support-on-windows/</link>
+      <description><![CDATA[how to make emacs support images on windows]]></description>
+      <pubDate>2018-05-29</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/03/26/emacs-image-support-on-windows/</guid>
+    </item>
+    <item>
+      <title>修复Apache Http Server的SSL CRIME漏洞</title>
+      <link>http://kelvinh.github.io/blog/2013/02/05/fix-httpd-ssl-security-issue/</link>
+      <description><![CDATA[crime issue fixing, and compilation process of mod_ssl]]></description>
+      <pubDate>2018-05-29</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/02/05/fix-httpd-ssl-security-issue/</guid>
+    </item>
+    <item>
       <title>Happy Hacking - 我的HHKB</title>
       <link>http://kelvinh.github.io/blog/2013/05/12/hhkb/</link>
       <description><![CDATA[HHKB keyboard]]></description>
@@ -37,46 +51,32 @@
       <guid>http://kelvinh.github.io/blog/2013/05/12/hhkb/</guid>
     </item>
     <item>
-      <title>Windows平台X64函数调用约定与汇编代码分析</title>
-      <link>http://kelvinh.github.io/blog/2013/08/05/windows-x64-calling-conventions/</link>
-      <description><![CDATA[the calling convention of x64 platform]]></description>
+      <title>在MacBook Air上安装Archlinux</title>
+      <link>http://kelvinh.github.io/blog/2012/09/05/archlinux-on-mac-air/</link>
+      <description><![CDATA[how to install archlinux on a macbook air]]></description>
       <pubDate>2018-05-29</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/08/05/windows-x64-calling-conventions/</guid>
+      <guid>http://kelvinh.github.io/blog/2012/09/05/archlinux-on-mac-air/</guid>
     </item>
     <item>
-      <title>SICP学习笔记和习题解答</title>
-      <link>http://kelvinh.github.io/wiki/sicp/</link>
-      <description><![CDATA[learning notes of book Structure and Interpretation of Computer Programs]]></description>
+      <title>彻底去除优酷广告</title>
+      <link>http://kelvinh.github.io/blog/2013/01/01/remove-youku-ads-totally/</link>
+      <description><![CDATA[how to remove ads on youku totally]]></description>
       <pubDate>2018-05-29</pubDate>
-      <guid>http://kelvinh.github.io/wiki/sicp/</guid>
+      <guid>http://kelvinh.github.io/blog/2013/01/01/remove-youku-ads-totally/</guid>
     </item>
     <item>
-      <title>LeetCode题解</title>
-      <link>http://kelvinh.github.io/wiki/leetcode-answers/</link>
-      <description><![CDATA[我个人的LeetCode OJ题解]]></description>
-      <pubDate>2017-05-09</pubDate>
-      <guid>http://kelvinh.github.io/wiki/leetcode-answers/</guid>
+      <title>扯一下关于魔兽改键的蛋</title>
+      <link>http://kelvinh.github.io/blog/2011/05/13/warkey/</link>
+      <description><![CDATA[windows keyboard hook]]></description>
+      <pubDate>2018-05-29</pubDate>
+      <guid>http://kelvinh.github.io/blog/2011/05/13/warkey/</guid>
     </item>
     <item>
-      <title>C++中对成员访问操作符-&gt;的重载</title>
-      <link>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</link>
-      <description><![CDATA[Introduction to overloading of -> operator in C++]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/11/20/overloading-of-member-access-operator-dash-greater-than-symbol-in-cpp/</guid>
-    </item>
-    <item>
-      <title>三门问题的程序解与解释</title>
-      <link>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</link>
-      <description><![CDATA[the famous Monty Hall problem and use program to explain it]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2013/11/28/monty-hall-problem/</guid>
-    </item>
-    <item>
-      <title>岁月如歌——甘十九妹</title>
-      <link>http://kelvinh.github.io/blog/2016/01/24/time-is-like-a-song/</link>
-      <description><![CDATA[回忆往事，岁月如歌]]></description>
-      <pubDate>2016-01-25</pubDate>
-      <guid>http://kelvinh.github.io/blog/2016/01/24/time-is-like-a-song/</guid>
+      <title>解决Windows上程序运行时的side by side错误</title>
+      <link>http://kelvinh.github.io/blog/2013/01/31/windows-side-by-side-error-solution/</link>
+      <description><![CDATA[solution to windows side-by-side error]]></description>
+      <pubDate>2018-05-29</pubDate>
+      <guid>http://kelvinh.github.io/blog/2013/01/31/windows-side-by-side-error-solution/</guid>
     </item>
   </channel>
 </rss>
