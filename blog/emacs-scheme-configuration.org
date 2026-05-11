@@ -107,4 +107,4 @@ PS: this function is inspired by Wang Yin."
 
 好了，经过一番折腾，上面提到的三个问题都完美解决了，从此，妈妈再也不用担心我会重复劳动了。 :-D
 
-PS：上面的代码中有涉及到一些我自己定义的变量及函数，想了解更多，请参考我的Emacs配置：https://github.com/kelvinh/.emacs.d
+PS：上面的代码中有涉及到一些我自己定义的变量及函数，想了解更多，请参考我的Emacs配置：https://github.com/sillykelvin/.emacs.d

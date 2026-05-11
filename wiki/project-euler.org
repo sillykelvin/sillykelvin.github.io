@@ -467,7 +467,7 @@ It appears that you have answered your own question. There is nothing quite like
   :
   : (find-prime-sum 2000000)
 
-  上面用到的 =miller-rabin-prime?= 过程，在我的[[http://kelvinh.github.io/wiki/sicp/#outline-container-sec-1-28][SICP习题解]]可以找到，这里就不再抄一遍了。
+  上面用到的 =miller-rabin-prime?= 过程，在我的[[http://sillykelvin.github.io/wiki/sicp/#outline-container-sec-1-28][SICP习题解]]可以找到，这里就不再抄一遍了。
 
   至于“标准答案”，我搞出一个能正确判断素数的函数就很不容易了，结果它宣称能在一秒内算出答案，太伤心了，不看鸟。。
 

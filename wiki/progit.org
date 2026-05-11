@@ -567,7 +567,7 @@
    所谓refspec，就是远程仓库分支到本地分支的映射，保存在 =.git/config= 的 =[remote]= 区。包括fetch和push，可能看起来像这样：
 
    : [remote "origin"]
-   :     url = git@github.com:kelvinh/org-page.git
+   :     url = git@github.com:sillykelvin/org-page.git
    :     fetch = +refs/heads/*:refs/remotes/origin/*
    :     push = refs/heads/master:refs/heads/rd/master
 

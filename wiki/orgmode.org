@@ -70,7 +70,7 @@ Learning notes recorded during reading org mode manual, simple and incomplete, b
 
   Links exist between two square brackets, like below:
 
-  [[http://kelvinh.github.com][kelvin's github blog]] or [[http://kelvinh.github.com]]
+  [[http://sillykelvin.github.io][kelvin's github blog]] or [[http://sillykelvin.github.io]]
 
 
   useful key bindings:
@@ -165,6 +165,6 @@ Learning notes recorded during reading org mode manual, simple and incomplete, b
 
 --------------------------------------------------------------------------------
 
-[fn:kelvin] http://kelvinh.github.com
+[fn:kelvin] http://sillykelvin.github.io
 
 [fn:1] http://www.cnblogs.com/ini_always
